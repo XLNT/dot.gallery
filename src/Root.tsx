@@ -8,6 +8,7 @@ import React from "react";
 
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
+import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
 import Panel from "pages/Panel";
@@ -24,6 +25,7 @@ const GlobalStyle = createGlobalStyle`
 const Providers = nest([
   Fullscreen.Provider,
   PanelState.Provider,
+  ForcedPanelState.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
 ]);

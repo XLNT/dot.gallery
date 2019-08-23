@@ -7073,6 +7073,11 @@ react-spring@^8.0.27:
     "@babel/runtime" "^7.3.1"
     prop-types "^15.5.8"
 
+react-teleporter@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-teleporter/-/react-teleporter-1.1.0.tgz#c68805e3f454443bdf473b79401a984039c3fcd6"
+  integrity sha512-6j3I29y3sRcekOP1IfbIbrrtwZGKQhRU3WFZoWgMtXN0lTA2/i9Yp3zzAkVBFRtZIfhux4M7tSYVu4AQjCRDlQ==
+
 react-use-dimensions@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-use-dimensions/-/react-use-dimensions-1.2.1.tgz#eb1561db7b06c393209d2bffa449931dd93f7870"

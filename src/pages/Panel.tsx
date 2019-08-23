@@ -1,4 +1,7 @@
 import { animated, useSpring } from "react-spring";
+import ForcedPanelState from "context/ForcedPanelState";
+import PanelAction from "context/PanelAction";
+import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import React, { useCallback } from "react";
 import styled from "styled-components";
@@ -16,24 +19,28 @@ const Container = styled(animated.div)`
   padding-right: 1rem;
 `;
 
-const PanelButton = styled(animated.div)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
+  <animated.span {...props} />
+))`
   z-index: 9;
   position: absolute;
-  bottom: 0;
-  left: -60px;
-  height: 2.5rem;
-  width: 2.5rem;
+  bottom: -1.5rem;
+  right: calc(1rem + ${({ panelWidth }) => panelWidth}px);
   font-size: 1rem;
   padding: 0.75rem;
+
+  white-space: nowrap;
 
   cursor: pointer;
   border: 1px solid black;
 
   transition: transform 0.1s ease-in;
 
-  &:hover {
-    transform: scale(1.05);
-  }
+  display: ${({ canTogglePanel }) => (canTogglePanel ? "block" : "none")};
+
+  transform-origin: right;
+  transform: rotate(90deg);
 `;
 
 const Inner = styled(animated.div)`
@@ -49,21 +56,37 @@ const Content = styled.div`
 `;
 
 export default function Panel() {
+  const { forcedState } = ForcedPanelState.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 
   const togglePanel = useCallback(() => setPanelState(!isOpen), [isOpen, setPanelState]);
 
   const [panelRef, { width: panelWidth }] = useDimensions();
 
+  const canTogglePanel = forcedState === null;
+  const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
+
   const { x } = useSpring({
-    x: hydrated && isOpen ? 0 : -1 * (panelWidth || 0),
+    x: showPanel ? 0 : -1 * (panelWidth || 0),
   });
 
   return (
     <Container ref={panelRef}>
       <Inner style={{ transform: x.interpolate(x => `translateX(${-x}px)`) }}>
-        <PanelButton onClick={togglePanel}>{isOpen ? "▶" : "◀"}</PanelButton>
-        <Content>fuck yeah</Content>
+        <PanelButton
+          onClick={canTogglePanel ? togglePanel : null}
+          canTogglePanel={canTogglePanel}
+          panelWidth={panelWidth}
+        >
+          {isOpen ? (
+            <span>⬆</span>
+          ) : (
+            <span>
+              <PanelAction.Target as="span" /> ⬇
+            </span>
+          )}
+        </PanelButton>
+        <PanelContent.Target as={Content} />
       </Inner>
     </Container>
   );

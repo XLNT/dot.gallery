@@ -40,6 +40,7 @@
     "react-hot-loader": "^4.12.11",
     "react-router-dom": "^5.0.1",
     "react-spring": "^8.0.27",
+    "react-teleporter": "^1.1.0",
     "react-use-dimensions": "^1.2.1",
     "styled-components": "^4.3.2",
     "subscriptions-transport-ws": "^0.9.16",
