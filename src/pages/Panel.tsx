@@ -4,6 +4,7 @@ import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import React, { useCallback } from "react";
+import arrow from "components/arrow.svg";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
 
@@ -33,11 +34,11 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   white-space: nowrap;
 
   cursor: pointer;
-  border: 1px solid black;
+  border: 4px solid black;
 
   transition: transform 0.1s ease-in;
 
-  display: ${({ canTogglePanel }) => (canTogglePanel ? "block" : "none")};
+  display: ${({ canTogglePanel }) => (canTogglePanel ? "flex" : "none")};
 
   transform-origin: right;
   transform: rotate(90deg);
@@ -47,7 +48,7 @@ const Inner = styled(animated.div)`
   position: relative;
 
   padding: 0.5rem;
-  border: 1px solid black;
+  border: 4px solid black;
   height: 100%;
 `;
 
@@ -66,8 +67,9 @@ export default function Panel() {
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
-  const { x } = useSpring({
+  const { x, deg } = useSpring({
     x: showPanel ? 0 : -1 * (panelWidth || 0),
+    deg: showPanel ? 90 : -90,
   });
 
   return (
@@ -78,13 +80,13 @@ export default function Panel() {
           canTogglePanel={canTogglePanel}
           panelWidth={panelWidth}
         >
-          {isOpen ? (
-            <span>⬆</span>
-          ) : (
-            <span>
-              <PanelAction.Target as="span" /> ⬇
-            </span>
-          )}
+          {!isOpen && <PanelAction.Target as="span" />}{" "}
+          <animated.img
+            src={arrow}
+            style={{
+              transform: deg.interpolate(d => `rotate(${d}deg)`),
+            }}
+          />
         </PanelButton>
         <PanelContent.Target as={Content} />
       </Inner>
