@@ -1,5 +1,13 @@
+import PanelState from "context/PanelState";
 import React from "react";
 
 export default function Home() {
-  return <div>Home</div>;
+  const [isPanelOpen, setPanelState, hydrated] = PanelState.useContainer();
+
+  return (
+    <div>
+      {isPanelOpen ? "true" : "false"}{" "}
+      <button onClick={() => setPanelState(!isPanelOpen)}>+</button> {hydrated}
+    </div>
+  );
 }

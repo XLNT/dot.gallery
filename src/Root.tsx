@@ -1,25 +1,25 @@
 import "normalize.css";
 
-import React from "react";
-import { hot } from "react-hot-loader";
-import { createGlobalStyle } from "styled-components";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
+import { hot } from "react-hot-loader";
+import React from "react";
 
-import { FullscreenProvider } from "context/useFullscreen";
-import nest from "lib/nest";
-
-import makeClient from "./client/client";
-
-import useConstant from "hook/useConstant";
-import Home from "pages/Home";
 import Exhibition from "pages/Exhibition";
+import Fullscreen from "context/Fullscreen";
+import Home from "pages/Home";
+import Panel from "pages/Panel";
+import PanelState from "context/PanelState";
+import makeClient from "client/client";
+import nest from "lib/nest";
+import useConstant from "hook/useConstant";
 
 const GlobalStyle = createGlobalStyle`
 
 `;
 
-const Providers = nest([FullscreenProvider, ApolloProvider]);
+const Providers = nest([Fullscreen.Provider, PanelState.Provider, ApolloProvider]);
 
 function Root() {
   const client = useConstant(() => makeClient());
@@ -32,6 +32,7 @@ function Root() {
           <Route path="/" exact component={Home} />
           <Route path="/:slug" component={Exhibition} />
         </Router>
+        <Panel />
       </Providers>
     </>
   );
