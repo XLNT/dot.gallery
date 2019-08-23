@@ -1,0 +1,5 @@
+subscription Test {
+  issue(where: {node: {id: "cjznzwhmf003m072105217so8"}, mutation_in: [UPDATED]}) {
+    updatedFields
+  }
+}

@@ -21,6 +21,7 @@ export interface Exists {
   exhibition: (where?: ExhibitionWhereInput) => Promise<boolean>;
   issue: (where?: IssueWhereInput) => Promise<boolean>;
   show: (where?: ShowWhereInput) => Promise<boolean>;
+  work: (where?: WorkWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -137,6 +138,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ShowConnectionPromise;
+  work: (where: WorkWhereUniqueInput) => WorkNullablePromise;
+  works: (args?: {
+    where?: WorkWhereInput;
+    orderBy?: WorkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Work>;
+  worksConnection: (args?: {
+    where?: WorkWhereInput;
+    orderBy?: WorkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => WorkConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -223,6 +243,22 @@ export interface Prisma {
   }) => ShowPromise;
   deleteShow: (where: ShowWhereUniqueInput) => ShowPromise;
   deleteManyShows: (where?: ShowWhereInput) => BatchPayloadPromise;
+  createWork: (data: WorkCreateInput) => WorkPromise;
+  updateWork: (args: {
+    data: WorkUpdateInput;
+    where: WorkWhereUniqueInput;
+  }) => WorkPromise;
+  updateManyWorks: (args: {
+    data: WorkUpdateManyMutationInput;
+    where?: WorkWhereInput;
+  }) => BatchPayloadPromise;
+  upsertWork: (args: {
+    where: WorkWhereUniqueInput;
+    create: WorkCreateInput;
+    update: WorkUpdateInput;
+  }) => WorkPromise;
+  deleteWork: (where: WorkWhereUniqueInput) => WorkPromise;
+  deleteManyWorks: (where?: WorkWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -247,6 +283,9 @@ export interface Subscription {
   show: (
     where?: ShowSubscriptionWhereInput
   ) => ShowSubscriptionPayloadSubscription;
+  work: (
+    where?: WorkSubscriptionWhereInput
+  ) => WorkSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -281,6 +320,14 @@ export type AssetOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type WorkOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "x_ASC"
+  | "x_DESC"
+  | "y_ASC"
+  | "y_DESC";
+
 export type EntityOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -312,6 +359,10 @@ export type ExhibitionOrderByInput =
   | "id_DESC"
   | "number_ASC"
   | "number_DESC"
+  | "theme_ASC"
+  | "theme_DESC"
+  | "extent_ASC"
+  | "extent_DESC"
   | "opensAt_ASC"
   | "opensAt_DESC"
   | "closesAt_ASC"
@@ -478,6 +529,9 @@ export interface AssetWhereInput {
   owner?: Maybe<EntityWhereInput>;
   issue?: Maybe<IssueWhereInput>;
   printer?: Maybe<EntityWhereInput>;
+  works_every?: Maybe<WorkWhereInput>;
+  works_some?: Maybe<WorkWhereInput>;
+  works_none?: Maybe<WorkWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -497,6 +551,45 @@ export interface AssetWhereInput {
   AND?: Maybe<AssetWhereInput[] | AssetWhereInput>;
   OR?: Maybe<AssetWhereInput[] | AssetWhereInput>;
   NOT?: Maybe<AssetWhereInput[] | AssetWhereInput>;
+}
+
+export interface WorkWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  x_not?: Maybe<Int>;
+  x_in?: Maybe<Int[] | Int>;
+  x_not_in?: Maybe<Int[] | Int>;
+  x_lt?: Maybe<Int>;
+  x_lte?: Maybe<Int>;
+  x_gt?: Maybe<Int>;
+  x_gte?: Maybe<Int>;
+  y?: Maybe<Int>;
+  y_not?: Maybe<Int>;
+  y_in?: Maybe<Int[] | Int>;
+  y_not_in?: Maybe<Int[] | Int>;
+  y_lt?: Maybe<Int>;
+  y_lte?: Maybe<Int>;
+  y_gt?: Maybe<Int>;
+  y_gte?: Maybe<Int>;
+  assets_every?: Maybe<AssetWhereInput>;
+  assets_some?: Maybe<AssetWhereInput>;
+  assets_none?: Maybe<AssetWhereInput>;
+  AND?: Maybe<WorkWhereInput[] | WorkWhereInput>;
+  OR?: Maybe<WorkWhereInput[] | WorkWhereInput>;
+  NOT?: Maybe<WorkWhereInput[] | WorkWhereInput>;
 }
 
 export type EntityWhereUniqueInput = AtLeastOne<{
@@ -593,6 +686,28 @@ export interface ExhibitionWhereInput {
   number_lte?: Maybe<Int>;
   number_gt?: Maybe<Int>;
   number_gte?: Maybe<Int>;
+  theme?: Maybe<String>;
+  theme_not?: Maybe<String>;
+  theme_in?: Maybe<String[] | String>;
+  theme_not_in?: Maybe<String[] | String>;
+  theme_lt?: Maybe<String>;
+  theme_lte?: Maybe<String>;
+  theme_gt?: Maybe<String>;
+  theme_gte?: Maybe<String>;
+  theme_contains?: Maybe<String>;
+  theme_not_contains?: Maybe<String>;
+  theme_starts_with?: Maybe<String>;
+  theme_not_starts_with?: Maybe<String>;
+  theme_ends_with?: Maybe<String>;
+  theme_not_ends_with?: Maybe<String>;
+  extent?: Maybe<Int>;
+  extent_not?: Maybe<Int>;
+  extent_in?: Maybe<Int[] | Int>;
+  extent_not_in?: Maybe<Int[] | Int>;
+  extent_lt?: Maybe<Int>;
+  extent_lte?: Maybe<Int>;
+  extent_gt?: Maybe<Int>;
+  extent_gte?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   opensAt_not?: Maybe<DateTimeInput>;
   opensAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -641,12 +756,17 @@ export type ShowWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
+export type WorkWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
 export interface AssetCreateInput {
   id?: Maybe<ID_Input>;
   isCounterfactual?: Maybe<Boolean>;
   owner: EntityCreateOneWithoutOwnedAssetsInput;
   issue: IssueCreateOneWithoutAssetsInput;
   printer: EntityCreateOneWithoutPrintedAssetsInput;
+  works?: Maybe<WorkCreateManyWithoutAssetsInput>;
 }
 
 export interface EntityCreateOneWithoutOwnedAssetsInput {
@@ -691,6 +811,7 @@ export interface AssetCreateWithoutIssueInput {
   isCounterfactual?: Maybe<Boolean>;
   owner: EntityCreateOneWithoutOwnedAssetsInput;
   printer: EntityCreateOneWithoutPrintedAssetsInput;
+  works?: Maybe<WorkCreateManyWithoutAssetsInput>;
 }
 
 export interface EntityCreateOneWithoutPrintedAssetsInput {
@@ -716,6 +837,7 @@ export interface AssetCreateWithoutOwnerInput {
   isCounterfactual?: Maybe<Boolean>;
   issue: IssueCreateOneWithoutAssetsInput;
   printer: EntityCreateOneWithoutPrintedAssetsInput;
+  works?: Maybe<WorkCreateManyWithoutAssetsInput>;
 }
 
 export interface IssueCreateOneWithoutAssetsInput {
@@ -756,6 +878,18 @@ export interface AssetCreateWithoutPrinterInput {
   isCounterfactual?: Maybe<Boolean>;
   owner: EntityCreateOneWithoutOwnedAssetsInput;
   issue: IssueCreateOneWithoutAssetsInput;
+  works?: Maybe<WorkCreateManyWithoutAssetsInput>;
+}
+
+export interface WorkCreateManyWithoutAssetsInput {
+  create?: Maybe<WorkCreateWithoutAssetsInput[] | WorkCreateWithoutAssetsInput>;
+  connect?: Maybe<WorkWhereUniqueInput[] | WorkWhereUniqueInput>;
+}
+
+export interface WorkCreateWithoutAssetsInput {
+  id?: Maybe<ID_Input>;
+  x: Int;
+  y: Int;
 }
 
 export interface AssetUpdateInput {
@@ -763,6 +897,7 @@ export interface AssetUpdateInput {
   owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
   issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
   printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
+  works?: Maybe<WorkUpdateManyWithoutAssetsInput>;
 }
 
 export interface EntityUpdateOneRequiredWithoutOwnedAssetsInput {
@@ -846,6 +981,7 @@ export interface AssetUpdateWithoutIssueDataInput {
   isCounterfactual?: Maybe<Boolean>;
   owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
   printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
+  works?: Maybe<WorkUpdateManyWithoutAssetsInput>;
 }
 
 export interface EntityUpdateOneRequiredWithoutPrintedAssetsInput {
@@ -891,6 +1027,7 @@ export interface AssetUpdateWithoutOwnerDataInput {
   isCounterfactual?: Maybe<Boolean>;
   issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
   printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
+  works?: Maybe<WorkUpdateManyWithoutAssetsInput>;
 }
 
 export interface IssueUpdateOneRequiredWithoutAssetsInput {
@@ -952,6 +1089,89 @@ export interface AssetUpdateWithoutPrinterDataInput {
   isCounterfactual?: Maybe<Boolean>;
   owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
   issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
+  works?: Maybe<WorkUpdateManyWithoutAssetsInput>;
+}
+
+export interface WorkUpdateManyWithoutAssetsInput {
+  create?: Maybe<WorkCreateWithoutAssetsInput[] | WorkCreateWithoutAssetsInput>;
+  delete?: Maybe<WorkWhereUniqueInput[] | WorkWhereUniqueInput>;
+  connect?: Maybe<WorkWhereUniqueInput[] | WorkWhereUniqueInput>;
+  set?: Maybe<WorkWhereUniqueInput[] | WorkWhereUniqueInput>;
+  disconnect?: Maybe<WorkWhereUniqueInput[] | WorkWhereUniqueInput>;
+  update?: Maybe<
+    | WorkUpdateWithWhereUniqueWithoutAssetsInput[]
+    | WorkUpdateWithWhereUniqueWithoutAssetsInput
+  >;
+  upsert?: Maybe<
+    | WorkUpsertWithWhereUniqueWithoutAssetsInput[]
+    | WorkUpsertWithWhereUniqueWithoutAssetsInput
+  >;
+  deleteMany?: Maybe<WorkScalarWhereInput[] | WorkScalarWhereInput>;
+  updateMany?: Maybe<
+    WorkUpdateManyWithWhereNestedInput[] | WorkUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface WorkUpdateWithWhereUniqueWithoutAssetsInput {
+  where: WorkWhereUniqueInput;
+  data: WorkUpdateWithoutAssetsDataInput;
+}
+
+export interface WorkUpdateWithoutAssetsDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+}
+
+export interface WorkUpsertWithWhereUniqueWithoutAssetsInput {
+  where: WorkWhereUniqueInput;
+  update: WorkUpdateWithoutAssetsDataInput;
+  create: WorkCreateWithoutAssetsInput;
+}
+
+export interface WorkScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  x_not?: Maybe<Int>;
+  x_in?: Maybe<Int[] | Int>;
+  x_not_in?: Maybe<Int[] | Int>;
+  x_lt?: Maybe<Int>;
+  x_lte?: Maybe<Int>;
+  x_gt?: Maybe<Int>;
+  x_gte?: Maybe<Int>;
+  y?: Maybe<Int>;
+  y_not?: Maybe<Int>;
+  y_in?: Maybe<Int[] | Int>;
+  y_not_in?: Maybe<Int[] | Int>;
+  y_lt?: Maybe<Int>;
+  y_lte?: Maybe<Int>;
+  y_gt?: Maybe<Int>;
+  y_gte?: Maybe<Int>;
+  AND?: Maybe<WorkScalarWhereInput[] | WorkScalarWhereInput>;
+  OR?: Maybe<WorkScalarWhereInput[] | WorkScalarWhereInput>;
+  NOT?: Maybe<WorkScalarWhereInput[] | WorkScalarWhereInput>;
+}
+
+export interface WorkUpdateManyWithWhereNestedInput {
+  where: WorkScalarWhereInput;
+  data: WorkUpdateManyDataInput;
+}
+
+export interface WorkUpdateManyDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
 }
 
 export interface AssetUpsertWithWhereUniqueWithoutPrinterInput {
@@ -1139,6 +1359,8 @@ export interface EntityUpdateManyMutationInput {
 export interface ExhibitionCreateInput {
   id?: Maybe<ID_Input>;
   number: Int;
+  theme?: Maybe<String>;
+  extent?: Maybe<Int>;
   opensAt: DateTimeInput;
   closesAt: DateTimeInput;
   shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
@@ -1160,6 +1382,8 @@ export interface ShowCreateWithoutExhibitionInput {
 
 export interface ExhibitionUpdateInput {
   number?: Maybe<Int>;
+  theme?: Maybe<String>;
+  extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
   shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
@@ -1277,6 +1501,8 @@ export interface ShowUpdateManyDataInput {
 
 export interface ExhibitionUpdateManyMutationInput {
   number?: Maybe<Int>;
+  theme?: Maybe<String>;
+  extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
 }
@@ -1320,6 +1546,8 @@ export interface ExhibitionCreateOneWithoutShowsInput {
 export interface ExhibitionCreateWithoutShowsInput {
   id?: Maybe<ID_Input>;
   number: Int;
+  theme?: Maybe<String>;
+  extent?: Maybe<Int>;
   opensAt: DateTimeInput;
   closesAt: DateTimeInput;
 }
@@ -1340,6 +1568,8 @@ export interface ExhibitionUpdateOneRequiredWithoutShowsInput {
 
 export interface ExhibitionUpdateWithoutShowsDataInput {
   number?: Maybe<Int>;
+  theme?: Maybe<String>;
+  extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
 }
@@ -1353,6 +1583,75 @@ export interface ShowUpdateManyMutationInput {
   number?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
+}
+
+export interface WorkCreateInput {
+  id?: Maybe<ID_Input>;
+  x: Int;
+  y: Int;
+  assets?: Maybe<AssetCreateManyWithoutWorksInput>;
+}
+
+export interface AssetCreateManyWithoutWorksInput {
+  create?: Maybe<AssetCreateWithoutWorksInput[] | AssetCreateWithoutWorksInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+}
+
+export interface AssetCreateWithoutWorksInput {
+  id?: Maybe<ID_Input>;
+  isCounterfactual?: Maybe<Boolean>;
+  owner: EntityCreateOneWithoutOwnedAssetsInput;
+  issue: IssueCreateOneWithoutAssetsInput;
+  printer: EntityCreateOneWithoutPrintedAssetsInput;
+}
+
+export interface WorkUpdateInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  assets?: Maybe<AssetUpdateManyWithoutWorksInput>;
+}
+
+export interface AssetUpdateManyWithoutWorksInput {
+  create?: Maybe<AssetCreateWithoutWorksInput[] | AssetCreateWithoutWorksInput>;
+  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  update?: Maybe<
+    | AssetUpdateWithWhereUniqueWithoutWorksInput[]
+    | AssetUpdateWithWhereUniqueWithoutWorksInput
+  >;
+  upsert?: Maybe<
+    | AssetUpsertWithWhereUniqueWithoutWorksInput[]
+    | AssetUpsertWithWhereUniqueWithoutWorksInput
+  >;
+  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  updateMany?: Maybe<
+    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface AssetUpdateWithWhereUniqueWithoutWorksInput {
+  where: AssetWhereUniqueInput;
+  data: AssetUpdateWithoutWorksDataInput;
+}
+
+export interface AssetUpdateWithoutWorksDataInput {
+  isCounterfactual?: Maybe<Boolean>;
+  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
+  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
+  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
+}
+
+export interface AssetUpsertWithWhereUniqueWithoutWorksInput {
+  where: AssetWhereUniqueInput;
+  update: AssetUpdateWithoutWorksDataInput;
+  create: AssetCreateWithoutWorksInput;
+}
+
+export interface WorkUpdateManyMutationInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
 }
 
 export interface AssetSubscriptionWhereInput {
@@ -1416,6 +1715,17 @@ export interface ShowSubscriptionWhereInput {
   NOT?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
 }
 
+export interface WorkSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<WorkWhereInput>;
+  AND?: Maybe<WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput>;
+  OR?: Maybe<WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput>;
+  NOT?: Maybe<WorkSubscriptionWhereInput[] | WorkSubscriptionWhereInput>;
+}
+
 export interface NodeNode {
   id: ID_Output;
 }
@@ -1433,6 +1743,15 @@ export interface AssetPromise extends Promise<Asset>, Fragmentable {
   owner: <T = EntityPromise>() => T;
   issue: <T = IssuePromise>() => T;
   printer: <T = EntityPromise>() => T;
+  works: <T = FragmentableArray<Work>>(args?: {
+    where?: WorkWhereInput;
+    orderBy?: WorkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1445,6 +1764,15 @@ export interface AssetSubscription
   owner: <T = EntitySubscription>() => T;
   issue: <T = IssueSubscription>() => T;
   printer: <T = EntitySubscription>() => T;
+  works: <T = Promise<AsyncIterator<WorkSubscription>>>(args?: {
+    where?: WorkWhereInput;
+    orderBy?: WorkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1457,6 +1785,15 @@ export interface AssetNullablePromise
   owner: <T = EntityPromise>() => T;
   issue: <T = IssuePromise>() => T;
   printer: <T = EntityPromise>() => T;
+  works: <T = FragmentableArray<Work>>(args?: {
+    where?: WorkWhereInput;
+    orderBy?: WorkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1648,6 +1985,61 @@ export interface IssueNullablePromise
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
+export interface Work {
+  id: ID_Output;
+  x: Int;
+  y: Int;
+}
+
+export interface WorkPromise extends Promise<Work>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+  assets: <T = FragmentableArray<Asset>>(args?: {
+    where?: AssetWhereInput;
+    orderBy?: AssetOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface WorkSubscription
+  extends Promise<AsyncIterator<Work>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  x: () => Promise<AsyncIterator<Int>>;
+  y: () => Promise<AsyncIterator<Int>>;
+  assets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
+    where?: AssetWhereInput;
+    orderBy?: AssetOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface WorkNullablePromise
+  extends Promise<Work | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+  assets: <T = FragmentableArray<Asset>>(args?: {
+    where?: AssetWhereInput;
+    orderBy?: AssetOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
 export interface AssetConnection {
   pageInfo: PageInfo;
   edges: AssetEdge[];
@@ -1782,6 +2174,8 @@ export interface AggregateEntitySubscription
 export interface Exhibition {
   id: ID_Output;
   number: Int;
+  theme: String;
+  extent: Int;
   opensAt: DateTimeOutput;
   closesAt: DateTimeOutput;
   createdAt: DateTimeOutput;
@@ -1791,6 +2185,8 @@ export interface Exhibition {
 export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
+  theme: () => Promise<String>;
+  extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
   shows: <T = FragmentableArray<Show>>(args?: {
@@ -1811,6 +2207,8 @@ export interface ExhibitionSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   number: () => Promise<AsyncIterator<Int>>;
+  theme: () => Promise<AsyncIterator<String>>;
+  extent: () => Promise<AsyncIterator<Int>>;
   opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   shows: <T = Promise<AsyncIterator<ShowSubscription>>>(args?: {
@@ -1831,6 +2229,8 @@ export interface ExhibitionNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
+  theme: () => Promise<String>;
+  extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
   shows: <T = FragmentableArray<Show>>(args?: {
@@ -2053,6 +2453,60 @@ export interface AggregateShowSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface WorkConnection {
+  pageInfo: PageInfo;
+  edges: WorkEdge[];
+}
+
+export interface WorkConnectionPromise
+  extends Promise<WorkConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<WorkEdge>>() => T;
+  aggregate: <T = AggregateWorkPromise>() => T;
+}
+
+export interface WorkConnectionSubscription
+  extends Promise<AsyncIterator<WorkConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<WorkEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateWorkSubscription>() => T;
+}
+
+export interface WorkEdge {
+  node: Work;
+  cursor: String;
+}
+
+export interface WorkEdgePromise extends Promise<WorkEdge>, Fragmentable {
+  node: <T = WorkPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface WorkEdgeSubscription
+  extends Promise<AsyncIterator<WorkEdge>>,
+    Fragmentable {
+  node: <T = WorkSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateWork {
+  count: Int;
+}
+
+export interface AggregateWorkPromise
+  extends Promise<AggregateWork>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateWorkSubscription
+  extends Promise<AsyncIterator<AggregateWork>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -2200,6 +2654,8 @@ export interface ExhibitionSubscriptionPayloadSubscription
 export interface ExhibitionPreviousValues {
   id: ID_Output;
   number: Int;
+  theme: String;
+  extent: Int;
   opensAt: DateTimeOutput;
   closesAt: DateTimeOutput;
   createdAt: DateTimeOutput;
@@ -2211,6 +2667,8 @@ export interface ExhibitionPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
+  theme: () => Promise<String>;
+  extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -2222,6 +2680,8 @@ export interface ExhibitionPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   number: () => Promise<AsyncIterator<Int>>;
+  theme: () => Promise<AsyncIterator<String>>;
+  extent: () => Promise<AsyncIterator<Int>>;
   opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2340,6 +2800,53 @@ export interface ShowPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface WorkSubscriptionPayload {
+  mutation: MutationType;
+  node: Work;
+  updatedFields: String[];
+  previousValues: WorkPreviousValues;
+}
+
+export interface WorkSubscriptionPayloadPromise
+  extends Promise<WorkSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = WorkPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = WorkPreviousValuesPromise>() => T;
+}
+
+export interface WorkSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<WorkSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = WorkSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = WorkPreviousValuesSubscription>() => T;
+}
+
+export interface WorkPreviousValues {
+  id: ID_Output;
+  x: Int;
+  y: Int;
+}
+
+export interface WorkPreviousValuesPromise
+  extends Promise<WorkPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+}
+
+export interface WorkPreviousValuesSubscription
+  extends Promise<AsyncIterator<WorkPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  x: () => Promise<AsyncIterator<Int>>;
+  y: () => Promise<AsyncIterator<Int>>;
+}
+
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
@@ -2357,6 +2864,11 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
+
+/*
 DateTime scalar input type, allowing Date
 */
 export type DateTimeInput = Date | string;
@@ -2365,11 +2877,6 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
 
 export type Long = string;
 
@@ -2401,6 +2908,10 @@ export const models: Model[] = [
   {
     name: "Show",
     embedded: false
+  },
+  {
+    name: "Work",
+    embedded: false
   }
 ];
 
@@ -2411,7 +2922,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `https://gallery-v1-f5f0a401ff.herokuapp.com`,
-  secret: `fuckingpasswordsyeah`
+  endpoint: `https://gallery-v1-f5f0a401ff.herokuapp.com`
 });
 export const prisma = new Prisma();

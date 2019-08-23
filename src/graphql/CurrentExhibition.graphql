@@ -1,0 +1,17 @@
+query CurrentExhibition {
+  exhibitions(last: 1, orderBy: opensAt_DESC) {
+    id
+    number
+    extent
+    theme
+    opensAt
+    closesAt
+
+    shows {
+      id
+      number
+      opensAt
+      closesAt
+    }
+  }
+}

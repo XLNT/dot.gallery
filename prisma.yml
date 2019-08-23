@@ -1,7 +1,12 @@
 endpoint: https://gallery-v1-f5f0a401ff.herokuapp.com
 datamodel: datamodel.prisma
-secret: fuckingpasswordsyeah
 
 generate:
   - generator: typescript-client
     output: ./src/prisma-client/
+  - generator: graphql-schema
+    output: ./prisma.graphql
+
+hooks:
+  post-deploy:
+    - yarn codegen

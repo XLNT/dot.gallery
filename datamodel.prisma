@@ -48,6 +48,8 @@ type Asset {
   # asset belongs_to: printer
   printer: Entity! @relation(name: "PrintedAssets")
 
+  works: [Work!]!
+
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -55,6 +57,8 @@ type Asset {
 type Exhibition {
   id: ID! @id
   number: Int!
+  theme: String! @default(value: "#000000")
+  extent: Int! @default(value: 7)
   opensAt: DateTime!
   closesAt: DateTime!
 
@@ -74,4 +78,13 @@ type Show {
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type Work {
+  id: ID! @id
+
+  x: Int!
+  y: Int!
+
+  assets: [Asset!]! @relation(link: TABLE)
 }
