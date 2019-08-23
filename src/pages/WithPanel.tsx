@@ -3,17 +3,31 @@ import ForcedPanelState from "context/ForcedPanelState";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
-import React, { useCallback } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import arrow from "components/arrow.svg";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
 
-const Container = styled(animated.div)`
+const Backboard = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const Content = styled(animated.div)`
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+`;
+
+const PanelContainer = styled(animated.div)`
   z-index: 10;
   position: absolute;
-  top: 0rem;
+  top: 0;
   right: 0;
-  bottom: 0rem;
+  bottom: 0;
 
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -26,7 +40,7 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
 ))`
   z-index: 9;
   position: absolute;
-  bottom: -1.5rem;
+  bottom: -1.75rem;
   right: calc(1rem + ${({ panelWidth }) => panelWidth}px);
   font-size: 1rem;
   padding: 0.75rem;
@@ -52,11 +66,11 @@ const Inner = styled(animated.div)`
   height: 100%;
 `;
 
-const Content = styled.div`
+const PanelContentElement = styled.div`
   width: 33vw;
 `;
 
-export default function Panel() {
+export default function Panel({ children }: PropsWithChildren<void>) {
   const { forcedState } = ForcedPanelState.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 
@@ -67,29 +81,33 @@ export default function Panel() {
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
-  const { x, deg } = useSpring({
+  const { x, width, deg } = useSpring({
     x: showPanel ? 0 : -1 * (panelWidth || 0),
+    width: showPanel ? panelWidth || 0 : 0,
     deg: showPanel ? 90 : -90,
   });
 
   return (
-    <Container ref={panelRef}>
-      <Inner style={{ transform: x.interpolate(x => `translateX(${-x}px)`) }}>
-        <PanelButton
-          onClick={canTogglePanel ? togglePanel : null}
-          canTogglePanel={canTogglePanel}
-          panelWidth={panelWidth}
-        >
-          {!isOpen && <PanelAction.Target as="span" />}{" "}
-          <animated.img
-            src={arrow}
-            style={{
-              transform: deg.interpolate(d => `rotate(${d}deg)`),
-            }}
-          />
-        </PanelButton>
-        <PanelContent.Target as={Content} />
-      </Inner>
-    </Container>
+    <Backboard>
+      <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
+      <PanelContainer ref={panelRef}>
+        <Inner style={{ transform: x.interpolate(x => `translateX(${-x}px)`) }}>
+          <PanelButton
+            onClick={canTogglePanel ? togglePanel : null}
+            canTogglePanel={canTogglePanel}
+            panelWidth={panelWidth}
+          >
+            {!isOpen && <PanelAction.Target as="span" />}{" "}
+            <animated.img
+              src={arrow}
+              style={{
+                transform: deg.interpolate(d => `rotate(${d}deg)`),
+              }}
+            />
+          </PanelButton>
+          <PanelContent.Target as={PanelContentElement} />
+        </Inner>
+      </PanelContainer>
+    </Backboard>
   );
 }

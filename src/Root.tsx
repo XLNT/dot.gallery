@@ -11,15 +11,14 @@ import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
-import Panel from "pages/Panel";
 import PanelState from "context/PanelState";
+import WithPanel from "pages/WithPanel";
 import makeClient from "client/client";
 import nest from "lib/nest";
 import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
 const GlobalStyle = createGlobalStyle`
-
 `;
 
 const Providers = nest([
@@ -38,11 +37,12 @@ function Root() {
       <GlobalStyle />
       <Providers theme={theme} client={client}>
         <>
-          <Router>
-            <Route path="/" exact component={Home} />
-            <Route path="/:slug" component={Exhibition} />
-          </Router>
-          <Panel />
+          <WithPanel>
+            <Router>
+              <Route path="/" exact component={Home} />
+              <Route path="/:slug" component={Exhibition} />
+            </Router>
+          </WithPanel>
         </>
       </Providers>
     </>

@@ -8,6 +8,7 @@ export default function Home() {
 
   return (
     <div>
+      This is the Home page.
       <PanelAction.Source>About</PanelAction.Source>
       <PanelContent.Source>
         <h1>dot.gallery</h1>
