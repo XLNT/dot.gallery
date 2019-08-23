@@ -7,19 +7,26 @@ import { hot } from "react-hot-loader";
 import React from "react";
 
 import Exhibition from "pages/Exhibition";
+import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
 import Panel from "pages/Panel";
 import PanelState from "context/PanelState";
 import makeClient from "client/client";
 import nest from "lib/nest";
+import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
 const GlobalStyle = createGlobalStyle`
 
 `;
 
-const Providers = nest([Fullscreen.Provider, PanelState.Provider, ApolloProvider]);
+const Providers = nest([
+  Fullscreen.Provider,
+  PanelState.Provider,
+  ApolloProvider,
+  ExhibitionThemeProvider,
+]);
 
 function Root() {
   const client = useConstant(() => makeClient());
@@ -27,12 +34,14 @@ function Root() {
   return (
     <>
       <GlobalStyle />
-      <Providers client={client}>
-        <Router>
-          <Route path="/" exact component={Home} />
-          <Route path="/:slug" component={Exhibition} />
-        </Router>
-        <Panel />
+      <Providers theme={theme} client={client}>
+        <>
+          <Router>
+            <Route path="/" exact component={Home} />
+            <Route path="/:slug" component={Exhibition} />
+          </Router>
+          <Panel />
+        </>
       </Providers>
     </>
   );

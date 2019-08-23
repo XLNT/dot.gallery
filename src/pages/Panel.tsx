@@ -26,7 +26,14 @@ const PanelButton = styled(animated.div)`
   font-size: 1rem;
   padding: 0.75rem;
 
+  cursor: pointer;
   border: 1px solid black;
+
+  transition: transform 0.1s ease-in;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const Inner = styled(animated.div)`

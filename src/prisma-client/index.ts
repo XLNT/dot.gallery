@@ -600,6 +600,7 @@ export type EntityWhereUniqueInput = AtLeastOne<{
 
 export type ExhibitionWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  number?: Maybe<Int>;
 }>;
 
 export interface ShowWhereInput {
@@ -686,20 +687,6 @@ export interface ExhibitionWhereInput {
   number_lte?: Maybe<Int>;
   number_gt?: Maybe<Int>;
   number_gte?: Maybe<Int>;
-  theme?: Maybe<String>;
-  theme_not?: Maybe<String>;
-  theme_in?: Maybe<String[] | String>;
-  theme_not_in?: Maybe<String[] | String>;
-  theme_lt?: Maybe<String>;
-  theme_lte?: Maybe<String>;
-  theme_gt?: Maybe<String>;
-  theme_gte?: Maybe<String>;
-  theme_contains?: Maybe<String>;
-  theme_not_contains?: Maybe<String>;
-  theme_starts_with?: Maybe<String>;
-  theme_not_starts_with?: Maybe<String>;
-  theme_ends_with?: Maybe<String>;
-  theme_not_ends_with?: Maybe<String>;
   extent?: Maybe<Int>;
   extent_not?: Maybe<Int>;
   extent_in?: Maybe<Int[] | Int>;
@@ -1359,7 +1346,7 @@ export interface EntityUpdateManyMutationInput {
 export interface ExhibitionCreateInput {
   id?: Maybe<ID_Input>;
   number: Int;
-  theme?: Maybe<String>;
+  theme?: Maybe<Json>;
   extent?: Maybe<Int>;
   opensAt: DateTimeInput;
   closesAt: DateTimeInput;
@@ -1382,7 +1369,7 @@ export interface ShowCreateWithoutExhibitionInput {
 
 export interface ExhibitionUpdateInput {
   number?: Maybe<Int>;
-  theme?: Maybe<String>;
+  theme?: Maybe<Json>;
   extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
@@ -1501,7 +1488,7 @@ export interface ShowUpdateManyDataInput {
 
 export interface ExhibitionUpdateManyMutationInput {
   number?: Maybe<Int>;
-  theme?: Maybe<String>;
+  theme?: Maybe<Json>;
   extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
@@ -1546,7 +1533,7 @@ export interface ExhibitionCreateOneWithoutShowsInput {
 export interface ExhibitionCreateWithoutShowsInput {
   id?: Maybe<ID_Input>;
   number: Int;
-  theme?: Maybe<String>;
+  theme?: Maybe<Json>;
   extent?: Maybe<Int>;
   opensAt: DateTimeInput;
   closesAt: DateTimeInput;
@@ -1568,7 +1555,7 @@ export interface ExhibitionUpdateOneRequiredWithoutShowsInput {
 
 export interface ExhibitionUpdateWithoutShowsDataInput {
   number?: Maybe<Int>;
-  theme?: Maybe<String>;
+  theme?: Maybe<Json>;
   extent?: Maybe<Int>;
   opensAt?: Maybe<DateTimeInput>;
   closesAt?: Maybe<DateTimeInput>;
@@ -2174,7 +2161,7 @@ export interface AggregateEntitySubscription
 export interface Exhibition {
   id: ID_Output;
   number: Int;
-  theme: String;
+  theme?: Json;
   extent: Int;
   opensAt: DateTimeOutput;
   closesAt: DateTimeOutput;
@@ -2185,7 +2172,7 @@ export interface Exhibition {
 export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
-  theme: () => Promise<String>;
+  theme: () => Promise<Json>;
   extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
@@ -2207,7 +2194,7 @@ export interface ExhibitionSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   number: () => Promise<AsyncIterator<Int>>;
-  theme: () => Promise<AsyncIterator<String>>;
+  theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;
   opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2229,7 +2216,7 @@ export interface ExhibitionNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
-  theme: () => Promise<String>;
+  theme: () => Promise<Json>;
   extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
@@ -2654,7 +2641,7 @@ export interface ExhibitionSubscriptionPayloadSubscription
 export interface ExhibitionPreviousValues {
   id: ID_Output;
   number: Int;
-  theme: String;
+  theme?: Json;
   extent: Int;
   opensAt: DateTimeOutput;
   closesAt: DateTimeOutput;
@@ -2667,7 +2654,7 @@ export interface ExhibitionPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   number: () => Promise<Int>;
-  theme: () => Promise<String>;
+  theme: () => Promise<Json>;
   extent: () => Promise<Int>;
   opensAt: () => Promise<DateTimeOutput>;
   closesAt: () => Promise<DateTimeOutput>;
@@ -2680,7 +2667,7 @@ export interface ExhibitionPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   number: () => Promise<AsyncIterator<Int>>;
-  theme: () => Promise<AsyncIterator<String>>;
+  theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;
   opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2877,6 +2864,8 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
+
+export type Json = any;
 
 export type Long = string;
 

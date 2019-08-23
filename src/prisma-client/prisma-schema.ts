@@ -639,7 +639,7 @@ input EntityWhereUniqueInput {
 type Exhibition {
   id: ID!
   number: Int!
-  theme: String!
+  theme: Json
   extent: Int!
   opensAt: DateTime!
   closesAt: DateTime!
@@ -657,7 +657,7 @@ type ExhibitionConnection {
 input ExhibitionCreateInput {
   id: ID
   number: Int!
-  theme: String
+  theme: Json
   extent: Int
   opensAt: DateTime!
   closesAt: DateTime!
@@ -672,7 +672,7 @@ input ExhibitionCreateOneWithoutShowsInput {
 input ExhibitionCreateWithoutShowsInput {
   id: ID
   number: Int!
-  theme: String
+  theme: Json
   extent: Int
   opensAt: DateTime!
   closesAt: DateTime!
@@ -705,7 +705,7 @@ enum ExhibitionOrderByInput {
 type ExhibitionPreviousValues {
   id: ID!
   number: Int!
-  theme: String!
+  theme: Json
   extent: Int!
   opensAt: DateTime!
   closesAt: DateTime!
@@ -733,7 +733,7 @@ input ExhibitionSubscriptionWhereInput {
 
 input ExhibitionUpdateInput {
   number: Int
-  theme: String
+  theme: Json
   extent: Int
   opensAt: DateTime
   closesAt: DateTime
@@ -742,7 +742,7 @@ input ExhibitionUpdateInput {
 
 input ExhibitionUpdateManyMutationInput {
   number: Int
-  theme: String
+  theme: Json
   extent: Int
   opensAt: DateTime
   closesAt: DateTime
@@ -757,7 +757,7 @@ input ExhibitionUpdateOneRequiredWithoutShowsInput {
 
 input ExhibitionUpdateWithoutShowsDataInput {
   number: Int
-  theme: String
+  theme: Json
   extent: Int
   opensAt: DateTime
   closesAt: DateTime
@@ -791,20 +791,6 @@ input ExhibitionWhereInput {
   number_lte: Int
   number_gt: Int
   number_gte: Int
-  theme: String
-  theme_not: String
-  theme_in: [String!]
-  theme_not_in: [String!]
-  theme_lt: String
-  theme_lte: String
-  theme_gt: String
-  theme_gte: String
-  theme_contains: String
-  theme_not_contains: String
-  theme_starts_with: String
-  theme_not_starts_with: String
-  theme_ends_with: String
-  theme_not_ends_with: String
   extent: Int
   extent_not: Int
   extent_in: [Int!]
@@ -855,6 +841,7 @@ input ExhibitionWhereInput {
 
 input ExhibitionWhereUniqueInput {
   id: ID
+  number: Int
 }
 
 type Issue {
@@ -1151,6 +1138,8 @@ input IssueWhereInput {
 input IssueWhereUniqueInput {
   id: ID
 }
+
+scalar Json
 
 scalar Long
 

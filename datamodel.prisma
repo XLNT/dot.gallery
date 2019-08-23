@@ -56,8 +56,8 @@ type Asset {
 
 type Exhibition {
   id: ID! @id
-  number: Int!
-  theme: String! @default(value: "#000000")
+  number: Int! @unique
+  theme: Json
   extent: Int! @default(value: 7)
   opensAt: DateTime!
   closesAt: DateTime!

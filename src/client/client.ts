@@ -1,10 +1,10 @@
 import { ApolloClient } from "apollo-client";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { HttpLink } from "apollo-link-http";
-import { onError } from "apollo-link-error";
 import { ApolloLink, split } from "apollo-link";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
+import { onError } from "apollo-link-error";
 
 const BASE_URL = "gallery-v1-f5f0a401ff.herokuapp.com";
 
@@ -22,9 +22,7 @@ export default () =>
       }),
       split(
         ({ query }) => {
-          console.log(query);
           const definition = getMainDefinition(query);
-          console.log(definition);
           return (
             definition.kind === "OperationDefinition" && definition.operation === "subscription"
           );

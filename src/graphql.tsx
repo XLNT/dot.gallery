@@ -10,6 +10,7 @@ export type Scalars = {
   Int: number,
   Float: number,
   DateTime: any,
+  Json: any,
   Long: any,
 };
 
@@ -711,7 +712,7 @@ export type IExhibition = {
   __typename?: 'Exhibition',
   id: Scalars['ID'],
   number: Scalars['Int'],
-  theme: Scalars['String'],
+  theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
@@ -741,7 +742,7 @@ export type IExhibitionConnection = {
 export type IExhibitionCreateInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
-  theme?: Maybe<Scalars['String']>,
+  theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
@@ -756,7 +757,7 @@ export type IExhibitionCreateOneWithoutShowsInput = {
 export type IExhibitionCreateWithoutShowsInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
-  theme?: Maybe<Scalars['String']>,
+  theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
@@ -791,7 +792,7 @@ export type IExhibitionPreviousValues = {
   __typename?: 'ExhibitionPreviousValues',
   id: Scalars['ID'],
   number: Scalars['Int'],
-  theme: Scalars['String'],
+  theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
@@ -820,7 +821,7 @@ export type IExhibitionSubscriptionWhereInput = {
 
 export type IExhibitionUpdateInput = {
   number?: Maybe<Scalars['Int']>,
-  theme?: Maybe<Scalars['String']>,
+  theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
@@ -829,7 +830,7 @@ export type IExhibitionUpdateInput = {
 
 export type IExhibitionUpdateManyMutationInput = {
   number?: Maybe<Scalars['Int']>,
-  theme?: Maybe<Scalars['String']>,
+  theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
@@ -844,7 +845,7 @@ export type IExhibitionUpdateOneRequiredWithoutShowsInput = {
 
 export type IExhibitionUpdateWithoutShowsDataInput = {
   number?: Maybe<Scalars['Int']>,
-  theme?: Maybe<Scalars['String']>,
+  theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
@@ -878,20 +879,6 @@ export type IExhibitionWhereInput = {
   number_lte?: Maybe<Scalars['Int']>,
   number_gt?: Maybe<Scalars['Int']>,
   number_gte?: Maybe<Scalars['Int']>,
-  theme?: Maybe<Scalars['String']>,
-  theme_not?: Maybe<Scalars['String']>,
-  theme_in?: Maybe<Array<Scalars['String']>>,
-  theme_not_in?: Maybe<Array<Scalars['String']>>,
-  theme_lt?: Maybe<Scalars['String']>,
-  theme_lte?: Maybe<Scalars['String']>,
-  theme_gt?: Maybe<Scalars['String']>,
-  theme_gte?: Maybe<Scalars['String']>,
-  theme_contains?: Maybe<Scalars['String']>,
-  theme_not_contains?: Maybe<Scalars['String']>,
-  theme_starts_with?: Maybe<Scalars['String']>,
-  theme_not_starts_with?: Maybe<Scalars['String']>,
-  theme_ends_with?: Maybe<Scalars['String']>,
-  theme_not_ends_with?: Maybe<Scalars['String']>,
   extent?: Maybe<Scalars['Int']>,
   extent_not?: Maybe<Scalars['Int']>,
   extent_in?: Maybe<Array<Scalars['Int']>>,
@@ -942,6 +929,7 @@ export type IExhibitionWhereInput = {
 
 export type IExhibitionWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
+  number?: Maybe<Scalars['Int']>,
 };
 
 export type IIssue = {
@@ -1254,6 +1242,7 @@ export type IIssueWhereInput = {
 export type IIssueWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
 };
+
 
 
 export type IMutation = {
