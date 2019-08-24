@@ -20,6 +20,8 @@ const Content = styled(animated.div)`
   top: 0;
   left: 0;
   bottom: 0;
+
+  display: flex;
 `;
 
 const PanelContainer = styled(animated.div)`
@@ -70,7 +72,7 @@ const PanelContentElement = styled.div`
   width: 33vw;
 `;
 
-export default function Panel({ children }: PropsWithChildren<void>) {
+export default function Panel({ children }: PropsWithChildren<{}>) {
   const { forcedState } = ForcedPanelState.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 

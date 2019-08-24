@@ -4,7 +4,7 @@ import { useCurrentExhibitionQuery } from "graphql";
 import React, { PropsWithChildren } from "react";
 import theme from "./theme";
 
-export default function ExhibitionThemeProvider(props: PropsWithChildren<void>) {
+export default function ExhibitionThemeProvider(props: PropsWithChildren<{}>) {
   const { loading, error, data } = useCurrentExhibitionQuery();
   const exhibitionTheme = get(data, ["exhibitions", 0, "theme"], {});
 

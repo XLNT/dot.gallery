@@ -8,5 +8,5 @@ export default function useForcedPanelState(state: boolean) {
     setForcedState(state);
 
     return () => revokeForcedState();
-  });
+  }, [revokeForcedState, setForcedState, state]);
 }
