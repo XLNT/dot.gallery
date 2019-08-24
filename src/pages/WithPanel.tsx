@@ -86,6 +86,11 @@ const PanelContentElement = styled.div`
   width: 33vw;
 `;
 
+const Arrow = styled(animated.img)`
+  width: 1rem;
+  height: 1rem;
+`;
+
 export default function Panel({ children }: PropsWithChildren<{}>) {
   const { forcedState } = ForcedPanelState.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
@@ -120,7 +125,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
             panelWidth={panelWidth}
           >
             <PanelAction.Target as={PanelActionText} isOpen={isOpen} />
-            <animated.img
+            <Arrow
               src={arrow}
               style={{
                 transform: deg.interpolate(d => `rotate(${d}deg)`),
