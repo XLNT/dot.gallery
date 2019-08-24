@@ -34,8 +34,6 @@ export default function Room({ room }: RoomProps) {
     contentful,
   ]);
 
-  console.log(result, error, state, state === "resolved");
-
   return (
     <>
       <Container>
@@ -45,6 +43,12 @@ export default function Room({ room }: RoomProps) {
       <PanelContent.Source>
         <WithContentTransition>
           {state === "resolved" && <RichText richText={result.fields.body} />}
+          {state === "rejected" && (
+            <>
+              <h1>Error</h1>
+              <code>{error.message}</code>
+            </>
+          )}
         </WithContentTransition>
       </PanelContent.Source>
     </>
