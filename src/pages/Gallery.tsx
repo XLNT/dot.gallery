@@ -1,17 +1,13 @@
 import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { animated, useTransition } from "react-spring";
-import { get, isNull, isUndefined, negate, uniqBy } from "lodash-es";
-import { isEqual } from "apollo-utilities";
-import { useCurrentExhibitionQuery } from "graphql";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import Layer from "components/Layer";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import styled from "styled-components";
+import useCurrentExhibition from "hook/useCurrentExhibition";
 import useKey from "use-key-hook";
-import usePreviousValue from "hook/usePreviousValue";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Backboard = styled.div`
@@ -35,8 +31,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
   useSuggestedPanelState(true);
   const [journey, appendToJourney] = Journey.useContainer();
 
-  const { data } = useCurrentExhibitionQuery();
-  const exhibition = get(data, ["exhibitions", 0]);
+  const { exhibition } = useCurrentExhibition();
 
   const [coords, setCoords] = useState<Coords>(null);
   // const prevCoords = usePreviousValue(coords, isEqual);

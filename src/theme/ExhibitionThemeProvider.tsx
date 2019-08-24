@@ -1,12 +1,12 @@
 import { ThemeProvider } from "styled-components";
 import { get } from "lodash-es";
-import { useCurrentExhibitionQuery } from "graphql";
 import React, { PropsWithChildren } from "react";
 import theme from "./theme";
+import useCurrentExhibition from "hook/useCurrentExhibition";
 
 export default function ExhibitionThemeProvider(props: PropsWithChildren<{}>) {
-  const { loading, error, data } = useCurrentExhibitionQuery();
-  const exhibitionTheme = get(data, ["exhibitions", 0, "theme"], {});
+  const { exhibition, loading, error } = useCurrentExhibition();
+  const exhibitionTheme = get(exhibition, "theme", {});
 
   const currentTheme = loading || error ? theme : { ...theme, ...exhibitionTheme };
 

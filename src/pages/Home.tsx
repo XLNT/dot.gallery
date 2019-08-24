@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
-import { first } from "lodash-es";
 import { format } from "lib/exhibitionSlug";
-import { useCurrentExhibitionQuery } from "graphql";
 import ArtworkMetadata from "components/ArtworkMetadata";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
-import PanelState from "context/PanelState";
 import React from "react";
 {
   /*import AudioComponent from "components/AudioComponent"*/
@@ -13,10 +10,12 @@ import React from "react";
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
 import LoginComponent from "../components/LoginComponent";
 import WithContentTransition from "components/WithContentTransition";
+import useCurrentExhibition from "hook/useCurrentExhibition";
+import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 export default function Home() {
-  const [isPanelOpen, setPanelState, hydrated] = PanelState.useContainer();
-  const { loading, error, data } = useCurrentExhibitionQuery();
+  useSuggestedPanelState(true);
+  const { exhibition, loading, error } = useCurrentExhibition();
 
   const renderExhibitionInfo = () => {
     if (loading) {
@@ -27,7 +26,6 @@ export default function Home() {
       return <code>{JSON.stringify(error)}</code>;
     }
 
-    const exhibition = first(data.exhibitions);
     if (!exhibition) {
       return <div>No current exhibition found.</div>;
     }
