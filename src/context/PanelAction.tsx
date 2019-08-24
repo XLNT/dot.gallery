@@ -1,3 +1,3 @@
-import { createTeleporter } from "react-teleporter";
+import createTeleporter from "lib/teleporter";
 
 export default createTeleporter();

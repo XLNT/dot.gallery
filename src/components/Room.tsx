@@ -1,4 +1,5 @@
 import { Asset as AssetModel, Room as RoomModel } from "graphql";
+import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React from "react";
 import RichText from "@madebyconnor/rich-text-to-jsx";
@@ -33,11 +34,14 @@ export default function Room({ room }: RoomProps) {
     contentful,
   ]);
 
+  console.log(result, error, state, state === "resolved");
+
   return (
     <>
       <Container>
         <Work src={room.asset.uri} />
       </Container>
+      <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
           {state === "resolved" && <RichText richText={result.fields.body} />}

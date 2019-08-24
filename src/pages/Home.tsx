@@ -2,14 +2,17 @@ import { Link } from "react-router-dom";
 import { first } from "lodash-es";
 import { format } from "lib/exhibitionSlug";
 import { useCurrentExhibitionQuery } from "graphql";
-import React from "react";
+import ArtworkMetadata from "components/ArtworkMetadata";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
-import ArtworkMetadata from "components/ArtworkMetadata"
-{/*import AudioComponent from "components/AudioComponent"*/}
+import React from "react";
+{
+  /*import AudioComponent from "components/AudioComponent"*/
+}
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
 import LoginComponent from "../components/LoginComponent";
+import WithContentTransition from "components/WithContentTransition";
 
 export default function Home() {
   const [isPanelOpen, setPanelState, hydrated] = PanelState.useContainer();
@@ -48,12 +51,14 @@ export default function Home() {
     <div>
       This is the Home page.
       {renderExhibitionInfo()}
-      <PanelAction.Source>About</PanelAction.Source>
+      <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
-        <h1>dot.gallery</h1>
-        <ArtworkMetadata artistName="test"/>
+        <WithContentTransition>
+          <h1>dot.gallery</h1>
+          <ArtworkMetadata artistName="test" />
+        </WithContentTransition>
       </PanelContent.Source>
-      <LoginComponent ticketPrice="200" remainingTicketCount="45"/>
+      <LoginComponent ticketPrice="200" remainingTicketCount="45" />
       {/*<AudioComponent />*/}
     </div>
   );

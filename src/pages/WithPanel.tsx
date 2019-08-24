@@ -63,7 +63,7 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   transform: rotate(90deg);
 `;
 
-const Inner = styled(animated.div)`
+const Inner = styled.div`
   position: relative;
 
   padding: 0.5rem;
@@ -71,6 +71,12 @@ const Inner = styled(animated.div)`
   height: 100%;
   background: ${fromTheme("panel")};
   color: ${fromTheme("panelText")};
+`;
+
+const PanelActionText = styled.div`
+  font-family: ${fromTheme("fontFamily")};
+  color: ${fromTheme("panelText")};
+  display: ${({ isOpen }) => (isOpen ? "none" : "inherit")};
 `;
 
 const PanelContentElement = styled.div`
@@ -100,14 +106,17 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
   return (
     <Backboard>
       <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
-      <PanelContainer ref={panelRef}>
-        <Inner style={{ transform: x.interpolate(x => `translateX(${x}px)`) }}>
+      <PanelContainer
+        ref={panelRef}
+        style={{ transform: x.interpolate(x => `translateX(${x}px)`) }}
+      >
+        <Inner>
           <PanelButton
             onClick={canTogglePanel ? togglePanel : null}
             canTogglePanel={canTogglePanel}
             panelWidth={panelWidth}
           >
-            {!isOpen && <PanelAction.Target as="span" />}{" "}
+            <PanelAction.Target as={PanelActionText} isOpen={isOpen} />
             <animated.img
               src={arrow}
               style={{
