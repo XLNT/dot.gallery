@@ -11,6 +11,7 @@ import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
+import Journey from "context/Journey";
 import PanelState from "context/PanelState";
 import WithPanel from "pages/WithPanel";
 import makeClient from "client/client";
@@ -25,6 +26,7 @@ const Providers = nest([
   Fullscreen.Provider,
   PanelState.Provider,
   ForcedPanelState.Provider,
+  Journey.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
 ]);
