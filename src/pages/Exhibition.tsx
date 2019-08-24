@@ -9,6 +9,7 @@ import React, { FunctionComponent, useMemo, useState } from "react";
 import styled from "styled-components";
 
 const Perspective = styled.div`
+  flex: 1;
   position: relative;
   perspective: 1000px;
 `;
@@ -19,6 +20,7 @@ const Transition = styled(animated.div)`
   top: 0;
   right: 0;
   bottom: 0;
+  display: flex;
 `;
 
 const routes: { [_: number]: FunctionComponent<ExhibitionProps<any>> } = {
