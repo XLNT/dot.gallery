@@ -3,11 +3,13 @@ import { RouteComponentProps } from "react-router-dom";
 import { animated, useTransition } from "react-spring";
 import { parse } from "lib/exhibitionSlug";
 import Foyer from "./Foyer";
+import Fullscreen from "context/Fullscreen";
 import Gallery from "./Gallery";
 import GiftShop from "./GiftShop";
 import Preflight from "./Preflight";
-import React, { FunctionComponent, useMemo, useState } from "react";
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+import usePreviousValue from "hook/usePreviousValue";
 
 const Perspective = styled.div`
   flex: 1;
@@ -34,6 +36,15 @@ const routes: { [_: number]: FunctionComponent<ExhibitionProps<any>> } = {
 export default function Exhibition({ match }: RouteComponentProps<{ slug: string }>) {
   const [flow, setFlow] = useState<Flow>(Flow.Preflight);
   const [exhibition, show] = useMemo(() => parse(match.params.slug), [match.params.slug]);
+  const { isFullscreen } = Fullscreen.useContainer();
+
+  const wasFullscreen = usePreviousValue(isFullscreen);
+
+  useEffect(() => {
+    if (wasFullscreen && !isFullscreen) {
+      setFlow(Flow.GiftShop);
+    }
+  }, [isFullscreen, wasFullscreen]);
 
   const routeProps = {
     exhibition,
