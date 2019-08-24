@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { format } from "lib/exhibitionSlug";
-import ArtworkMetadata from "components/ArtworkMetadata";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React from "react";
@@ -9,13 +8,19 @@ import React from "react";
 }
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
 import LoginComponent from "../components/LoginComponent";
+import RichText from "@madebyconnor/rich-text-to-jsx";
 import WithContentTransition from "components/WithContentTransition";
+import contentful from "client/contentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import usePromise from "react-use-promise";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
+
+const ABOUT_ID = "3myaHf3JO0keiFVJvbvgL4";
 
 export default function Home() {
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
+  const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
 
   const renderExhibitionInfo = () => {
     if (loading) {
@@ -52,8 +57,12 @@ export default function Home() {
       <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
-          <h1>dot.gallery</h1>
-          <ArtworkMetadata artistName="test" />
+          {state === "resolved" && <RichText richText={result.fields.body} />}
+          {state === "rejected" && (
+            <>
+              <h1>dot.gallery</h1>
+            </>
+          )}
         </WithContentTransition>
       </PanelContent.Source>
       <LoginComponent ticketPrice="200" remainingTicketCount="45" />

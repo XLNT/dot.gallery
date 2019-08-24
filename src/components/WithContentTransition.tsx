@@ -3,6 +3,7 @@ import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
+  flex: 1;
   position: relative;
 `;
 
@@ -12,6 +13,7 @@ const Content = styled(animated.div)`
   top: 0;
   right: 0;
   bottom: 0;
+  overflow-y: auto;
 `;
 
 export default function WithContentTransition({ children }: PropsWithChildren<{}>) {

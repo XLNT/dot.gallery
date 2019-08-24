@@ -14,12 +14,16 @@ import Home from "pages/Home";
 import Journey from "context/Journey";
 import PanelState from "context/PanelState";
 import WithPanel from "pages/WithPanel";
+import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
 import nest from "lib/nest";
 import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
 const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: ${fromTheme("fontFamily")};
+  }
 `;
 
 const Providers = nest([
@@ -36,9 +40,9 @@ function Root() {
 
   return (
     <>
-      <GlobalStyle />
       <Providers theme={theme} client={client}>
         <>
+          <GlobalStyle />
           <WithPanel>
             <Router>
               <Route path="/" exact component={Home} />

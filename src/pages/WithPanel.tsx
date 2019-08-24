@@ -71,6 +71,8 @@ const Inner = styled.div`
   height: 100%;
   background: ${fromTheme("panel")};
   color: ${fromTheme("panelText")};
+
+  display: flex;
 `;
 
 const PanelActionText = styled.div`
@@ -80,6 +82,8 @@ const PanelActionText = styled.div`
 `;
 
 const PanelContentElement = styled.div`
+  flex: 1;
+  display: flex;
   width: 33vw;
 `;
 
