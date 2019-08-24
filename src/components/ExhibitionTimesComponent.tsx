@@ -1,12 +1,19 @@
 import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
+import { useCreateAssetMutation } from "graphql";
 import CalendarSvg from "components/calendar.svg";
 import React, { useCallback, useMemo } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useRouter from "context/useRouter";
+
+import { buildTokenUri } from "lib/tokenURI";
+import { times } from "lodash-es";
+import EntityId from "context/EntityId";
+import tokenURI from "images/token.png";
+import useEntityAssets from "hook/useEntityAssets";
 
 const Container = styled.div`
   flex: 1;
@@ -50,6 +57,13 @@ const Calendar = styled.img`
 export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: any) {
   const { history } = useRouter();
   const { exhibition } = useCurrentExhibition();
+
+  const [entityId] = EntityId.useContainer();
+  const { assets } = useEntityAssets();
+  const [grantToken] = useCreateAssetMutation({
+    variables: { ownerId: entityId, uri: buildTokenUri(tokenURI) },
+  });
+
   const opensAtDate = useMemo(() => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_MED), [
     opensAt,
   ]);
@@ -68,11 +82,12 @@ export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: 
 
   const showState = getShowState(opensAt, closesAt);
 
-  const goExhibition = useCallback(() => history.push(`/${format(exhibition.number, number)}`), [
-    exhibition.number,
-    history,
-    number,
-  ]);
+  const goExhibition = useCallback(async () => {
+    if (assets.length === 0) {
+      await Promise.all(times(5, () => grantToken()));
+    }
+    history.push(`/${format(exhibition.number, number)}`);
+  }, [assets.length, exhibition.number, grantToken, history, number]);
 
   const goRequest = useCallback(() => {}, []);
 

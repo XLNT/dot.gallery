@@ -6,6 +6,7 @@ import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import React from "react";
 
+import EntityId from "context/EntityId";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
@@ -31,6 +32,7 @@ const Providers = nest([
   PanelState.Provider,
   ForcedPanelState.Provider,
   Journey.Provider,
+  EntityId.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
 ]);

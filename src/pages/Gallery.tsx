@@ -1,12 +1,17 @@
 import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
+import { get } from "lodash-es";
+import { useEntityQuery } from "graphql";
+import EntityId from "context/EntityId";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import Layer from "components/Layer";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
+import SocialLayer from "./Gallery/SocialLayer";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useEntityAssets from "hook/useEntityAssets";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -32,6 +37,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
   const [journey, appendToJourney] = Journey.useContainer();
 
   const { exhibition } = useCurrentExhibition();
+  const assets = useEntityAssets();
 
   const [coords, setCoords] = useState<Coords>(null);
   // const prevCoords = usePreviousValue(coords, isEqual);
@@ -47,7 +53,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
   }, [exhibition]);
 
   useKey(
-    (pressedKey: number, event: Event) => {
+    (pressedKey: number) => {
       if (exhibition) {
         appendToJourney(directionFor(pressedKey));
         setCoords(navigate(coords, exhibition.extent, directionFor(pressedKey)));
@@ -68,6 +74,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
     <Backboard>
       <Canvas>
         <JourneyAndExit {...props} />
+        <SocialLayer />
         <InnerCanvas>{room && <Room room={room} />}</InnerCanvas>
       </Canvas>
     </Backboard>

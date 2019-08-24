@@ -287,8 +287,7 @@ scalar DateTime
 
 type Entity {
   id: ID!
-  handle: String!
-  email: String!
+  handle: String
   ownedAssets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -302,8 +301,7 @@ type EntityConnection {
 
 input EntityCreateInput {
   id: ID
-  handle: String!
-  email: String!
+  handle: String
   ownedAssets: AssetCreateManyWithoutOwnerInput
 }
 
@@ -314,8 +312,7 @@ input EntityCreateOneWithoutOwnedAssetsInput {
 
 input EntityCreateWithoutOwnedAssetsInput {
   id: ID
-  handle: String!
-  email: String!
+  handle: String
 }
 
 type EntityEdge {
@@ -328,8 +325,6 @@ enum EntityOrderByInput {
   id_DESC
   handle_ASC
   handle_DESC
-  email_ASC
-  email_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -338,8 +333,7 @@ enum EntityOrderByInput {
 
 type EntityPreviousValues {
   id: ID!
-  handle: String!
-  email: String!
+  handle: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -364,13 +358,11 @@ input EntitySubscriptionWhereInput {
 
 input EntityUpdateInput {
   handle: String
-  email: String
   ownedAssets: AssetUpdateManyWithoutOwnerInput
 }
 
 input EntityUpdateManyMutationInput {
   handle: String
-  email: String
 }
 
 input EntityUpdateOneRequiredWithoutOwnedAssetsInput {
@@ -382,7 +374,6 @@ input EntityUpdateOneRequiredWithoutOwnedAssetsInput {
 
 input EntityUpdateWithoutOwnedAssetsDataInput {
   handle: String
-  email: String
 }
 
 input EntityUpsertWithoutOwnedAssetsInput {
@@ -419,20 +410,6 @@ input EntityWhereInput {
   handle_not_starts_with: String
   handle_ends_with: String
   handle_not_ends_with: String
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
   ownedAssets_every: AssetWhereInput
   ownedAssets_some: AssetWhereInput
   ownedAssets_none: AssetWhereInput
@@ -460,7 +437,6 @@ input EntityWhereInput {
 input EntityWhereUniqueInput {
   id: ID
   handle: String
-  email: String
 }
 
 type Exhibition {

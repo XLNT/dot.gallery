@@ -1,0 +1,10 @@
+query Entity($id: ID!) {
+  entity(where: {id: $id}) {
+    id
+    handle
+    ownedAssets {
+      id
+      uri
+    }
+  }
+}

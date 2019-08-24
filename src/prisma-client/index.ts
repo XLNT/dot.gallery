@@ -296,8 +296,6 @@ export type EntityOrderByInput =
   | "id_DESC"
   | "handle_ASC"
   | "handle_DESC"
-  | "email_ASC"
-  | "email_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -408,20 +406,6 @@ export interface EntityWhereInput {
   handle_not_starts_with?: Maybe<String>;
   handle_ends_with?: Maybe<String>;
   handle_not_ends_with?: Maybe<String>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
   ownedAssets_every?: Maybe<AssetWhereInput>;
   ownedAssets_some?: Maybe<AssetWhereInput>;
   ownedAssets_none?: Maybe<AssetWhereInput>;
@@ -634,7 +618,6 @@ export interface ShowWhereInput {
 export type EntityWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   handle?: Maybe<String>;
-  email?: Maybe<String>;
 }>;
 
 export type ExhibitionWhereUniqueInput = AtLeastOne<{
@@ -665,8 +648,7 @@ export interface EntityCreateOneWithoutOwnedAssetsInput {
 
 export interface EntityCreateWithoutOwnedAssetsInput {
   id?: Maybe<ID_Input>;
-  handle: String;
-  email: String;
+  handle?: Maybe<String>;
 }
 
 export interface RoomCreateManyWithoutAssetInput {
@@ -725,7 +707,6 @@ export interface EntityUpdateOneRequiredWithoutOwnedAssetsInput {
 
 export interface EntityUpdateWithoutOwnedAssetsDataInput {
   handle?: Maybe<String>;
-  email?: Maybe<String>;
 }
 
 export interface EntityUpsertWithoutOwnedAssetsInput {
@@ -968,8 +949,7 @@ export interface AssetUpdateManyMutationInput {
 
 export interface EntityCreateInput {
   id?: Maybe<ID_Input>;
-  handle: String;
-  email: String;
+  handle?: Maybe<String>;
   ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>;
 }
 
@@ -986,7 +966,6 @@ export interface AssetCreateWithoutOwnerInput {
 
 export interface EntityUpdateInput {
   handle?: Maybe<String>;
-  email?: Maybe<String>;
   ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
 }
 
@@ -1087,7 +1066,6 @@ export interface AssetUpdateManyDataInput {
 
 export interface EntityUpdateManyMutationInput {
   handle?: Maybe<String>;
-  email?: Maybe<String>;
 }
 
 export interface ExhibitionCreateInput {
@@ -1406,8 +1384,7 @@ export interface AssetNullablePromise
 
 export interface Entity {
   id: ID_Output;
-  handle: String;
-  email: String;
+  handle?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1415,7 +1392,6 @@ export interface Entity {
 export interface EntityPromise extends Promise<Entity>, Fragmentable {
   id: () => Promise<ID_Output>;
   handle: () => Promise<String>;
-  email: () => Promise<String>;
   ownedAssets: <T = FragmentableArray<Asset>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
@@ -1434,7 +1410,6 @@ export interface EntitySubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   handle: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
   ownedAssets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
@@ -1453,7 +1428,6 @@ export interface EntityNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   handle: () => Promise<String>;
-  email: () => Promise<String>;
   ownedAssets: <T = FragmentableArray<Asset>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
@@ -2034,8 +2008,7 @@ export interface EntitySubscriptionPayloadSubscription
 
 export interface EntityPreviousValues {
   id: ID_Output;
-  handle: String;
-  email: String;
+  handle?: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2045,7 +2018,6 @@ export interface EntityPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   handle: () => Promise<String>;
-  email: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2055,7 +2027,6 @@ export interface EntityPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   handle: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }

@@ -321,8 +321,7 @@ export type BatchPayload = {
 export type Entity = {
   __typename?: 'Entity',
   id: Scalars['ID'],
-  handle: Scalars['String'],
-  email: Scalars['String'],
+  handle?: Maybe<Scalars['String']>,
   ownedAssets?: Maybe<Array<Asset>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
@@ -348,8 +347,7 @@ export type EntityConnection = {
 
 export type EntityCreateInput = {
   id?: Maybe<Scalars['ID']>,
-  handle: Scalars['String'],
-  email: Scalars['String'],
+  handle?: Maybe<Scalars['String']>,
   ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>,
 };
 
@@ -360,8 +358,7 @@ export type EntityCreateOneWithoutOwnedAssetsInput = {
 
 export type EntityCreateWithoutOwnedAssetsInput = {
   id?: Maybe<Scalars['ID']>,
-  handle: Scalars['String'],
-  email: Scalars['String'],
+  handle?: Maybe<Scalars['String']>,
 };
 
 export type EntityEdge = {
@@ -375,8 +372,6 @@ export enum EntityOrderByInput {
   IdDesc = 'id_DESC',
   HandleAsc = 'handle_ASC',
   HandleDesc = 'handle_DESC',
-  EmailAsc = 'email_ASC',
-  EmailDesc = 'email_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -386,8 +381,7 @@ export enum EntityOrderByInput {
 export type EntityPreviousValues = {
   __typename?: 'EntityPreviousValues',
   id: Scalars['ID'],
-  handle: Scalars['String'],
-  email: Scalars['String'],
+  handle?: Maybe<Scalars['String']>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -413,13 +407,11 @@ export type EntitySubscriptionWhereInput = {
 
 export type EntityUpdateInput = {
   handle?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
   ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>,
 };
 
 export type EntityUpdateManyMutationInput = {
   handle?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
 };
 
 export type EntityUpdateOneRequiredWithoutOwnedAssetsInput = {
@@ -431,7 +423,6 @@ export type EntityUpdateOneRequiredWithoutOwnedAssetsInput = {
 
 export type EntityUpdateWithoutOwnedAssetsDataInput = {
   handle?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
 };
 
 export type EntityUpsertWithoutOwnedAssetsInput = {
@@ -468,20 +459,6 @@ export type EntityWhereInput = {
   handle_not_starts_with?: Maybe<Scalars['String']>,
   handle_ends_with?: Maybe<Scalars['String']>,
   handle_not_ends_with?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
-  email_not?: Maybe<Scalars['String']>,
-  email_in?: Maybe<Array<Scalars['String']>>,
-  email_not_in?: Maybe<Array<Scalars['String']>>,
-  email_lt?: Maybe<Scalars['String']>,
-  email_lte?: Maybe<Scalars['String']>,
-  email_gt?: Maybe<Scalars['String']>,
-  email_gte?: Maybe<Scalars['String']>,
-  email_contains?: Maybe<Scalars['String']>,
-  email_not_contains?: Maybe<Scalars['String']>,
-  email_starts_with?: Maybe<Scalars['String']>,
-  email_not_starts_with?: Maybe<Scalars['String']>,
-  email_ends_with?: Maybe<Scalars['String']>,
-  email_not_ends_with?: Maybe<Scalars['String']>,
   ownedAssets_every?: Maybe<AssetWhereInput>,
   ownedAssets_some?: Maybe<AssetWhereInput>,
   ownedAssets_none?: Maybe<AssetWhereInput>,
@@ -509,7 +486,6 @@ export type EntityWhereInput = {
 export type EntityWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
   handle?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
 };
 
 export type Exhibition = {
@@ -1749,6 +1725,35 @@ export type SubscriptionRoomArgs = {
 export type SubscriptionShowArgs = {
   where?: Maybe<ShowSubscriptionWhereInput>
 };
+export type CreateAssetMutationVariables = {
+  ownerId: Scalars['ID'],
+  uri: Scalars['String']
+};
+
+
+export type CreateAssetMutation = (
+  { __typename?: 'Mutation' }
+  & { createAsset: (
+    { __typename?: 'Asset' }
+    & Pick<Asset, 'id' | 'uri'>
+    & { owner: (
+      { __typename?: 'Entity' }
+      & Pick<Entity, 'id'>
+    ) }
+  ) }
+);
+
+export type CreateEntityMutationVariables = {};
+
+
+export type CreateEntityMutation = (
+  { __typename?: 'Mutation' }
+  & { createEntity: (
+    { __typename?: 'Entity' }
+    & Pick<Entity, 'id'>
+  ) }
+);
+
 export type CurrentExhibitionQueryVariables = {};
 
 
@@ -1771,6 +1776,57 @@ export type CurrentExhibitionQuery = (
   )>> }
 );
 
+export type EntityQueryVariables = {
+  id: Scalars['ID']
+};
+
+
+export type EntityQuery = (
+  { __typename?: 'Query' }
+  & { entity: Maybe<(
+    { __typename?: 'Entity' }
+    & Pick<Entity, 'id' | 'handle'>
+    & { ownedAssets: Maybe<Array<(
+      { __typename?: 'Asset' }
+      & Pick<Asset, 'id' | 'uri'>
+    )>> }
+  )> }
+);
+
+export const CreateAssetDocument = gql`
+    mutation CreateAsset($ownerId: ID!, $uri: String!) {
+  createAsset(data: {owner: {connect: {id: $ownerId}}, uri: $uri}) {
+    id
+    uri
+    owner {
+      id
+    }
+  }
+}
+    `;
+export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<CreateAssetMutation, CreateAssetMutationVariables>;
+
+    export function useCreateAssetMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAssetMutation, CreateAssetMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreateAssetMutation, CreateAssetMutationVariables>(CreateAssetDocument, baseOptions);
+    };
+export type CreateAssetMutationHookResult = ReturnType<typeof useCreateAssetMutation>;
+export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<CreateAssetMutation>;
+export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAssetMutation, CreateAssetMutationVariables>;
+export const CreateEntityDocument = gql`
+    mutation CreateEntity {
+  createEntity(data: {}) {
+    id
+  }
+}
+    `;
+export type CreateEntityMutationFn = ApolloReactCommon.MutationFunction<CreateEntityMutation, CreateEntityMutationVariables>;
+
+    export function useCreateEntityMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateEntityMutation, CreateEntityMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreateEntityMutation, CreateEntityMutationVariables>(CreateEntityDocument, baseOptions);
+    };
+export type CreateEntityMutationHookResult = ReturnType<typeof useCreateEntityMutation>;
+export type CreateEntityMutationResult = ApolloReactCommon.MutationResult<CreateEntityMutation>;
+export type CreateEntityMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateEntityMutation, CreateEntityMutationVariables>;
 export const CurrentExhibitionDocument = gql`
     query CurrentExhibition {
   exhibitions(last: 1, orderBy: number_DESC) {
@@ -1808,3 +1864,25 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
+export const EntityDocument = gql`
+    query Entity($id: ID!) {
+  entity(where: {id: $id}) {
+    id
+    handle
+    ownedAssets {
+      id
+      uri
+    }
+  }
+}
+    `;
+
+    export function useEntityQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EntityQuery, EntityQueryVariables>) {
+      return ApolloReactHooks.useQuery<EntityQuery, EntityQueryVariables>(EntityDocument, baseOptions);
+    };
+      export function useEntityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EntityQuery, EntityQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<EntityQuery, EntityQueryVariables>(EntityDocument, baseOptions);
+      };
+      
+export type EntityQueryHookResult = ReturnType<typeof useEntityQuery>;
+export type EntityQueryResult = ApolloReactCommon.QueryResult<EntityQuery, EntityQueryVariables>;

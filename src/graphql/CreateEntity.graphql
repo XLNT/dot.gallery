@@ -1,0 +1,5 @@
+mutation CreateEntity {
+  createEntity(data: {}) {
+    id
+  }
+}

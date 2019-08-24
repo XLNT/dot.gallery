@@ -14,8 +14,10 @@ const Container = styled.div`
 export default function Preflight({ exhibition, show, setFlow }: ExhibitionProps<void>) {
   const { setFullscreen } = Fullscreen.useContainer();
   const goFoyer = useCallback(async () => {
-    process.env.NODE_ENV !== "development" && setFullscreen(true);
-    await timeout(2000);
+    if (process.env.NODE_ENV !== "development") {
+      setFullscreen(true);
+      await timeout(2000);
+    }
     setFlow(Flow.Foyer);
   }, [setFlow, setFullscreen]);
 

@@ -1,11 +1,12 @@
 import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
+import { useCreateEntityMutation } from "graphql";
+import EntityId from "context/EntityId";
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
-import LoginComponent from "../components/LoginComponent";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
-import React from "react";
+import React, { useEffect } from "react";
 import RichText from "@madebyconnor/rich-text-to-jsx";
 import WithContentTransition from "components/WithContentTransition";
 import contentful from "client/contentful";
@@ -47,6 +48,18 @@ export default function Home() {
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
+  const [entityId, setEntityId, entityIdHydrated] = EntityId.useContainer();
+  const [mutate] = useCreateEntityMutation();
+
+  useEffect(() => {
+    if (entityIdHydrated && !entityId) {
+      mutate().then(({ data: { createEntity: { id } } }) => setEntityId(id));
+    }
+  }, [entityId, entityIdHydrated, mutate, setEntityId]);
+
+  if (!entityId) {
+    return null;
+  }
 
   const renderExhibitionInfo = () => {
     if (loading) {
@@ -103,8 +116,6 @@ export default function Home() {
           )}
         </WithContentTransition>
       </PanelContent.Source>
-      <LoginComponent ticketPrice="200" remainingTicketCount="45" />
-      {/*<AudioComponent />*/}
     </Container>
   );
 }
