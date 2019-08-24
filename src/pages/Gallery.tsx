@@ -1,6 +1,9 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { animated, config, useSpring, useTransition } from "react-spring";
+import { first, get } from "lodash-es";
+import { useCurrentExhibitionQuery } from "graphql";
 import React, { useCallback, useMemo, useState } from "react";
+import Room from "components/Room";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
@@ -94,6 +97,9 @@ const ThemeLink = styled.a`
 `;
 
 export default function Gallery({ setFlow }: ExhibitionProps<void>) {
+  const { error, loading, data } = useCurrentExhibitionQuery();
+  const exhibition = get(data, ["exhibitions", 0]);
+
   useSuggestedPanelState(true);
   const [exitHovered, setExitHovered] = useState<boolean>(false);
   const onExitMouseEnter = useCallback(() => setExitHovered(true), []);
@@ -172,7 +178,9 @@ export default function Gallery({ setFlow }: ExhibitionProps<void>) {
             </animated.div>
           ))}
         </Journey>
-        <InnerCanvas></InnerCanvas>
+        <InnerCanvas>
+          {exhibition && exhibition.rooms.length > 0 && <Room room={exhibition.rooms[0]} />}
+        </InnerCanvas>
       </Canvas>
     </Backboard>
   );

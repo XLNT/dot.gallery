@@ -14,52 +14,52 @@ export type Scalars = {
   Long: any,
 };
 
-export type IAggregateAsset = {
+export type AggregateAsset = {
   __typename?: 'AggregateAsset',
   count: Scalars['Int'],
 };
 
-export type IAggregateEntity = {
+export type AggregateEntity = {
   __typename?: 'AggregateEntity',
   count: Scalars['Int'],
 };
 
-export type IAggregateExhibition = {
+export type AggregateExhibition = {
   __typename?: 'AggregateExhibition',
   count: Scalars['Int'],
 };
 
-export type IAggregateIssue = {
+export type AggregateIssue = {
   __typename?: 'AggregateIssue',
   count: Scalars['Int'],
 };
 
-export type IAggregateShow = {
+export type AggregateRoom = {
+  __typename?: 'AggregateRoom',
+  count: Scalars['Int'],
+};
+
+export type AggregateShow = {
   __typename?: 'AggregateShow',
   count: Scalars['Int'],
 };
 
-export type IAggregateWork = {
-  __typename?: 'AggregateWork',
-  count: Scalars['Int'],
-};
-
-export type IAsset = {
+export type Asset = {
   __typename?: 'Asset',
   id: Scalars['ID'],
   isCounterfactual: Scalars['Boolean'],
-  owner: IEntity,
-  issue: IIssue,
-  printer: IEntity,
-  works?: Maybe<Array<IWork>>,
+  owner: Entity,
+  issue: Issue,
+  printer: Entity,
+  rooms?: Maybe<Array<Room>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
 
-export type IAssetWorksArgs = {
-  where?: Maybe<IWorkWhereInput>,
-  orderBy?: Maybe<IWorkOrderByInput>,
+export type AssetRoomsArgs = {
+  where?: Maybe<RoomWhereInput>,
+  orderBy?: Maybe<RoomOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -67,81 +67,81 @@ export type IAssetWorksArgs = {
   last?: Maybe<Scalars['Int']>
 };
 
-export type IAssetConnection = {
+export type AssetConnection = {
   __typename?: 'AssetConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IAssetEdge>>,
-  aggregate: IAggregateAsset,
+  pageInfo: PageInfo,
+  edges: Array<Maybe<AssetEdge>>,
+  aggregate: AggregateAsset,
 };
 
-export type IAssetCreateInput = {
+export type AssetCreateInput = {
   id?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner: IEntityCreateOneWithoutOwnedAssetsInput,
-  issue: IIssueCreateOneWithoutAssetsInput,
-  printer: IEntityCreateOneWithoutPrintedAssetsInput,
-  works?: Maybe<IWorkCreateManyWithoutAssetsInput>,
+  owner: EntityCreateOneWithoutOwnedAssetsInput,
+  issue: IssueCreateOneWithoutAssetsInput,
+  printer: EntityCreateOneWithoutPrintedAssetsInput,
+  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>,
 };
 
-export type IAssetCreateManyWithoutIssueInput = {
-  create?: Maybe<Array<IAssetCreateWithoutIssueInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
+export type AssetCreateManyWithoutIssueInput = {
+  create?: Maybe<Array<AssetCreateWithoutIssueInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
 };
 
-export type IAssetCreateManyWithoutOwnerInput = {
-  create?: Maybe<Array<IAssetCreateWithoutOwnerInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
+export type AssetCreateManyWithoutOwnerInput = {
+  create?: Maybe<Array<AssetCreateWithoutOwnerInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
 };
 
-export type IAssetCreateManyWithoutPrinterInput = {
-  create?: Maybe<Array<IAssetCreateWithoutPrinterInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
+export type AssetCreateManyWithoutPrinterInput = {
+  create?: Maybe<Array<AssetCreateWithoutPrinterInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
 };
 
-export type IAssetCreateManyWithoutWorksInput = {
-  create?: Maybe<Array<IAssetCreateWithoutWorksInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
+export type AssetCreateManyWithoutRoomsInput = {
+  create?: Maybe<Array<AssetCreateWithoutRoomsInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
 };
 
-export type IAssetCreateWithoutIssueInput = {
+export type AssetCreateWithoutIssueInput = {
   id?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner: IEntityCreateOneWithoutOwnedAssetsInput,
-  printer: IEntityCreateOneWithoutPrintedAssetsInput,
-  works?: Maybe<IWorkCreateManyWithoutAssetsInput>,
+  owner: EntityCreateOneWithoutOwnedAssetsInput,
+  printer: EntityCreateOneWithoutPrintedAssetsInput,
+  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>,
 };
 
-export type IAssetCreateWithoutOwnerInput = {
+export type AssetCreateWithoutOwnerInput = {
   id?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  issue: IIssueCreateOneWithoutAssetsInput,
-  printer: IEntityCreateOneWithoutPrintedAssetsInput,
-  works?: Maybe<IWorkCreateManyWithoutAssetsInput>,
+  issue: IssueCreateOneWithoutAssetsInput,
+  printer: EntityCreateOneWithoutPrintedAssetsInput,
+  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>,
 };
 
-export type IAssetCreateWithoutPrinterInput = {
+export type AssetCreateWithoutPrinterInput = {
   id?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner: IEntityCreateOneWithoutOwnedAssetsInput,
-  issue: IIssueCreateOneWithoutAssetsInput,
-  works?: Maybe<IWorkCreateManyWithoutAssetsInput>,
+  owner: EntityCreateOneWithoutOwnedAssetsInput,
+  issue: IssueCreateOneWithoutAssetsInput,
+  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>,
 };
 
-export type IAssetCreateWithoutWorksInput = {
+export type AssetCreateWithoutRoomsInput = {
   id?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner: IEntityCreateOneWithoutOwnedAssetsInput,
-  issue: IIssueCreateOneWithoutAssetsInput,
-  printer: IEntityCreateOneWithoutPrintedAssetsInput,
+  owner: EntityCreateOneWithoutOwnedAssetsInput,
+  issue: IssueCreateOneWithoutAssetsInput,
+  printer: EntityCreateOneWithoutPrintedAssetsInput,
 };
 
-export type IAssetEdge = {
+export type AssetEdge = {
   __typename?: 'AssetEdge',
-  node: IAsset,
+  node: Asset,
   cursor: Scalars['String'],
 };
 
-export enum IAssetOrderByInput {
+export enum AssetOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   IsCounterfactualAsc = 'isCounterfactual_ASC',
@@ -152,7 +152,7 @@ export enum IAssetOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
-export type IAssetPreviousValues = {
+export type AssetPreviousValues = {
   __typename?: 'AssetPreviousValues',
   id: Scalars['ID'],
   isCounterfactual: Scalars['Boolean'],
@@ -160,7 +160,7 @@ export type IAssetPreviousValues = {
   updatedAt: Scalars['DateTime'],
 };
 
-export type IAssetScalarWhereInput = {
+export type AssetScalarWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -193,172 +193,172 @@ export type IAssetScalarWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IAssetScalarWhereInput>>,
-  OR?: Maybe<Array<IAssetScalarWhereInput>>,
-  NOT?: Maybe<Array<IAssetScalarWhereInput>>,
+  AND?: Maybe<Array<AssetScalarWhereInput>>,
+  OR?: Maybe<Array<AssetScalarWhereInput>>,
+  NOT?: Maybe<Array<AssetScalarWhereInput>>,
 };
 
-export type IAssetSubscriptionPayload = {
+export type AssetSubscriptionPayload = {
   __typename?: 'AssetSubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IAsset>,
+  mutation: MutationType,
+  node?: Maybe<Asset>,
   updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IAssetPreviousValues>,
+  previousValues?: Maybe<AssetPreviousValues>,
 };
 
-export type IAssetSubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
+export type AssetSubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
   updatedFields_contains?: Maybe<Scalars['String']>,
   updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
   updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IAssetWhereInput>,
-  AND?: Maybe<Array<IAssetSubscriptionWhereInput>>,
-  OR?: Maybe<Array<IAssetSubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IAssetSubscriptionWhereInput>>,
+  node?: Maybe<AssetWhereInput>,
+  AND?: Maybe<Array<AssetSubscriptionWhereInput>>,
+  OR?: Maybe<Array<AssetSubscriptionWhereInput>>,
+  NOT?: Maybe<Array<AssetSubscriptionWhereInput>>,
 };
 
-export type IAssetUpdateInput = {
+export type AssetUpdateInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner?: Maybe<IEntityUpdateOneRequiredWithoutOwnedAssetsInput>,
-  issue?: Maybe<IIssueUpdateOneRequiredWithoutAssetsInput>,
-  printer?: Maybe<IEntityUpdateOneRequiredWithoutPrintedAssetsInput>,
-  works?: Maybe<IWorkUpdateManyWithoutAssetsInput>,
+  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>,
+  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>,
+  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>,
+  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>,
 };
 
-export type IAssetUpdateManyDataInput = {
-  isCounterfactual?: Maybe<Scalars['Boolean']>,
-};
-
-export type IAssetUpdateManyMutationInput = {
+export type AssetUpdateManyDataInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
 };
 
-export type IAssetUpdateManyWithoutIssueInput = {
-  create?: Maybe<Array<IAssetCreateWithoutIssueInput>>,
-  delete?: Maybe<Array<IAssetWhereUniqueInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  set?: Maybe<Array<IAssetWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  update?: Maybe<Array<IAssetUpdateWithWhereUniqueWithoutIssueInput>>,
-  upsert?: Maybe<Array<IAssetUpsertWithWhereUniqueWithoutIssueInput>>,
-  deleteMany?: Maybe<Array<IAssetScalarWhereInput>>,
-  updateMany?: Maybe<Array<IAssetUpdateManyWithWhereNestedInput>>,
-};
-
-export type IAssetUpdateManyWithoutOwnerInput = {
-  create?: Maybe<Array<IAssetCreateWithoutOwnerInput>>,
-  delete?: Maybe<Array<IAssetWhereUniqueInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  set?: Maybe<Array<IAssetWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  update?: Maybe<Array<IAssetUpdateWithWhereUniqueWithoutOwnerInput>>,
-  upsert?: Maybe<Array<IAssetUpsertWithWhereUniqueWithoutOwnerInput>>,
-  deleteMany?: Maybe<Array<IAssetScalarWhereInput>>,
-  updateMany?: Maybe<Array<IAssetUpdateManyWithWhereNestedInput>>,
-};
-
-export type IAssetUpdateManyWithoutPrinterInput = {
-  create?: Maybe<Array<IAssetCreateWithoutPrinterInput>>,
-  delete?: Maybe<Array<IAssetWhereUniqueInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  set?: Maybe<Array<IAssetWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  update?: Maybe<Array<IAssetUpdateWithWhereUniqueWithoutPrinterInput>>,
-  upsert?: Maybe<Array<IAssetUpsertWithWhereUniqueWithoutPrinterInput>>,
-  deleteMany?: Maybe<Array<IAssetScalarWhereInput>>,
-  updateMany?: Maybe<Array<IAssetUpdateManyWithWhereNestedInput>>,
-};
-
-export type IAssetUpdateManyWithoutWorksInput = {
-  create?: Maybe<Array<IAssetCreateWithoutWorksInput>>,
-  delete?: Maybe<Array<IAssetWhereUniqueInput>>,
-  connect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  set?: Maybe<Array<IAssetWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IAssetWhereUniqueInput>>,
-  update?: Maybe<Array<IAssetUpdateWithWhereUniqueWithoutWorksInput>>,
-  upsert?: Maybe<Array<IAssetUpsertWithWhereUniqueWithoutWorksInput>>,
-  deleteMany?: Maybe<Array<IAssetScalarWhereInput>>,
-  updateMany?: Maybe<Array<IAssetUpdateManyWithWhereNestedInput>>,
-};
-
-export type IAssetUpdateManyWithWhereNestedInput = {
-  where: IAssetScalarWhereInput,
-  data: IAssetUpdateManyDataInput,
-};
-
-export type IAssetUpdateWithoutIssueDataInput = {
+export type AssetUpdateManyMutationInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner?: Maybe<IEntityUpdateOneRequiredWithoutOwnedAssetsInput>,
-  printer?: Maybe<IEntityUpdateOneRequiredWithoutPrintedAssetsInput>,
-  works?: Maybe<IWorkUpdateManyWithoutAssetsInput>,
 };
 
-export type IAssetUpdateWithoutOwnerDataInput = {
+export type AssetUpdateManyWithoutIssueInput = {
+  create?: Maybe<Array<AssetCreateWithoutIssueInput>>,
+  delete?: Maybe<Array<AssetWhereUniqueInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
+  set?: Maybe<Array<AssetWhereUniqueInput>>,
+  disconnect?: Maybe<Array<AssetWhereUniqueInput>>,
+  update?: Maybe<Array<AssetUpdateWithWhereUniqueWithoutIssueInput>>,
+  upsert?: Maybe<Array<AssetUpsertWithWhereUniqueWithoutIssueInput>>,
+  deleteMany?: Maybe<Array<AssetScalarWhereInput>>,
+  updateMany?: Maybe<Array<AssetUpdateManyWithWhereNestedInput>>,
+};
+
+export type AssetUpdateManyWithoutOwnerInput = {
+  create?: Maybe<Array<AssetCreateWithoutOwnerInput>>,
+  delete?: Maybe<Array<AssetWhereUniqueInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
+  set?: Maybe<Array<AssetWhereUniqueInput>>,
+  disconnect?: Maybe<Array<AssetWhereUniqueInput>>,
+  update?: Maybe<Array<AssetUpdateWithWhereUniqueWithoutOwnerInput>>,
+  upsert?: Maybe<Array<AssetUpsertWithWhereUniqueWithoutOwnerInput>>,
+  deleteMany?: Maybe<Array<AssetScalarWhereInput>>,
+  updateMany?: Maybe<Array<AssetUpdateManyWithWhereNestedInput>>,
+};
+
+export type AssetUpdateManyWithoutPrinterInput = {
+  create?: Maybe<Array<AssetCreateWithoutPrinterInput>>,
+  delete?: Maybe<Array<AssetWhereUniqueInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
+  set?: Maybe<Array<AssetWhereUniqueInput>>,
+  disconnect?: Maybe<Array<AssetWhereUniqueInput>>,
+  update?: Maybe<Array<AssetUpdateWithWhereUniqueWithoutPrinterInput>>,
+  upsert?: Maybe<Array<AssetUpsertWithWhereUniqueWithoutPrinterInput>>,
+  deleteMany?: Maybe<Array<AssetScalarWhereInput>>,
+  updateMany?: Maybe<Array<AssetUpdateManyWithWhereNestedInput>>,
+};
+
+export type AssetUpdateManyWithoutRoomsInput = {
+  create?: Maybe<Array<AssetCreateWithoutRoomsInput>>,
+  delete?: Maybe<Array<AssetWhereUniqueInput>>,
+  connect?: Maybe<Array<AssetWhereUniqueInput>>,
+  set?: Maybe<Array<AssetWhereUniqueInput>>,
+  disconnect?: Maybe<Array<AssetWhereUniqueInput>>,
+  update?: Maybe<Array<AssetUpdateWithWhereUniqueWithoutRoomsInput>>,
+  upsert?: Maybe<Array<AssetUpsertWithWhereUniqueWithoutRoomsInput>>,
+  deleteMany?: Maybe<Array<AssetScalarWhereInput>>,
+  updateMany?: Maybe<Array<AssetUpdateManyWithWhereNestedInput>>,
+};
+
+export type AssetUpdateManyWithWhereNestedInput = {
+  where: AssetScalarWhereInput,
+  data: AssetUpdateManyDataInput,
+};
+
+export type AssetUpdateWithoutIssueDataInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  issue?: Maybe<IIssueUpdateOneRequiredWithoutAssetsInput>,
-  printer?: Maybe<IEntityUpdateOneRequiredWithoutPrintedAssetsInput>,
-  works?: Maybe<IWorkUpdateManyWithoutAssetsInput>,
+  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>,
+  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>,
+  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>,
 };
 
-export type IAssetUpdateWithoutPrinterDataInput = {
+export type AssetUpdateWithoutOwnerDataInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner?: Maybe<IEntityUpdateOneRequiredWithoutOwnedAssetsInput>,
-  issue?: Maybe<IIssueUpdateOneRequiredWithoutAssetsInput>,
-  works?: Maybe<IWorkUpdateManyWithoutAssetsInput>,
+  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>,
+  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>,
+  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>,
 };
 
-export type IAssetUpdateWithoutWorksDataInput = {
+export type AssetUpdateWithoutPrinterDataInput = {
   isCounterfactual?: Maybe<Scalars['Boolean']>,
-  owner?: Maybe<IEntityUpdateOneRequiredWithoutOwnedAssetsInput>,
-  issue?: Maybe<IIssueUpdateOneRequiredWithoutAssetsInput>,
-  printer?: Maybe<IEntityUpdateOneRequiredWithoutPrintedAssetsInput>,
+  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>,
+  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>,
+  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>,
 };
 
-export type IAssetUpdateWithWhereUniqueWithoutIssueInput = {
-  where: IAssetWhereUniqueInput,
-  data: IAssetUpdateWithoutIssueDataInput,
+export type AssetUpdateWithoutRoomsDataInput = {
+  isCounterfactual?: Maybe<Scalars['Boolean']>,
+  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>,
+  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>,
+  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>,
 };
 
-export type IAssetUpdateWithWhereUniqueWithoutOwnerInput = {
-  where: IAssetWhereUniqueInput,
-  data: IAssetUpdateWithoutOwnerDataInput,
+export type AssetUpdateWithWhereUniqueWithoutIssueInput = {
+  where: AssetWhereUniqueInput,
+  data: AssetUpdateWithoutIssueDataInput,
 };
 
-export type IAssetUpdateWithWhereUniqueWithoutPrinterInput = {
-  where: IAssetWhereUniqueInput,
-  data: IAssetUpdateWithoutPrinterDataInput,
+export type AssetUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: AssetWhereUniqueInput,
+  data: AssetUpdateWithoutOwnerDataInput,
 };
 
-export type IAssetUpdateWithWhereUniqueWithoutWorksInput = {
-  where: IAssetWhereUniqueInput,
-  data: IAssetUpdateWithoutWorksDataInput,
+export type AssetUpdateWithWhereUniqueWithoutPrinterInput = {
+  where: AssetWhereUniqueInput,
+  data: AssetUpdateWithoutPrinterDataInput,
 };
 
-export type IAssetUpsertWithWhereUniqueWithoutIssueInput = {
-  where: IAssetWhereUniqueInput,
-  update: IAssetUpdateWithoutIssueDataInput,
-  create: IAssetCreateWithoutIssueInput,
+export type AssetUpdateWithWhereUniqueWithoutRoomsInput = {
+  where: AssetWhereUniqueInput,
+  data: AssetUpdateWithoutRoomsDataInput,
 };
 
-export type IAssetUpsertWithWhereUniqueWithoutOwnerInput = {
-  where: IAssetWhereUniqueInput,
-  update: IAssetUpdateWithoutOwnerDataInput,
-  create: IAssetCreateWithoutOwnerInput,
+export type AssetUpsertWithWhereUniqueWithoutIssueInput = {
+  where: AssetWhereUniqueInput,
+  update: AssetUpdateWithoutIssueDataInput,
+  create: AssetCreateWithoutIssueInput,
 };
 
-export type IAssetUpsertWithWhereUniqueWithoutPrinterInput = {
-  where: IAssetWhereUniqueInput,
-  update: IAssetUpdateWithoutPrinterDataInput,
-  create: IAssetCreateWithoutPrinterInput,
+export type AssetUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: AssetWhereUniqueInput,
+  update: AssetUpdateWithoutOwnerDataInput,
+  create: AssetCreateWithoutOwnerInput,
 };
 
-export type IAssetUpsertWithWhereUniqueWithoutWorksInput = {
-  where: IAssetWhereUniqueInput,
-  update: IAssetUpdateWithoutWorksDataInput,
-  create: IAssetCreateWithoutWorksInput,
+export type AssetUpsertWithWhereUniqueWithoutPrinterInput = {
+  where: AssetWhereUniqueInput,
+  update: AssetUpdateWithoutPrinterDataInput,
+  create: AssetCreateWithoutPrinterInput,
 };
 
-export type IAssetWhereInput = {
+export type AssetUpsertWithWhereUniqueWithoutRoomsInput = {
+  where: AssetWhereUniqueInput,
+  update: AssetUpdateWithoutRoomsDataInput,
+  create: AssetCreateWithoutRoomsInput,
+};
+
+export type AssetWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -375,12 +375,12 @@ export type IAssetWhereInput = {
   id_not_ends_with?: Maybe<Scalars['ID']>,
   isCounterfactual?: Maybe<Scalars['Boolean']>,
   isCounterfactual_not?: Maybe<Scalars['Boolean']>,
-  owner?: Maybe<IEntityWhereInput>,
-  issue?: Maybe<IIssueWhereInput>,
-  printer?: Maybe<IEntityWhereInput>,
-  works_every?: Maybe<IWorkWhereInput>,
-  works_some?: Maybe<IWorkWhereInput>,
-  works_none?: Maybe<IWorkWhereInput>,
+  owner?: Maybe<EntityWhereInput>,
+  issue?: Maybe<IssueWhereInput>,
+  printer?: Maybe<EntityWhereInput>,
+  rooms_every?: Maybe<RoomWhereInput>,
+  rooms_some?: Maybe<RoomWhereInput>,
+  rooms_none?: Maybe<RoomWhereInput>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -397,37 +397,37 @@ export type IAssetWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IAssetWhereInput>>,
-  OR?: Maybe<Array<IAssetWhereInput>>,
-  NOT?: Maybe<Array<IAssetWhereInput>>,
+  AND?: Maybe<Array<AssetWhereInput>>,
+  OR?: Maybe<Array<AssetWhereInput>>,
+  NOT?: Maybe<Array<AssetWhereInput>>,
 };
 
-export type IAssetWhereUniqueInput = {
+export type AssetWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
 };
 
-export type IBatchPayload = {
+export type BatchPayload = {
   __typename?: 'BatchPayload',
   count: Scalars['Long'],
 };
 
 
-export type IEntity = {
+export type Entity = {
   __typename?: 'Entity',
   id: Scalars['ID'],
   handle: Scalars['String'],
   email: Scalars['String'],
-  createdIssues?: Maybe<Array<IIssue>>,
-  ownedAssets?: Maybe<Array<IAsset>>,
-  printedAssets?: Maybe<Array<IAsset>>,
+  createdIssues?: Maybe<Array<Issue>>,
+  ownedAssets?: Maybe<Array<Asset>>,
+  printedAssets?: Maybe<Array<Asset>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
 
-export type IEntityCreatedIssuesArgs = {
-  where?: Maybe<IIssueWhereInput>,
-  orderBy?: Maybe<IIssueOrderByInput>,
+export type EntityCreatedIssuesArgs = {
+  where?: Maybe<IssueWhereInput>,
+  orderBy?: Maybe<IssueOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -436,9 +436,9 @@ export type IEntityCreatedIssuesArgs = {
 };
 
 
-export type IEntityOwnedAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
+export type EntityOwnedAssetsArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -447,9 +447,9 @@ export type IEntityOwnedAssetsArgs = {
 };
 
 
-export type IEntityPrintedAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
+export type EntityPrintedAssetsArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -457,68 +457,68 @@ export type IEntityPrintedAssetsArgs = {
   last?: Maybe<Scalars['Int']>
 };
 
-export type IEntityConnection = {
+export type EntityConnection = {
   __typename?: 'EntityConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IEntityEdge>>,
-  aggregate: IAggregateEntity,
+  pageInfo: PageInfo,
+  edges: Array<Maybe<EntityEdge>>,
+  aggregate: AggregateEntity,
 };
 
-export type IEntityCreateInput = {
+export type EntityCreateInput = {
   id?: Maybe<Scalars['ID']>,
   handle: Scalars['String'],
   email: Scalars['String'],
-  createdIssues?: Maybe<IIssueCreateManyWithoutCreatorInput>,
-  ownedAssets?: Maybe<IAssetCreateManyWithoutOwnerInput>,
-  printedAssets?: Maybe<IAssetCreateManyWithoutPrinterInput>,
+  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>,
+  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>,
+  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>,
 };
 
-export type IEntityCreateOneWithoutCreatedIssuesInput = {
-  create?: Maybe<IEntityCreateWithoutCreatedIssuesInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityCreateOneWithoutCreatedIssuesInput = {
+  create?: Maybe<EntityCreateWithoutCreatedIssuesInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityCreateOneWithoutOwnedAssetsInput = {
-  create?: Maybe<IEntityCreateWithoutOwnedAssetsInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityCreateOneWithoutOwnedAssetsInput = {
+  create?: Maybe<EntityCreateWithoutOwnedAssetsInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityCreateOneWithoutPrintedAssetsInput = {
-  create?: Maybe<IEntityCreateWithoutPrintedAssetsInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityCreateOneWithoutPrintedAssetsInput = {
+  create?: Maybe<EntityCreateWithoutPrintedAssetsInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityCreateWithoutCreatedIssuesInput = {
+export type EntityCreateWithoutCreatedIssuesInput = {
   id?: Maybe<Scalars['ID']>,
   handle: Scalars['String'],
   email: Scalars['String'],
-  ownedAssets?: Maybe<IAssetCreateManyWithoutOwnerInput>,
-  printedAssets?: Maybe<IAssetCreateManyWithoutPrinterInput>,
+  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>,
+  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>,
 };
 
-export type IEntityCreateWithoutOwnedAssetsInput = {
+export type EntityCreateWithoutOwnedAssetsInput = {
   id?: Maybe<Scalars['ID']>,
   handle: Scalars['String'],
   email: Scalars['String'],
-  createdIssues?: Maybe<IIssueCreateManyWithoutCreatorInput>,
-  printedAssets?: Maybe<IAssetCreateManyWithoutPrinterInput>,
+  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>,
+  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>,
 };
 
-export type IEntityCreateWithoutPrintedAssetsInput = {
+export type EntityCreateWithoutPrintedAssetsInput = {
   id?: Maybe<Scalars['ID']>,
   handle: Scalars['String'],
   email: Scalars['String'],
-  createdIssues?: Maybe<IIssueCreateManyWithoutCreatorInput>,
-  ownedAssets?: Maybe<IAssetCreateManyWithoutOwnerInput>,
+  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>,
+  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>,
 };
 
-export type IEntityEdge = {
+export type EntityEdge = {
   __typename?: 'EntityEdge',
-  node: IEntity,
+  node: Entity,
   cursor: Scalars['String'],
 };
 
-export enum IEntityOrderByInput {
+export enum EntityOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   HandleAsc = 'handle_ASC',
@@ -531,7 +531,7 @@ export enum IEntityOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
-export type IEntityPreviousValues = {
+export type EntityPreviousValues = {
   __typename?: 'EntityPreviousValues',
   id: Scalars['ID'],
   handle: Scalars['String'],
@@ -540,96 +540,96 @@ export type IEntityPreviousValues = {
   updatedAt: Scalars['DateTime'],
 };
 
-export type IEntitySubscriptionPayload = {
+export type EntitySubscriptionPayload = {
   __typename?: 'EntitySubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IEntity>,
+  mutation: MutationType,
+  node?: Maybe<Entity>,
   updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IEntityPreviousValues>,
+  previousValues?: Maybe<EntityPreviousValues>,
 };
 
-export type IEntitySubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
+export type EntitySubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
   updatedFields_contains?: Maybe<Scalars['String']>,
   updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
   updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IEntityWhereInput>,
-  AND?: Maybe<Array<IEntitySubscriptionWhereInput>>,
-  OR?: Maybe<Array<IEntitySubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IEntitySubscriptionWhereInput>>,
+  node?: Maybe<EntityWhereInput>,
+  AND?: Maybe<Array<EntitySubscriptionWhereInput>>,
+  OR?: Maybe<Array<EntitySubscriptionWhereInput>>,
+  NOT?: Maybe<Array<EntitySubscriptionWhereInput>>,
 };
 
-export type IEntityUpdateInput = {
+export type EntityUpdateInput = {
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
-  createdIssues?: Maybe<IIssueUpdateManyWithoutCreatorInput>,
-  ownedAssets?: Maybe<IAssetUpdateManyWithoutOwnerInput>,
-  printedAssets?: Maybe<IAssetUpdateManyWithoutPrinterInput>,
+  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>,
+  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>,
+  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>,
 };
 
-export type IEntityUpdateManyMutationInput = {
+export type EntityUpdateManyMutationInput = {
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
 };
 
-export type IEntityUpdateOneRequiredWithoutCreatedIssuesInput = {
-  create?: Maybe<IEntityCreateWithoutCreatedIssuesInput>,
-  update?: Maybe<IEntityUpdateWithoutCreatedIssuesDataInput>,
-  upsert?: Maybe<IEntityUpsertWithoutCreatedIssuesInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityUpdateOneRequiredWithoutCreatedIssuesInput = {
+  create?: Maybe<EntityCreateWithoutCreatedIssuesInput>,
+  update?: Maybe<EntityUpdateWithoutCreatedIssuesDataInput>,
+  upsert?: Maybe<EntityUpsertWithoutCreatedIssuesInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityUpdateOneRequiredWithoutOwnedAssetsInput = {
-  create?: Maybe<IEntityCreateWithoutOwnedAssetsInput>,
-  update?: Maybe<IEntityUpdateWithoutOwnedAssetsDataInput>,
-  upsert?: Maybe<IEntityUpsertWithoutOwnedAssetsInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityUpdateOneRequiredWithoutOwnedAssetsInput = {
+  create?: Maybe<EntityCreateWithoutOwnedAssetsInput>,
+  update?: Maybe<EntityUpdateWithoutOwnedAssetsDataInput>,
+  upsert?: Maybe<EntityUpsertWithoutOwnedAssetsInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityUpdateOneRequiredWithoutPrintedAssetsInput = {
-  create?: Maybe<IEntityCreateWithoutPrintedAssetsInput>,
-  update?: Maybe<IEntityUpdateWithoutPrintedAssetsDataInput>,
-  upsert?: Maybe<IEntityUpsertWithoutPrintedAssetsInput>,
-  connect?: Maybe<IEntityWhereUniqueInput>,
+export type EntityUpdateOneRequiredWithoutPrintedAssetsInput = {
+  create?: Maybe<EntityCreateWithoutPrintedAssetsInput>,
+  update?: Maybe<EntityUpdateWithoutPrintedAssetsDataInput>,
+  upsert?: Maybe<EntityUpsertWithoutPrintedAssetsInput>,
+  connect?: Maybe<EntityWhereUniqueInput>,
 };
 
-export type IEntityUpdateWithoutCreatedIssuesDataInput = {
+export type EntityUpdateWithoutCreatedIssuesDataInput = {
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
-  ownedAssets?: Maybe<IAssetUpdateManyWithoutOwnerInput>,
-  printedAssets?: Maybe<IAssetUpdateManyWithoutPrinterInput>,
+  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>,
+  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>,
 };
 
-export type IEntityUpdateWithoutOwnedAssetsDataInput = {
+export type EntityUpdateWithoutOwnedAssetsDataInput = {
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
-  createdIssues?: Maybe<IIssueUpdateManyWithoutCreatorInput>,
-  printedAssets?: Maybe<IAssetUpdateManyWithoutPrinterInput>,
+  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>,
+  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>,
 };
 
-export type IEntityUpdateWithoutPrintedAssetsDataInput = {
+export type EntityUpdateWithoutPrintedAssetsDataInput = {
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
-  createdIssues?: Maybe<IIssueUpdateManyWithoutCreatorInput>,
-  ownedAssets?: Maybe<IAssetUpdateManyWithoutOwnerInput>,
+  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>,
+  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>,
 };
 
-export type IEntityUpsertWithoutCreatedIssuesInput = {
-  update: IEntityUpdateWithoutCreatedIssuesDataInput,
-  create: IEntityCreateWithoutCreatedIssuesInput,
+export type EntityUpsertWithoutCreatedIssuesInput = {
+  update: EntityUpdateWithoutCreatedIssuesDataInput,
+  create: EntityCreateWithoutCreatedIssuesInput,
 };
 
-export type IEntityUpsertWithoutOwnedAssetsInput = {
-  update: IEntityUpdateWithoutOwnedAssetsDataInput,
-  create: IEntityCreateWithoutOwnedAssetsInput,
+export type EntityUpsertWithoutOwnedAssetsInput = {
+  update: EntityUpdateWithoutOwnedAssetsDataInput,
+  create: EntityCreateWithoutOwnedAssetsInput,
 };
 
-export type IEntityUpsertWithoutPrintedAssetsInput = {
-  update: IEntityUpdateWithoutPrintedAssetsDataInput,
-  create: IEntityCreateWithoutPrintedAssetsInput,
+export type EntityUpsertWithoutPrintedAssetsInput = {
+  update: EntityUpdateWithoutPrintedAssetsDataInput,
+  create: EntityCreateWithoutPrintedAssetsInput,
 };
 
-export type IEntityWhereInput = {
+export type EntityWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -672,15 +672,15 @@ export type IEntityWhereInput = {
   email_not_starts_with?: Maybe<Scalars['String']>,
   email_ends_with?: Maybe<Scalars['String']>,
   email_not_ends_with?: Maybe<Scalars['String']>,
-  createdIssues_every?: Maybe<IIssueWhereInput>,
-  createdIssues_some?: Maybe<IIssueWhereInput>,
-  createdIssues_none?: Maybe<IIssueWhereInput>,
-  ownedAssets_every?: Maybe<IAssetWhereInput>,
-  ownedAssets_some?: Maybe<IAssetWhereInput>,
-  ownedAssets_none?: Maybe<IAssetWhereInput>,
-  printedAssets_every?: Maybe<IAssetWhereInput>,
-  printedAssets_some?: Maybe<IAssetWhereInput>,
-  printedAssets_none?: Maybe<IAssetWhereInput>,
+  createdIssues_every?: Maybe<IssueWhereInput>,
+  createdIssues_some?: Maybe<IssueWhereInput>,
+  createdIssues_none?: Maybe<IssueWhereInput>,
+  ownedAssets_every?: Maybe<AssetWhereInput>,
+  ownedAssets_some?: Maybe<AssetWhereInput>,
+  ownedAssets_none?: Maybe<AssetWhereInput>,
+  printedAssets_every?: Maybe<AssetWhereInput>,
+  printedAssets_some?: Maybe<AssetWhereInput>,
+  printedAssets_none?: Maybe<AssetWhereInput>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -697,18 +697,18 @@ export type IEntityWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IEntityWhereInput>>,
-  OR?: Maybe<Array<IEntityWhereInput>>,
-  NOT?: Maybe<Array<IEntityWhereInput>>,
+  AND?: Maybe<Array<EntityWhereInput>>,
+  OR?: Maybe<Array<EntityWhereInput>>,
+  NOT?: Maybe<Array<EntityWhereInput>>,
 };
 
-export type IEntityWhereUniqueInput = {
+export type EntityWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
   handle?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
 };
 
-export type IExhibition = {
+export type Exhibition = {
   __typename?: 'Exhibition',
   id: Scalars['ID'],
   number: Scalars['Int'],
@@ -716,15 +716,16 @@ export type IExhibition = {
   extent: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
-  shows?: Maybe<Array<IShow>>,
+  shows?: Maybe<Array<Show>>,
+  rooms?: Maybe<Array<Room>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
 
-export type IExhibitionShowsArgs = {
-  where?: Maybe<IShowWhereInput>,
-  orderBy?: Maybe<IShowOrderByInput>,
+export type ExhibitionShowsArgs = {
+  where?: Maybe<ShowWhereInput>,
+  orderBy?: Maybe<ShowOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -732,44 +733,72 @@ export type IExhibitionShowsArgs = {
   last?: Maybe<Scalars['Int']>
 };
 
-export type IExhibitionConnection = {
+
+export type ExhibitionRoomsArgs = {
+  where?: Maybe<RoomWhereInput>,
+  orderBy?: Maybe<RoomOrderByInput>,
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+export type ExhibitionConnection = {
   __typename?: 'ExhibitionConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IExhibitionEdge>>,
-  aggregate: IAggregateExhibition,
+  pageInfo: PageInfo,
+  edges: Array<Maybe<ExhibitionEdge>>,
+  aggregate: AggregateExhibition,
 };
 
-export type IExhibitionCreateInput = {
+export type ExhibitionCreateInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
-  shows?: Maybe<IShowCreateManyWithoutExhibitionInput>,
+  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>,
+  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>,
 };
 
-export type IExhibitionCreateOneWithoutShowsInput = {
-  create?: Maybe<IExhibitionCreateWithoutShowsInput>,
-  connect?: Maybe<IExhibitionWhereUniqueInput>,
+export type ExhibitionCreateOneWithoutRoomsInput = {
+  create?: Maybe<ExhibitionCreateWithoutRoomsInput>,
+  connect?: Maybe<ExhibitionWhereUniqueInput>,
 };
 
-export type IExhibitionCreateWithoutShowsInput = {
+export type ExhibitionCreateOneWithoutShowsInput = {
+  create?: Maybe<ExhibitionCreateWithoutShowsInput>,
+  connect?: Maybe<ExhibitionWhereUniqueInput>,
+};
+
+export type ExhibitionCreateWithoutRoomsInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
+  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>,
 };
 
-export type IExhibitionEdge = {
+export type ExhibitionCreateWithoutShowsInput = {
+  id?: Maybe<Scalars['ID']>,
+  number: Scalars['Int'],
+  theme?: Maybe<Scalars['Json']>,
+  extent?: Maybe<Scalars['Int']>,
+  opensAt: Scalars['DateTime'],
+  closesAt: Scalars['DateTime'],
+  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>,
+};
+
+export type ExhibitionEdge = {
   __typename?: 'ExhibitionEdge',
-  node: IExhibition,
+  node: Exhibition,
   cursor: Scalars['String'],
 };
 
-export enum IExhibitionOrderByInput {
+export enum ExhibitionOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   NumberAsc = 'number_ASC',
@@ -788,7 +817,7 @@ export enum IExhibitionOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
-export type IExhibitionPreviousValues = {
+export type ExhibitionPreviousValues = {
   __typename?: 'ExhibitionPreviousValues',
   id: Scalars['ID'],
   number: Scalars['Int'],
@@ -800,50 +829,36 @@ export type IExhibitionPreviousValues = {
   updatedAt: Scalars['DateTime'],
 };
 
-export type IExhibitionSubscriptionPayload = {
+export type ExhibitionSubscriptionPayload = {
   __typename?: 'ExhibitionSubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IExhibition>,
+  mutation: MutationType,
+  node?: Maybe<Exhibition>,
   updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IExhibitionPreviousValues>,
+  previousValues?: Maybe<ExhibitionPreviousValues>,
 };
 
-export type IExhibitionSubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
+export type ExhibitionSubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
   updatedFields_contains?: Maybe<Scalars['String']>,
   updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
   updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IExhibitionWhereInput>,
-  AND?: Maybe<Array<IExhibitionSubscriptionWhereInput>>,
-  OR?: Maybe<Array<IExhibitionSubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IExhibitionSubscriptionWhereInput>>,
+  node?: Maybe<ExhibitionWhereInput>,
+  AND?: Maybe<Array<ExhibitionSubscriptionWhereInput>>,
+  OR?: Maybe<Array<ExhibitionSubscriptionWhereInput>>,
+  NOT?: Maybe<Array<ExhibitionSubscriptionWhereInput>>,
 };
 
-export type IExhibitionUpdateInput = {
+export type ExhibitionUpdateInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
-  shows?: Maybe<IShowUpdateManyWithoutExhibitionInput>,
+  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>,
+  rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>,
 };
 
-export type IExhibitionUpdateManyMutationInput = {
-  number?: Maybe<Scalars['Int']>,
-  theme?: Maybe<Scalars['Json']>,
-  extent?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
-};
-
-export type IExhibitionUpdateOneRequiredWithoutShowsInput = {
-  create?: Maybe<IExhibitionCreateWithoutShowsInput>,
-  update?: Maybe<IExhibitionUpdateWithoutShowsDataInput>,
-  upsert?: Maybe<IExhibitionUpsertWithoutShowsInput>,
-  connect?: Maybe<IExhibitionWhereUniqueInput>,
-};
-
-export type IExhibitionUpdateWithoutShowsDataInput = {
+export type ExhibitionUpdateManyMutationInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -851,12 +866,49 @@ export type IExhibitionUpdateWithoutShowsDataInput = {
   closesAt?: Maybe<Scalars['DateTime']>,
 };
 
-export type IExhibitionUpsertWithoutShowsInput = {
-  update: IExhibitionUpdateWithoutShowsDataInput,
-  create: IExhibitionCreateWithoutShowsInput,
+export type ExhibitionUpdateOneRequiredWithoutRoomsInput = {
+  create?: Maybe<ExhibitionCreateWithoutRoomsInput>,
+  update?: Maybe<ExhibitionUpdateWithoutRoomsDataInput>,
+  upsert?: Maybe<ExhibitionUpsertWithoutRoomsInput>,
+  connect?: Maybe<ExhibitionWhereUniqueInput>,
 };
 
-export type IExhibitionWhereInput = {
+export type ExhibitionUpdateOneRequiredWithoutShowsInput = {
+  create?: Maybe<ExhibitionCreateWithoutShowsInput>,
+  update?: Maybe<ExhibitionUpdateWithoutShowsDataInput>,
+  upsert?: Maybe<ExhibitionUpsertWithoutShowsInput>,
+  connect?: Maybe<ExhibitionWhereUniqueInput>,
+};
+
+export type ExhibitionUpdateWithoutRoomsDataInput = {
+  number?: Maybe<Scalars['Int']>,
+  theme?: Maybe<Scalars['Json']>,
+  extent?: Maybe<Scalars['Int']>,
+  opensAt?: Maybe<Scalars['DateTime']>,
+  closesAt?: Maybe<Scalars['DateTime']>,
+  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>,
+};
+
+export type ExhibitionUpdateWithoutShowsDataInput = {
+  number?: Maybe<Scalars['Int']>,
+  theme?: Maybe<Scalars['Json']>,
+  extent?: Maybe<Scalars['Int']>,
+  opensAt?: Maybe<Scalars['DateTime']>,
+  closesAt?: Maybe<Scalars['DateTime']>,
+  rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>,
+};
+
+export type ExhibitionUpsertWithoutRoomsInput = {
+  update: ExhibitionUpdateWithoutRoomsDataInput,
+  create: ExhibitionCreateWithoutRoomsInput,
+};
+
+export type ExhibitionUpsertWithoutShowsInput = {
+  update: ExhibitionUpdateWithoutShowsDataInput,
+  create: ExhibitionCreateWithoutShowsInput,
+};
+
+export type ExhibitionWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -903,9 +955,12 @@ export type IExhibitionWhereInput = {
   closesAt_lte?: Maybe<Scalars['DateTime']>,
   closesAt_gt?: Maybe<Scalars['DateTime']>,
   closesAt_gte?: Maybe<Scalars['DateTime']>,
-  shows_every?: Maybe<IShowWhereInput>,
-  shows_some?: Maybe<IShowWhereInput>,
-  shows_none?: Maybe<IShowWhereInput>,
+  shows_every?: Maybe<ShowWhereInput>,
+  shows_some?: Maybe<ShowWhereInput>,
+  shows_none?: Maybe<ShowWhereInput>,
+  rooms_every?: Maybe<RoomWhereInput>,
+  rooms_some?: Maybe<RoomWhereInput>,
+  rooms_none?: Maybe<RoomWhereInput>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -922,32 +977,32 @@ export type IExhibitionWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IExhibitionWhereInput>>,
-  OR?: Maybe<Array<IExhibitionWhereInput>>,
-  NOT?: Maybe<Array<IExhibitionWhereInput>>,
+  AND?: Maybe<Array<ExhibitionWhereInput>>,
+  OR?: Maybe<Array<ExhibitionWhereInput>>,
+  NOT?: Maybe<Array<ExhibitionWhereInput>>,
 };
 
-export type IExhibitionWhereUniqueInput = {
+export type ExhibitionWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
   number?: Maybe<Scalars['Int']>,
 };
 
-export type IIssue = {
+export type Issue = {
   __typename?: 'Issue',
   id: Scalars['ID'],
   uri: Scalars['String'],
-  rarity: IRarity,
+  rarity: Rarity,
   emojis: Array<Scalars['String']>,
-  creator: IEntity,
-  assets?: Maybe<Array<IAsset>>,
+  creator: Entity,
+  assets?: Maybe<Array<Asset>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
 
-export type IIssueAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
+export type IssueAssetsArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -955,59 +1010,59 @@ export type IIssueAssetsArgs = {
   last?: Maybe<Scalars['Int']>
 };
 
-export type IIssueConnection = {
+export type IssueConnection = {
   __typename?: 'IssueConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IIssueEdge>>,
-  aggregate: IAggregateIssue,
+  pageInfo: PageInfo,
+  edges: Array<Maybe<IssueEdge>>,
+  aggregate: AggregateIssue,
 };
 
-export type IIssueCreateemojisInput = {
+export type IssueCreateemojisInput = {
   set?: Maybe<Array<Scalars['String']>>,
 };
 
-export type IIssueCreateInput = {
+export type IssueCreateInput = {
   id?: Maybe<Scalars['ID']>,
   uri: Scalars['String'],
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueCreateemojisInput>,
-  creator: IEntityCreateOneWithoutCreatedIssuesInput,
-  assets?: Maybe<IAssetCreateManyWithoutIssueInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueCreateemojisInput>,
+  creator: EntityCreateOneWithoutCreatedIssuesInput,
+  assets?: Maybe<AssetCreateManyWithoutIssueInput>,
 };
 
-export type IIssueCreateManyWithoutCreatorInput = {
-  create?: Maybe<Array<IIssueCreateWithoutCreatorInput>>,
-  connect?: Maybe<Array<IIssueWhereUniqueInput>>,
+export type IssueCreateManyWithoutCreatorInput = {
+  create?: Maybe<Array<IssueCreateWithoutCreatorInput>>,
+  connect?: Maybe<Array<IssueWhereUniqueInput>>,
 };
 
-export type IIssueCreateOneWithoutAssetsInput = {
-  create?: Maybe<IIssueCreateWithoutAssetsInput>,
-  connect?: Maybe<IIssueWhereUniqueInput>,
+export type IssueCreateOneWithoutAssetsInput = {
+  create?: Maybe<IssueCreateWithoutAssetsInput>,
+  connect?: Maybe<IssueWhereUniqueInput>,
 };
 
-export type IIssueCreateWithoutAssetsInput = {
+export type IssueCreateWithoutAssetsInput = {
   id?: Maybe<Scalars['ID']>,
   uri: Scalars['String'],
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueCreateemojisInput>,
-  creator: IEntityCreateOneWithoutCreatedIssuesInput,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueCreateemojisInput>,
+  creator: EntityCreateOneWithoutCreatedIssuesInput,
 };
 
-export type IIssueCreateWithoutCreatorInput = {
+export type IssueCreateWithoutCreatorInput = {
   id?: Maybe<Scalars['ID']>,
   uri: Scalars['String'],
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueCreateemojisInput>,
-  assets?: Maybe<IAssetCreateManyWithoutIssueInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueCreateemojisInput>,
+  assets?: Maybe<AssetCreateManyWithoutIssueInput>,
 };
 
-export type IIssueEdge = {
+export type IssueEdge = {
   __typename?: 'IssueEdge',
-  node: IIssue,
+  node: Issue,
   cursor: Scalars['String'],
 };
 
-export enum IIssueOrderByInput {
+export enum IssueOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   UriAsc = 'uri_ASC',
@@ -1020,17 +1075,17 @@ export enum IIssueOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
-export type IIssuePreviousValues = {
+export type IssuePreviousValues = {
   __typename?: 'IssuePreviousValues',
   id: Scalars['ID'],
   uri: Scalars['String'],
-  rarity: IRarity,
+  rarity: Rarity,
   emojis: Array<Scalars['String']>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
-export type IIssueScalarWhereInput = {
+export type IssueScalarWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -1059,10 +1114,10 @@ export type IIssueScalarWhereInput = {
   uri_not_starts_with?: Maybe<Scalars['String']>,
   uri_ends_with?: Maybe<Scalars['String']>,
   uri_not_ends_with?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  rarity_not?: Maybe<IRarity>,
-  rarity_in?: Maybe<Array<IRarity>>,
-  rarity_not_in?: Maybe<Array<IRarity>>,
+  rarity?: Maybe<Rarity>,
+  rarity_not?: Maybe<Rarity>,
+  rarity_in?: Maybe<Array<Rarity>>,
+  rarity_not_in?: Maybe<Array<Rarity>>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -1079,109 +1134,109 @@ export type IIssueScalarWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IIssueScalarWhereInput>>,
-  OR?: Maybe<Array<IIssueScalarWhereInput>>,
-  NOT?: Maybe<Array<IIssueScalarWhereInput>>,
+  AND?: Maybe<Array<IssueScalarWhereInput>>,
+  OR?: Maybe<Array<IssueScalarWhereInput>>,
+  NOT?: Maybe<Array<IssueScalarWhereInput>>,
 };
 
-export type IIssueSubscriptionPayload = {
+export type IssueSubscriptionPayload = {
   __typename?: 'IssueSubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IIssue>,
+  mutation: MutationType,
+  node?: Maybe<Issue>,
   updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IIssuePreviousValues>,
+  previousValues?: Maybe<IssuePreviousValues>,
 };
 
-export type IIssueSubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
+export type IssueSubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
   updatedFields_contains?: Maybe<Scalars['String']>,
   updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
   updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IIssueWhereInput>,
-  AND?: Maybe<Array<IIssueSubscriptionWhereInput>>,
-  OR?: Maybe<Array<IIssueSubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IIssueSubscriptionWhereInput>>,
+  node?: Maybe<IssueWhereInput>,
+  AND?: Maybe<Array<IssueSubscriptionWhereInput>>,
+  OR?: Maybe<Array<IssueSubscriptionWhereInput>>,
+  NOT?: Maybe<Array<IssueSubscriptionWhereInput>>,
 };
 
-export type IIssueUpdateemojisInput = {
+export type IssueUpdateemojisInput = {
   set?: Maybe<Array<Scalars['String']>>,
 };
 
-export type IIssueUpdateInput = {
+export type IssueUpdateInput = {
   uri?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueUpdateemojisInput>,
-  creator?: Maybe<IEntityUpdateOneRequiredWithoutCreatedIssuesInput>,
-  assets?: Maybe<IAssetUpdateManyWithoutIssueInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueUpdateemojisInput>,
+  creator?: Maybe<EntityUpdateOneRequiredWithoutCreatedIssuesInput>,
+  assets?: Maybe<AssetUpdateManyWithoutIssueInput>,
 };
 
-export type IIssueUpdateManyDataInput = {
+export type IssueUpdateManyDataInput = {
   uri?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueUpdateemojisInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueUpdateemojisInput>,
 };
 
-export type IIssueUpdateManyMutationInput = {
+export type IssueUpdateManyMutationInput = {
   uri?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueUpdateemojisInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueUpdateemojisInput>,
 };
 
-export type IIssueUpdateManyWithoutCreatorInput = {
-  create?: Maybe<Array<IIssueCreateWithoutCreatorInput>>,
-  delete?: Maybe<Array<IIssueWhereUniqueInput>>,
-  connect?: Maybe<Array<IIssueWhereUniqueInput>>,
-  set?: Maybe<Array<IIssueWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IIssueWhereUniqueInput>>,
-  update?: Maybe<Array<IIssueUpdateWithWhereUniqueWithoutCreatorInput>>,
-  upsert?: Maybe<Array<IIssueUpsertWithWhereUniqueWithoutCreatorInput>>,
-  deleteMany?: Maybe<Array<IIssueScalarWhereInput>>,
-  updateMany?: Maybe<Array<IIssueUpdateManyWithWhereNestedInput>>,
+export type IssueUpdateManyWithoutCreatorInput = {
+  create?: Maybe<Array<IssueCreateWithoutCreatorInput>>,
+  delete?: Maybe<Array<IssueWhereUniqueInput>>,
+  connect?: Maybe<Array<IssueWhereUniqueInput>>,
+  set?: Maybe<Array<IssueWhereUniqueInput>>,
+  disconnect?: Maybe<Array<IssueWhereUniqueInput>>,
+  update?: Maybe<Array<IssueUpdateWithWhereUniqueWithoutCreatorInput>>,
+  upsert?: Maybe<Array<IssueUpsertWithWhereUniqueWithoutCreatorInput>>,
+  deleteMany?: Maybe<Array<IssueScalarWhereInput>>,
+  updateMany?: Maybe<Array<IssueUpdateManyWithWhereNestedInput>>,
 };
 
-export type IIssueUpdateManyWithWhereNestedInput = {
-  where: IIssueScalarWhereInput,
-  data: IIssueUpdateManyDataInput,
+export type IssueUpdateManyWithWhereNestedInput = {
+  where: IssueScalarWhereInput,
+  data: IssueUpdateManyDataInput,
 };
 
-export type IIssueUpdateOneRequiredWithoutAssetsInput = {
-  create?: Maybe<IIssueCreateWithoutAssetsInput>,
-  update?: Maybe<IIssueUpdateWithoutAssetsDataInput>,
-  upsert?: Maybe<IIssueUpsertWithoutAssetsInput>,
-  connect?: Maybe<IIssueWhereUniqueInput>,
+export type IssueUpdateOneRequiredWithoutAssetsInput = {
+  create?: Maybe<IssueCreateWithoutAssetsInput>,
+  update?: Maybe<IssueUpdateWithoutAssetsDataInput>,
+  upsert?: Maybe<IssueUpsertWithoutAssetsInput>,
+  connect?: Maybe<IssueWhereUniqueInput>,
 };
 
-export type IIssueUpdateWithoutAssetsDataInput = {
+export type IssueUpdateWithoutAssetsDataInput = {
   uri?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueUpdateemojisInput>,
-  creator?: Maybe<IEntityUpdateOneRequiredWithoutCreatedIssuesInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueUpdateemojisInput>,
+  creator?: Maybe<EntityUpdateOneRequiredWithoutCreatedIssuesInput>,
 };
 
-export type IIssueUpdateWithoutCreatorDataInput = {
+export type IssueUpdateWithoutCreatorDataInput = {
   uri?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  emojis?: Maybe<IIssueUpdateemojisInput>,
-  assets?: Maybe<IAssetUpdateManyWithoutIssueInput>,
+  rarity?: Maybe<Rarity>,
+  emojis?: Maybe<IssueUpdateemojisInput>,
+  assets?: Maybe<AssetUpdateManyWithoutIssueInput>,
 };
 
-export type IIssueUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: IIssueWhereUniqueInput,
-  data: IIssueUpdateWithoutCreatorDataInput,
+export type IssueUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: IssueWhereUniqueInput,
+  data: IssueUpdateWithoutCreatorDataInput,
 };
 
-export type IIssueUpsertWithoutAssetsInput = {
-  update: IIssueUpdateWithoutAssetsDataInput,
-  create: IIssueCreateWithoutAssetsInput,
+export type IssueUpsertWithoutAssetsInput = {
+  update: IssueUpdateWithoutAssetsDataInput,
+  create: IssueCreateWithoutAssetsInput,
 };
 
-export type IIssueUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: IIssueWhereUniqueInput,
-  update: IIssueUpdateWithoutCreatorDataInput,
-  create: IIssueCreateWithoutCreatorInput,
+export type IssueUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: IssueWhereUniqueInput,
+  update: IssueUpdateWithoutCreatorDataInput,
+  create: IssueCreateWithoutCreatorInput,
 };
 
-export type IIssueWhereInput = {
+export type IssueWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -1210,14 +1265,14 @@ export type IIssueWhereInput = {
   uri_not_starts_with?: Maybe<Scalars['String']>,
   uri_ends_with?: Maybe<Scalars['String']>,
   uri_not_ends_with?: Maybe<Scalars['String']>,
-  rarity?: Maybe<IRarity>,
-  rarity_not?: Maybe<IRarity>,
-  rarity_in?: Maybe<Array<IRarity>>,
-  rarity_not_in?: Maybe<Array<IRarity>>,
-  creator?: Maybe<IEntityWhereInput>,
-  assets_every?: Maybe<IAssetWhereInput>,
-  assets_some?: Maybe<IAssetWhereInput>,
-  assets_none?: Maybe<IAssetWhereInput>,
+  rarity?: Maybe<Rarity>,
+  rarity_not?: Maybe<Rarity>,
+  rarity_in?: Maybe<Array<Rarity>>,
+  rarity_not_in?: Maybe<Array<Rarity>>,
+  creator?: Maybe<EntityWhereInput>,
+  assets_every?: Maybe<AssetWhereInput>,
+  assets_some?: Maybe<AssetWhereInput>,
+  assets_none?: Maybe<AssetWhereInput>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -1234,272 +1289,272 @@ export type IIssueWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IIssueWhereInput>>,
-  OR?: Maybe<Array<IIssueWhereInput>>,
-  NOT?: Maybe<Array<IIssueWhereInput>>,
+  AND?: Maybe<Array<IssueWhereInput>>,
+  OR?: Maybe<Array<IssueWhereInput>>,
+  NOT?: Maybe<Array<IssueWhereInput>>,
 };
 
-export type IIssueWhereUniqueInput = {
+export type IssueWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
 };
 
 
 
-export type IMutation = {
+export type Mutation = {
   __typename?: 'Mutation',
-  createAsset: IAsset,
-  updateAsset?: Maybe<IAsset>,
-  updateManyAssets: IBatchPayload,
-  upsertAsset: IAsset,
-  deleteAsset?: Maybe<IAsset>,
-  deleteManyAssets: IBatchPayload,
-  createEntity: IEntity,
-  updateEntity?: Maybe<IEntity>,
-  updateManyEntities: IBatchPayload,
-  upsertEntity: IEntity,
-  deleteEntity?: Maybe<IEntity>,
-  deleteManyEntities: IBatchPayload,
-  createExhibition: IExhibition,
-  updateExhibition?: Maybe<IExhibition>,
-  updateManyExhibitions: IBatchPayload,
-  upsertExhibition: IExhibition,
-  deleteExhibition?: Maybe<IExhibition>,
-  deleteManyExhibitions: IBatchPayload,
-  createIssue: IIssue,
-  updateIssue?: Maybe<IIssue>,
-  updateManyIssues: IBatchPayload,
-  upsertIssue: IIssue,
-  deleteIssue?: Maybe<IIssue>,
-  deleteManyIssues: IBatchPayload,
-  createShow: IShow,
-  updateShow?: Maybe<IShow>,
-  updateManyShows: IBatchPayload,
-  upsertShow: IShow,
-  deleteShow?: Maybe<IShow>,
-  deleteManyShows: IBatchPayload,
-  createWork: IWork,
-  updateWork?: Maybe<IWork>,
-  updateManyWorks: IBatchPayload,
-  upsertWork: IWork,
-  deleteWork?: Maybe<IWork>,
-  deleteManyWorks: IBatchPayload,
+  createAsset: Asset,
+  updateAsset?: Maybe<Asset>,
+  updateManyAssets: BatchPayload,
+  upsertAsset: Asset,
+  deleteAsset?: Maybe<Asset>,
+  deleteManyAssets: BatchPayload,
+  createEntity: Entity,
+  updateEntity?: Maybe<Entity>,
+  updateManyEntities: BatchPayload,
+  upsertEntity: Entity,
+  deleteEntity?: Maybe<Entity>,
+  deleteManyEntities: BatchPayload,
+  createExhibition: Exhibition,
+  updateExhibition?: Maybe<Exhibition>,
+  updateManyExhibitions: BatchPayload,
+  upsertExhibition: Exhibition,
+  deleteExhibition?: Maybe<Exhibition>,
+  deleteManyExhibitions: BatchPayload,
+  createIssue: Issue,
+  updateIssue?: Maybe<Issue>,
+  updateManyIssues: BatchPayload,
+  upsertIssue: Issue,
+  deleteIssue?: Maybe<Issue>,
+  deleteManyIssues: BatchPayload,
+  createRoom: Room,
+  updateRoom?: Maybe<Room>,
+  updateManyRooms: BatchPayload,
+  upsertRoom: Room,
+  deleteRoom?: Maybe<Room>,
+  deleteManyRooms: BatchPayload,
+  createShow: Show,
+  updateShow?: Maybe<Show>,
+  updateManyShows: BatchPayload,
+  upsertShow: Show,
+  deleteShow?: Maybe<Show>,
+  deleteManyShows: BatchPayload,
 };
 
 
-export type IMutationCreateAssetArgs = {
-  data: IAssetCreateInput
+export type MutationCreateAssetArgs = {
+  data: AssetCreateInput
 };
 
 
-export type IMutationUpdateAssetArgs = {
-  data: IAssetUpdateInput,
-  where: IAssetWhereUniqueInput
+export type MutationUpdateAssetArgs = {
+  data: AssetUpdateInput,
+  where: AssetWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyAssetsArgs = {
-  data: IAssetUpdateManyMutationInput,
-  where?: Maybe<IAssetWhereInput>
+export type MutationUpdateManyAssetsArgs = {
+  data: AssetUpdateManyMutationInput,
+  where?: Maybe<AssetWhereInput>
 };
 
 
-export type IMutationUpsertAssetArgs = {
-  where: IAssetWhereUniqueInput,
-  create: IAssetCreateInput,
-  update: IAssetUpdateInput
+export type MutationUpsertAssetArgs = {
+  where: AssetWhereUniqueInput,
+  create: AssetCreateInput,
+  update: AssetUpdateInput
 };
 
 
-export type IMutationDeleteAssetArgs = {
-  where: IAssetWhereUniqueInput
+export type MutationDeleteAssetArgs = {
+  where: AssetWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>
+export type MutationDeleteManyAssetsArgs = {
+  where?: Maybe<AssetWhereInput>
 };
 
 
-export type IMutationCreateEntityArgs = {
-  data: IEntityCreateInput
+export type MutationCreateEntityArgs = {
+  data: EntityCreateInput
 };
 
 
-export type IMutationUpdateEntityArgs = {
-  data: IEntityUpdateInput,
-  where: IEntityWhereUniqueInput
+export type MutationUpdateEntityArgs = {
+  data: EntityUpdateInput,
+  where: EntityWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyEntitiesArgs = {
-  data: IEntityUpdateManyMutationInput,
-  where?: Maybe<IEntityWhereInput>
+export type MutationUpdateManyEntitiesArgs = {
+  data: EntityUpdateManyMutationInput,
+  where?: Maybe<EntityWhereInput>
 };
 
 
-export type IMutationUpsertEntityArgs = {
-  where: IEntityWhereUniqueInput,
-  create: IEntityCreateInput,
-  update: IEntityUpdateInput
+export type MutationUpsertEntityArgs = {
+  where: EntityWhereUniqueInput,
+  create: EntityCreateInput,
+  update: EntityUpdateInput
 };
 
 
-export type IMutationDeleteEntityArgs = {
-  where: IEntityWhereUniqueInput
+export type MutationDeleteEntityArgs = {
+  where: EntityWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyEntitiesArgs = {
-  where?: Maybe<IEntityWhereInput>
+export type MutationDeleteManyEntitiesArgs = {
+  where?: Maybe<EntityWhereInput>
 };
 
 
-export type IMutationCreateExhibitionArgs = {
-  data: IExhibitionCreateInput
+export type MutationCreateExhibitionArgs = {
+  data: ExhibitionCreateInput
 };
 
 
-export type IMutationUpdateExhibitionArgs = {
-  data: IExhibitionUpdateInput,
-  where: IExhibitionWhereUniqueInput
+export type MutationUpdateExhibitionArgs = {
+  data: ExhibitionUpdateInput,
+  where: ExhibitionWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyExhibitionsArgs = {
-  data: IExhibitionUpdateManyMutationInput,
-  where?: Maybe<IExhibitionWhereInput>
+export type MutationUpdateManyExhibitionsArgs = {
+  data: ExhibitionUpdateManyMutationInput,
+  where?: Maybe<ExhibitionWhereInput>
 };
 
 
-export type IMutationUpsertExhibitionArgs = {
-  where: IExhibitionWhereUniqueInput,
-  create: IExhibitionCreateInput,
-  update: IExhibitionUpdateInput
+export type MutationUpsertExhibitionArgs = {
+  where: ExhibitionWhereUniqueInput,
+  create: ExhibitionCreateInput,
+  update: ExhibitionUpdateInput
 };
 
 
-export type IMutationDeleteExhibitionArgs = {
-  where: IExhibitionWhereUniqueInput
+export type MutationDeleteExhibitionArgs = {
+  where: ExhibitionWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyExhibitionsArgs = {
-  where?: Maybe<IExhibitionWhereInput>
+export type MutationDeleteManyExhibitionsArgs = {
+  where?: Maybe<ExhibitionWhereInput>
 };
 
 
-export type IMutationCreateIssueArgs = {
-  data: IIssueCreateInput
+export type MutationCreateIssueArgs = {
+  data: IssueCreateInput
 };
 
 
-export type IMutationUpdateIssueArgs = {
-  data: IIssueUpdateInput,
-  where: IIssueWhereUniqueInput
+export type MutationUpdateIssueArgs = {
+  data: IssueUpdateInput,
+  where: IssueWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyIssuesArgs = {
-  data: IIssueUpdateManyMutationInput,
-  where?: Maybe<IIssueWhereInput>
+export type MutationUpdateManyIssuesArgs = {
+  data: IssueUpdateManyMutationInput,
+  where?: Maybe<IssueWhereInput>
 };
 
 
-export type IMutationUpsertIssueArgs = {
-  where: IIssueWhereUniqueInput,
-  create: IIssueCreateInput,
-  update: IIssueUpdateInput
+export type MutationUpsertIssueArgs = {
+  where: IssueWhereUniqueInput,
+  create: IssueCreateInput,
+  update: IssueUpdateInput
 };
 
 
-export type IMutationDeleteIssueArgs = {
-  where: IIssueWhereUniqueInput
+export type MutationDeleteIssueArgs = {
+  where: IssueWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyIssuesArgs = {
-  where?: Maybe<IIssueWhereInput>
+export type MutationDeleteManyIssuesArgs = {
+  where?: Maybe<IssueWhereInput>
 };
 
 
-export type IMutationCreateShowArgs = {
-  data: IShowCreateInput
+export type MutationCreateRoomArgs = {
+  data: RoomCreateInput
 };
 
 
-export type IMutationUpdateShowArgs = {
-  data: IShowUpdateInput,
-  where: IShowWhereUniqueInput
+export type MutationUpdateRoomArgs = {
+  data: RoomUpdateInput,
+  where: RoomWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyShowsArgs = {
-  data: IShowUpdateManyMutationInput,
-  where?: Maybe<IShowWhereInput>
+export type MutationUpdateManyRoomsArgs = {
+  data: RoomUpdateManyMutationInput,
+  where?: Maybe<RoomWhereInput>
 };
 
 
-export type IMutationUpsertShowArgs = {
-  where: IShowWhereUniqueInput,
-  create: IShowCreateInput,
-  update: IShowUpdateInput
+export type MutationUpsertRoomArgs = {
+  where: RoomWhereUniqueInput,
+  create: RoomCreateInput,
+  update: RoomUpdateInput
 };
 
 
-export type IMutationDeleteShowArgs = {
-  where: IShowWhereUniqueInput
+export type MutationDeleteRoomArgs = {
+  where: RoomWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyShowsArgs = {
-  where?: Maybe<IShowWhereInput>
+export type MutationDeleteManyRoomsArgs = {
+  where?: Maybe<RoomWhereInput>
 };
 
 
-export type IMutationCreateWorkArgs = {
-  data: IWorkCreateInput
+export type MutationCreateShowArgs = {
+  data: ShowCreateInput
 };
 
 
-export type IMutationUpdateWorkArgs = {
-  data: IWorkUpdateInput,
-  where: IWorkWhereUniqueInput
+export type MutationUpdateShowArgs = {
+  data: ShowUpdateInput,
+  where: ShowWhereUniqueInput
 };
 
 
-export type IMutationUpdateManyWorksArgs = {
-  data: IWorkUpdateManyMutationInput,
-  where?: Maybe<IWorkWhereInput>
+export type MutationUpdateManyShowsArgs = {
+  data: ShowUpdateManyMutationInput,
+  where?: Maybe<ShowWhereInput>
 };
 
 
-export type IMutationUpsertWorkArgs = {
-  where: IWorkWhereUniqueInput,
-  create: IWorkCreateInput,
-  update: IWorkUpdateInput
+export type MutationUpsertShowArgs = {
+  where: ShowWhereUniqueInput,
+  create: ShowCreateInput,
+  update: ShowUpdateInput
 };
 
 
-export type IMutationDeleteWorkArgs = {
-  where: IWorkWhereUniqueInput
+export type MutationDeleteShowArgs = {
+  where: ShowWhereUniqueInput
 };
 
 
-export type IMutationDeleteManyWorksArgs = {
-  where?: Maybe<IWorkWhereInput>
+export type MutationDeleteManyShowsArgs = {
+  where?: Maybe<ShowWhereInput>
 };
 
-export enum IMutationType {
+export enum MutationType {
   Created = 'CREATED',
   Updated = 'UPDATED',
   Deleted = 'DELETED'
 }
 
-export type INode = {
+export type Node = {
   id: Scalars['ID'],
 };
 
-export type IPageInfo = {
+export type PageInfo = {
   __typename?: 'PageInfo',
   hasNextPage: Scalars['Boolean'],
   hasPreviousPage: Scalars['Boolean'],
@@ -1507,38 +1562,38 @@ export type IPageInfo = {
   endCursor?: Maybe<Scalars['String']>,
 };
 
-export type IQuery = {
+export type Query = {
   __typename?: 'Query',
-  asset?: Maybe<IAsset>,
-  assets: Array<Maybe<IAsset>>,
-  assetsConnection: IAssetConnection,
-  entity?: Maybe<IEntity>,
-  entities: Array<Maybe<IEntity>>,
-  entitiesConnection: IEntityConnection,
-  exhibition?: Maybe<IExhibition>,
-  exhibitions: Array<Maybe<IExhibition>>,
-  exhibitionsConnection: IExhibitionConnection,
-  issue?: Maybe<IIssue>,
-  issues: Array<Maybe<IIssue>>,
-  issuesConnection: IIssueConnection,
-  show?: Maybe<IShow>,
-  shows: Array<Maybe<IShow>>,
-  showsConnection: IShowConnection,
-  work?: Maybe<IWork>,
-  works: Array<Maybe<IWork>>,
-  worksConnection: IWorkConnection,
-  node?: Maybe<INode>,
+  asset?: Maybe<Asset>,
+  assets: Array<Maybe<Asset>>,
+  assetsConnection: AssetConnection,
+  entity?: Maybe<Entity>,
+  entities: Array<Maybe<Entity>>,
+  entitiesConnection: EntityConnection,
+  exhibition?: Maybe<Exhibition>,
+  exhibitions: Array<Maybe<Exhibition>>,
+  exhibitionsConnection: ExhibitionConnection,
+  issue?: Maybe<Issue>,
+  issues: Array<Maybe<Issue>>,
+  issuesConnection: IssueConnection,
+  room?: Maybe<Room>,
+  rooms: Array<Maybe<Room>>,
+  roomsConnection: RoomConnection,
+  show?: Maybe<Show>,
+  shows: Array<Maybe<Show>>,
+  showsConnection: ShowConnection,
+  node?: Maybe<Node>,
 };
 
 
-export type IQueryAssetArgs = {
-  where: IAssetWhereUniqueInput
+export type QueryAssetArgs = {
+  where: AssetWhereUniqueInput
 };
 
 
-export type IQueryAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
+export type QueryAssetsArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1547,9 +1602,9 @@ export type IQueryAssetsArgs = {
 };
 
 
-export type IQueryAssetsConnectionArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
+export type QueryAssetsConnectionArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1558,14 +1613,14 @@ export type IQueryAssetsConnectionArgs = {
 };
 
 
-export type IQueryEntityArgs = {
-  where: IEntityWhereUniqueInput
+export type QueryEntityArgs = {
+  where: EntityWhereUniqueInput
 };
 
 
-export type IQueryEntitiesArgs = {
-  where?: Maybe<IEntityWhereInput>,
-  orderBy?: Maybe<IEntityOrderByInput>,
+export type QueryEntitiesArgs = {
+  where?: Maybe<EntityWhereInput>,
+  orderBy?: Maybe<EntityOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1574,9 +1629,9 @@ export type IQueryEntitiesArgs = {
 };
 
 
-export type IQueryEntitiesConnectionArgs = {
-  where?: Maybe<IEntityWhereInput>,
-  orderBy?: Maybe<IEntityOrderByInput>,
+export type QueryEntitiesConnectionArgs = {
+  where?: Maybe<EntityWhereInput>,
+  orderBy?: Maybe<EntityOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1585,14 +1640,14 @@ export type IQueryEntitiesConnectionArgs = {
 };
 
 
-export type IQueryExhibitionArgs = {
-  where: IExhibitionWhereUniqueInput
+export type QueryExhibitionArgs = {
+  where: ExhibitionWhereUniqueInput
 };
 
 
-export type IQueryExhibitionsArgs = {
-  where?: Maybe<IExhibitionWhereInput>,
-  orderBy?: Maybe<IExhibitionOrderByInput>,
+export type QueryExhibitionsArgs = {
+  where?: Maybe<ExhibitionWhereInput>,
+  orderBy?: Maybe<ExhibitionOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1601,9 +1656,9 @@ export type IQueryExhibitionsArgs = {
 };
 
 
-export type IQueryExhibitionsConnectionArgs = {
-  where?: Maybe<IExhibitionWhereInput>,
-  orderBy?: Maybe<IExhibitionOrderByInput>,
+export type QueryExhibitionsConnectionArgs = {
+  where?: Maybe<ExhibitionWhereInput>,
+  orderBy?: Maybe<ExhibitionOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1612,14 +1667,14 @@ export type IQueryExhibitionsConnectionArgs = {
 };
 
 
-export type IQueryIssueArgs = {
-  where: IIssueWhereUniqueInput
+export type QueryIssueArgs = {
+  where: IssueWhereUniqueInput
 };
 
 
-export type IQueryIssuesArgs = {
-  where?: Maybe<IIssueWhereInput>,
-  orderBy?: Maybe<IIssueOrderByInput>,
+export type QueryIssuesArgs = {
+  where?: Maybe<IssueWhereInput>,
+  orderBy?: Maybe<IssueOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1628,9 +1683,9 @@ export type IQueryIssuesArgs = {
 };
 
 
-export type IQueryIssuesConnectionArgs = {
-  where?: Maybe<IIssueWhereInput>,
-  orderBy?: Maybe<IIssueOrderByInput>,
+export type QueryIssuesConnectionArgs = {
+  where?: Maybe<IssueWhereInput>,
+  orderBy?: Maybe<IssueOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1639,14 +1694,14 @@ export type IQueryIssuesConnectionArgs = {
 };
 
 
-export type IQueryShowArgs = {
-  where: IShowWhereUniqueInput
+export type QueryRoomArgs = {
+  where: RoomWhereUniqueInput
 };
 
 
-export type IQueryShowsArgs = {
-  where?: Maybe<IShowWhereInput>,
-  orderBy?: Maybe<IShowOrderByInput>,
+export type QueryRoomsArgs = {
+  where?: Maybe<RoomWhereInput>,
+  orderBy?: Maybe<RoomOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1655,9 +1710,9 @@ export type IQueryShowsArgs = {
 };
 
 
-export type IQueryShowsConnectionArgs = {
-  where?: Maybe<IShowWhereInput>,
-  orderBy?: Maybe<IShowOrderByInput>,
+export type QueryRoomsConnectionArgs = {
+  where?: Maybe<RoomWhereInput>,
+  orderBy?: Maybe<RoomOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1666,14 +1721,14 @@ export type IQueryShowsConnectionArgs = {
 };
 
 
-export type IQueryWorkArgs = {
-  where: IWorkWhereUniqueInput
+export type QueryShowArgs = {
+  where: ShowWhereUniqueInput
 };
 
 
-export type IQueryWorksArgs = {
-  where?: Maybe<IWorkWhereInput>,
-  orderBy?: Maybe<IWorkOrderByInput>,
+export type QueryShowsArgs = {
+  where?: Maybe<ShowWhereInput>,
+  orderBy?: Maybe<ShowOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1682,9 +1737,9 @@ export type IQueryWorksArgs = {
 };
 
 
-export type IQueryWorksConnectionArgs = {
-  where?: Maybe<IWorkWhereInput>,
-  orderBy?: Maybe<IWorkOrderByInput>,
+export type QueryShowsConnectionArgs = {
+  where?: Maybe<ShowWhereInput>,
+  orderBy?: Maybe<ShowOrderByInput>,
   skip?: Maybe<Scalars['Int']>,
   after?: Maybe<Scalars['String']>,
   before?: Maybe<Scalars['String']>,
@@ -1693,60 +1748,361 @@ export type IQueryWorksConnectionArgs = {
 };
 
 
-export type IQueryNodeArgs = {
+export type QueryNodeArgs = {
   id: Scalars['ID']
 };
 
-export enum IRarity {
+export enum Rarity {
   Common = 'COMMON',
   Rare = 'RARE'
 }
 
-export type IShow = {
+export type Room = {
+  __typename?: 'Room',
+  id: Scalars['ID'],
+  entryId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  exhibition: Exhibition,
+  assets?: Maybe<Array<Asset>>,
+};
+
+
+export type RoomAssetsArgs = {
+  where?: Maybe<AssetWhereInput>,
+  orderBy?: Maybe<AssetOrderByInput>,
+  skip?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+export type RoomConnection = {
+  __typename?: 'RoomConnection',
+  pageInfo: PageInfo,
+  edges: Array<Maybe<RoomEdge>>,
+  aggregate: AggregateRoom,
+};
+
+export type RoomCreateInput = {
+  id?: Maybe<Scalars['ID']>,
+  entryId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  exhibition: ExhibitionCreateOneWithoutRoomsInput,
+  assets?: Maybe<AssetCreateManyWithoutRoomsInput>,
+};
+
+export type RoomCreateManyWithoutAssetsInput = {
+  create?: Maybe<Array<RoomCreateWithoutAssetsInput>>,
+  connect?: Maybe<Array<RoomWhereUniqueInput>>,
+};
+
+export type RoomCreateManyWithoutExhibitionInput = {
+  create?: Maybe<Array<RoomCreateWithoutExhibitionInput>>,
+  connect?: Maybe<Array<RoomWhereUniqueInput>>,
+};
+
+export type RoomCreateWithoutAssetsInput = {
+  id?: Maybe<Scalars['ID']>,
+  entryId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  exhibition: ExhibitionCreateOneWithoutRoomsInput,
+};
+
+export type RoomCreateWithoutExhibitionInput = {
+  id?: Maybe<Scalars['ID']>,
+  entryId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  assets?: Maybe<AssetCreateManyWithoutRoomsInput>,
+};
+
+export type RoomEdge = {
+  __typename?: 'RoomEdge',
+  node: Room,
+  cursor: Scalars['String'],
+};
+
+export enum RoomOrderByInput {
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  EntryIdAsc = 'entryId_ASC',
+  EntryIdDesc = 'entryId_DESC',
+  XAsc = 'x_ASC',
+  XDesc = 'x_DESC',
+  YAsc = 'y_ASC',
+  YDesc = 'y_DESC'
+}
+
+export type RoomPreviousValues = {
+  __typename?: 'RoomPreviousValues',
+  id: Scalars['ID'],
+  entryId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+};
+
+export type RoomScalarWhereInput = {
+  id?: Maybe<Scalars['ID']>,
+  id_not?: Maybe<Scalars['ID']>,
+  id_in?: Maybe<Array<Scalars['ID']>>,
+  id_not_in?: Maybe<Array<Scalars['ID']>>,
+  id_lt?: Maybe<Scalars['ID']>,
+  id_lte?: Maybe<Scalars['ID']>,
+  id_gt?: Maybe<Scalars['ID']>,
+  id_gte?: Maybe<Scalars['ID']>,
+  id_contains?: Maybe<Scalars['ID']>,
+  id_not_contains?: Maybe<Scalars['ID']>,
+  id_starts_with?: Maybe<Scalars['ID']>,
+  id_not_starts_with?: Maybe<Scalars['ID']>,
+  id_ends_with?: Maybe<Scalars['ID']>,
+  id_not_ends_with?: Maybe<Scalars['ID']>,
+  entryId?: Maybe<Scalars['ID']>,
+  entryId_not?: Maybe<Scalars['ID']>,
+  entryId_in?: Maybe<Array<Scalars['ID']>>,
+  entryId_not_in?: Maybe<Array<Scalars['ID']>>,
+  entryId_lt?: Maybe<Scalars['ID']>,
+  entryId_lte?: Maybe<Scalars['ID']>,
+  entryId_gt?: Maybe<Scalars['ID']>,
+  entryId_gte?: Maybe<Scalars['ID']>,
+  entryId_contains?: Maybe<Scalars['ID']>,
+  entryId_not_contains?: Maybe<Scalars['ID']>,
+  entryId_starts_with?: Maybe<Scalars['ID']>,
+  entryId_not_starts_with?: Maybe<Scalars['ID']>,
+  entryId_ends_with?: Maybe<Scalars['ID']>,
+  entryId_not_ends_with?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  x_not?: Maybe<Scalars['Int']>,
+  x_in?: Maybe<Array<Scalars['Int']>>,
+  x_not_in?: Maybe<Array<Scalars['Int']>>,
+  x_lt?: Maybe<Scalars['Int']>,
+  x_lte?: Maybe<Scalars['Int']>,
+  x_gt?: Maybe<Scalars['Int']>,
+  x_gte?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+  y_not?: Maybe<Scalars['Int']>,
+  y_in?: Maybe<Array<Scalars['Int']>>,
+  y_not_in?: Maybe<Array<Scalars['Int']>>,
+  y_lt?: Maybe<Scalars['Int']>,
+  y_lte?: Maybe<Scalars['Int']>,
+  y_gt?: Maybe<Scalars['Int']>,
+  y_gte?: Maybe<Scalars['Int']>,
+  AND?: Maybe<Array<RoomScalarWhereInput>>,
+  OR?: Maybe<Array<RoomScalarWhereInput>>,
+  NOT?: Maybe<Array<RoomScalarWhereInput>>,
+};
+
+export type RoomSubscriptionPayload = {
+  __typename?: 'RoomSubscriptionPayload',
+  mutation: MutationType,
+  node?: Maybe<Room>,
+  updatedFields?: Maybe<Array<Scalars['String']>>,
+  previousValues?: Maybe<RoomPreviousValues>,
+};
+
+export type RoomSubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
+  updatedFields_contains?: Maybe<Scalars['String']>,
+  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
+  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
+  node?: Maybe<RoomWhereInput>,
+  AND?: Maybe<Array<RoomSubscriptionWhereInput>>,
+  OR?: Maybe<Array<RoomSubscriptionWhereInput>>,
+  NOT?: Maybe<Array<RoomSubscriptionWhereInput>>,
+};
+
+export type RoomUpdateInput = {
+  entryId?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>,
+  assets?: Maybe<AssetUpdateManyWithoutRoomsInput>,
+};
+
+export type RoomUpdateManyDataInput = {
+  entryId?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+};
+
+export type RoomUpdateManyMutationInput = {
+  entryId?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+};
+
+export type RoomUpdateManyWithoutAssetsInput = {
+  create?: Maybe<Array<RoomCreateWithoutAssetsInput>>,
+  delete?: Maybe<Array<RoomWhereUniqueInput>>,
+  connect?: Maybe<Array<RoomWhereUniqueInput>>,
+  set?: Maybe<Array<RoomWhereUniqueInput>>,
+  disconnect?: Maybe<Array<RoomWhereUniqueInput>>,
+  update?: Maybe<Array<RoomUpdateWithWhereUniqueWithoutAssetsInput>>,
+  upsert?: Maybe<Array<RoomUpsertWithWhereUniqueWithoutAssetsInput>>,
+  deleteMany?: Maybe<Array<RoomScalarWhereInput>>,
+  updateMany?: Maybe<Array<RoomUpdateManyWithWhereNestedInput>>,
+};
+
+export type RoomUpdateManyWithoutExhibitionInput = {
+  create?: Maybe<Array<RoomCreateWithoutExhibitionInput>>,
+  delete?: Maybe<Array<RoomWhereUniqueInput>>,
+  connect?: Maybe<Array<RoomWhereUniqueInput>>,
+  set?: Maybe<Array<RoomWhereUniqueInput>>,
+  disconnect?: Maybe<Array<RoomWhereUniqueInput>>,
+  update?: Maybe<Array<RoomUpdateWithWhereUniqueWithoutExhibitionInput>>,
+  upsert?: Maybe<Array<RoomUpsertWithWhereUniqueWithoutExhibitionInput>>,
+  deleteMany?: Maybe<Array<RoomScalarWhereInput>>,
+  updateMany?: Maybe<Array<RoomUpdateManyWithWhereNestedInput>>,
+};
+
+export type RoomUpdateManyWithWhereNestedInput = {
+  where: RoomScalarWhereInput,
+  data: RoomUpdateManyDataInput,
+};
+
+export type RoomUpdateWithoutAssetsDataInput = {
+  entryId?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>,
+};
+
+export type RoomUpdateWithoutExhibitionDataInput = {
+  entryId?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+  assets?: Maybe<AssetUpdateManyWithoutRoomsInput>,
+};
+
+export type RoomUpdateWithWhereUniqueWithoutAssetsInput = {
+  where: RoomWhereUniqueInput,
+  data: RoomUpdateWithoutAssetsDataInput,
+};
+
+export type RoomUpdateWithWhereUniqueWithoutExhibitionInput = {
+  where: RoomWhereUniqueInput,
+  data: RoomUpdateWithoutExhibitionDataInput,
+};
+
+export type RoomUpsertWithWhereUniqueWithoutAssetsInput = {
+  where: RoomWhereUniqueInput,
+  update: RoomUpdateWithoutAssetsDataInput,
+  create: RoomCreateWithoutAssetsInput,
+};
+
+export type RoomUpsertWithWhereUniqueWithoutExhibitionInput = {
+  where: RoomWhereUniqueInput,
+  update: RoomUpdateWithoutExhibitionDataInput,
+  create: RoomCreateWithoutExhibitionInput,
+};
+
+export type RoomWhereInput = {
+  id?: Maybe<Scalars['ID']>,
+  id_not?: Maybe<Scalars['ID']>,
+  id_in?: Maybe<Array<Scalars['ID']>>,
+  id_not_in?: Maybe<Array<Scalars['ID']>>,
+  id_lt?: Maybe<Scalars['ID']>,
+  id_lte?: Maybe<Scalars['ID']>,
+  id_gt?: Maybe<Scalars['ID']>,
+  id_gte?: Maybe<Scalars['ID']>,
+  id_contains?: Maybe<Scalars['ID']>,
+  id_not_contains?: Maybe<Scalars['ID']>,
+  id_starts_with?: Maybe<Scalars['ID']>,
+  id_not_starts_with?: Maybe<Scalars['ID']>,
+  id_ends_with?: Maybe<Scalars['ID']>,
+  id_not_ends_with?: Maybe<Scalars['ID']>,
+  entryId?: Maybe<Scalars['ID']>,
+  entryId_not?: Maybe<Scalars['ID']>,
+  entryId_in?: Maybe<Array<Scalars['ID']>>,
+  entryId_not_in?: Maybe<Array<Scalars['ID']>>,
+  entryId_lt?: Maybe<Scalars['ID']>,
+  entryId_lte?: Maybe<Scalars['ID']>,
+  entryId_gt?: Maybe<Scalars['ID']>,
+  entryId_gte?: Maybe<Scalars['ID']>,
+  entryId_contains?: Maybe<Scalars['ID']>,
+  entryId_not_contains?: Maybe<Scalars['ID']>,
+  entryId_starts_with?: Maybe<Scalars['ID']>,
+  entryId_not_starts_with?: Maybe<Scalars['ID']>,
+  entryId_ends_with?: Maybe<Scalars['ID']>,
+  entryId_not_ends_with?: Maybe<Scalars['ID']>,
+  x?: Maybe<Scalars['Int']>,
+  x_not?: Maybe<Scalars['Int']>,
+  x_in?: Maybe<Array<Scalars['Int']>>,
+  x_not_in?: Maybe<Array<Scalars['Int']>>,
+  x_lt?: Maybe<Scalars['Int']>,
+  x_lte?: Maybe<Scalars['Int']>,
+  x_gt?: Maybe<Scalars['Int']>,
+  x_gte?: Maybe<Scalars['Int']>,
+  y?: Maybe<Scalars['Int']>,
+  y_not?: Maybe<Scalars['Int']>,
+  y_in?: Maybe<Array<Scalars['Int']>>,
+  y_not_in?: Maybe<Array<Scalars['Int']>>,
+  y_lt?: Maybe<Scalars['Int']>,
+  y_lte?: Maybe<Scalars['Int']>,
+  y_gt?: Maybe<Scalars['Int']>,
+  y_gte?: Maybe<Scalars['Int']>,
+  exhibition?: Maybe<ExhibitionWhereInput>,
+  assets_every?: Maybe<AssetWhereInput>,
+  assets_some?: Maybe<AssetWhereInput>,
+  assets_none?: Maybe<AssetWhereInput>,
+  AND?: Maybe<Array<RoomWhereInput>>,
+  OR?: Maybe<Array<RoomWhereInput>>,
+  NOT?: Maybe<Array<RoomWhereInput>>,
+};
+
+export type RoomWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>,
+  entryId?: Maybe<Scalars['ID']>,
+};
+
+export type Show = {
   __typename?: 'Show',
   id: Scalars['ID'],
   number: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
-  exhibition: IExhibition,
+  exhibition: Exhibition,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
 
-export type IShowConnection = {
+export type ShowConnection = {
   __typename?: 'ShowConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IShowEdge>>,
-  aggregate: IAggregateShow,
+  pageInfo: PageInfo,
+  edges: Array<Maybe<ShowEdge>>,
+  aggregate: AggregateShow,
 };
 
-export type IShowCreateInput = {
+export type ShowCreateInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
-  exhibition: IExhibitionCreateOneWithoutShowsInput,
+  exhibition: ExhibitionCreateOneWithoutShowsInput,
 };
 
-export type IShowCreateManyWithoutExhibitionInput = {
-  create?: Maybe<Array<IShowCreateWithoutExhibitionInput>>,
-  connect?: Maybe<Array<IShowWhereUniqueInput>>,
+export type ShowCreateManyWithoutExhibitionInput = {
+  create?: Maybe<Array<ShowCreateWithoutExhibitionInput>>,
+  connect?: Maybe<Array<ShowWhereUniqueInput>>,
 };
 
-export type IShowCreateWithoutExhibitionInput = {
+export type ShowCreateWithoutExhibitionInput = {
   id?: Maybe<Scalars['ID']>,
   number: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
 };
 
-export type IShowEdge = {
+export type ShowEdge = {
   __typename?: 'ShowEdge',
-  node: IShow,
+  node: Show,
   cursor: Scalars['String'],
 };
 
-export enum IShowOrderByInput {
+export enum ShowOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   NumberAsc = 'number_ASC',
@@ -1761,7 +2117,7 @@ export enum IShowOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
-export type IShowPreviousValues = {
+export type ShowPreviousValues = {
   __typename?: 'ShowPreviousValues',
   id: Scalars['ID'],
   number: Scalars['Int'],
@@ -1771,7 +2127,7 @@ export type IShowPreviousValues = {
   updatedAt: Scalars['DateTime'],
 };
 
-export type IShowScalarWhereInput = {
+export type ShowScalarWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -1826,84 +2182,84 @@ export type IShowScalarWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IShowScalarWhereInput>>,
-  OR?: Maybe<Array<IShowScalarWhereInput>>,
-  NOT?: Maybe<Array<IShowScalarWhereInput>>,
+  AND?: Maybe<Array<ShowScalarWhereInput>>,
+  OR?: Maybe<Array<ShowScalarWhereInput>>,
+  NOT?: Maybe<Array<ShowScalarWhereInput>>,
 };
 
-export type IShowSubscriptionPayload = {
+export type ShowSubscriptionPayload = {
   __typename?: 'ShowSubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IShow>,
+  mutation: MutationType,
+  node?: Maybe<Show>,
   updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IShowPreviousValues>,
+  previousValues?: Maybe<ShowPreviousValues>,
 };
 
-export type IShowSubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
+export type ShowSubscriptionWhereInput = {
+  mutation_in?: Maybe<Array<MutationType>>,
   updatedFields_contains?: Maybe<Scalars['String']>,
   updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
   updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IShowWhereInput>,
-  AND?: Maybe<Array<IShowSubscriptionWhereInput>>,
-  OR?: Maybe<Array<IShowSubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IShowSubscriptionWhereInput>>,
+  node?: Maybe<ShowWhereInput>,
+  AND?: Maybe<Array<ShowSubscriptionWhereInput>>,
+  OR?: Maybe<Array<ShowSubscriptionWhereInput>>,
+  NOT?: Maybe<Array<ShowSubscriptionWhereInput>>,
 };
 
-export type IShowUpdateInput = {
+export type ShowUpdateInput = {
   number?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
-  exhibition?: Maybe<IExhibitionUpdateOneRequiredWithoutShowsInput>,
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutShowsInput>,
 };
 
-export type IShowUpdateManyDataInput = {
-  number?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
-};
-
-export type IShowUpdateManyMutationInput = {
+export type ShowUpdateManyDataInput = {
   number?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
 };
 
-export type IShowUpdateManyWithoutExhibitionInput = {
-  create?: Maybe<Array<IShowCreateWithoutExhibitionInput>>,
-  delete?: Maybe<Array<IShowWhereUniqueInput>>,
-  connect?: Maybe<Array<IShowWhereUniqueInput>>,
-  set?: Maybe<Array<IShowWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IShowWhereUniqueInput>>,
-  update?: Maybe<Array<IShowUpdateWithWhereUniqueWithoutExhibitionInput>>,
-  upsert?: Maybe<Array<IShowUpsertWithWhereUniqueWithoutExhibitionInput>>,
-  deleteMany?: Maybe<Array<IShowScalarWhereInput>>,
-  updateMany?: Maybe<Array<IShowUpdateManyWithWhereNestedInput>>,
-};
-
-export type IShowUpdateManyWithWhereNestedInput = {
-  where: IShowScalarWhereInput,
-  data: IShowUpdateManyDataInput,
-};
-
-export type IShowUpdateWithoutExhibitionDataInput = {
+export type ShowUpdateManyMutationInput = {
   number?: Maybe<Scalars['Int']>,
   opensAt?: Maybe<Scalars['DateTime']>,
   closesAt?: Maybe<Scalars['DateTime']>,
 };
 
-export type IShowUpdateWithWhereUniqueWithoutExhibitionInput = {
-  where: IShowWhereUniqueInput,
-  data: IShowUpdateWithoutExhibitionDataInput,
+export type ShowUpdateManyWithoutExhibitionInput = {
+  create?: Maybe<Array<ShowCreateWithoutExhibitionInput>>,
+  delete?: Maybe<Array<ShowWhereUniqueInput>>,
+  connect?: Maybe<Array<ShowWhereUniqueInput>>,
+  set?: Maybe<Array<ShowWhereUniqueInput>>,
+  disconnect?: Maybe<Array<ShowWhereUniqueInput>>,
+  update?: Maybe<Array<ShowUpdateWithWhereUniqueWithoutExhibitionInput>>,
+  upsert?: Maybe<Array<ShowUpsertWithWhereUniqueWithoutExhibitionInput>>,
+  deleteMany?: Maybe<Array<ShowScalarWhereInput>>,
+  updateMany?: Maybe<Array<ShowUpdateManyWithWhereNestedInput>>,
 };
 
-export type IShowUpsertWithWhereUniqueWithoutExhibitionInput = {
-  where: IShowWhereUniqueInput,
-  update: IShowUpdateWithoutExhibitionDataInput,
-  create: IShowCreateWithoutExhibitionInput,
+export type ShowUpdateManyWithWhereNestedInput = {
+  where: ShowScalarWhereInput,
+  data: ShowUpdateManyDataInput,
 };
 
-export type IShowWhereInput = {
+export type ShowUpdateWithoutExhibitionDataInput = {
+  number?: Maybe<Scalars['Int']>,
+  opensAt?: Maybe<Scalars['DateTime']>,
+  closesAt?: Maybe<Scalars['DateTime']>,
+};
+
+export type ShowUpdateWithWhereUniqueWithoutExhibitionInput = {
+  where: ShowWhereUniqueInput,
+  data: ShowUpdateWithoutExhibitionDataInput,
+};
+
+export type ShowUpsertWithWhereUniqueWithoutExhibitionInput = {
+  where: ShowWhereUniqueInput,
+  update: ShowUpdateWithoutExhibitionDataInput,
+  create: ShowCreateWithoutExhibitionInput,
+};
+
+export type ShowWhereInput = {
   id?: Maybe<Scalars['ID']>,
   id_not?: Maybe<Scalars['ID']>,
   id_in?: Maybe<Array<Scalars['ID']>>,
@@ -1942,7 +2298,7 @@ export type IShowWhereInput = {
   closesAt_lte?: Maybe<Scalars['DateTime']>,
   closesAt_gt?: Maybe<Scalars['DateTime']>,
   closesAt_gte?: Maybe<Scalars['DateTime']>,
-  exhibition?: Maybe<IExhibitionWhereInput>,
+  exhibition?: Maybe<ExhibitionWhereInput>,
   createdAt?: Maybe<Scalars['DateTime']>,
   createdAt_not?: Maybe<Scalars['DateTime']>,
   createdAt_in?: Maybe<Array<Scalars['DateTime']>>,
@@ -1959,290 +2315,80 @@ export type IShowWhereInput = {
   updatedAt_lte?: Maybe<Scalars['DateTime']>,
   updatedAt_gt?: Maybe<Scalars['DateTime']>,
   updatedAt_gte?: Maybe<Scalars['DateTime']>,
-  AND?: Maybe<Array<IShowWhereInput>>,
-  OR?: Maybe<Array<IShowWhereInput>>,
-  NOT?: Maybe<Array<IShowWhereInput>>,
+  AND?: Maybe<Array<ShowWhereInput>>,
+  OR?: Maybe<Array<ShowWhereInput>>,
+  NOT?: Maybe<Array<ShowWhereInput>>,
 };
 
-export type IShowWhereUniqueInput = {
+export type ShowWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>,
 };
 
-export type ISubscription = {
+export type Subscription = {
   __typename?: 'Subscription',
-  asset?: Maybe<IAssetSubscriptionPayload>,
-  entity?: Maybe<IEntitySubscriptionPayload>,
-  exhibition?: Maybe<IExhibitionSubscriptionPayload>,
-  issue?: Maybe<IIssueSubscriptionPayload>,
-  show?: Maybe<IShowSubscriptionPayload>,
-  work?: Maybe<IWorkSubscriptionPayload>,
+  asset?: Maybe<AssetSubscriptionPayload>,
+  entity?: Maybe<EntitySubscriptionPayload>,
+  exhibition?: Maybe<ExhibitionSubscriptionPayload>,
+  issue?: Maybe<IssueSubscriptionPayload>,
+  room?: Maybe<RoomSubscriptionPayload>,
+  show?: Maybe<ShowSubscriptionPayload>,
 };
 
 
-export type ISubscriptionAssetArgs = {
-  where?: Maybe<IAssetSubscriptionWhereInput>
+export type SubscriptionAssetArgs = {
+  where?: Maybe<AssetSubscriptionWhereInput>
 };
 
 
-export type ISubscriptionEntityArgs = {
-  where?: Maybe<IEntitySubscriptionWhereInput>
+export type SubscriptionEntityArgs = {
+  where?: Maybe<EntitySubscriptionWhereInput>
 };
 
 
-export type ISubscriptionExhibitionArgs = {
-  where?: Maybe<IExhibitionSubscriptionWhereInput>
+export type SubscriptionExhibitionArgs = {
+  where?: Maybe<ExhibitionSubscriptionWhereInput>
 };
 
 
-export type ISubscriptionIssueArgs = {
-  where?: Maybe<IIssueSubscriptionWhereInput>
+export type SubscriptionIssueArgs = {
+  where?: Maybe<IssueSubscriptionWhereInput>
 };
 
 
-export type ISubscriptionShowArgs = {
-  where?: Maybe<IShowSubscriptionWhereInput>
+export type SubscriptionRoomArgs = {
+  where?: Maybe<RoomSubscriptionWhereInput>
 };
 
 
-export type ISubscriptionWorkArgs = {
-  where?: Maybe<IWorkSubscriptionWhereInput>
+export type SubscriptionShowArgs = {
+  where?: Maybe<ShowSubscriptionWhereInput>
 };
-
-export type IWork = {
-  __typename?: 'Work',
-  id: Scalars['ID'],
-  x: Scalars['Int'],
-  y: Scalars['Int'],
-  assets?: Maybe<Array<IAsset>>,
-};
+export type CurrentExhibitionQueryVariables = {};
 
 
-export type IWorkAssetsArgs = {
-  where?: Maybe<IAssetWhereInput>,
-  orderBy?: Maybe<IAssetOrderByInput>,
-  skip?: Maybe<Scalars['Int']>,
-  after?: Maybe<Scalars['String']>,
-  before?: Maybe<Scalars['String']>,
-  first?: Maybe<Scalars['Int']>,
-  last?: Maybe<Scalars['Int']>
-};
-
-export type IWorkConnection = {
-  __typename?: 'WorkConnection',
-  pageInfo: IPageInfo,
-  edges: Array<Maybe<IWorkEdge>>,
-  aggregate: IAggregateWork,
-};
-
-export type IWorkCreateInput = {
-  id?: Maybe<Scalars['ID']>,
-  x: Scalars['Int'],
-  y: Scalars['Int'],
-  assets?: Maybe<IAssetCreateManyWithoutWorksInput>,
-};
-
-export type IWorkCreateManyWithoutAssetsInput = {
-  create?: Maybe<Array<IWorkCreateWithoutAssetsInput>>,
-  connect?: Maybe<Array<IWorkWhereUniqueInput>>,
-};
-
-export type IWorkCreateWithoutAssetsInput = {
-  id?: Maybe<Scalars['ID']>,
-  x: Scalars['Int'],
-  y: Scalars['Int'],
-};
-
-export type IWorkEdge = {
-  __typename?: 'WorkEdge',
-  node: IWork,
-  cursor: Scalars['String'],
-};
-
-export enum IWorkOrderByInput {
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  XAsc = 'x_ASC',
-  XDesc = 'x_DESC',
-  YAsc = 'y_ASC',
-  YDesc = 'y_DESC'
-}
-
-export type IWorkPreviousValues = {
-  __typename?: 'WorkPreviousValues',
-  id: Scalars['ID'],
-  x: Scalars['Int'],
-  y: Scalars['Int'],
-};
-
-export type IWorkScalarWhereInput = {
-  id?: Maybe<Scalars['ID']>,
-  id_not?: Maybe<Scalars['ID']>,
-  id_in?: Maybe<Array<Scalars['ID']>>,
-  id_not_in?: Maybe<Array<Scalars['ID']>>,
-  id_lt?: Maybe<Scalars['ID']>,
-  id_lte?: Maybe<Scalars['ID']>,
-  id_gt?: Maybe<Scalars['ID']>,
-  id_gte?: Maybe<Scalars['ID']>,
-  id_contains?: Maybe<Scalars['ID']>,
-  id_not_contains?: Maybe<Scalars['ID']>,
-  id_starts_with?: Maybe<Scalars['ID']>,
-  id_not_starts_with?: Maybe<Scalars['ID']>,
-  id_ends_with?: Maybe<Scalars['ID']>,
-  id_not_ends_with?: Maybe<Scalars['ID']>,
-  x?: Maybe<Scalars['Int']>,
-  x_not?: Maybe<Scalars['Int']>,
-  x_in?: Maybe<Array<Scalars['Int']>>,
-  x_not_in?: Maybe<Array<Scalars['Int']>>,
-  x_lt?: Maybe<Scalars['Int']>,
-  x_lte?: Maybe<Scalars['Int']>,
-  x_gt?: Maybe<Scalars['Int']>,
-  x_gte?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-  y_not?: Maybe<Scalars['Int']>,
-  y_in?: Maybe<Array<Scalars['Int']>>,
-  y_not_in?: Maybe<Array<Scalars['Int']>>,
-  y_lt?: Maybe<Scalars['Int']>,
-  y_lte?: Maybe<Scalars['Int']>,
-  y_gt?: Maybe<Scalars['Int']>,
-  y_gte?: Maybe<Scalars['Int']>,
-  AND?: Maybe<Array<IWorkScalarWhereInput>>,
-  OR?: Maybe<Array<IWorkScalarWhereInput>>,
-  NOT?: Maybe<Array<IWorkScalarWhereInput>>,
-};
-
-export type IWorkSubscriptionPayload = {
-  __typename?: 'WorkSubscriptionPayload',
-  mutation: IMutationType,
-  node?: Maybe<IWork>,
-  updatedFields?: Maybe<Array<Scalars['String']>>,
-  previousValues?: Maybe<IWorkPreviousValues>,
-};
-
-export type IWorkSubscriptionWhereInput = {
-  mutation_in?: Maybe<Array<IMutationType>>,
-  updatedFields_contains?: Maybe<Scalars['String']>,
-  updatedFields_contains_every?: Maybe<Array<Scalars['String']>>,
-  updatedFields_contains_some?: Maybe<Array<Scalars['String']>>,
-  node?: Maybe<IWorkWhereInput>,
-  AND?: Maybe<Array<IWorkSubscriptionWhereInput>>,
-  OR?: Maybe<Array<IWorkSubscriptionWhereInput>>,
-  NOT?: Maybe<Array<IWorkSubscriptionWhereInput>>,
-};
-
-export type IWorkUpdateInput = {
-  x?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-  assets?: Maybe<IAssetUpdateManyWithoutWorksInput>,
-};
-
-export type IWorkUpdateManyDataInput = {
-  x?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-};
-
-export type IWorkUpdateManyMutationInput = {
-  x?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-};
-
-export type IWorkUpdateManyWithoutAssetsInput = {
-  create?: Maybe<Array<IWorkCreateWithoutAssetsInput>>,
-  delete?: Maybe<Array<IWorkWhereUniqueInput>>,
-  connect?: Maybe<Array<IWorkWhereUniqueInput>>,
-  set?: Maybe<Array<IWorkWhereUniqueInput>>,
-  disconnect?: Maybe<Array<IWorkWhereUniqueInput>>,
-  update?: Maybe<Array<IWorkUpdateWithWhereUniqueWithoutAssetsInput>>,
-  upsert?: Maybe<Array<IWorkUpsertWithWhereUniqueWithoutAssetsInput>>,
-  deleteMany?: Maybe<Array<IWorkScalarWhereInput>>,
-  updateMany?: Maybe<Array<IWorkUpdateManyWithWhereNestedInput>>,
-};
-
-export type IWorkUpdateManyWithWhereNestedInput = {
-  where: IWorkScalarWhereInput,
-  data: IWorkUpdateManyDataInput,
-};
-
-export type IWorkUpdateWithoutAssetsDataInput = {
-  x?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-};
-
-export type IWorkUpdateWithWhereUniqueWithoutAssetsInput = {
-  where: IWorkWhereUniqueInput,
-  data: IWorkUpdateWithoutAssetsDataInput,
-};
-
-export type IWorkUpsertWithWhereUniqueWithoutAssetsInput = {
-  where: IWorkWhereUniqueInput,
-  update: IWorkUpdateWithoutAssetsDataInput,
-  create: IWorkCreateWithoutAssetsInput,
-};
-
-export type IWorkWhereInput = {
-  id?: Maybe<Scalars['ID']>,
-  id_not?: Maybe<Scalars['ID']>,
-  id_in?: Maybe<Array<Scalars['ID']>>,
-  id_not_in?: Maybe<Array<Scalars['ID']>>,
-  id_lt?: Maybe<Scalars['ID']>,
-  id_lte?: Maybe<Scalars['ID']>,
-  id_gt?: Maybe<Scalars['ID']>,
-  id_gte?: Maybe<Scalars['ID']>,
-  id_contains?: Maybe<Scalars['ID']>,
-  id_not_contains?: Maybe<Scalars['ID']>,
-  id_starts_with?: Maybe<Scalars['ID']>,
-  id_not_starts_with?: Maybe<Scalars['ID']>,
-  id_ends_with?: Maybe<Scalars['ID']>,
-  id_not_ends_with?: Maybe<Scalars['ID']>,
-  x?: Maybe<Scalars['Int']>,
-  x_not?: Maybe<Scalars['Int']>,
-  x_in?: Maybe<Array<Scalars['Int']>>,
-  x_not_in?: Maybe<Array<Scalars['Int']>>,
-  x_lt?: Maybe<Scalars['Int']>,
-  x_lte?: Maybe<Scalars['Int']>,
-  x_gt?: Maybe<Scalars['Int']>,
-  x_gte?: Maybe<Scalars['Int']>,
-  y?: Maybe<Scalars['Int']>,
-  y_not?: Maybe<Scalars['Int']>,
-  y_in?: Maybe<Array<Scalars['Int']>>,
-  y_not_in?: Maybe<Array<Scalars['Int']>>,
-  y_lt?: Maybe<Scalars['Int']>,
-  y_lte?: Maybe<Scalars['Int']>,
-  y_gt?: Maybe<Scalars['Int']>,
-  y_gte?: Maybe<Scalars['Int']>,
-  assets_every?: Maybe<IAssetWhereInput>,
-  assets_some?: Maybe<IAssetWhereInput>,
-  assets_none?: Maybe<IAssetWhereInput>,
-  AND?: Maybe<Array<IWorkWhereInput>>,
-  OR?: Maybe<Array<IWorkWhereInput>>,
-  NOT?: Maybe<Array<IWorkWhereInput>>,
-};
-
-export type IWorkWhereUniqueInput = {
-  id?: Maybe<Scalars['ID']>,
-};
-export type ICurrentExhibitionQueryVariables = {};
-
-
-export type ICurrentExhibitionQuery = (
+export type CurrentExhibitionQuery = (
   { __typename?: 'Query' }
   & { exhibitions: Array<Maybe<(
     { __typename?: 'Exhibition' }
-    & Pick<IExhibition, 'id' | 'number' | 'extent' | 'theme' | 'opensAt' | 'closesAt'>
+    & Pick<Exhibition, 'id' | 'number' | 'extent' | 'theme' | 'opensAt' | 'closesAt'>
     & { shows: Maybe<Array<(
       { __typename?: 'Show' }
-      & Pick<IShow, 'id' | 'number' | 'opensAt' | 'closesAt'>
+      & Pick<Show, 'id' | 'number' | 'opensAt' | 'closesAt'>
+    )>>, rooms: Maybe<Array<(
+      { __typename?: 'Room' }
+      & Pick<Room, 'id' | 'entryId' | 'x' | 'y'>
     )>> }
   )>> }
 );
 
-export type ITestSubscriptionVariables = {};
+export type TestSubscriptionVariables = {};
 
 
-export type ITestSubscription = (
+export type TestSubscription = (
   { __typename?: 'Subscription' }
   & { issue: Maybe<(
     { __typename?: 'IssueSubscriptionPayload' }
-    & Pick<IIssueSubscriptionPayload, 'updatedFields'>
+    & Pick<IssueSubscriptionPayload, 'updatedFields'>
   )> }
 );
 
@@ -2261,19 +2407,25 @@ export const CurrentExhibitionDocument = gql`
       opensAt
       closesAt
     }
+    rooms {
+      id
+      entryId
+      x
+      y
+    }
   }
 }
     `;
 
-    export function useCurrentExhibitionQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ICurrentExhibitionQuery, ICurrentExhibitionQueryVariables>) {
-      return ApolloReactHooks.useQuery<ICurrentExhibitionQuery, ICurrentExhibitionQueryVariables>(CurrentExhibitionDocument, baseOptions);
+    export function useCurrentExhibitionQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>) {
+      return ApolloReactHooks.useQuery<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>(CurrentExhibitionDocument, baseOptions);
     };
-      export function useCurrentExhibitionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ICurrentExhibitionQuery, ICurrentExhibitionQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<ICurrentExhibitionQuery, ICurrentExhibitionQueryVariables>(CurrentExhibitionDocument, baseOptions);
+      export function useCurrentExhibitionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>(CurrentExhibitionDocument, baseOptions);
       };
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
-export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<ICurrentExhibitionQuery, ICurrentExhibitionQueryVariables>;
+export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
 export const TestDocument = gql`
     subscription Test {
   issue(where: {node: {id: "cjznzwhmf003m072105217so8"}, mutation_in: [UPDATED]}) {
@@ -2282,8 +2434,8 @@ export const TestDocument = gql`
 }
     `;
 
-    export function useTestSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<ITestSubscription, ITestSubscriptionVariables>) {
-      return ApolloReactHooks.useSubscription<ITestSubscription, ITestSubscriptionVariables>(TestDocument, baseOptions);
+    export function useTestSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<TestSubscription, TestSubscriptionVariables>) {
+      return ApolloReactHooks.useSubscription<TestSubscription, TestSubscriptionVariables>(TestDocument, baseOptions);
     };
 export type TestSubscriptionHookResult = ReturnType<typeof useTestSubscription>;
-export type TestSubscriptionResult = ApolloReactCommon.SubscriptionResult<ITestSubscription>;
+export type TestSubscriptionResult = ApolloReactCommon.SubscriptionResult<TestSubscription>;

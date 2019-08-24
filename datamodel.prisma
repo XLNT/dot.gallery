@@ -48,7 +48,7 @@ type Asset {
   # asset belongs_to: printer
   printer: Entity! @relation(name: "PrintedAssets")
 
-  works: [Work!]!
+  rooms: [Room!]! @relation(name: "AssetRooms")
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -63,6 +63,7 @@ type Exhibition {
   closesAt: DateTime!
 
   shows: [Show!]!
+  rooms: [Room!]! @relation(name: "ExhibitionRooms")
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -80,11 +81,13 @@ type Show {
   updatedAt: DateTime! @updatedAt
 }
 
-type Work {
+type Room {
   id: ID! @id
+  entryId: ID! @unique
 
   x: Int!
   y: Int!
 
-  assets: [Asset!]! @relation(link: TABLE)
+  exhibition: Exhibition! @relation(name: "ExhibitionRooms")
+  assets: [Asset!]! @relation(name: "AssetRooms", link: TABLE)
 }

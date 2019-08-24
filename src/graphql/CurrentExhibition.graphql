@@ -13,5 +13,12 @@ query CurrentExhibition {
       opensAt
       closesAt
     }
+
+    rooms {
+      id
+      entryId
+      x
+      y
+    }
   }
 }
