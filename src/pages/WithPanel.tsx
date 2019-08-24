@@ -81,9 +81,6 @@ export default function Panel({ children }: PropsWithChildren<void>) {
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
-  console.log(showPanel);
-  console.log(panelWidth, document.body.clientWidth);
-
   const { x, width, deg } = useSpring({
     x: showPanel ? 0 : 1 * (panelWidth || 0),
     width: showPanel ? panelWidth || 0 : 0,
