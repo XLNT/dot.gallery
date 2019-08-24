@@ -81,17 +81,24 @@ export default function Panel({ children }: PropsWithChildren<void>) {
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
+  console.log(showPanel);
+  console.log(panelWidth, document.body.clientWidth);
+
   const { x, width, deg } = useSpring({
-    x: showPanel ? 0 : -1 * (panelWidth || 0),
+    x: showPanel ? 0 : 1 * (panelWidth || 0),
     width: showPanel ? panelWidth || 0 : 0,
     deg: showPanel ? 90 : -90,
+    from: {
+      width: document.body.clientWidth,
+      x: document.body.clientWidth,
+    },
   });
 
   return (
     <Backboard>
       <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
       <PanelContainer ref={panelRef}>
-        <Inner style={{ transform: x.interpolate(x => `translateX(${-x}px)`) }}>
+        <Inner style={{ transform: x.interpolate(x => `translateX(${x}px)`) }}>
           <PanelButton
             onClick={canTogglePanel ? togglePanel : null}
             canTogglePanel={canTogglePanel}
