@@ -31,6 +31,7 @@
     "context": "^0.0.1",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.1",
+    "hooks": "^0.3.2",
     "lib": "^4.0.4",
     "localforage": "^1.7.3",
     "lodash-es": "^4.17.15",

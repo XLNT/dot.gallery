@@ -10,10 +10,6 @@ type AggregateExhibition {
   count: Int!
 }
 
-type AggregateIssue {
-  count: Int!
-}
-
 type AggregateRoom {
   count: Int!
 }
@@ -24,10 +20,8 @@ type AggregateShow {
 
 type Asset {
   id: ID!
-  isCounterfactual: Boolean!
+  uri: String!
   owner: Entity!
-  issue: Issue!
-  printer: Entity!
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -41,16 +35,9 @@ type AssetConnection {
 
 input AssetCreateInput {
   id: ID
-  isCounterfactual: Boolean
+  uri: String!
   owner: EntityCreateOneWithoutOwnedAssetsInput!
-  issue: IssueCreateOneWithoutAssetsInput!
-  printer: EntityCreateOneWithoutPrintedAssetsInput!
-  rooms: RoomCreateManyWithoutAssetsInput
-}
-
-input AssetCreateManyWithoutIssueInput {
-  create: [AssetCreateWithoutIssueInput!]
-  connect: [AssetWhereUniqueInput!]
+  rooms: RoomCreateManyWithoutAssetInput
 }
 
 input AssetCreateManyWithoutOwnerInput {
@@ -58,46 +45,21 @@ input AssetCreateManyWithoutOwnerInput {
   connect: [AssetWhereUniqueInput!]
 }
 
-input AssetCreateManyWithoutPrinterInput {
-  create: [AssetCreateWithoutPrinterInput!]
-  connect: [AssetWhereUniqueInput!]
-}
-
-input AssetCreateManyWithoutRoomsInput {
-  create: [AssetCreateWithoutRoomsInput!]
-  connect: [AssetWhereUniqueInput!]
-}
-
-input AssetCreateWithoutIssueInput {
-  id: ID
-  isCounterfactual: Boolean
-  owner: EntityCreateOneWithoutOwnedAssetsInput!
-  printer: EntityCreateOneWithoutPrintedAssetsInput!
-  rooms: RoomCreateManyWithoutAssetsInput
+input AssetCreateOneWithoutRoomsInput {
+  create: AssetCreateWithoutRoomsInput
+  connect: AssetWhereUniqueInput
 }
 
 input AssetCreateWithoutOwnerInput {
   id: ID
-  isCounterfactual: Boolean
-  issue: IssueCreateOneWithoutAssetsInput!
-  printer: EntityCreateOneWithoutPrintedAssetsInput!
-  rooms: RoomCreateManyWithoutAssetsInput
-}
-
-input AssetCreateWithoutPrinterInput {
-  id: ID
-  isCounterfactual: Boolean
-  owner: EntityCreateOneWithoutOwnedAssetsInput!
-  issue: IssueCreateOneWithoutAssetsInput!
-  rooms: RoomCreateManyWithoutAssetsInput
+  uri: String!
+  rooms: RoomCreateManyWithoutAssetInput
 }
 
 input AssetCreateWithoutRoomsInput {
   id: ID
-  isCounterfactual: Boolean
+  uri: String!
   owner: EntityCreateOneWithoutOwnedAssetsInput!
-  issue: IssueCreateOneWithoutAssetsInput!
-  printer: EntityCreateOneWithoutPrintedAssetsInput!
 }
 
 type AssetEdge {
@@ -108,8 +70,8 @@ type AssetEdge {
 enum AssetOrderByInput {
   id_ASC
   id_DESC
-  isCounterfactual_ASC
-  isCounterfactual_DESC
+  uri_ASC
+  uri_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -118,7 +80,7 @@ enum AssetOrderByInput {
 
 type AssetPreviousValues {
   id: ID!
-  isCounterfactual: Boolean!
+  uri: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -138,8 +100,20 @@ input AssetScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  isCounterfactual: Boolean
-  isCounterfactual_not: Boolean
+  uri: String
+  uri_not: String
+  uri_in: [String!]
+  uri_not_in: [String!]
+  uri_lt: String
+  uri_lte: String
+  uri_gt: String
+  uri_gte: String
+  uri_contains: String
+  uri_not_contains: String
+  uri_starts_with: String
+  uri_not_starts_with: String
+  uri_ends_with: String
+  uri_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -180,31 +154,17 @@ input AssetSubscriptionWhereInput {
 }
 
 input AssetUpdateInput {
-  isCounterfactual: Boolean
+  uri: String
   owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
-  issue: IssueUpdateOneRequiredWithoutAssetsInput
-  printer: EntityUpdateOneRequiredWithoutPrintedAssetsInput
-  rooms: RoomUpdateManyWithoutAssetsInput
+  rooms: RoomUpdateManyWithoutAssetInput
 }
 
 input AssetUpdateManyDataInput {
-  isCounterfactual: Boolean
+  uri: String
 }
 
 input AssetUpdateManyMutationInput {
-  isCounterfactual: Boolean
-}
-
-input AssetUpdateManyWithoutIssueInput {
-  create: [AssetCreateWithoutIssueInput!]
-  delete: [AssetWhereUniqueInput!]
-  connect: [AssetWhereUniqueInput!]
-  set: [AssetWhereUniqueInput!]
-  disconnect: [AssetWhereUniqueInput!]
-  update: [AssetUpdateWithWhereUniqueWithoutIssueInput!]
-  upsert: [AssetUpsertWithWhereUniqueWithoutIssueInput!]
-  deleteMany: [AssetScalarWhereInput!]
-  updateMany: [AssetUpdateManyWithWhereNestedInput!]
+  uri: String
 }
 
 input AssetUpdateManyWithoutOwnerInput {
@@ -219,66 +179,26 @@ input AssetUpdateManyWithoutOwnerInput {
   updateMany: [AssetUpdateManyWithWhereNestedInput!]
 }
 
-input AssetUpdateManyWithoutPrinterInput {
-  create: [AssetCreateWithoutPrinterInput!]
-  delete: [AssetWhereUniqueInput!]
-  connect: [AssetWhereUniqueInput!]
-  set: [AssetWhereUniqueInput!]
-  disconnect: [AssetWhereUniqueInput!]
-  update: [AssetUpdateWithWhereUniqueWithoutPrinterInput!]
-  upsert: [AssetUpsertWithWhereUniqueWithoutPrinterInput!]
-  deleteMany: [AssetScalarWhereInput!]
-  updateMany: [AssetUpdateManyWithWhereNestedInput!]
-}
-
-input AssetUpdateManyWithoutRoomsInput {
-  create: [AssetCreateWithoutRoomsInput!]
-  delete: [AssetWhereUniqueInput!]
-  connect: [AssetWhereUniqueInput!]
-  set: [AssetWhereUniqueInput!]
-  disconnect: [AssetWhereUniqueInput!]
-  update: [AssetUpdateWithWhereUniqueWithoutRoomsInput!]
-  upsert: [AssetUpsertWithWhereUniqueWithoutRoomsInput!]
-  deleteMany: [AssetScalarWhereInput!]
-  updateMany: [AssetUpdateManyWithWhereNestedInput!]
-}
-
 input AssetUpdateManyWithWhereNestedInput {
   where: AssetScalarWhereInput!
   data: AssetUpdateManyDataInput!
 }
 
-input AssetUpdateWithoutIssueDataInput {
-  isCounterfactual: Boolean
-  owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
-  printer: EntityUpdateOneRequiredWithoutPrintedAssetsInput
-  rooms: RoomUpdateManyWithoutAssetsInput
+input AssetUpdateOneRequiredWithoutRoomsInput {
+  create: AssetCreateWithoutRoomsInput
+  update: AssetUpdateWithoutRoomsDataInput
+  upsert: AssetUpsertWithoutRoomsInput
+  connect: AssetWhereUniqueInput
 }
 
 input AssetUpdateWithoutOwnerDataInput {
-  isCounterfactual: Boolean
-  issue: IssueUpdateOneRequiredWithoutAssetsInput
-  printer: EntityUpdateOneRequiredWithoutPrintedAssetsInput
-  rooms: RoomUpdateManyWithoutAssetsInput
-}
-
-input AssetUpdateWithoutPrinterDataInput {
-  isCounterfactual: Boolean
-  owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
-  issue: IssueUpdateOneRequiredWithoutAssetsInput
-  rooms: RoomUpdateManyWithoutAssetsInput
+  uri: String
+  rooms: RoomUpdateManyWithoutAssetInput
 }
 
 input AssetUpdateWithoutRoomsDataInput {
-  isCounterfactual: Boolean
+  uri: String
   owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
-  issue: IssueUpdateOneRequiredWithoutAssetsInput
-  printer: EntityUpdateOneRequiredWithoutPrintedAssetsInput
-}
-
-input AssetUpdateWithWhereUniqueWithoutIssueInput {
-  where: AssetWhereUniqueInput!
-  data: AssetUpdateWithoutIssueDataInput!
 }
 
 input AssetUpdateWithWhereUniqueWithoutOwnerInput {
@@ -286,38 +206,15 @@ input AssetUpdateWithWhereUniqueWithoutOwnerInput {
   data: AssetUpdateWithoutOwnerDataInput!
 }
 
-input AssetUpdateWithWhereUniqueWithoutPrinterInput {
-  where: AssetWhereUniqueInput!
-  data: AssetUpdateWithoutPrinterDataInput!
-}
-
-input AssetUpdateWithWhereUniqueWithoutRoomsInput {
-  where: AssetWhereUniqueInput!
-  data: AssetUpdateWithoutRoomsDataInput!
-}
-
-input AssetUpsertWithWhereUniqueWithoutIssueInput {
-  where: AssetWhereUniqueInput!
-  update: AssetUpdateWithoutIssueDataInput!
-  create: AssetCreateWithoutIssueInput!
+input AssetUpsertWithoutRoomsInput {
+  update: AssetUpdateWithoutRoomsDataInput!
+  create: AssetCreateWithoutRoomsInput!
 }
 
 input AssetUpsertWithWhereUniqueWithoutOwnerInput {
   where: AssetWhereUniqueInput!
   update: AssetUpdateWithoutOwnerDataInput!
   create: AssetCreateWithoutOwnerInput!
-}
-
-input AssetUpsertWithWhereUniqueWithoutPrinterInput {
-  where: AssetWhereUniqueInput!
-  update: AssetUpdateWithoutPrinterDataInput!
-  create: AssetCreateWithoutPrinterInput!
-}
-
-input AssetUpsertWithWhereUniqueWithoutRoomsInput {
-  where: AssetWhereUniqueInput!
-  update: AssetUpdateWithoutRoomsDataInput!
-  create: AssetCreateWithoutRoomsInput!
 }
 
 input AssetWhereInput {
@@ -335,11 +232,21 @@ input AssetWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  isCounterfactual: Boolean
-  isCounterfactual_not: Boolean
+  uri: String
+  uri_not: String
+  uri_in: [String!]
+  uri_not_in: [String!]
+  uri_lt: String
+  uri_lte: String
+  uri_gt: String
+  uri_gte: String
+  uri_contains: String
+  uri_not_contains: String
+  uri_starts_with: String
+  uri_not_starts_with: String
+  uri_ends_with: String
+  uri_not_ends_with: String
   owner: EntityWhereInput
-  issue: IssueWhereInput
-  printer: EntityWhereInput
   rooms_every: RoomWhereInput
   rooms_some: RoomWhereInput
   rooms_none: RoomWhereInput
@@ -378,9 +285,7 @@ type Entity {
   id: ID!
   handle: String!
   email: String!
-  createdIssues(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Issue!]
   ownedAssets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
-  printedAssets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -395,14 +300,7 @@ input EntityCreateInput {
   id: ID
   handle: String!
   email: String!
-  createdIssues: IssueCreateManyWithoutCreatorInput
   ownedAssets: AssetCreateManyWithoutOwnerInput
-  printedAssets: AssetCreateManyWithoutPrinterInput
-}
-
-input EntityCreateOneWithoutCreatedIssuesInput {
-  create: EntityCreateWithoutCreatedIssuesInput
-  connect: EntityWhereUniqueInput
 }
 
 input EntityCreateOneWithoutOwnedAssetsInput {
@@ -410,33 +308,10 @@ input EntityCreateOneWithoutOwnedAssetsInput {
   connect: EntityWhereUniqueInput
 }
 
-input EntityCreateOneWithoutPrintedAssetsInput {
-  create: EntityCreateWithoutPrintedAssetsInput
-  connect: EntityWhereUniqueInput
-}
-
-input EntityCreateWithoutCreatedIssuesInput {
-  id: ID
-  handle: String!
-  email: String!
-  ownedAssets: AssetCreateManyWithoutOwnerInput
-  printedAssets: AssetCreateManyWithoutPrinterInput
-}
-
 input EntityCreateWithoutOwnedAssetsInput {
   id: ID
   handle: String!
   email: String!
-  createdIssues: IssueCreateManyWithoutCreatorInput
-  printedAssets: AssetCreateManyWithoutPrinterInput
-}
-
-input EntityCreateWithoutPrintedAssetsInput {
-  id: ID
-  handle: String!
-  email: String!
-  createdIssues: IssueCreateManyWithoutCreatorInput
-  ownedAssets: AssetCreateManyWithoutOwnerInput
 }
 
 type EntityEdge {
@@ -486,21 +361,12 @@ input EntitySubscriptionWhereInput {
 input EntityUpdateInput {
   handle: String
   email: String
-  createdIssues: IssueUpdateManyWithoutCreatorInput
   ownedAssets: AssetUpdateManyWithoutOwnerInput
-  printedAssets: AssetUpdateManyWithoutPrinterInput
 }
 
 input EntityUpdateManyMutationInput {
   handle: String
   email: String
-}
-
-input EntityUpdateOneRequiredWithoutCreatedIssuesInput {
-  create: EntityCreateWithoutCreatedIssuesInput
-  update: EntityUpdateWithoutCreatedIssuesDataInput
-  upsert: EntityUpsertWithoutCreatedIssuesInput
-  connect: EntityWhereUniqueInput
 }
 
 input EntityUpdateOneRequiredWithoutOwnedAssetsInput {
@@ -510,47 +376,14 @@ input EntityUpdateOneRequiredWithoutOwnedAssetsInput {
   connect: EntityWhereUniqueInput
 }
 
-input EntityUpdateOneRequiredWithoutPrintedAssetsInput {
-  create: EntityCreateWithoutPrintedAssetsInput
-  update: EntityUpdateWithoutPrintedAssetsDataInput
-  upsert: EntityUpsertWithoutPrintedAssetsInput
-  connect: EntityWhereUniqueInput
-}
-
-input EntityUpdateWithoutCreatedIssuesDataInput {
-  handle: String
-  email: String
-  ownedAssets: AssetUpdateManyWithoutOwnerInput
-  printedAssets: AssetUpdateManyWithoutPrinterInput
-}
-
 input EntityUpdateWithoutOwnedAssetsDataInput {
   handle: String
   email: String
-  createdIssues: IssueUpdateManyWithoutCreatorInput
-  printedAssets: AssetUpdateManyWithoutPrinterInput
-}
-
-input EntityUpdateWithoutPrintedAssetsDataInput {
-  handle: String
-  email: String
-  createdIssues: IssueUpdateManyWithoutCreatorInput
-  ownedAssets: AssetUpdateManyWithoutOwnerInput
-}
-
-input EntityUpsertWithoutCreatedIssuesInput {
-  update: EntityUpdateWithoutCreatedIssuesDataInput!
-  create: EntityCreateWithoutCreatedIssuesInput!
 }
 
 input EntityUpsertWithoutOwnedAssetsInput {
   update: EntityUpdateWithoutOwnedAssetsDataInput!
   create: EntityCreateWithoutOwnedAssetsInput!
-}
-
-input EntityUpsertWithoutPrintedAssetsInput {
-  update: EntityUpdateWithoutPrintedAssetsDataInput!
-  create: EntityCreateWithoutPrintedAssetsInput!
 }
 
 input EntityWhereInput {
@@ -596,15 +429,9 @@ input EntityWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  createdIssues_every: IssueWhereInput
-  createdIssues_some: IssueWhereInput
-  createdIssues_none: IssueWhereInput
   ownedAssets_every: AssetWhereInput
   ownedAssets_some: AssetWhereInput
   ownedAssets_none: AssetWhereInput
-  printedAssets_every: AssetWhereInput
-  printedAssets_some: AssetWhereInput
-  printedAssets_none: AssetWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -884,301 +711,6 @@ input ExhibitionWhereUniqueInput {
   number: Int
 }
 
-type Issue {
-  id: ID!
-  uri: String!
-  rarity: Rarity!
-  emojis: [String!]!
-  creator: Entity!
-  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type IssueConnection {
-  pageInfo: PageInfo!
-  edges: [IssueEdge]!
-  aggregate: AggregateIssue!
-}
-
-input IssueCreateemojisInput {
-  set: [String!]
-}
-
-input IssueCreateInput {
-  id: ID
-  uri: String!
-  rarity: Rarity
-  emojis: IssueCreateemojisInput
-  creator: EntityCreateOneWithoutCreatedIssuesInput!
-  assets: AssetCreateManyWithoutIssueInput
-}
-
-input IssueCreateManyWithoutCreatorInput {
-  create: [IssueCreateWithoutCreatorInput!]
-  connect: [IssueWhereUniqueInput!]
-}
-
-input IssueCreateOneWithoutAssetsInput {
-  create: IssueCreateWithoutAssetsInput
-  connect: IssueWhereUniqueInput
-}
-
-input IssueCreateWithoutAssetsInput {
-  id: ID
-  uri: String!
-  rarity: Rarity
-  emojis: IssueCreateemojisInput
-  creator: EntityCreateOneWithoutCreatedIssuesInput!
-}
-
-input IssueCreateWithoutCreatorInput {
-  id: ID
-  uri: String!
-  rarity: Rarity
-  emojis: IssueCreateemojisInput
-  assets: AssetCreateManyWithoutIssueInput
-}
-
-type IssueEdge {
-  node: Issue!
-  cursor: String!
-}
-
-enum IssueOrderByInput {
-  id_ASC
-  id_DESC
-  uri_ASC
-  uri_DESC
-  rarity_ASC
-  rarity_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type IssuePreviousValues {
-  id: ID!
-  uri: String!
-  rarity: Rarity!
-  emojis: [String!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-input IssueScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  uri: String
-  uri_not: String
-  uri_in: [String!]
-  uri_not_in: [String!]
-  uri_lt: String
-  uri_lte: String
-  uri_gt: String
-  uri_gte: String
-  uri_contains: String
-  uri_not_contains: String
-  uri_starts_with: String
-  uri_not_starts_with: String
-  uri_ends_with: String
-  uri_not_ends_with: String
-  rarity: Rarity
-  rarity_not: Rarity
-  rarity_in: [Rarity!]
-  rarity_not_in: [Rarity!]
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [IssueScalarWhereInput!]
-  OR: [IssueScalarWhereInput!]
-  NOT: [IssueScalarWhereInput!]
-}
-
-type IssueSubscriptionPayload {
-  mutation: MutationType!
-  node: Issue
-  updatedFields: [String!]
-  previousValues: IssuePreviousValues
-}
-
-input IssueSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: IssueWhereInput
-  AND: [IssueSubscriptionWhereInput!]
-  OR: [IssueSubscriptionWhereInput!]
-  NOT: [IssueSubscriptionWhereInput!]
-}
-
-input IssueUpdateemojisInput {
-  set: [String!]
-}
-
-input IssueUpdateInput {
-  uri: String
-  rarity: Rarity
-  emojis: IssueUpdateemojisInput
-  creator: EntityUpdateOneRequiredWithoutCreatedIssuesInput
-  assets: AssetUpdateManyWithoutIssueInput
-}
-
-input IssueUpdateManyDataInput {
-  uri: String
-  rarity: Rarity
-  emojis: IssueUpdateemojisInput
-}
-
-input IssueUpdateManyMutationInput {
-  uri: String
-  rarity: Rarity
-  emojis: IssueUpdateemojisInput
-}
-
-input IssueUpdateManyWithoutCreatorInput {
-  create: [IssueCreateWithoutCreatorInput!]
-  delete: [IssueWhereUniqueInput!]
-  connect: [IssueWhereUniqueInput!]
-  set: [IssueWhereUniqueInput!]
-  disconnect: [IssueWhereUniqueInput!]
-  update: [IssueUpdateWithWhereUniqueWithoutCreatorInput!]
-  upsert: [IssueUpsertWithWhereUniqueWithoutCreatorInput!]
-  deleteMany: [IssueScalarWhereInput!]
-  updateMany: [IssueUpdateManyWithWhereNestedInput!]
-}
-
-input IssueUpdateManyWithWhereNestedInput {
-  where: IssueScalarWhereInput!
-  data: IssueUpdateManyDataInput!
-}
-
-input IssueUpdateOneRequiredWithoutAssetsInput {
-  create: IssueCreateWithoutAssetsInput
-  update: IssueUpdateWithoutAssetsDataInput
-  upsert: IssueUpsertWithoutAssetsInput
-  connect: IssueWhereUniqueInput
-}
-
-input IssueUpdateWithoutAssetsDataInput {
-  uri: String
-  rarity: Rarity
-  emojis: IssueUpdateemojisInput
-  creator: EntityUpdateOneRequiredWithoutCreatedIssuesInput
-}
-
-input IssueUpdateWithoutCreatorDataInput {
-  uri: String
-  rarity: Rarity
-  emojis: IssueUpdateemojisInput
-  assets: AssetUpdateManyWithoutIssueInput
-}
-
-input IssueUpdateWithWhereUniqueWithoutCreatorInput {
-  where: IssueWhereUniqueInput!
-  data: IssueUpdateWithoutCreatorDataInput!
-}
-
-input IssueUpsertWithoutAssetsInput {
-  update: IssueUpdateWithoutAssetsDataInput!
-  create: IssueCreateWithoutAssetsInput!
-}
-
-input IssueUpsertWithWhereUniqueWithoutCreatorInput {
-  where: IssueWhereUniqueInput!
-  update: IssueUpdateWithoutCreatorDataInput!
-  create: IssueCreateWithoutCreatorInput!
-}
-
-input IssueWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  uri: String
-  uri_not: String
-  uri_in: [String!]
-  uri_not_in: [String!]
-  uri_lt: String
-  uri_lte: String
-  uri_gt: String
-  uri_gte: String
-  uri_contains: String
-  uri_not_contains: String
-  uri_starts_with: String
-  uri_not_starts_with: String
-  uri_ends_with: String
-  uri_not_ends_with: String
-  rarity: Rarity
-  rarity_not: Rarity
-  rarity_in: [Rarity!]
-  rarity_not_in: [Rarity!]
-  creator: EntityWhereInput
-  assets_every: AssetWhereInput
-  assets_some: AssetWhereInput
-  assets_none: AssetWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [IssueWhereInput!]
-  OR: [IssueWhereInput!]
-  NOT: [IssueWhereInput!]
-}
-
-input IssueWhereUniqueInput {
-  id: ID
-}
-
 scalar Json
 
 scalar Long
@@ -1202,12 +734,6 @@ type Mutation {
   upsertExhibition(where: ExhibitionWhereUniqueInput!, create: ExhibitionCreateInput!, update: ExhibitionUpdateInput!): Exhibition!
   deleteExhibition(where: ExhibitionWhereUniqueInput!): Exhibition
   deleteManyExhibitions(where: ExhibitionWhereInput): BatchPayload!
-  createIssue(data: IssueCreateInput!): Issue!
-  updateIssue(data: IssueUpdateInput!, where: IssueWhereUniqueInput!): Issue
-  updateManyIssues(data: IssueUpdateManyMutationInput!, where: IssueWhereInput): BatchPayload!
-  upsertIssue(where: IssueWhereUniqueInput!, create: IssueCreateInput!, update: IssueUpdateInput!): Issue!
-  deleteIssue(where: IssueWhereUniqueInput!): Issue
-  deleteManyIssues(where: IssueWhereInput): BatchPayload!
   createRoom(data: RoomCreateInput!): Room!
   updateRoom(data: RoomUpdateInput!, where: RoomWhereUniqueInput!): Room
   updateManyRooms(data: RoomUpdateManyMutationInput!, where: RoomWhereInput): BatchPayload!
@@ -1249,9 +775,6 @@ type Query {
   exhibition(where: ExhibitionWhereUniqueInput!): Exhibition
   exhibitions(where: ExhibitionWhereInput, orderBy: ExhibitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Exhibition]!
   exhibitionsConnection(where: ExhibitionWhereInput, orderBy: ExhibitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExhibitionConnection!
-  issue(where: IssueWhereUniqueInput!): Issue
-  issues(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Issue]!
-  issuesConnection(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): IssueConnection!
   room(where: RoomWhereUniqueInput!): Room
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
   roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
@@ -1261,18 +784,13 @@ type Query {
   node(id: ID!): Node
 }
 
-enum Rarity {
-  COMMON
-  RARE
-}
-
 type Room {
   id: ID!
   entryId: ID!
   x: Int!
   y: Int!
   exhibition: Exhibition!
-  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
+  asset: Asset!
 }
 
 type RoomConnection {
@@ -1287,11 +805,11 @@ input RoomCreateInput {
   x: Int!
   y: Int!
   exhibition: ExhibitionCreateOneWithoutRoomsInput!
-  assets: AssetCreateManyWithoutRoomsInput
+  asset: AssetCreateOneWithoutRoomsInput!
 }
 
-input RoomCreateManyWithoutAssetsInput {
-  create: [RoomCreateWithoutAssetsInput!]
+input RoomCreateManyWithoutAssetInput {
+  create: [RoomCreateWithoutAssetInput!]
   connect: [RoomWhereUniqueInput!]
 }
 
@@ -1300,7 +818,7 @@ input RoomCreateManyWithoutExhibitionInput {
   connect: [RoomWhereUniqueInput!]
 }
 
-input RoomCreateWithoutAssetsInput {
+input RoomCreateWithoutAssetInput {
   id: ID
   entryId: ID!
   x: Int!
@@ -1313,7 +831,7 @@ input RoomCreateWithoutExhibitionInput {
   entryId: ID!
   x: Int!
   y: Int!
-  assets: AssetCreateManyWithoutRoomsInput
+  asset: AssetCreateOneWithoutRoomsInput!
 }
 
 type RoomEdge {
@@ -1412,7 +930,7 @@ input RoomUpdateInput {
   x: Int
   y: Int
   exhibition: ExhibitionUpdateOneRequiredWithoutRoomsInput
-  assets: AssetUpdateManyWithoutRoomsInput
+  asset: AssetUpdateOneRequiredWithoutRoomsInput
 }
 
 input RoomUpdateManyDataInput {
@@ -1427,14 +945,14 @@ input RoomUpdateManyMutationInput {
   y: Int
 }
 
-input RoomUpdateManyWithoutAssetsInput {
-  create: [RoomCreateWithoutAssetsInput!]
+input RoomUpdateManyWithoutAssetInput {
+  create: [RoomCreateWithoutAssetInput!]
   delete: [RoomWhereUniqueInput!]
   connect: [RoomWhereUniqueInput!]
   set: [RoomWhereUniqueInput!]
   disconnect: [RoomWhereUniqueInput!]
-  update: [RoomUpdateWithWhereUniqueWithoutAssetsInput!]
-  upsert: [RoomUpsertWithWhereUniqueWithoutAssetsInput!]
+  update: [RoomUpdateWithWhereUniqueWithoutAssetInput!]
+  upsert: [RoomUpsertWithWhereUniqueWithoutAssetInput!]
   deleteMany: [RoomScalarWhereInput!]
   updateMany: [RoomUpdateManyWithWhereNestedInput!]
 }
@@ -1456,7 +974,7 @@ input RoomUpdateManyWithWhereNestedInput {
   data: RoomUpdateManyDataInput!
 }
 
-input RoomUpdateWithoutAssetsDataInput {
+input RoomUpdateWithoutAssetDataInput {
   entryId: ID
   x: Int
   y: Int
@@ -1467,12 +985,12 @@ input RoomUpdateWithoutExhibitionDataInput {
   entryId: ID
   x: Int
   y: Int
-  assets: AssetUpdateManyWithoutRoomsInput
+  asset: AssetUpdateOneRequiredWithoutRoomsInput
 }
 
-input RoomUpdateWithWhereUniqueWithoutAssetsInput {
+input RoomUpdateWithWhereUniqueWithoutAssetInput {
   where: RoomWhereUniqueInput!
-  data: RoomUpdateWithoutAssetsDataInput!
+  data: RoomUpdateWithoutAssetDataInput!
 }
 
 input RoomUpdateWithWhereUniqueWithoutExhibitionInput {
@@ -1480,10 +998,10 @@ input RoomUpdateWithWhereUniqueWithoutExhibitionInput {
   data: RoomUpdateWithoutExhibitionDataInput!
 }
 
-input RoomUpsertWithWhereUniqueWithoutAssetsInput {
+input RoomUpsertWithWhereUniqueWithoutAssetInput {
   where: RoomWhereUniqueInput!
-  update: RoomUpdateWithoutAssetsDataInput!
-  create: RoomCreateWithoutAssetsInput!
+  update: RoomUpdateWithoutAssetDataInput!
+  create: RoomCreateWithoutAssetInput!
 }
 
 input RoomUpsertWithWhereUniqueWithoutExhibitionInput {
@@ -1538,9 +1056,7 @@ input RoomWhereInput {
   y_gt: Int
   y_gte: Int
   exhibition: ExhibitionWhereInput
-  assets_every: AssetWhereInput
-  assets_some: AssetWhereInput
-  assets_none: AssetWhereInput
+  asset: AssetWhereInput
   AND: [RoomWhereInput!]
   OR: [RoomWhereInput!]
   NOT: [RoomWhereInput!]
@@ -1816,7 +1332,6 @@ type Subscription {
   asset(where: AssetSubscriptionWhereInput): AssetSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   exhibition(where: ExhibitionSubscriptionWhereInput): ExhibitionSubscriptionPayload
-  issue(where: IssueSubscriptionWhereInput): IssueSubscriptionPayload
   room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   show(where: ShowSubscriptionWhereInput): ShowSubscriptionPayload
 }

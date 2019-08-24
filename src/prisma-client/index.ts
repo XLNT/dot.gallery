@@ -19,7 +19,6 @@ export interface Exists {
   asset: (where?: AssetWhereInput) => Promise<boolean>;
   entity: (where?: EntityWhereInput) => Promise<boolean>;
   exhibition: (where?: ExhibitionWhereInput) => Promise<boolean>;
-  issue: (where?: IssueWhereInput) => Promise<boolean>;
   room: (where?: RoomWhereInput) => Promise<boolean>;
   show: (where?: ShowWhereInput) => Promise<boolean>;
 }
@@ -100,25 +99,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ExhibitionConnectionPromise;
-  issue: (where: IssueWhereUniqueInput) => IssueNullablePromise;
-  issues: (args?: {
-    where?: IssueWhereInput;
-    orderBy?: IssueOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Issue>;
-  issuesConnection: (args?: {
-    where?: IssueWhereInput;
-    orderBy?: IssueOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => IssueConnectionPromise;
   room: (where: RoomWhereUniqueInput) => RoomNullablePromise;
   rooms: (args?: {
     where?: RoomWhereInput;
@@ -211,22 +191,6 @@ export interface Prisma {
   }) => ExhibitionPromise;
   deleteExhibition: (where: ExhibitionWhereUniqueInput) => ExhibitionPromise;
   deleteManyExhibitions: (where?: ExhibitionWhereInput) => BatchPayloadPromise;
-  createIssue: (data: IssueCreateInput) => IssuePromise;
-  updateIssue: (args: {
-    data: IssueUpdateInput;
-    where: IssueWhereUniqueInput;
-  }) => IssuePromise;
-  updateManyIssues: (args: {
-    data: IssueUpdateManyMutationInput;
-    where?: IssueWhereInput;
-  }) => BatchPayloadPromise;
-  upsertIssue: (args: {
-    where: IssueWhereUniqueInput;
-    create: IssueCreateInput;
-    update: IssueUpdateInput;
-  }) => IssuePromise;
-  deleteIssue: (where: IssueWhereUniqueInput) => IssuePromise;
-  deleteManyIssues: (where?: IssueWhereInput) => BatchPayloadPromise;
   createRoom: (data: RoomCreateInput) => RoomPromise;
   updateRoom: (args: {
     data: RoomUpdateInput;
@@ -277,9 +241,6 @@ export interface Subscription {
   exhibition: (
     where?: ExhibitionSubscriptionWhereInput
   ) => ExhibitionSubscriptionPayloadSubscription;
-  issue: (
-    where?: IssueSubscriptionWhereInput
-  ) => IssueSubscriptionPayloadSubscription;
   room: (
     where?: RoomSubscriptionWhereInput
   ) => RoomSubscriptionPayloadSubscription;
@@ -296,25 +257,11 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type Rarity = "COMMON" | "RARE";
-
-export type IssueOrderByInput =
+export type AssetOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "uri_ASC"
   | "uri_DESC"
-  | "rarity_ASC"
-  | "rarity_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type AssetOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "isCounterfactual_ASC"
-  | "isCounterfactual_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -380,7 +327,7 @@ export type AssetWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface IssueWhereInput {
+export interface AssetWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -409,14 +356,10 @@ export interface IssueWhereInput {
   uri_not_starts_with?: Maybe<String>;
   uri_ends_with?: Maybe<String>;
   uri_not_ends_with?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  rarity_not?: Maybe<Rarity>;
-  rarity_in?: Maybe<Rarity[] | Rarity>;
-  rarity_not_in?: Maybe<Rarity[] | Rarity>;
-  creator?: Maybe<EntityWhereInput>;
-  assets_every?: Maybe<AssetWhereInput>;
-  assets_some?: Maybe<AssetWhereInput>;
-  assets_none?: Maybe<AssetWhereInput>;
+  owner?: Maybe<EntityWhereInput>;
+  rooms_every?: Maybe<RoomWhereInput>;
+  rooms_some?: Maybe<RoomWhereInput>;
+  rooms_none?: Maybe<RoomWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -433,9 +376,9 @@ export interface IssueWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<IssueWhereInput[] | IssueWhereInput>;
-  OR?: Maybe<IssueWhereInput[] | IssueWhereInput>;
-  NOT?: Maybe<IssueWhereInput[] | IssueWhereInput>;
+  AND?: Maybe<AssetWhereInput[] | AssetWhereInput>;
+  OR?: Maybe<AssetWhereInput[] | AssetWhereInput>;
+  NOT?: Maybe<AssetWhereInput[] | AssetWhereInput>;
 }
 
 export interface EntityWhereInput {
@@ -481,15 +424,9 @@ export interface EntityWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
-  createdIssues_every?: Maybe<IssueWhereInput>;
-  createdIssues_some?: Maybe<IssueWhereInput>;
-  createdIssues_none?: Maybe<IssueWhereInput>;
   ownedAssets_every?: Maybe<AssetWhereInput>;
   ownedAssets_some?: Maybe<AssetWhereInput>;
   ownedAssets_none?: Maybe<AssetWhereInput>;
-  printedAssets_every?: Maybe<AssetWhereInput>;
-  printedAssets_some?: Maybe<AssetWhereInput>;
-  printedAssets_none?: Maybe<AssetWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -509,50 +446,6 @@ export interface EntityWhereInput {
   AND?: Maybe<EntityWhereInput[] | EntityWhereInput>;
   OR?: Maybe<EntityWhereInput[] | EntityWhereInput>;
   NOT?: Maybe<EntityWhereInput[] | EntityWhereInput>;
-}
-
-export interface AssetWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
-  isCounterfactual_not?: Maybe<Boolean>;
-  owner?: Maybe<EntityWhereInput>;
-  issue?: Maybe<IssueWhereInput>;
-  printer?: Maybe<EntityWhereInput>;
-  rooms_every?: Maybe<RoomWhereInput>;
-  rooms_some?: Maybe<RoomWhereInput>;
-  rooms_none?: Maybe<RoomWhereInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<AssetWhereInput[] | AssetWhereInput>;
-  OR?: Maybe<AssetWhereInput[] | AssetWhereInput>;
-  NOT?: Maybe<AssetWhereInput[] | AssetWhereInput>;
 }
 
 export interface RoomWhereInput {
@@ -601,9 +494,7 @@ export interface RoomWhereInput {
   y_gt?: Maybe<Int>;
   y_gte?: Maybe<Int>;
   exhibition?: Maybe<ExhibitionWhereInput>;
-  assets_every?: Maybe<AssetWhereInput>;
-  assets_some?: Maybe<AssetWhereInput>;
-  assets_none?: Maybe<AssetWhereInput>;
+  asset?: Maybe<AssetWhereInput>;
   AND?: Maybe<RoomWhereInput[] | RoomWhereInput>;
   OR?: Maybe<RoomWhereInput[] | RoomWhereInput>;
   NOT?: Maybe<RoomWhereInput[] | RoomWhereInput>;
@@ -755,10 +646,6 @@ export type ExhibitionWhereUniqueInput = AtLeastOne<{
   number?: Maybe<Int>;
 }>;
 
-export type IssueWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
 export type RoomWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   entryId?: Maybe<ID_Input>;
@@ -770,11 +657,9 @@ export type ShowWhereUniqueInput = AtLeastOne<{
 
 export interface AssetCreateInput {
   id?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
+  uri: String;
   owner: EntityCreateOneWithoutOwnedAssetsInput;
-  issue: IssueCreateOneWithoutAssetsInput;
-  printer: EntityCreateOneWithoutPrintedAssetsInput;
-  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>;
+  rooms?: Maybe<RoomCreateManyWithoutAssetInput>;
 }
 
 export interface EntityCreateOneWithoutOwnedAssetsInput {
@@ -786,115 +671,14 @@ export interface EntityCreateWithoutOwnedAssetsInput {
   id?: Maybe<ID_Input>;
   handle: String;
   email: String;
-  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>;
-  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>;
 }
 
-export interface IssueCreateManyWithoutCreatorInput {
-  create?: Maybe<
-    IssueCreateWithoutCreatorInput[] | IssueCreateWithoutCreatorInput
-  >;
-  connect?: Maybe<IssueWhereUniqueInput[] | IssueWhereUniqueInput>;
-}
-
-export interface IssueCreateWithoutCreatorInput {
-  id?: Maybe<ID_Input>;
-  uri: String;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueCreateemojisInput>;
-  assets?: Maybe<AssetCreateManyWithoutIssueInput>;
-}
-
-export interface IssueCreateemojisInput {
-  set?: Maybe<String[] | String>;
-}
-
-export interface AssetCreateManyWithoutIssueInput {
-  create?: Maybe<AssetCreateWithoutIssueInput[] | AssetCreateWithoutIssueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-}
-
-export interface AssetCreateWithoutIssueInput {
-  id?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
-  owner: EntityCreateOneWithoutOwnedAssetsInput;
-  printer: EntityCreateOneWithoutPrintedAssetsInput;
-  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>;
-}
-
-export interface EntityCreateOneWithoutPrintedAssetsInput {
-  create?: Maybe<EntityCreateWithoutPrintedAssetsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface EntityCreateWithoutPrintedAssetsInput {
-  id?: Maybe<ID_Input>;
-  handle: String;
-  email: String;
-  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>;
-  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>;
-}
-
-export interface AssetCreateManyWithoutOwnerInput {
-  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-}
-
-export interface AssetCreateWithoutOwnerInput {
-  id?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
-  issue: IssueCreateOneWithoutAssetsInput;
-  printer: EntityCreateOneWithoutPrintedAssetsInput;
-  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>;
-}
-
-export interface IssueCreateOneWithoutAssetsInput {
-  create?: Maybe<IssueCreateWithoutAssetsInput>;
-  connect?: Maybe<IssueWhereUniqueInput>;
-}
-
-export interface IssueCreateWithoutAssetsInput {
-  id?: Maybe<ID_Input>;
-  uri: String;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueCreateemojisInput>;
-  creator: EntityCreateOneWithoutCreatedIssuesInput;
-}
-
-export interface EntityCreateOneWithoutCreatedIssuesInput {
-  create?: Maybe<EntityCreateWithoutCreatedIssuesInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface EntityCreateWithoutCreatedIssuesInput {
-  id?: Maybe<ID_Input>;
-  handle: String;
-  email: String;
-  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>;
-  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>;
-}
-
-export interface AssetCreateManyWithoutPrinterInput {
-  create?: Maybe<
-    AssetCreateWithoutPrinterInput[] | AssetCreateWithoutPrinterInput
-  >;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-}
-
-export interface AssetCreateWithoutPrinterInput {
-  id?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
-  owner: EntityCreateOneWithoutOwnedAssetsInput;
-  issue: IssueCreateOneWithoutAssetsInput;
-  rooms?: Maybe<RoomCreateManyWithoutAssetsInput>;
-}
-
-export interface RoomCreateManyWithoutAssetsInput {
-  create?: Maybe<RoomCreateWithoutAssetsInput[] | RoomCreateWithoutAssetsInput>;
+export interface RoomCreateManyWithoutAssetInput {
+  create?: Maybe<RoomCreateWithoutAssetInput[] | RoomCreateWithoutAssetInput>;
   connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
 }
 
-export interface RoomCreateWithoutAssetsInput {
+export interface RoomCreateWithoutAssetInput {
   id?: Maybe<ID_Input>;
   entryId: ID_Input;
   x: Int;
@@ -932,11 +716,9 @@ export interface ShowCreateWithoutExhibitionInput {
 }
 
 export interface AssetUpdateInput {
-  isCounterfactual?: Maybe<Boolean>;
+  uri?: Maybe<String>;
   owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
-  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
-  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
-  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>;
+  rooms?: Maybe<RoomUpdateManyWithoutAssetInput>;
 }
 
 export interface EntityUpdateOneRequiredWithoutOwnedAssetsInput {
@@ -949,201 +731,26 @@ export interface EntityUpdateOneRequiredWithoutOwnedAssetsInput {
 export interface EntityUpdateWithoutOwnedAssetsDataInput {
   handle?: Maybe<String>;
   email?: Maybe<String>;
-  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>;
-  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>;
 }
 
-export interface IssueUpdateManyWithoutCreatorInput {
-  create?: Maybe<
-    IssueCreateWithoutCreatorInput[] | IssueCreateWithoutCreatorInput
-  >;
-  delete?: Maybe<IssueWhereUniqueInput[] | IssueWhereUniqueInput>;
-  connect?: Maybe<IssueWhereUniqueInput[] | IssueWhereUniqueInput>;
-  set?: Maybe<IssueWhereUniqueInput[] | IssueWhereUniqueInput>;
-  disconnect?: Maybe<IssueWhereUniqueInput[] | IssueWhereUniqueInput>;
-  update?: Maybe<
-    | IssueUpdateWithWhereUniqueWithoutCreatorInput[]
-    | IssueUpdateWithWhereUniqueWithoutCreatorInput
-  >;
-  upsert?: Maybe<
-    | IssueUpsertWithWhereUniqueWithoutCreatorInput[]
-    | IssueUpsertWithWhereUniqueWithoutCreatorInput
-  >;
-  deleteMany?: Maybe<IssueScalarWhereInput[] | IssueScalarWhereInput>;
-  updateMany?: Maybe<
-    IssueUpdateManyWithWhereNestedInput[] | IssueUpdateManyWithWhereNestedInput
-  >;
+export interface EntityUpsertWithoutOwnedAssetsInput {
+  update: EntityUpdateWithoutOwnedAssetsDataInput;
+  create: EntityCreateWithoutOwnedAssetsInput;
 }
 
-export interface IssueUpdateWithWhereUniqueWithoutCreatorInput {
-  where: IssueWhereUniqueInput;
-  data: IssueUpdateWithoutCreatorDataInput;
-}
-
-export interface IssueUpdateWithoutCreatorDataInput {
-  uri?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueUpdateemojisInput>;
-  assets?: Maybe<AssetUpdateManyWithoutIssueInput>;
-}
-
-export interface IssueUpdateemojisInput {
-  set?: Maybe<String[] | String>;
-}
-
-export interface AssetUpdateManyWithoutIssueInput {
-  create?: Maybe<AssetCreateWithoutIssueInput[] | AssetCreateWithoutIssueInput>;
-  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  update?: Maybe<
-    | AssetUpdateWithWhereUniqueWithoutIssueInput[]
-    | AssetUpdateWithWhereUniqueWithoutIssueInput
-  >;
-  upsert?: Maybe<
-    | AssetUpsertWithWhereUniqueWithoutIssueInput[]
-    | AssetUpsertWithWhereUniqueWithoutIssueInput
-  >;
-  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  updateMany?: Maybe<
-    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface AssetUpdateWithWhereUniqueWithoutIssueInput {
-  where: AssetWhereUniqueInput;
-  data: AssetUpdateWithoutIssueDataInput;
-}
-
-export interface AssetUpdateWithoutIssueDataInput {
-  isCounterfactual?: Maybe<Boolean>;
-  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
-  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
-  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>;
-}
-
-export interface EntityUpdateOneRequiredWithoutPrintedAssetsInput {
-  create?: Maybe<EntityCreateWithoutPrintedAssetsInput>;
-  update?: Maybe<EntityUpdateWithoutPrintedAssetsDataInput>;
-  upsert?: Maybe<EntityUpsertWithoutPrintedAssetsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface EntityUpdateWithoutPrintedAssetsDataInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>;
-  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-}
-
-export interface AssetUpdateManyWithoutOwnerInput {
-  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
-  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  update?: Maybe<
-    | AssetUpdateWithWhereUniqueWithoutOwnerInput[]
-    | AssetUpdateWithWhereUniqueWithoutOwnerInput
-  >;
-  upsert?: Maybe<
-    | AssetUpsertWithWhereUniqueWithoutOwnerInput[]
-    | AssetUpsertWithWhereUniqueWithoutOwnerInput
-  >;
-  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  updateMany?: Maybe<
-    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface AssetUpdateWithWhereUniqueWithoutOwnerInput {
-  where: AssetWhereUniqueInput;
-  data: AssetUpdateWithoutOwnerDataInput;
-}
-
-export interface AssetUpdateWithoutOwnerDataInput {
-  isCounterfactual?: Maybe<Boolean>;
-  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
-  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
-  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>;
-}
-
-export interface IssueUpdateOneRequiredWithoutAssetsInput {
-  create?: Maybe<IssueCreateWithoutAssetsInput>;
-  update?: Maybe<IssueUpdateWithoutAssetsDataInput>;
-  upsert?: Maybe<IssueUpsertWithoutAssetsInput>;
-  connect?: Maybe<IssueWhereUniqueInput>;
-}
-
-export interface IssueUpdateWithoutAssetsDataInput {
-  uri?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueUpdateemojisInput>;
-  creator?: Maybe<EntityUpdateOneRequiredWithoutCreatedIssuesInput>;
-}
-
-export interface EntityUpdateOneRequiredWithoutCreatedIssuesInput {
-  create?: Maybe<EntityCreateWithoutCreatedIssuesInput>;
-  update?: Maybe<EntityUpdateWithoutCreatedIssuesDataInput>;
-  upsert?: Maybe<EntityUpsertWithoutCreatedIssuesInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface EntityUpdateWithoutCreatedIssuesDataInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>;
-}
-
-export interface AssetUpdateManyWithoutPrinterInput {
-  create?: Maybe<
-    AssetCreateWithoutPrinterInput[] | AssetCreateWithoutPrinterInput
-  >;
-  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  update?: Maybe<
-    | AssetUpdateWithWhereUniqueWithoutPrinterInput[]
-    | AssetUpdateWithWhereUniqueWithoutPrinterInput
-  >;
-  upsert?: Maybe<
-    | AssetUpsertWithWhereUniqueWithoutPrinterInput[]
-    | AssetUpsertWithWhereUniqueWithoutPrinterInput
-  >;
-  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  updateMany?: Maybe<
-    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface AssetUpdateWithWhereUniqueWithoutPrinterInput {
-  where: AssetWhereUniqueInput;
-  data: AssetUpdateWithoutPrinterDataInput;
-}
-
-export interface AssetUpdateWithoutPrinterDataInput {
-  isCounterfactual?: Maybe<Boolean>;
-  owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
-  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
-  rooms?: Maybe<RoomUpdateManyWithoutAssetsInput>;
-}
-
-export interface RoomUpdateManyWithoutAssetsInput {
-  create?: Maybe<RoomCreateWithoutAssetsInput[] | RoomCreateWithoutAssetsInput>;
+export interface RoomUpdateManyWithoutAssetInput {
+  create?: Maybe<RoomCreateWithoutAssetInput[] | RoomCreateWithoutAssetInput>;
   delete?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
   connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
   set?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
   disconnect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
   update?: Maybe<
-    | RoomUpdateWithWhereUniqueWithoutAssetsInput[]
-    | RoomUpdateWithWhereUniqueWithoutAssetsInput
+    | RoomUpdateWithWhereUniqueWithoutAssetInput[]
+    | RoomUpdateWithWhereUniqueWithoutAssetInput
   >;
   upsert?: Maybe<
-    | RoomUpsertWithWhereUniqueWithoutAssetsInput[]
-    | RoomUpsertWithWhereUniqueWithoutAssetsInput
+    | RoomUpsertWithWhereUniqueWithoutAssetInput[]
+    | RoomUpsertWithWhereUniqueWithoutAssetInput
   >;
   deleteMany?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
   updateMany?: Maybe<
@@ -1151,12 +758,12 @@ export interface RoomUpdateManyWithoutAssetsInput {
   >;
 }
 
-export interface RoomUpdateWithWhereUniqueWithoutAssetsInput {
+export interface RoomUpdateWithWhereUniqueWithoutAssetInput {
   where: RoomWhereUniqueInput;
-  data: RoomUpdateWithoutAssetsDataInput;
+  data: RoomUpdateWithoutAssetDataInput;
 }
 
-export interface RoomUpdateWithoutAssetsDataInput {
+export interface RoomUpdateWithoutAssetDataInput {
   entryId?: Maybe<ID_Input>;
   x?: Maybe<Int>;
   y?: Maybe<Int>;
@@ -1294,10 +901,10 @@ export interface ExhibitionUpsertWithoutRoomsInput {
   create: ExhibitionCreateWithoutRoomsInput;
 }
 
-export interface RoomUpsertWithWhereUniqueWithoutAssetsInput {
+export interface RoomUpsertWithWhereUniqueWithoutAssetInput {
   where: RoomWhereUniqueInput;
-  update: RoomUpdateWithoutAssetsDataInput;
-  create: RoomCreateWithoutAssetsInput;
+  update: RoomUpdateWithoutAssetDataInput;
+  create: RoomCreateWithoutAssetInput;
 }
 
 export interface RoomScalarWhereInput {
@@ -1361,67 +968,62 @@ export interface RoomUpdateManyDataInput {
   y?: Maybe<Int>;
 }
 
-export interface AssetUpsertWithWhereUniqueWithoutPrinterInput {
-  where: AssetWhereUniqueInput;
-  update: AssetUpdateWithoutPrinterDataInput;
-  create: AssetCreateWithoutPrinterInput;
+export interface AssetUpdateManyMutationInput {
+  uri?: Maybe<String>;
 }
 
-export interface AssetScalarWhereInput {
+export interface EntityCreateInput {
   id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
-  isCounterfactual_not?: Maybe<Boolean>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  OR?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  NOT?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  handle: String;
+  email: String;
+  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>;
 }
 
-export interface AssetUpdateManyWithWhereNestedInput {
-  where: AssetScalarWhereInput;
-  data: AssetUpdateManyDataInput;
+export interface AssetCreateManyWithoutOwnerInput {
+  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
 }
 
-export interface AssetUpdateManyDataInput {
-  isCounterfactual?: Maybe<Boolean>;
+export interface AssetCreateWithoutOwnerInput {
+  id?: Maybe<ID_Input>;
+  uri: String;
+  rooms?: Maybe<RoomCreateManyWithoutAssetInput>;
 }
 
-export interface EntityUpsertWithoutCreatedIssuesInput {
-  update: EntityUpdateWithoutCreatedIssuesDataInput;
-  create: EntityCreateWithoutCreatedIssuesInput;
+export interface EntityUpdateInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
 }
 
-export interface IssueUpsertWithoutAssetsInput {
-  update: IssueUpdateWithoutAssetsDataInput;
-  create: IssueCreateWithoutAssetsInput;
+export interface AssetUpdateManyWithoutOwnerInput {
+  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
+  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  update?: Maybe<
+    | AssetUpdateWithWhereUniqueWithoutOwnerInput[]
+    | AssetUpdateWithWhereUniqueWithoutOwnerInput
+  >;
+  upsert?: Maybe<
+    | AssetUpsertWithWhereUniqueWithoutOwnerInput[]
+    | AssetUpsertWithWhereUniqueWithoutOwnerInput
+  >;
+  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  updateMany?: Maybe<
+    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface AssetUpdateWithWhereUniqueWithoutOwnerInput {
+  where: AssetWhereUniqueInput;
+  data: AssetUpdateWithoutOwnerDataInput;
+}
+
+export interface AssetUpdateWithoutOwnerDataInput {
+  uri?: Maybe<String>;
+  rooms?: Maybe<RoomUpdateManyWithoutAssetInput>;
 }
 
 export interface AssetUpsertWithWhereUniqueWithoutOwnerInput {
@@ -1430,24 +1032,7 @@ export interface AssetUpsertWithWhereUniqueWithoutOwnerInput {
   create: AssetCreateWithoutOwnerInput;
 }
 
-export interface EntityUpsertWithoutPrintedAssetsInput {
-  update: EntityUpdateWithoutPrintedAssetsDataInput;
-  create: EntityCreateWithoutPrintedAssetsInput;
-}
-
-export interface AssetUpsertWithWhereUniqueWithoutIssueInput {
-  where: AssetWhereUniqueInput;
-  update: AssetUpdateWithoutIssueDataInput;
-  create: AssetCreateWithoutIssueInput;
-}
-
-export interface IssueUpsertWithWhereUniqueWithoutCreatorInput {
-  where: IssueWhereUniqueInput;
-  update: IssueUpdateWithoutCreatorDataInput;
-  create: IssueCreateWithoutCreatorInput;
-}
-
-export interface IssueScalarWhereInput {
+export interface AssetScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1476,10 +1061,6 @@ export interface IssueScalarWhereInput {
   uri_not_starts_with?: Maybe<String>;
   uri_ends_with?: Maybe<String>;
   uri_not_ends_with?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  rarity_not?: Maybe<Rarity>;
-  rarity_in?: Maybe<Rarity[] | Rarity>;
-  rarity_not_in?: Maybe<Rarity[] | Rarity>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1496,46 +1077,18 @@ export interface IssueScalarWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<IssueScalarWhereInput[] | IssueScalarWhereInput>;
-  OR?: Maybe<IssueScalarWhereInput[] | IssueScalarWhereInput>;
-  NOT?: Maybe<IssueScalarWhereInput[] | IssueScalarWhereInput>;
+  AND?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  OR?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  NOT?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
 }
 
-export interface IssueUpdateManyWithWhereNestedInput {
-  where: IssueScalarWhereInput;
-  data: IssueUpdateManyDataInput;
+export interface AssetUpdateManyWithWhereNestedInput {
+  where: AssetScalarWhereInput;
+  data: AssetUpdateManyDataInput;
 }
 
-export interface IssueUpdateManyDataInput {
+export interface AssetUpdateManyDataInput {
   uri?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueUpdateemojisInput>;
-}
-
-export interface EntityUpsertWithoutOwnedAssetsInput {
-  update: EntityUpdateWithoutOwnedAssetsDataInput;
-  create: EntityCreateWithoutOwnedAssetsInput;
-}
-
-export interface AssetUpdateManyMutationInput {
-  isCounterfactual?: Maybe<Boolean>;
-}
-
-export interface EntityCreateInput {
-  id?: Maybe<ID_Input>;
-  handle: String;
-  email: String;
-  createdIssues?: Maybe<IssueCreateManyWithoutCreatorInput>;
-  ownedAssets?: Maybe<AssetCreateManyWithoutOwnerInput>;
-  printedAssets?: Maybe<AssetCreateManyWithoutPrinterInput>;
-}
-
-export interface EntityUpdateInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  createdIssues?: Maybe<IssueUpdateManyWithoutCreatorInput>;
-  ownedAssets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-  printedAssets?: Maybe<AssetUpdateManyWithoutPrinterInput>;
 }
 
 export interface EntityUpdateManyMutationInput {
@@ -1566,20 +1119,18 @@ export interface RoomCreateWithoutExhibitionInput {
   entryId: ID_Input;
   x: Int;
   y: Int;
-  assets?: Maybe<AssetCreateManyWithoutRoomsInput>;
+  asset: AssetCreateOneWithoutRoomsInput;
 }
 
-export interface AssetCreateManyWithoutRoomsInput {
-  create?: Maybe<AssetCreateWithoutRoomsInput[] | AssetCreateWithoutRoomsInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+export interface AssetCreateOneWithoutRoomsInput {
+  create?: Maybe<AssetCreateWithoutRoomsInput>;
+  connect?: Maybe<AssetWhereUniqueInput>;
 }
 
 export interface AssetCreateWithoutRoomsInput {
   id?: Maybe<ID_Input>;
-  isCounterfactual?: Maybe<Boolean>;
+  uri: String;
   owner: EntityCreateOneWithoutOwnedAssetsInput;
-  issue: IssueCreateOneWithoutAssetsInput;
-  printer: EntityCreateOneWithoutPrintedAssetsInput;
 }
 
 export interface ExhibitionUpdateInput {
@@ -1623,43 +1174,22 @@ export interface RoomUpdateWithoutExhibitionDataInput {
   entryId?: Maybe<ID_Input>;
   x?: Maybe<Int>;
   y?: Maybe<Int>;
-  assets?: Maybe<AssetUpdateManyWithoutRoomsInput>;
+  asset?: Maybe<AssetUpdateOneRequiredWithoutRoomsInput>;
 }
 
-export interface AssetUpdateManyWithoutRoomsInput {
-  create?: Maybe<AssetCreateWithoutRoomsInput[] | AssetCreateWithoutRoomsInput>;
-  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  update?: Maybe<
-    | AssetUpdateWithWhereUniqueWithoutRoomsInput[]
-    | AssetUpdateWithWhereUniqueWithoutRoomsInput
-  >;
-  upsert?: Maybe<
-    | AssetUpsertWithWhereUniqueWithoutRoomsInput[]
-    | AssetUpsertWithWhereUniqueWithoutRoomsInput
-  >;
-  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  updateMany?: Maybe<
-    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface AssetUpdateWithWhereUniqueWithoutRoomsInput {
-  where: AssetWhereUniqueInput;
-  data: AssetUpdateWithoutRoomsDataInput;
+export interface AssetUpdateOneRequiredWithoutRoomsInput {
+  create?: Maybe<AssetCreateWithoutRoomsInput>;
+  update?: Maybe<AssetUpdateWithoutRoomsDataInput>;
+  upsert?: Maybe<AssetUpsertWithoutRoomsInput>;
+  connect?: Maybe<AssetWhereUniqueInput>;
 }
 
 export interface AssetUpdateWithoutRoomsDataInput {
-  isCounterfactual?: Maybe<Boolean>;
+  uri?: Maybe<String>;
   owner?: Maybe<EntityUpdateOneRequiredWithoutOwnedAssetsInput>;
-  issue?: Maybe<IssueUpdateOneRequiredWithoutAssetsInput>;
-  printer?: Maybe<EntityUpdateOneRequiredWithoutPrintedAssetsInput>;
 }
 
-export interface AssetUpsertWithWhereUniqueWithoutRoomsInput {
-  where: AssetWhereUniqueInput;
+export interface AssetUpsertWithoutRoomsInput {
   update: AssetUpdateWithoutRoomsDataInput;
   create: AssetCreateWithoutRoomsInput;
 }
@@ -1678,36 +1208,13 @@ export interface ExhibitionUpdateManyMutationInput {
   closesAt?: Maybe<DateTimeInput>;
 }
 
-export interface IssueCreateInput {
-  id?: Maybe<ID_Input>;
-  uri: String;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueCreateemojisInput>;
-  creator: EntityCreateOneWithoutCreatedIssuesInput;
-  assets?: Maybe<AssetCreateManyWithoutIssueInput>;
-}
-
-export interface IssueUpdateInput {
-  uri?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueUpdateemojisInput>;
-  creator?: Maybe<EntityUpdateOneRequiredWithoutCreatedIssuesInput>;
-  assets?: Maybe<AssetUpdateManyWithoutIssueInput>;
-}
-
-export interface IssueUpdateManyMutationInput {
-  uri?: Maybe<String>;
-  rarity?: Maybe<Rarity>;
-  emojis?: Maybe<IssueUpdateemojisInput>;
-}
-
 export interface RoomCreateInput {
   id?: Maybe<ID_Input>;
   entryId: ID_Input;
   x: Int;
   y: Int;
   exhibition: ExhibitionCreateOneWithoutRoomsInput;
-  assets?: Maybe<AssetCreateManyWithoutRoomsInput>;
+  asset: AssetCreateOneWithoutRoomsInput;
 }
 
 export interface RoomUpdateInput {
@@ -1715,7 +1222,7 @@ export interface RoomUpdateInput {
   x?: Maybe<Int>;
   y?: Maybe<Int>;
   exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>;
-  assets?: Maybe<AssetUpdateManyWithoutRoomsInput>;
+  asset?: Maybe<AssetUpdateOneRequiredWithoutRoomsInput>;
 }
 
 export interface RoomUpdateManyMutationInput {
@@ -1820,17 +1327,6 @@ export interface ExhibitionSubscriptionWhereInput {
   >;
 }
 
-export interface IssueSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<IssueWhereInput>;
-  AND?: Maybe<IssueSubscriptionWhereInput[] | IssueSubscriptionWhereInput>;
-  OR?: Maybe<IssueSubscriptionWhereInput[] | IssueSubscriptionWhereInput>;
-  NOT?: Maybe<IssueSubscriptionWhereInput[] | IssueSubscriptionWhereInput>;
-}
-
 export interface RoomSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -1859,17 +1355,15 @@ export interface NodeNode {
 
 export interface Asset {
   id: ID_Output;
-  isCounterfactual: Boolean;
+  uri: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
 export interface AssetPromise extends Promise<Asset>, Fragmentable {
   id: () => Promise<ID_Output>;
-  isCounterfactual: () => Promise<Boolean>;
+  uri: () => Promise<String>;
   owner: <T = EntityPromise>() => T;
-  issue: <T = IssuePromise>() => T;
-  printer: <T = EntityPromise>() => T;
   rooms: <T = FragmentableArray<Room>>(args?: {
     where?: RoomWhereInput;
     orderBy?: RoomOrderByInput;
@@ -1887,10 +1381,8 @@ export interface AssetSubscription
   extends Promise<AsyncIterator<Asset>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  isCounterfactual: () => Promise<AsyncIterator<Boolean>>;
+  uri: () => Promise<AsyncIterator<String>>;
   owner: <T = EntitySubscription>() => T;
-  issue: <T = IssueSubscription>() => T;
-  printer: <T = EntitySubscription>() => T;
   rooms: <T = Promise<AsyncIterator<RoomSubscription>>>(args?: {
     where?: RoomWhereInput;
     orderBy?: RoomOrderByInput;
@@ -1908,10 +1400,8 @@ export interface AssetNullablePromise
   extends Promise<Asset | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  isCounterfactual: () => Promise<Boolean>;
+  uri: () => Promise<String>;
   owner: <T = EntityPromise>() => T;
-  issue: <T = IssuePromise>() => T;
-  printer: <T = EntityPromise>() => T;
   rooms: <T = FragmentableArray<Room>>(args?: {
     where?: RoomWhereInput;
     orderBy?: RoomOrderByInput;
@@ -1937,25 +1427,7 @@ export interface EntityPromise extends Promise<Entity>, Fragmentable {
   id: () => Promise<ID_Output>;
   handle: () => Promise<String>;
   email: () => Promise<String>;
-  createdIssues: <T = FragmentableArray<Issue>>(args?: {
-    where?: IssueWhereInput;
-    orderBy?: IssueOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
   ownedAssets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  printedAssets: <T = FragmentableArray<Asset>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
     skip?: Int;
@@ -1974,25 +1446,7 @@ export interface EntitySubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   handle: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
-  createdIssues: <T = Promise<AsyncIterator<IssueSubscription>>>(args?: {
-    where?: IssueWhereInput;
-    orderBy?: IssueOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
   ownedAssets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  printedAssets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
     skip?: Int;
@@ -2011,95 +1465,7 @@ export interface EntityNullablePromise
   id: () => Promise<ID_Output>;
   handle: () => Promise<String>;
   email: () => Promise<String>;
-  createdIssues: <T = FragmentableArray<Issue>>(args?: {
-    where?: IssueWhereInput;
-    orderBy?: IssueOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
   ownedAssets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  printedAssets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface Issue {
-  id: ID_Output;
-  uri: String;
-  rarity: Rarity;
-  emojis: String[];
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface IssuePromise extends Promise<Issue>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  uri: () => Promise<String>;
-  rarity: () => Promise<Rarity>;
-  emojis: () => Promise<String[]>;
-  creator: <T = EntityPromise>() => T;
-  assets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface IssueSubscription
-  extends Promise<AsyncIterator<Issue>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  uri: () => Promise<AsyncIterator<String>>;
-  rarity: () => Promise<AsyncIterator<Rarity>>;
-  emojis: () => Promise<AsyncIterator<String[]>>;
-  creator: <T = EntitySubscription>() => T;
-  assets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface IssueNullablePromise
-  extends Promise<Issue | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  uri: () => Promise<String>;
-  rarity: () => Promise<Rarity>;
-  emojis: () => Promise<String[]>;
-  creator: <T = EntityPromise>() => T;
-  assets: <T = FragmentableArray<Asset>>(args?: {
     where?: AssetWhereInput;
     orderBy?: AssetOrderByInput;
     skip?: Int;
@@ -2125,15 +1491,7 @@ export interface RoomPromise extends Promise<Room>, Fragmentable {
   x: () => Promise<Int>;
   y: () => Promise<Int>;
   exhibition: <T = ExhibitionPromise>() => T;
-  assets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  asset: <T = AssetPromise>() => T;
 }
 
 export interface RoomSubscription
@@ -2144,15 +1502,7 @@ export interface RoomSubscription
   x: () => Promise<AsyncIterator<Int>>;
   y: () => Promise<AsyncIterator<Int>>;
   exhibition: <T = ExhibitionSubscription>() => T;
-  assets: <T = Promise<AsyncIterator<AssetSubscription>>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  asset: <T = AssetSubscription>() => T;
 }
 
 export interface RoomNullablePromise
@@ -2163,15 +1513,7 @@ export interface RoomNullablePromise
   x: () => Promise<Int>;
   y: () => Promise<Int>;
   exhibition: <T = ExhibitionPromise>() => T;
-  assets: <T = FragmentableArray<Asset>>(args?: {
-    where?: AssetWhereInput;
-    orderBy?: AssetOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  asset: <T = AssetPromise>() => T;
 }
 
 export interface Exhibition {
@@ -2506,60 +1848,6 @@ export interface AggregateExhibitionSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface IssueConnection {
-  pageInfo: PageInfo;
-  edges: IssueEdge[];
-}
-
-export interface IssueConnectionPromise
-  extends Promise<IssueConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<IssueEdge>>() => T;
-  aggregate: <T = AggregateIssuePromise>() => T;
-}
-
-export interface IssueConnectionSubscription
-  extends Promise<AsyncIterator<IssueConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<IssueEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateIssueSubscription>() => T;
-}
-
-export interface IssueEdge {
-  node: Issue;
-  cursor: String;
-}
-
-export interface IssueEdgePromise extends Promise<IssueEdge>, Fragmentable {
-  node: <T = IssuePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface IssueEdgeSubscription
-  extends Promise<AsyncIterator<IssueEdge>>,
-    Fragmentable {
-  node: <T = IssueSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateIssue {
-  count: Int;
-}
-
-export interface AggregateIssuePromise
-  extends Promise<AggregateIssue>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateIssueSubscription
-  extends Promise<AsyncIterator<AggregateIssue>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface RoomConnection {
   pageInfo: PageInfo;
   edges: RoomEdge[];
@@ -2711,7 +1999,7 @@ export interface AssetSubscriptionPayloadSubscription
 
 export interface AssetPreviousValues {
   id: ID_Output;
-  isCounterfactual: Boolean;
+  uri: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2720,7 +2008,7 @@ export interface AssetPreviousValuesPromise
   extends Promise<AssetPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  isCounterfactual: () => Promise<Boolean>;
+  uri: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2729,7 +2017,7 @@ export interface AssetPreviousValuesSubscription
   extends Promise<AsyncIterator<AssetPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  isCounterfactual: () => Promise<AsyncIterator<Boolean>>;
+  uri: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2849,62 +2137,6 @@ export interface ExhibitionPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface IssueSubscriptionPayload {
-  mutation: MutationType;
-  node: Issue;
-  updatedFields: String[];
-  previousValues: IssuePreviousValues;
-}
-
-export interface IssueSubscriptionPayloadPromise
-  extends Promise<IssueSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = IssuePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = IssuePreviousValuesPromise>() => T;
-}
-
-export interface IssueSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<IssueSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = IssueSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = IssuePreviousValuesSubscription>() => T;
-}
-
-export interface IssuePreviousValues {
-  id: ID_Output;
-  uri: String;
-  rarity: Rarity;
-  emojis: String[];
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface IssuePreviousValuesPromise
-  extends Promise<IssuePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  uri: () => Promise<String>;
-  rarity: () => Promise<Rarity>;
-  emojis: () => Promise<String[]>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface IssuePreviousValuesSubscription
-  extends Promise<AsyncIterator<IssuePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  uri: () => Promise<AsyncIterator<String>>;
-  rarity: () => Promise<AsyncIterator<Rarity>>;
-  emojis: () => Promise<AsyncIterator<String[]>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
 export interface RoomSubscriptionPayload {
   mutation: MutationType;
   node: Room;
@@ -3018,19 +2250,9 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
 
 /*
 DateTime scalar input type, allowing Date
@@ -3042,7 +2264,17 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
+
 export type Json = any;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 export type Long = string;
 
@@ -3052,15 +2284,7 @@ export type Long = string;
 
 export const models: Model[] = [
   {
-    name: "Rarity",
-    embedded: false
-  },
-  {
     name: "Entity",
-    embedded: false
-  },
-  {
-    name: "Issue",
     embedded: false
   },
   {

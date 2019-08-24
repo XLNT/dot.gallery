@@ -1,5 +1,18 @@
 import { animated, useTransition } from "react-spring";
 import React, { PropsWithChildren } from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: relative;
+`;
+
+const Content = styled(animated.div)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+`;
 
 export default function WithContentTransition({ children }: PropsWithChildren<{}>) {
   const contentTransitions = useTransition(React.Children.toArray(children), null, {
@@ -10,12 +23,12 @@ export default function WithContentTransition({ children }: PropsWithChildren<{}
   });
 
   return (
-    <>
+    <Container>
       {contentTransitions.map(({ item, key, props }) => (
-        <animated.div key={key} style={props}>
+        <Content key={key} style={props}>
           {item}
-        </animated.div>
+        </Content>
       ))}
-    </>
+    </Container>
   );
 }

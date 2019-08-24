@@ -1,15 +1,17 @@
-import { Coords, Direction, directionFor, keycodeFor, navigate } from "lib/rooms";
+import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { find, get } from "lodash-es";
+import { animated, useTransition } from "react-spring";
+import { get, isNull, isUndefined, negate, uniqBy } from "lodash-es";
+import { isEqual } from "apollo-utilities";
 import { useCurrentExhibitionQuery } from "graphql";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import Layer from "components/Layer";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
-import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useKey from "use-key-hook";
+import usePreviousValue from "hook/usePreviousValue";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Backboard = styled.div`
@@ -25,7 +27,8 @@ const Canvas = styled(Layer)`
 const InnerCanvas = styled.div`
   flex: 1;
   margin: 5rem;
-  background: ${fromTheme("canvas")};
+
+  display: flex;
 `;
 
 export default function Gallery(props: ExhibitionProps<void>) {
@@ -36,12 +39,13 @@ export default function Gallery(props: ExhibitionProps<void>) {
   const exhibition = get(data, ["exhibitions", 0]);
 
   const [coords, setCoords] = useState<Coords>(null);
+  // const prevCoords = usePreviousValue(coords, isEqual);
 
   useEffect(() => {
     if (exhibition) {
       const center: Coords = [
-        Math.ceil(exhibition.extent / 2.0),
-        Math.ceil(exhibition.extent / 2.0),
+        Math.floor(exhibition.extent / 2.0),
+        Math.floor(exhibition.extent / 2.0),
       ];
       setCoords(center);
     }
@@ -61,10 +65,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
   );
 
   const room = useMemo(
-    () =>
-      !exhibition || coords === null
-        ? null
-        : find(exhibition.rooms, room => room.x === coords[0] && room.y === coords[1]) || null,
+    () => (!exhibition || coords === null ? null : findRoom(exhibition.rooms, coords)),
     [coords, exhibition],
   );
 

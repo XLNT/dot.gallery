@@ -1,3 +1,6 @@
+import { Room } from "graphql";
+import { find } from "lodash-es";
+
 export type Coords = [number, number];
 
 export enum Direction {
@@ -34,3 +37,6 @@ export const navigate = (coords: Coords, extent: number, direction: Direction): 
   const newY = extent + y + toNumber(direction, Direction.Up, Direction.Down);
   return [newX % extent, newY % extent];
 };
+
+export const findRoom = <T extends Pick<Room, "x" | "y">>(rooms: Array<T>, coords: Coords) =>
+  find(rooms, room => room.x === coords[0] && room.y === coords[1]) || null;

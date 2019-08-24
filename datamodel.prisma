@@ -1,35 +1,10 @@
-enum Rarity {
-  COMMON
-  RARE
-}
-
 type Entity {
   id: ID! @id
   handle: String! @unique
   email: String! @unique
 
-  # entity has_many createdIssues
-  createdIssues: [Issue!]! @relation(name: "CreatedIssues")
   # entity has_many ownedAssets
   ownedAssets: [Asset!]! @relation(name: "OwnedAssets")
-  # entity has_many printedAssets
-  printedAssets: [Asset!]! @relation(name: "PrintedAssets")
-
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Issue {
-  id: ID! @id
-
-  uri: String!
-  rarity: Rarity! @default(value: COMMON)
-  emojis: [String!]! @scalarList(strategy: RELATION)
-
-  # issue has_one creator
-  creator: Entity! @relation(name: "CreatedIssues")
-  # issue has_many assets
-  assets: [Asset!]!
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -37,16 +12,10 @@ type Issue {
 
 type Asset {
   id: ID! @id
-
-  # uri: String
-  isCounterfactual: Boolean! @default(value: false)
+  uri: String!
 
   # asset belongs_to: owner
   owner: Entity! @relation(name: "OwnedAssets")
-  # asset belongs_to: issue
-  issue: Issue!
-  # asset belongs_to: printer
-  printer: Entity! @relation(name: "PrintedAssets")
 
   rooms: [Room!]! @relation(name: "AssetRooms")
 
@@ -89,5 +58,5 @@ type Room {
   y: Int!
 
   exhibition: Exhibition! @relation(name: "ExhibitionRooms")
-  assets: [Asset!]! @relation(name: "AssetRooms", link: TABLE)
+  asset: Asset! @relation(name: "AssetRooms")
 }

@@ -49,7 +49,8 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   font-size: 1rem;
   padding: 0.75rem;
 
-  white-space: nowrap;
+  background: ${fromTheme("panel")};
+  color: ${fromTheme("panelText")};
 
   cursor: pointer;
   border: 4px solid ${fromTheme("primary")};
@@ -68,6 +69,8 @@ const Inner = styled(animated.div)`
   padding: 0.5rem;
   border: 4px solid ${fromTheme("primary")};
   height: 100%;
+  background: ${fromTheme("panel")};
+  color: ${fromTheme("panelText")};
 `;
 
 const PanelContentElement = styled.div`
