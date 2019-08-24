@@ -7,7 +7,8 @@ import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import ArtworkMetadata from "components/ArtworkMetadata"
-import AudioComponent from "components/AudioComponent"
+{/*import AudioComponent from "components/AudioComponent"*/}
+import ExhibitionTimes from "components/ExhibitionTimesComponent";
 
 export default function Home() {
   const [isPanelOpen, setPanelState, hydrated] = PanelState.useContainer();
@@ -34,6 +35,7 @@ export default function Home() {
           <div key={show.number}>
             <Link to={`/${format(exhibition.number, show.number)}`}>
               {show.number}: {show.opensAt} -> {show.closesAt}
+              <ExhibitionTimes opensAt={show.opensAt} closesAt={show.closesAt}></ExhibitionTimes>
             </Link>
           </div>
         ))}
@@ -50,7 +52,7 @@ export default function Home() {
         <h1>dot.gallery</h1>
         <ArtworkMetadata artistName="test"/>
       </PanelContent.Source>
-      <AudioComponent />
+      {/*<AudioComponent />*/}
     </div>
   );
 }
