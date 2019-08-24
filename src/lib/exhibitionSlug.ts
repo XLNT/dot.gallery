@@ -1,6 +1,8 @@
 const kSlugLength = 6; // e00s00
 
-export default (s: string) => {
+const pad = (s: number) => `00${s}`.slice(-2);
+
+export const parse = (s: string) => {
   if (!s || s.length !== kSlugLength) {
     return [];
   }
@@ -12,4 +14,8 @@ export default (s: string) => {
   } catch {
     return [];
   }
+};
+
+export const format = (e: number, s: number): string => {
+  return `e${pad(e)}s${pad(s)}`;
 };
