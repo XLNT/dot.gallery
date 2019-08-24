@@ -4,6 +4,7 @@ import { animated, useTransition } from "react-spring";
 import { parse } from "lib/exhibitionSlug";
 import Foyer from "./Foyer";
 import Gallery from "./Gallery";
+import GiftShop from "./GiftShop";
 import Preflight from "./Preflight";
 import React, { FunctionComponent, useMemo, useState } from "react";
 import styled from "styled-components";
@@ -27,6 +28,7 @@ const routes: { [_: number]: FunctionComponent<ExhibitionProps<any>> } = {
   [Flow.Preflight]: Preflight,
   [Flow.Foyer]: Foyer,
   [Flow.Gallery]: Gallery,
+  [Flow.GiftShop]: GiftShop,
 };
 
 export default function Exhibition({ match }: RouteComponentProps<{ slug: string }>) {

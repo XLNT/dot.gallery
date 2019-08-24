@@ -2,6 +2,7 @@ export enum Flow {
   Preflight,
   Foyer,
   Gallery,
+  GiftShop,
 }
 
 export type ExhibitionProps<T> = {

@@ -1,20 +1,18 @@
-import React from "react";
 import PresentPerson from "./PresentPersonComponent";
+import React from "react";
 
 export default class AudioComponent extends React.Component<any> {
   constructor(props) {
-    super(props)
-    this.state = {people: this.props.people}
+    super(props);
+    this.state = { people: this.props.people };
   }
   render() {
-    return(
+    return (
       <div>
-        {
-          this.props.people.map(person =>
-            <PresentPerson person={person}/>
-          )
-        }
+        {this.props.people.map(person => (
+          <PresentPerson person={person} />
+        ))}
       </div>
-    )
+    );
   }
 }

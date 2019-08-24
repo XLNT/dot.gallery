@@ -5,6 +5,7 @@ import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import React, { PropsWithChildren, useCallback } from "react";
 import arrow from "components/arrow.svg";
+import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
 
@@ -12,6 +13,7 @@ const Backboard = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  background: ${fromTheme("background")};
 `;
 
 const Content = styled(animated.div)`
@@ -50,7 +52,7 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   white-space: nowrap;
 
   cursor: pointer;
-  border: 4px solid black;
+  border: 4px solid ${fromTheme("primary")};
 
   transition: transform 0.1s ease-in;
 
@@ -64,7 +66,7 @@ const Inner = styled(animated.div)`
   position: relative;
 
   padding: 0.5rem;
-  border: 4px solid black;
+  border: 4px solid ${fromTheme("primary")};
   height: 100%;
 `;
 
