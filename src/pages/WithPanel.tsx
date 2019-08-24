@@ -86,7 +86,6 @@ export default function Panel({ children }: PropsWithChildren<void>) {
     width: showPanel ? panelWidth || 0 : 0,
     deg: showPanel ? 90 : -90,
     from: {
-      width: document.body.clientWidth,
       x: document.body.clientWidth,
     },
   });
