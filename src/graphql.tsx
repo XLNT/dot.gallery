@@ -519,8 +519,6 @@ export type Exhibition = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
-  opensAt: Scalars['DateTime'],
-  closesAt: Scalars['DateTime'],
   shows?: Maybe<Array<Show>>,
   rooms?: Maybe<Array<Room>>,
   createdAt: Scalars['DateTime'],
@@ -562,8 +560,6 @@ export type ExhibitionCreateInput = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt: Scalars['DateTime'],
-  closesAt: Scalars['DateTime'],
   shows?: Maybe<ShowCreateManyWithoutExhibitionInput>,
   rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>,
 };
@@ -584,8 +580,6 @@ export type ExhibitionCreateWithoutRoomsInput = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt: Scalars['DateTime'],
-  closesAt: Scalars['DateTime'],
   shows?: Maybe<ShowCreateManyWithoutExhibitionInput>,
 };
 
@@ -595,8 +589,6 @@ export type ExhibitionCreateWithoutShowsInput = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt: Scalars['DateTime'],
-  closesAt: Scalars['DateTime'],
   rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>,
 };
 
@@ -617,10 +609,6 @@ export enum ExhibitionOrderByInput {
   ThemeDesc = 'theme_DESC',
   ExtentAsc = 'extent_ASC',
   ExtentDesc = 'extent_DESC',
-  OpensAtAsc = 'opensAt_ASC',
-  OpensAtDesc = 'opensAt_DESC',
-  ClosesAtAsc = 'closesAt_ASC',
-  ClosesAtDesc = 'closesAt_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -634,8 +622,6 @@ export type ExhibitionPreviousValues = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
-  opensAt: Scalars['DateTime'],
-  closesAt: Scalars['DateTime'],
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -664,8 +650,6 @@ export type ExhibitionUpdateInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
   shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>,
   rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>,
 };
@@ -675,8 +659,6 @@ export type ExhibitionUpdateManyMutationInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
 };
 
 export type ExhibitionUpdateOneRequiredWithoutRoomsInput = {
@@ -698,8 +680,6 @@ export type ExhibitionUpdateWithoutRoomsDataInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
   shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>,
 };
 
@@ -708,8 +688,6 @@ export type ExhibitionUpdateWithoutShowsDataInput = {
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
   rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>,
 };
 
@@ -768,22 +746,6 @@ export type ExhibitionWhereInput = {
   extent_lte?: Maybe<Scalars['Int']>,
   extent_gt?: Maybe<Scalars['Int']>,
   extent_gte?: Maybe<Scalars['Int']>,
-  opensAt?: Maybe<Scalars['DateTime']>,
-  opensAt_not?: Maybe<Scalars['DateTime']>,
-  opensAt_in?: Maybe<Array<Scalars['DateTime']>>,
-  opensAt_not_in?: Maybe<Array<Scalars['DateTime']>>,
-  opensAt_lt?: Maybe<Scalars['DateTime']>,
-  opensAt_lte?: Maybe<Scalars['DateTime']>,
-  opensAt_gt?: Maybe<Scalars['DateTime']>,
-  opensAt_gte?: Maybe<Scalars['DateTime']>,
-  closesAt?: Maybe<Scalars['DateTime']>,
-  closesAt_not?: Maybe<Scalars['DateTime']>,
-  closesAt_in?: Maybe<Array<Scalars['DateTime']>>,
-  closesAt_not_in?: Maybe<Array<Scalars['DateTime']>>,
-  closesAt_lt?: Maybe<Scalars['DateTime']>,
-  closesAt_lte?: Maybe<Scalars['DateTime']>,
-  closesAt_gt?: Maybe<Scalars['DateTime']>,
-  closesAt_gte?: Maybe<Scalars['DateTime']>,
   shows_every?: Maybe<ShowWhereInput>,
   shows_some?: Maybe<ShowWhereInput>,
   shows_none?: Maybe<ShowWhereInput>,
@@ -1794,7 +1756,7 @@ export type CurrentExhibitionQuery = (
   { __typename?: 'Query' }
   & { exhibitions: Array<Maybe<(
     { __typename?: 'Exhibition' }
-    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme' | 'opensAt' | 'closesAt'>
+    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme'>
     & { shows: Maybe<Array<(
       { __typename?: 'Show' }
       & Pick<Show, 'id' | 'number' | 'opensAt' | 'closesAt'>
@@ -1811,14 +1773,12 @@ export type CurrentExhibitionQuery = (
 
 export const CurrentExhibitionDocument = gql`
     query CurrentExhibition {
-  exhibitions(last: 1, orderBy: opensAt_DESC) {
+  exhibitions(last: 1, orderBy: number_DESC) {
     id
     title
     number
     extent
     theme
-    opensAt
-    closesAt
     shows {
       id
       number

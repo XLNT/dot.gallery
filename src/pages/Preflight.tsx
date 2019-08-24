@@ -4,6 +4,7 @@ import PanelContent from "context/PanelContent";
 import React, { useCallback } from "react";
 import WithContentTransition from "components/WithContentTransition";
 import styled from "styled-components";
+import timeout from "lib/timeout";
 
 const Container = styled.div`
   display: flex;
@@ -12,8 +13,9 @@ const Container = styled.div`
 
 export default function Preflight({ exhibition, show, setFlow }: ExhibitionProps<void>) {
   const { setFullscreen } = Fullscreen.useContainer();
-  const goFoyer = useCallback(() => {
-    setFullscreen(true);
+  const goFoyer = useCallback(async () => {
+    process.env.NODE_ENV !== "development" && setFullscreen(true);
+    await timeout(2000);
     setFlow(Flow.Foyer);
   }, [setFlow, setFullscreen]);
 

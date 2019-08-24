@@ -469,8 +469,6 @@ type Exhibition {
   number: Int!
   theme: Json
   extent: Int!
-  opensAt: DateTime!
-  closesAt: DateTime!
   shows(where: ShowWhereInput, orderBy: ShowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Show!]
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   createdAt: DateTime!
@@ -489,8 +487,6 @@ input ExhibitionCreateInput {
   number: Int!
   theme: Json
   extent: Int
-  opensAt: DateTime!
-  closesAt: DateTime!
   shows: ShowCreateManyWithoutExhibitionInput
   rooms: RoomCreateManyWithoutExhibitionInput
 }
@@ -511,8 +507,6 @@ input ExhibitionCreateWithoutRoomsInput {
   number: Int!
   theme: Json
   extent: Int
-  opensAt: DateTime!
-  closesAt: DateTime!
   shows: ShowCreateManyWithoutExhibitionInput
 }
 
@@ -522,8 +516,6 @@ input ExhibitionCreateWithoutShowsInput {
   number: Int!
   theme: Json
   extent: Int
-  opensAt: DateTime!
-  closesAt: DateTime!
   rooms: RoomCreateManyWithoutExhibitionInput
 }
 
@@ -543,10 +535,6 @@ enum ExhibitionOrderByInput {
   theme_DESC
   extent_ASC
   extent_DESC
-  opensAt_ASC
-  opensAt_DESC
-  closesAt_ASC
-  closesAt_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -559,8 +547,6 @@ type ExhibitionPreviousValues {
   number: Int!
   theme: Json
   extent: Int!
-  opensAt: DateTime!
-  closesAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -588,8 +574,6 @@ input ExhibitionUpdateInput {
   number: Int
   theme: Json
   extent: Int
-  opensAt: DateTime
-  closesAt: DateTime
   shows: ShowUpdateManyWithoutExhibitionInput
   rooms: RoomUpdateManyWithoutExhibitionInput
 }
@@ -599,8 +583,6 @@ input ExhibitionUpdateManyMutationInput {
   number: Int
   theme: Json
   extent: Int
-  opensAt: DateTime
-  closesAt: DateTime
 }
 
 input ExhibitionUpdateOneRequiredWithoutRoomsInput {
@@ -622,8 +604,6 @@ input ExhibitionUpdateWithoutRoomsDataInput {
   number: Int
   theme: Json
   extent: Int
-  opensAt: DateTime
-  closesAt: DateTime
   shows: ShowUpdateManyWithoutExhibitionInput
 }
 
@@ -632,8 +612,6 @@ input ExhibitionUpdateWithoutShowsDataInput {
   number: Int
   theme: Json
   extent: Int
-  opensAt: DateTime
-  closesAt: DateTime
   rooms: RoomUpdateManyWithoutExhibitionInput
 }
 
@@ -692,22 +670,6 @@ input ExhibitionWhereInput {
   extent_lte: Int
   extent_gt: Int
   extent_gte: Int
-  opensAt: DateTime
-  opensAt_not: DateTime
-  opensAt_in: [DateTime!]
-  opensAt_not_in: [DateTime!]
-  opensAt_lt: DateTime
-  opensAt_lte: DateTime
-  opensAt_gt: DateTime
-  opensAt_gte: DateTime
-  closesAt: DateTime
-  closesAt_not: DateTime
-  closesAt_in: [DateTime!]
-  closesAt_not_in: [DateTime!]
-  closesAt_lt: DateTime
-  closesAt_lte: DateTime
-  closesAt_gt: DateTime
-  closesAt_gte: DateTime
   shows_every: ShowWhereInput
   shows_some: ShowWhereInput
   shows_none: ShowWhereInput

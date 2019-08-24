@@ -1,12 +1,10 @@
 query CurrentExhibition {
-  exhibitions(last: 1, orderBy: opensAt_DESC) {
+  exhibitions(last: 1, orderBy: number_DESC) {
     id
     title
     number
     extent
     theme
-    opensAt
-    closesAt
 
     shows {
       id

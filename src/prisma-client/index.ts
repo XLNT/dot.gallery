@@ -314,10 +314,6 @@ export type ExhibitionOrderByInput =
   | "theme_DESC"
   | "extent_ASC"
   | "extent_DESC"
-  | "opensAt_ASC"
-  | "opensAt_DESC"
-  | "closesAt_ASC"
-  | "closesAt_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -547,22 +543,6 @@ export interface ExhibitionWhereInput {
   extent_lte?: Maybe<Int>;
   extent_gt?: Maybe<Int>;
   extent_gte?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  opensAt_not?: Maybe<DateTimeInput>;
-  opensAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  opensAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  opensAt_lt?: Maybe<DateTimeInput>;
-  opensAt_lte?: Maybe<DateTimeInput>;
-  opensAt_gt?: Maybe<DateTimeInput>;
-  opensAt_gte?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
-  closesAt_not?: Maybe<DateTimeInput>;
-  closesAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  closesAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  closesAt_lt?: Maybe<DateTimeInput>;
-  closesAt_lte?: Maybe<DateTimeInput>;
-  closesAt_gt?: Maybe<DateTimeInput>;
-  closesAt_gte?: Maybe<DateTimeInput>;
   shows_every?: Maybe<ShowWhereInput>;
   shows_some?: Maybe<ShowWhereInput>;
   shows_none?: Maybe<ShowWhereInput>;
@@ -713,8 +693,6 @@ export interface ExhibitionCreateWithoutRoomsInput {
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt: DateTimeInput;
-  closesAt: DateTimeInput;
   shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
 }
 
@@ -799,8 +777,6 @@ export interface ExhibitionUpdateWithoutRoomsDataInput {
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
   shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
 }
 
@@ -1120,8 +1096,6 @@ export interface ExhibitionCreateInput {
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt: DateTimeInput;
-  closesAt: DateTimeInput;
   shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
   rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
 }
@@ -1157,8 +1131,6 @@ export interface ExhibitionUpdateInput {
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
   shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
   rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
 }
@@ -1225,8 +1197,6 @@ export interface ExhibitionUpdateManyMutationInput {
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
 }
 
 export interface RoomCreateInput {
@@ -1271,8 +1241,6 @@ export interface ExhibitionCreateWithoutShowsInput {
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt: DateTimeInput;
-  closesAt: DateTimeInput;
   rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
 }
 
@@ -1295,8 +1263,6 @@ export interface ExhibitionUpdateWithoutShowsDataInput {
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
   rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
 }
 
@@ -1545,8 +1511,6 @@ export interface Exhibition {
   number: Int;
   theme?: Json;
   extent: Int;
-  opensAt: DateTimeOutput;
-  closesAt: DateTimeOutput;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1557,8 +1521,6 @@ export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
   shows: <T = FragmentableArray<Show>>(args?: {
     where?: ShowWhereInput;
     orderBy?: ShowOrderByInput;
@@ -1589,8 +1551,6 @@ export interface ExhibitionSubscription
   number: () => Promise<AsyncIterator<Int>>;
   theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;
-  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   shows: <T = Promise<AsyncIterator<ShowSubscription>>>(args?: {
     where?: ShowWhereInput;
     orderBy?: ShowOrderByInput;
@@ -1621,8 +1581,6 @@ export interface ExhibitionNullablePromise
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
   shows: <T = FragmentableArray<Show>>(args?: {
     where?: ShowWhereInput;
     orderBy?: ShowOrderByInput;
@@ -2133,8 +2091,6 @@ export interface ExhibitionPreviousValues {
   number: Int;
   theme?: Json;
   extent: Int;
-  opensAt: DateTimeOutput;
-  closesAt: DateTimeOutput;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2147,8 +2103,6 @@ export interface ExhibitionPreviousValuesPromise
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2161,8 +2115,6 @@ export interface ExhibitionPreviousValuesSubscription
   number: () => Promise<AsyncIterator<Int>>;
   theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;
-  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }

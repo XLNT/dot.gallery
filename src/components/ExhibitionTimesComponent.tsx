@@ -1,12 +1,24 @@
 import { DateTime } from "luxon";
+import { ShowState, getShowState } from "lib/shows";
+import { format } from "lib/exhibitionSlug";
 import CalendarSvg from "components/calendar.svg";
 import React, { useCallback, useMemo } from "react";
+import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
+import useCurrentExhibition from "hook/useCurrentExhibition";
+import useRouter from "context/useRouter";
 
 const Container = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  margin-bottom: 3rem;
+
+  transition: color 100ms linear;
+  &:hover {
+    color: ${fromTheme("secondary")};
+  }
 `;
 
 const OpenDate = styled.div`
@@ -19,6 +31,7 @@ const OpenDate = styled.div`
 const OpenTime = styled.div`
   font-weight: bold;
   font-size: 4.5rem;
+  text-transform: uppercase;
 `;
 
 const Calendar = styled.img`
@@ -34,8 +47,10 @@ const Calendar = styled.img`
   }
 `;
 
-export default function ExhibitionTimes({ opensAt, closesAt, ...rest }: any) {
-  const opensAtDate = useMemo(() => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_HUGE), [
+export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: any) {
+  const { history } = useRouter();
+  const { exhibition } = useCurrentExhibition();
+  const opensAtDate = useMemo(() => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_MED), [
     opensAt,
   ]);
   const opensAtTime = useMemo(
@@ -51,13 +66,23 @@ export default function ExhibitionTimes({ opensAt, closesAt, ...rest }: any) {
     e.stopPropagation();
   }, []);
 
+  const showState = getShowState(opensAt, closesAt);
+
+  const goExhibition = useCallback(() => history.push(`/${format(exhibition.number, number)}`), [
+    exhibition.number,
+    history,
+    number,
+  ]);
+
+  const goRequest = useCallback(() => {}, []);
+
   return (
-    <Container {...rest}>
+    <Container {...rest} onClick={showState === ShowState.Open ? goExhibition : goRequest}>
       <OpenDate>
-        open {opensAtDate} <Calendar onClick={goCalendar} src={CalendarSvg} />
+        opens {opensAtDate} <Calendar onClick={goCalendar} src={CalendarSvg} />
       </OpenDate>
       <OpenTime>
-        {opensAtTime}-{closesAtTime}
+        {showState === ShowState.Open ? "Enter" : `${opensAtTime}-${closesAtTime}`}
       </OpenTime>
     </Container>
   );

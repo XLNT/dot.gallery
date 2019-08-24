@@ -29,8 +29,6 @@ type Exhibition {
   number: Int! @unique
   theme: Json
   extent: Int! @default(value: 7)
-  opensAt: DateTime!
-  closesAt: DateTime!
 
   shows: [Show!]!
   rooms: [Room!]! @relation(name: "ExhibitionRooms")
