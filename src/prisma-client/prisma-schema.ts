@@ -465,6 +465,7 @@ input EntityWhereUniqueInput {
 
 type Exhibition {
   id: ID!
+  title: String!
   number: Int!
   theme: Json
   extent: Int!
@@ -484,6 +485,7 @@ type ExhibitionConnection {
 
 input ExhibitionCreateInput {
   id: ID
+  title: String!
   number: Int!
   theme: Json
   extent: Int
@@ -505,6 +507,7 @@ input ExhibitionCreateOneWithoutShowsInput {
 
 input ExhibitionCreateWithoutRoomsInput {
   id: ID
+  title: String!
   number: Int!
   theme: Json
   extent: Int
@@ -515,6 +518,7 @@ input ExhibitionCreateWithoutRoomsInput {
 
 input ExhibitionCreateWithoutShowsInput {
   id: ID
+  title: String!
   number: Int!
   theme: Json
   extent: Int
@@ -531,6 +535,8 @@ type ExhibitionEdge {
 enum ExhibitionOrderByInput {
   id_ASC
   id_DESC
+  title_ASC
+  title_DESC
   number_ASC
   number_DESC
   theme_ASC
@@ -549,6 +555,7 @@ enum ExhibitionOrderByInput {
 
 type ExhibitionPreviousValues {
   id: ID!
+  title: String!
   number: Int!
   theme: Json
   extent: Int!
@@ -577,6 +584,7 @@ input ExhibitionSubscriptionWhereInput {
 }
 
 input ExhibitionUpdateInput {
+  title: String
   number: Int
   theme: Json
   extent: Int
@@ -587,6 +595,7 @@ input ExhibitionUpdateInput {
 }
 
 input ExhibitionUpdateManyMutationInput {
+  title: String
   number: Int
   theme: Json
   extent: Int
@@ -609,6 +618,7 @@ input ExhibitionUpdateOneRequiredWithoutShowsInput {
 }
 
 input ExhibitionUpdateWithoutRoomsDataInput {
+  title: String
   number: Int
   theme: Json
   extent: Int
@@ -618,6 +628,7 @@ input ExhibitionUpdateWithoutRoomsDataInput {
 }
 
 input ExhibitionUpdateWithoutShowsDataInput {
+  title: String
   number: Int
   theme: Json
   extent: Int
@@ -651,6 +662,20 @@ input ExhibitionWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
   number: Int
   number_not: Int
   number_in: [Int!]

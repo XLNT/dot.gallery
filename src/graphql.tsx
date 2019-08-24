@@ -515,6 +515,7 @@ export type EntityWhereUniqueInput = {
 export type Exhibition = {
   __typename?: 'Exhibition',
   id: Scalars['ID'],
+  title: Scalars['String'],
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
@@ -557,6 +558,7 @@ export type ExhibitionConnection = {
 
 export type ExhibitionCreateInput = {
   id?: Maybe<Scalars['ID']>,
+  title: Scalars['String'],
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -578,6 +580,7 @@ export type ExhibitionCreateOneWithoutShowsInput = {
 
 export type ExhibitionCreateWithoutRoomsInput = {
   id?: Maybe<Scalars['ID']>,
+  title: Scalars['String'],
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -588,6 +591,7 @@ export type ExhibitionCreateWithoutRoomsInput = {
 
 export type ExhibitionCreateWithoutShowsInput = {
   id?: Maybe<Scalars['ID']>,
+  title: Scalars['String'],
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -605,6 +609,8 @@ export type ExhibitionEdge = {
 export enum ExhibitionOrderByInput {
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
   NumberAsc = 'number_ASC',
   NumberDesc = 'number_DESC',
   ThemeAsc = 'theme_ASC',
@@ -624,6 +630,7 @@ export enum ExhibitionOrderByInput {
 export type ExhibitionPreviousValues = {
   __typename?: 'ExhibitionPreviousValues',
   id: Scalars['ID'],
+  title: Scalars['String'],
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
@@ -653,6 +660,7 @@ export type ExhibitionSubscriptionWhereInput = {
 };
 
 export type ExhibitionUpdateInput = {
+  title?: Maybe<Scalars['String']>,
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -663,6 +671,7 @@ export type ExhibitionUpdateInput = {
 };
 
 export type ExhibitionUpdateManyMutationInput = {
+  title?: Maybe<Scalars['String']>,
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -685,6 +694,7 @@ export type ExhibitionUpdateOneRequiredWithoutShowsInput = {
 };
 
 export type ExhibitionUpdateWithoutRoomsDataInput = {
+  title?: Maybe<Scalars['String']>,
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -694,6 +704,7 @@ export type ExhibitionUpdateWithoutRoomsDataInput = {
 };
 
 export type ExhibitionUpdateWithoutShowsDataInput = {
+  title?: Maybe<Scalars['String']>,
   number?: Maybe<Scalars['Int']>,
   theme?: Maybe<Scalars['Json']>,
   extent?: Maybe<Scalars['Int']>,
@@ -727,6 +738,20 @@ export type ExhibitionWhereInput = {
   id_not_starts_with?: Maybe<Scalars['ID']>,
   id_ends_with?: Maybe<Scalars['ID']>,
   id_not_ends_with?: Maybe<Scalars['ID']>,
+  title?: Maybe<Scalars['String']>,
+  title_not?: Maybe<Scalars['String']>,
+  title_in?: Maybe<Array<Scalars['String']>>,
+  title_not_in?: Maybe<Array<Scalars['String']>>,
+  title_lt?: Maybe<Scalars['String']>,
+  title_lte?: Maybe<Scalars['String']>,
+  title_gt?: Maybe<Scalars['String']>,
+  title_gte?: Maybe<Scalars['String']>,
+  title_contains?: Maybe<Scalars['String']>,
+  title_not_contains?: Maybe<Scalars['String']>,
+  title_starts_with?: Maybe<Scalars['String']>,
+  title_not_starts_with?: Maybe<Scalars['String']>,
+  title_ends_with?: Maybe<Scalars['String']>,
+  title_not_ends_with?: Maybe<Scalars['String']>,
   number?: Maybe<Scalars['Int']>,
   number_not?: Maybe<Scalars['Int']>,
   number_in?: Maybe<Array<Scalars['Int']>>,
@@ -1769,7 +1794,7 @@ export type CurrentExhibitionQuery = (
   { __typename?: 'Query' }
   & { exhibitions: Array<Maybe<(
     { __typename?: 'Exhibition' }
-    & Pick<Exhibition, 'id' | 'number' | 'extent' | 'theme' | 'opensAt' | 'closesAt'>
+    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme' | 'opensAt' | 'closesAt'>
     & { shows: Maybe<Array<(
       { __typename?: 'Show' }
       & Pick<Show, 'id' | 'number' | 'opensAt' | 'closesAt'>
@@ -1788,6 +1813,7 @@ export const CurrentExhibitionDocument = gql`
     query CurrentExhibition {
   exhibitions(last: 1, orderBy: opensAt_DESC) {
     id
+    title
     number
     extent
     theme
@@ -1819,6 +1845,6 @@ export const CurrentExhibitionDocument = gql`
       export function useCurrentExhibitionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>) {
         return ApolloReactHooks.useLazyQuery<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>(CurrentExhibitionDocument, baseOptions);
       };
-
+      
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;

@@ -306,6 +306,8 @@ export type EntityOrderByInput =
 export type ExhibitionOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "title_ASC"
+  | "title_DESC"
   | "number_ASC"
   | "number_DESC"
   | "theme_ASC"
@@ -515,6 +517,20 @@ export interface ExhibitionWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
   number?: Maybe<Int>;
   number_not?: Maybe<Int>;
   number_in?: Maybe<Int[] | Int>;
@@ -693,6 +709,7 @@ export interface ExhibitionCreateOneWithoutRoomsInput {
 
 export interface ExhibitionCreateWithoutRoomsInput {
   id?: Maybe<ID_Input>;
+  title: String;
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -778,6 +795,7 @@ export interface ExhibitionUpdateOneRequiredWithoutRoomsInput {
 }
 
 export interface ExhibitionUpdateWithoutRoomsDataInput {
+  title?: Maybe<String>;
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1098,6 +1116,7 @@ export interface EntityUpdateManyMutationInput {
 
 export interface ExhibitionCreateInput {
   id?: Maybe<ID_Input>;
+  title: String;
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1134,6 +1153,7 @@ export interface AssetCreateWithoutRoomsInput {
 }
 
 export interface ExhibitionUpdateInput {
+  title?: Maybe<String>;
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1201,6 +1221,7 @@ export interface RoomUpsertWithWhereUniqueWithoutExhibitionInput {
 }
 
 export interface ExhibitionUpdateManyMutationInput {
+  title?: Maybe<String>;
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1246,6 +1267,7 @@ export interface ExhibitionCreateOneWithoutShowsInput {
 
 export interface ExhibitionCreateWithoutShowsInput {
   id?: Maybe<ID_Input>;
+  title: String;
   number: Int;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1269,6 +1291,7 @@ export interface ExhibitionUpdateOneRequiredWithoutShowsInput {
 }
 
 export interface ExhibitionUpdateWithoutShowsDataInput {
+  title?: Maybe<String>;
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
@@ -1518,6 +1541,7 @@ export interface RoomNullablePromise
 
 export interface Exhibition {
   id: ID_Output;
+  title: String;
   number: Int;
   theme?: Json;
   extent: Int;
@@ -1529,6 +1553,7 @@ export interface Exhibition {
 
 export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
@@ -1560,6 +1585,7 @@ export interface ExhibitionSubscription
   extends Promise<AsyncIterator<Exhibition>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   number: () => Promise<AsyncIterator<Int>>;
   theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;
@@ -1591,6 +1617,7 @@ export interface ExhibitionNullablePromise
   extends Promise<Exhibition | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
@@ -2102,6 +2129,7 @@ export interface ExhibitionSubscriptionPayloadSubscription
 
 export interface ExhibitionPreviousValues {
   id: ID_Output;
+  title: String;
   number: Int;
   theme?: Json;
   extent: Int;
@@ -2115,6 +2143,7 @@ export interface ExhibitionPreviousValuesPromise
   extends Promise<ExhibitionPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
   number: () => Promise<Int>;
   theme: () => Promise<Json>;
   extent: () => Promise<Int>;
@@ -2128,6 +2157,7 @@ export interface ExhibitionPreviousValuesSubscription
   extends Promise<AsyncIterator<ExhibitionPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
   number: () => Promise<AsyncIterator<Int>>;
   theme: () => Promise<AsyncIterator<Json>>;
   extent: () => Promise<AsyncIterator<Int>>;

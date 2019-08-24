@@ -1,6 +1,7 @@
 query CurrentExhibition {
   exhibitions(last: 1, orderBy: opensAt_DESC) {
     id
+    title
     number
     extent
     theme

@@ -21,8 +21,6 @@ const InnerExitProposal = styled.div`
   border: 4px solid ${fromTheme("primary")};
   padding: 0.75rem;
   background: #fff;
-
-  font-family: ${fromTheme("fontFamily")};
 `;
 
 const Journey = styled.div`
@@ -60,7 +58,6 @@ const ExitButton = styled.div`
   align-items: center;
   background-color: ${fromTheme("secondary")};
   color: ${fromTheme("secondaryText")};
-  font-family: ${fromTheme("fontFamily")};
   text-transform: uppercase;
 `;
 

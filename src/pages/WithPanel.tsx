@@ -76,7 +76,6 @@ const Inner = styled.div`
 `;
 
 const PanelActionText = styled.div`
-  font-family: ${fromTheme("fontFamily")};
   color: ${fromTheme("panelText")};
   display: ${({ isOpen }) => (isOpen ? "none" : "inherit")};
 `;

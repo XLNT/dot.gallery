@@ -1,26 +1,36 @@
-import { Link } from "react-router-dom";
 import { format } from "lib/exhibitionSlug";
+import ExhibitionTimes from "components/ExhibitionTimesComponent";
+import LoginComponent from "../components/LoginComponent";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React from "react";
-{
-  /*import AudioComponent from "components/AudioComponent"*/
-}
-import ExhibitionTimes from "components/ExhibitionTimesComponent";
-import LoginComponent from "../components/LoginComponent";
 import RichText from "@madebyconnor/rich-text-to-jsx";
 import WithContentTransition from "components/WithContentTransition";
 import contentful from "client/contentful";
+import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import usePromise from "react-use-promise";
+import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const ABOUT_ID = "3myaHf3JO0keiFVJvbvgL4";
+
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ExhibitionTitle = styled.h1`
+  font-size: 3rem;
+`;
 
 export default function Home() {
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
+  const { history } = useRouter();
 
   const renderExhibitionInfo = () => {
     if (loading) {
@@ -37,13 +47,17 @@ export default function Home() {
 
     return (
       <>
-        <h1>Exhibition {exhibition.number}</h1>
+        <ExhibitionTitle>
+          {format(exhibition.number)}: {exhibition.title}
+        </ExhibitionTitle>
+
         {exhibition.shows.map(show => (
           <div key={show.number}>
-            <Link to={`/${format(exhibition.number, show.number)}`}>
-              {show.number}: {show.opensAt} -> {show.closesAt}
-              <ExhibitionTimes opensAt={show.opensAt} closesAt={show.closesAt}></ExhibitionTimes>
-            </Link>
+            <ExhibitionTimes
+              onClick={() => history.push(`/${format(exhibition.number, show.number)}`)}
+              opensAt={show.opensAt}
+              closesAt={show.closesAt}
+            ></ExhibitionTimes>
           </div>
         ))}
       </>
@@ -51,8 +65,7 @@ export default function Home() {
   };
 
   return (
-    <div>
-      This is the Home page.
+    <Container>
       {renderExhibitionInfo()}
       <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
@@ -67,6 +80,6 @@ export default function Home() {
       </PanelContent.Source>
       <LoginComponent ticketPrice="200" remainingTicketCount="45" />
       {/*<AudioComponent />*/}
-    </div>
+    </Container>
   );
 }

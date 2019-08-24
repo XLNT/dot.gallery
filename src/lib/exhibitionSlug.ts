@@ -8,7 +8,10 @@ export const parse = (s: string) => {
   }
 
   try {
-    const parts = s.slice(1).split("s");
+    const parts = s
+      .slice(1)
+      .toLowerCase()
+      .split("s");
 
     return parts.map(sn => parseInt(sn, 10));
   } catch {
@@ -16,6 +19,6 @@ export const parse = (s: string) => {
   }
 };
 
-export const format = (e: number, s: number): string => {
-  return `e${pad(e)}s${pad(s)}`;
+export const format = (e: number, s?: number): string => {
+  return `E${pad(e)}${s ? `S${pad(s)}` : ""}`;
 };
