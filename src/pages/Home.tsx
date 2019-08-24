@@ -9,6 +9,7 @@ import PanelState from "context/PanelState";
 import ArtworkMetadata from "components/ArtworkMetadata"
 {/*import AudioComponent from "components/AudioComponent"*/}
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
+import LoginComponent from "../components/LoginComponent";
 
 export default function Home() {
   const [isPanelOpen, setPanelState, hydrated] = PanelState.useContainer();
@@ -52,6 +53,7 @@ export default function Home() {
         <h1>dot.gallery</h1>
         <ArtworkMetadata artistName="test"/>
       </PanelContent.Source>
+      <LoginComponent ticketPrice="200" remainingTicketCount="45"/>
       {/*<AudioComponent />*/}
     </div>
   );
