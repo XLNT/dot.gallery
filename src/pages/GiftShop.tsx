@@ -24,7 +24,7 @@ const contractAddress = "0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF";
 const abi = ["function awardItem(address visitor, string tokenURI) public returns (uint256)"];
 
 const provider = new providers.JsonRpcProvider({
-  url: "http://165.22.137.3:10178",
+  url: "https://165.22.137.3:10183",
   allowInsecure: true,
 });
 
