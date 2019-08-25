@@ -1,8 +1,6 @@
 import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { get } from "lodash-es";
-import { useEntityQuery } from "graphql";
-import EntityId from "context/EntityId";
+import AssetDragLayer from "./Gallery/AssetDragLayer";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import Layer from "components/Layer";
@@ -15,17 +13,11 @@ import useEntityAssets from "hook/useEntityAssets";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
-const Backboard = styled.div`
-  position: relative;
-  flex: 1;
-`;
-
 const Canvas = styled(Layer)`
-  z-index: 6;
   display: flex;
 `;
 
-const InnerCanvas = styled.div`
+const InnerCanvas = styled(Layer)`
   flex: 1;
   margin: 5rem;
 
@@ -71,12 +63,11 @@ export default function Gallery(props: ExhibitionProps<void>) {
   );
 
   return (
-    <Backboard>
-      <Canvas>
-        <JourneyAndExit {...props} />
-        <SocialLayer />
-        <InnerCanvas>{room && <Room room={room} />}</InnerCanvas>
-      </Canvas>
-    </Backboard>
+    <Canvas>
+      <JourneyAndExit {...props} />
+      <InnerCanvas>{room && <Room room={room} />}</InnerCanvas>
+      <SocialLayer />
+      <AssetDragLayer />
+    </Canvas>
   );
 }

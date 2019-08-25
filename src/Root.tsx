@@ -6,11 +6,13 @@ import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import React from "react";
 
+import { DndProvider } from "react-dnd";
 import EntityId from "context/EntityId";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
+import HTML5Backend from "react-dnd-html5-backend";
 import Home from "pages/Home";
 import Journey from "context/Journey";
 import PanelState from "context/PanelState";
@@ -35,6 +37,7 @@ const Providers = nest([
   EntityId.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
+  DndProvider,
 ]);
 
 function Root() {
@@ -42,7 +45,7 @@ function Root() {
 
   return (
     <>
-      <Providers theme={theme} client={client}>
+      <Providers theme={theme} client={client} backend={HTML5Backend}>
         <>
           <GlobalStyle />
           <WithPanel>

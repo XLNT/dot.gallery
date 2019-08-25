@@ -17,7 +17,6 @@ const Backboard = styled.div`
 `;
 
 const Content = styled(animated.div)`
-  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -42,7 +41,7 @@ const PanelContainer = styled(animated.div)`
 const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   <animated.span {...props} />
 ))`
-  z-index: 9;
+  z-index: 10;
   position: absolute;
   bottom: -1.75rem;
   right: calc(1rem + ${({ panelWidth }) => panelWidth}px);

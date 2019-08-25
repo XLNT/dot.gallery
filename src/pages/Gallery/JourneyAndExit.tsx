@@ -7,9 +7,10 @@ import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
 
 const ExitLayer = styled(Layer)`
-  z-index: 5;
   display: flex;
   justify-content: center;
+
+  visibility: ${({ proposingExit }) => (proposingExit ? "inherit" : "none")};
 `;
 
 const ExitProposal = styled(animated.div)`
@@ -24,7 +25,6 @@ const InnerExitProposal = styled.div`
 `;
 
 const Journey = styled.div`
-  z-index: 6;
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -115,7 +115,7 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
 
   return (
     <>
-      <ExitLayer>
+      <ExitLayer proposingExit={proposingExit}>
         <ExitProposal
           ref={proposalRef}
           style={{ transform: y.interpolate(y => `translateY(${y}px)`) }}

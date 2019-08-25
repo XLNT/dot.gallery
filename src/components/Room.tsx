@@ -1,7 +1,17 @@
-import { Asset as AssetModel, Room as RoomModel } from "graphql";
+import {
+  Asset as AssetModel,
+  Room as RoomModel,
+  useCreateAssetMutation,
+  useDeleteAssetMutation,
+} from "graphql";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import { animated, useSpring } from "react-spring";
+import { isEmpty } from "lodash-es";
+import DragTypes from "lib/dragTypes";
+import EntityId from "context/EntityId";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
-import React from "react";
+import React, { useCallback } from "react";
 import RichText from "@madebyconnor/rich-text-to-jsx";
 import WithContentTransition from "./WithContentTransition";
 import contentful from "client/contentful";
@@ -14,12 +24,10 @@ interface RoomProps {
 
 const Container = styled.div`
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  perspective: 1000px;
 `;
 
-const Work = styled.div`
+const Work = styled(animated.div)`
   background-image: ${({ src }) => `url(${src})`};
   width: 100%;
   height: 100%;
@@ -28,16 +36,40 @@ const Work = styled.div`
   background-position: 50% 50%;
 `;
 
+const collect = (monitor: DropTargetMonitor) => ({
+  isOver: monitor.isOver(),
+});
+
 export default function Room({ room }: RoomProps) {
+  const [entityId] = EntityId.useContainer();
+  const [createAsset] = useCreateAssetMutation({
+    variables: { ownerId: entityId, uri: room.asset.uri },
+  });
+  const [deleteAsset] = useDeleteAssetMutation();
   const [result, error, state] = usePromise(() => contentful.getEntry<any>(room.entryId), [
     room.entryId,
     contentful,
   ]);
 
+  const drop = useCallback(
+    item => {
+      Promise.all([deleteAsset({ variables: { id: item.id } }), createAsset()]);
+    },
+    [createAsset, deleteAsset],
+  );
+
+  const [{ isOver }, dropRef] = useDrop({ accept: DragTypes.Asset, drop, collect });
+
+  console.log(isOver);
+
+  const style = useSpring({
+    transform: `translateZ(${isOver ? "100px" : "0px"})`,
+  });
+
   return (
     <>
       <Container>
-        <Work src={room.asset.uri} />
+        <Work ref={dropRef} src={room.asset.uri} style={style} />
       </Container>
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>

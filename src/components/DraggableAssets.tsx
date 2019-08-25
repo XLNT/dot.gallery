@@ -1,12 +1,34 @@
 import { Asset } from "graphql";
-import React from "react";
+import { DragSourceMonitor, useDrag } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
+import DragTypes from "lib/dragTypes";
+import React, { useEffect } from "react";
+import StaticAsset from "./StaticAsset";
 import styled from "styled-components";
 
-const AssetImg = styled.img`
-  width: 4.5rem;
-  height: 4.5rem;
+const StyledStaticAsset = styled(StaticAsset)`
+  opacity: ${({ isDragging }) => (isDragging ? 0.3 : 1)};
 `;
 
+const collect = (monitor: DragSourceMonitor) => ({
+  isDragging: monitor.isDragging(),
+});
+
 export default function DraggableAsset({ asset, ...rest }: { asset: Pick<Asset, "id" | "uri"> }) {
-  return <AssetImg src={asset.uri} {...rest} />;
+  const [{ isDragging }, drag, connectDragPreview] = useDrag({
+    item: { type: DragTypes.Asset, id: asset.id, uri: asset.uri },
+    collect,
+  });
+
+  useEffect(() => {
+    // Use empty image as a drag preview so browsers don't draw it
+    // and we can draw whatever we want on the custom drag layer instead.
+    connectDragPreview(getEmptyImage(), {
+      // IE fallback: specify that we'd rather screenshot the node
+      // when it already knows it's being dragged so we can hide it with CSS.
+      captureDraggingState: true,
+    });
+  }, [connectDragPreview]);
+
+  return <StyledStaticAsset ref={drag} asset={asset} isDragging={isDragging} {...rest} />;
 }

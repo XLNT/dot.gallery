@@ -1776,6 +1776,19 @@ export type CurrentExhibitionQuery = (
   )>> }
 );
 
+export type DeleteAssetMutationVariables = {
+  id: Scalars['ID']
+};
+
+
+export type DeleteAssetMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteAsset: Maybe<(
+    { __typename?: 'Asset' }
+    & Pick<Asset, 'id'>
+  )> }
+);
+
 export type EntityQueryVariables = {
   id: Scalars['ID']
 };
@@ -1864,6 +1877,21 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
+export const DeleteAssetDocument = gql`
+    mutation DeleteAsset($id: ID!) {
+  deleteAsset(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteAssetMutationFn = ApolloReactCommon.MutationFunction<DeleteAssetMutation, DeleteAssetMutationVariables>;
+
+    export function useDeleteAssetMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteAssetMutation, DeleteAssetMutationVariables>) {
+      return ApolloReactHooks.useMutation<DeleteAssetMutation, DeleteAssetMutationVariables>(DeleteAssetDocument, baseOptions);
+    };
+export type DeleteAssetMutationHookResult = ReturnType<typeof useDeleteAssetMutation>;
+export type DeleteAssetMutationResult = ApolloReactCommon.MutationResult<DeleteAssetMutation>;
+export type DeleteAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteAssetMutation, DeleteAssetMutationVariables>;
 export const EntityDocument = gql`
     query Entity($id: ID!) {
   entity(where: {id: $id}) {
