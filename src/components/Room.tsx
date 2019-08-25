@@ -6,6 +6,7 @@ import {
 } from "graphql";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { animated, useSpring } from "react-spring";
+import { get } from "lodash-es";
 import DragTypes from "lib/dragTypes";
 import EntityId from "context/EntityId";
 import GalleryRichText from "./GalleryRichText";
@@ -50,6 +51,8 @@ export default function Room({ room }: RoomProps) {
     room.entryId,
     contentful,
   ]);
+
+  room.asset.uri = get(result, "fields.work.fields.file.url");
 
   const drop = useCallback(
     item => {

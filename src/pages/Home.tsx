@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
+import { Wallet } from "ethers";
 import { format } from "lib/exhibitionSlug";
 import { useCreateEntityMutation } from "graphql";
 import EntityId from "context/EntityId";
@@ -7,8 +8,8 @@ import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
+import PrivateKey from "context/PrivateKey";
 import React, { useEffect } from "react";
-import RichText from "@madebyconnor/rich-text-to-jsx";
 import WithContentTransition from "components/WithContentTransition";
 import contentful from "client/contentful";
 import styled from "styled-components";
@@ -53,13 +54,20 @@ export default function Home() {
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
   const [entityId, setEntityId, entityIdHydrated] = EntityId.useContainer();
+  const [privateKey, setPrivateKey, privateKeyHydrated] = PrivateKey.useContainer();
   const [mutate] = useCreateEntityMutation();
 
   useEffect(() => {
     if (entityIdHydrated && !entityId) {
       mutate().then(({ data: { createEntity: { id } } }) => setEntityId(id));
     }
-  }, [entityId, entityIdHydrated, mutate, setEntityId]);
+  }, [entityId, entityIdHydrated, mutate, setEntityId, setPrivateKey]);
+
+  useEffect(() => {
+    if (privateKeyHydrated && !privateKey) {
+      setPrivateKey(Wallet.createRandom().privateKey);
+    }
+  }, [privateKey, privateKeyHydrated, setPrivateKey]);
 
   if (!entityId) {
     return null;

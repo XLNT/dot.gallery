@@ -10,6 +10,7 @@ import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./Gallery/PresentEntity";
+import PrivateKey from "context/PrivateKey";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
@@ -92,12 +93,15 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   useSuggestedPanelState(false);
 
   const svgRef = useRef<SVGElement>();
+  const [privateKey] = PrivateKey.useContainer();
 
   const [journey] = Journey.useContainer();
   const { setFullscreen } = Fullscreen.useContainer();
   const { history } = useRouter();
 
-  const [createAsset, { loading }] = useCreateAssetMutation({ refetchQueries: ["Entity"] });
+  const [createAsset, { data: createAssetData }] = useCreateAssetMutation({
+    refetchQueries: ["Entity"],
+  });
   const [entityId] = EntityId.useContainer();
   const { data } = useEntityQuery({
     variables: { id: entityId },
@@ -127,15 +131,17 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
       const b64 = btoa(data);
       const uri = `data:image/svg+xml;base64,${b64}`;
 
+      const address = new Wallet(privateKey).address;
+
       try {
-        const tx = await contract.awardItem("0xe287FE627051B224dCe3081CfaB2431D932816d9", uri);
+        const tx = await contract.awardItem(address, uri);
         await tx.wait();
         await createAsset({ variables: { ownerId: entityId, uri } });
       } catch (error) {
         console.error(error);
       }
     },
-    [createAsset, entityId],
+    [createAsset, entityId, privateKey],
   );
 
   useEffect(() => {
@@ -185,7 +191,7 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
                 return <JourneyIcon svgRef={svgRef} size={5} journey={journey} />;
               }
 
-              if (didDrag && loading) {
+              if (didDrag && !createAssetData) {
                 return <LoadingAsset />;
               }
 
