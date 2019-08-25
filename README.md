@@ -9,6 +9,6 @@ The maximum admission for this exhibit is 4,200, and pricing will progressively 
 
 
 - contract address: 0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF
-- on test net: https://ethberlin01.skalenodes.com:10183
+- on https://ethberlin01.skalenodes.com:10183
 - short presentation link: https://docs.google.com/presentation/d/1z14itEBfot1ZHHmVTtuale4GGFFUVTtrKwnk1ujYsec/edit#slide=id.p
 - ETHBerlinZwei sponsored SKALE bounty: https://github.com/ethberlinzwei/Bounties/issues/25
