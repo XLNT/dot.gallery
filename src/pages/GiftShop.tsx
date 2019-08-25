@@ -1,3 +1,4 @@
+import { Contract, Wallet, providers } from "ethers";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { getEmptyImage } from "react-dnd-html5-backend";
@@ -9,13 +10,28 @@ import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./Gallery/PresentEntity";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
+
+const contractAddress = "0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF";
+
+const abi = ["function awardItem(address visitor, string tokenURI) public returns (uint256)"];
+
+const provider = new providers.JsonRpcProvider({
+  url: "http://165.22.137.3:10178",
+  allowInsecure: true,
+});
+
+const wallet = Wallet.fromMnemonic(
+  "ritual pioneer maze shine retreat mother salute height walk alien mail chat",
+).connect(provider);
+
+const contract = new Contract(contractAddress, abi, wallet);
 
 const Column = styled.div`
   flex: 1;
@@ -105,12 +121,19 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   });
 
   const onDrop = useCallback(
-    item => {
+    async item => {
       setDidDrag(true);
       const data = new XMLSerializer().serializeToString(svgRef.current);
       const b64 = btoa(data);
       const uri = `data:image/svg+xml;base64,${b64}`;
-      createAsset({ variables: { ownerId: entityId, uri } });
+
+      try {
+        const tx = await contract.awardItem("0xe287FE627051B224dCe3081CfaB2431D932816d9", uri);
+        await tx.wait();
+        await createAsset({ variables: { ownerId: entityId, uri } });
+      } catch (error) {
+        console.error(error);
+      }
     },
     [createAsset, entityId],
   );
