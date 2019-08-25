@@ -8,7 +8,7 @@ Customarily, an individual is admitted to a gallery as a single viewer. Instead,
 The maximum admission for this exhibit is 4,200, and pricing will progressively increase as the number of available tickets wanes. Admission proceeds sponsor the artists, collectors, and curators who coalesce to create the exhibit.
 
 
-- contract address: 0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF
+- contract address: `0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF`
 - on https://ethberlin01.skalenodes.com:10183
 - short presentation link: https://docs.google.com/presentation/d/1z14itEBfot1ZHHmVTtuale4GGFFUVTtrKwnk1ujYsec/edit#slide=id.p
 - ETHBerlinZwei sponsored SKALE bounty: https://github.com/ethberlinzwei/Bounties/issues/25
