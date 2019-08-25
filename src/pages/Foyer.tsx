@@ -1,8 +1,8 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { preloadImage } from "lib/preload";
 import React, { useCallback, useEffect } from "react";
-import arrow from "components/grey_arrow.svg";
-import foyerMp4 from "files/foyer.mp4";
+import arrow from "static/grey_arrow.svg";
+import foyerMp4 from "static/foyer.mp4";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";

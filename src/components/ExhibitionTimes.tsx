@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
 import { useCreateAssetMutation } from "graphql";
-import CalendarSvg from "components/calendar.svg";
+import CalendarSvg from "static/calendar.svg";
 import React, { useCallback, useMemo } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
@@ -12,7 +12,7 @@ import useRouter from "context/useRouter";
 import { buildTokenUri } from "lib/tokenURI";
 import { times } from "lodash-es";
 import EntityId from "context/EntityId";
-import tokenURI from "images/token.png";
+import tokenURI from "static/token.png";
 import useEntityAssets from "hook/useEntityAssets";
 
 const Container = styled.div`

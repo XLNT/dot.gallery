@@ -5,7 +5,7 @@ import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
 import React, { PropsWithChildren, useCallback } from "react";
-import arrow from "components/arrow.svg";
+import arrow from "static/arrow.svg";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
