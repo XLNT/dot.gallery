@@ -4,6 +4,7 @@ import { format } from "lib/exhibitionSlug";
 import { useCreateEntityMutation } from "graphql";
 import EntityId from "context/EntityId";
 import ExhibitionTimes from "components/ExhibitionTimesComponent";
+import GalleryRichText from "components/GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React, { useEffect } from "react";
@@ -108,7 +109,7 @@ export default function Home() {
       <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
-          {state === "resolved" && <RichText richText={result.fields.body} />}
+          {state === "resolved" && <GalleryRichText richText={result.fields.body} />}
           {state === "rejected" && (
             <>
               <h1>dot.gallery</h1>

@@ -7,6 +7,7 @@ import StaticAsset from "./StaticAsset";
 import styled from "styled-components";
 
 const StyledStaticAsset = styled(StaticAsset)`
+  cursor: ${({ isDragging }) => (isDragging ? "grabbing" : "grab")};
   opacity: ${({ isDragging }) => (isDragging ? 0.3 : 1)};
 `;
 

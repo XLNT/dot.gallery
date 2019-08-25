@@ -9,6 +9,7 @@ import { animated, useSpring } from "react-spring";
 import { isEmpty } from "lodash-es";
 import DragTypes from "lib/dragTypes";
 import EntityId from "context/EntityId";
+import GalleryRichText from "./GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React, { useCallback } from "react";
@@ -72,7 +73,7 @@ export default function Room({ room }: RoomProps) {
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
-          {state === "resolved" && <RichText richText={result.fields.body} />}
+          {state === "resolved" && <GalleryRichText richText={result.fields.body} />}
           {state === "rejected" && (
             <>
               <h1>Error</h1>

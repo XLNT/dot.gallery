@@ -10,7 +10,7 @@ const ExitLayer = styled(Layer)`
   display: flex;
   justify-content: center;
 
-  visibility: ${({ proposingExit }) => (proposingExit ? "inherit" : "none")};
+  z-index: ${({ proposingExit }) => (proposingExit ? 8 : 0)};
 `;
 
 const ExitProposal = styled(animated.div)`
@@ -25,6 +25,7 @@ const InnerExitProposal = styled.div`
 `;
 
 const Journey = styled.div`
+  z-index: 1;
   position: absolute;
   top: 1rem;
   right: 1rem;
