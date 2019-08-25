@@ -1,4 +1,5 @@
 import { DragLayerMonitor, useDragLayer } from "react-dnd";
+import DragTypes from "lib/dragTypes";
 import Layer from "components/Layer";
 import React from "react";
 import StaticAsset from "components/StaticAsset";
@@ -8,6 +9,11 @@ const DragLayerBackboard = styled(Layer)`
   pointer-events: none;
 
   z-index: 100;
+`;
+
+const JourneyIcon = styled.div`
+  width: 4.25rem;
+  height: 4.25rem;
 `;
 
 const DragEffect = styled.div.attrs(({ pointerOffset }) => {
@@ -34,16 +40,21 @@ const collect = (monitor: DragLayerMonitor) => ({
   item: monitor.getItem(),
   pointerOffset: monitor.getClientOffset(),
   isDragging: monitor.isDragging(),
+  itemType: monitor.getItemType(),
 });
 
 export default function MyDragLayer() {
-  const { isDragging, pointerOffset, item } = useDragLayer(collect);
+  const { isDragging, pointerOffset, item, itemType } = useDragLayer(collect);
 
   return (
     <DragLayerBackboard>
       {isDragging && pointerOffset && (
         <DragEffect pointerOffset={pointerOffset} item={item}>
-          <StaticAsset asset={item} />
+          {itemType === DragTypes.Asset ? (
+            <StaticAsset asset={item} />
+          ) : (
+            <JourneyIcon dangerouslySetInnerHTML={{ __html: item.html }} />
+          )}
         </DragEffect>
       )}
     </DragLayerBackboard>

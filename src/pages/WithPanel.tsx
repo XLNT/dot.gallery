@@ -115,12 +115,18 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     },
   });
 
+  console.log(panelWidth);
+
   return (
     <Backboard>
       <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
       <PanelContainer
         ref={panelRef}
-        style={{ transform: x.interpolate(x => `translateX(${x}px)`), opacity }}
+        style={{
+          transform: x.interpolate(x => `translateX(${x}px)`),
+          opacity,
+          pointerEvents: opacity.interpolate(o => (o === 0 ? "none" : "all")),
+        }}
       >
         <Inner>
           <PanelButton

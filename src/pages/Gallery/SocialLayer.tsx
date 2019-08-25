@@ -10,7 +10,7 @@ const PresenceList = styled.div`
   bottom: 1rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 5rem);
 `;
 
 export default function SocialLayer() {

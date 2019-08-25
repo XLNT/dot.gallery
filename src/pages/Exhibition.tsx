@@ -2,6 +2,7 @@ import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { RouteComponentProps } from "react-router-dom";
 import { animated, useTransition } from "react-spring";
 import { parse } from "lib/exhibitionSlug";
+import AssetDragLayer from "./AssetDragLayer";
 import Foyer from "./Foyer";
 import Fullscreen from "context/Fullscreen";
 import Gallery from "./Gallery";
@@ -60,12 +61,15 @@ export default function Exhibition({ match }: RouteComponentProps<{ slug: string
   });
 
   return (
-    <Perspective>
-      {transitions.map(({ item: Item, key, props }) => (
-        <Transition style={props} key={key}>
-          <Item {...routeProps} />
-        </Transition>
-      ))}
-    </Perspective>
+    <>
+      <Perspective>
+        {transitions.map(({ item: Item, key, props }) => (
+          <Transition style={props} key={key}>
+            <Item {...routeProps} />
+          </Transition>
+        ))}
+      </Perspective>
+      <AssetDragLayer />
+    </>
   );
 }

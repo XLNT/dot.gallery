@@ -6,7 +6,12 @@ import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
 
-const ExitLayer = styled(Layer)`
+const ExitLayer = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+
   display: flex;
   justify-content: center;
 

@@ -1,8 +1,8 @@
 import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { animated, useTransition } from "react-spring";
+import { format } from "lib/exhibitionSlug";
 import { last } from "lodash-es";
-import AssetDragLayer from "./Gallery/AssetDragLayer";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import React, { useEffect, useMemo, useState } from "react";
@@ -23,6 +23,7 @@ const Canvas = styled.div`
 
   perspective: 1000px;
 `;
+
 const InnerCanvas = styled(animated.div)`
   position: absolute;
   left: 0;
@@ -30,9 +31,20 @@ const InnerCanvas = styled(animated.div)`
   right: 0;
   bottom: 0;
 
-  margin: 5rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
+  margin-bottom: 7rem;
+  margin-top: 3rem;
 
   display: flex;
+`;
+
+const ExhibitionSlug = styled.div`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+
+  font-weight: bold;
 `;
 
 export default function Gallery(props: ExhibitionProps<void>) {
@@ -90,6 +102,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
 
   return (
     <>
+      <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
       <JourneyAndExit {...props} />
       <Canvas>
         {transitions.map(({ item, key, props }) => (
@@ -99,7 +112,6 @@ export default function Gallery(props: ExhibitionProps<void>) {
         ))}
       </Canvas>
       <SocialLayer />
-      <AssetDragLayer />
     </>
   );
 }

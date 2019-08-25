@@ -3,7 +3,7 @@ import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
 import { useCreateEntityMutation } from "graphql";
 import EntityId from "context/EntityId";
-import ExhibitionTimes from "components/ExhibitionTimesComponent";
+import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
