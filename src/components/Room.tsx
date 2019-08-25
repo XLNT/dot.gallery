@@ -43,6 +43,7 @@ export default function Room({ room }: RoomProps) {
   const [entityId] = EntityId.useContainer();
   const [createAsset] = useCreateAssetMutation({
     variables: { ownerId: entityId, uri: room.asset.uri },
+    refetchQueries: ["Entity"],
   });
   const [deleteAsset] = useDeleteAssetMutation();
   const [result, error, state] = usePromise(() => contentful.getEntry<any>(room.entryId), [

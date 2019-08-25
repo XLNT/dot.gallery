@@ -15,7 +15,10 @@ const PresenceList = styled.div`
 
 export default function SocialLayer() {
   const [entityId] = EntityId.useContainer();
-  const { data, loading, error } = useEntityQuery({ variables: { id: entityId } });
+  const { data, loading, error } = useEntityQuery({
+    variables: { id: entityId },
+    pollInterval: 5000,
+  });
 
   return (
     <PresenceList>

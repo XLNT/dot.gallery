@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 
 const AssetImg = styled.img`
-  border-radius: 50%;
   width: 4.5rem;
   height: 4.5rem;
 `;

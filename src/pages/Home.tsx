@@ -13,6 +13,7 @@ import WithContentTransition from "components/WithContentTransition";
 import contentful from "client/contentful";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import usePromise from "react-use-promise";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -38,6 +39,7 @@ const Container = styled.div`
 `;
 
 const ExhibitionTitle = styled.h1`
+  margin: 4rem 2rem;
   font-size: 3rem;
 `;
 
@@ -46,6 +48,7 @@ const ShowTimes = styled.div`
 `;
 
 export default function Home() {
+  useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
@@ -88,7 +91,7 @@ export default function Home() {
         <ShowTimes>
           {shows.map((show, i) => {
             const realOpensAt =
-              i === 0 && process.env.NODE_ENV === "development"
+              i === 0
                 ? DateTime.local()
                     .toUTC()
                     .minus({ hour: 1 })

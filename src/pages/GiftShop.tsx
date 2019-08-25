@@ -6,9 +6,10 @@ import DragTypes from "lib/dragTypes";
 import EntityId from "context/EntityId";
 import Fullscreen from "context/Fullscreen";
 import Journey from "context/Journey";
+import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./Gallery/PresentEntity";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import timeout from "lib/timeout";
@@ -21,7 +22,7 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 2rem;
+  margin: 2rem 5rem;
 `;
 
 const Container = styled.div`
@@ -59,13 +60,6 @@ const Header = styled.h2`
 
 const Subtitle = styled.span``;
 
-const JourneyIcon = styled.div`
-  width: 4.25rem;
-  height: 4.25rem;
-
-  opacity: ${({ isDragging }) => (isDragging ? 0.2 : 1)};
-`;
-
 const LeaveButton = styled.span`
   font-size: 3rem;
   font-weight: bold;
@@ -80,6 +74,8 @@ const collectDrop = (monitor: DropTargetMonitor) => ({ isOver: monitor.isOver({ 
 export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
+
+  const svgRef = useRef<SVGElement>();
 
   const [journey] = Journey.useContainer();
   const { setFullscreen } = Fullscreen.useContainer();
@@ -101,35 +97,23 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
     history.replace("/");
   }, [history, setFullscreen]);
 
-  const journeySvg = useMemo(
-    () => `<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="2" width="64" height="64" fill="white" stroke="#FF3333" stroke-width="4"/>
-    <rect x="60" y="20" width="4" height="16" transform="rotate(90 60 20)" fill="#FF3333"/>
-    <rect x="48" y="36" width="4" height="16" transform="rotate(-180 48 36)" fill="#FF3333"/>
-    <rect x="12" y="48" width="4" height="16" transform="rotate(-180 12 48)" fill="#FF3333"/>
-    <rect x="32" y="36" width="4" height="16" transform="rotate(-90 32 36)" fill="#FF3333"/>
-    <rect x="56" y="20" width="4" height="16" fill="#FF3333"/>
-    <rect x="56" y="32" width="4" height="16" fill="#FF3333"/>
-    <rect x="68" y="44" width="4" height="12" transform="rotate(90 68 44)" fill="#FF3333"/>
-    <rect y="48" width="4" height="12" transform="rotate(-90 0 48)" fill="#FF3333"/>
-    </svg>`,
-    [],
-  );
-
   const [didDrag, setDidDrag] = useState(false);
+
+  const [{ isDragging }, drag, connectDragPreview] = useDrag({
+    item: { type: DragTypes.Journey, journey },
+    collect: connectDrag,
+  });
 
   const onDrop = useCallback(
     item => {
       setDidDrag(true);
-      createAsset({ variables: { ownerId: entityId, uri: "http://placekitten.com/200/200" } });
+      const data = new XMLSerializer().serializeToString(svgRef.current);
+      const b64 = btoa(data);
+      const uri = `data:image/svg+xml;base64,${b64}`;
+      createAsset({ variables: { ownerId: entityId, uri } });
     },
     [createAsset, entityId],
   );
-
-  const [{ isDragging }, drag, connectDragPreview] = useDrag({
-    item: { type: DragTypes.Journey, journey, html: journeySvg },
-    collect: connectDrag,
-  });
 
   useEffect(() => {
     // Use empty image as a drag preview so browsers don't draw it
@@ -162,8 +146,9 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
           ) : (
             <JourneyIcon
               ref={drag}
-              dangerouslySetInnerHTML={{ __html: journeySvg }}
-              isDragging={isDragging}
+              size={5}
+              journey={journey}
+              style={{ opacity: isDragging ? 0.2 : 1 }}
             />
           )}
         </GiftContainer>
@@ -174,9 +159,7 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
           <PresentEntity entity={data.entity} draggable={false} wrappable>
             {(() => {
               if (isOver) {
-                return (
-                  <JourneyIcon dangerouslySetInnerHTML={{ __html: journeySvg }} isDragging={true} />
-                );
+                return <JourneyIcon svgRef={svgRef} size={5} journey={journey} />;
               }
 
               if (didDrag && loading) {

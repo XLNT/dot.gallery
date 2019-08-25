@@ -1,5 +1,7 @@
 import { ExhibitionProps, Flow } from "pages/ExhibitionProps";
 import { animated, config, useSpring, useTransition } from "react-spring";
+import Journey from "context/Journey";
+import JourneyIcon from "components/JourneyIcon";
 import Layer from "components/Layer";
 import React, { useCallback, useMemo, useState } from "react";
 import fromTheme from "theme/fromTheme";
@@ -29,7 +31,7 @@ const InnerExitProposal = styled.div`
   background: #fff;
 `;
 
-const Journey = styled.div`
+const JourneyButton = styled.div`
   z-index: 1;
   position: absolute;
   top: 1rem;
@@ -77,26 +79,12 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
   const onExitMouseEnter = useCallback(() => setExitHovered(true), []);
   const onExitMouseLeave = useCallback(() => setExitHovered(false), []);
 
+  const [journey] = Journey.useContainer();
   const [proposingExit, setProposingExit] = useState<boolean>(false);
   const [proposalRef, { height: proposalExtent }] = useDimensions();
   const { y } = useSpring<{ y: number }>({
     y: proposingExit ? 0 : -1 * (proposalExtent || document.body.clientHeight),
   });
-
-  const journeySvg = useMemo(
-    () => `<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="2" width="64" height="64" fill="white" stroke="#FF3333" stroke-width="4"/>
-    <rect x="60" y="20" width="4" height="16" transform="rotate(90 60 20)" fill="#FF3333"/>
-    <rect x="48" y="36" width="4" height="16" transform="rotate(-180 48 36)" fill="#FF3333"/>
-    <rect x="12" y="48" width="4" height="16" transform="rotate(-180 12 48)" fill="#FF3333"/>
-    <rect x="32" y="36" width="4" height="16" transform="rotate(-90 32 36)" fill="#FF3333"/>
-    <rect x="56" y="20" width="4" height="16" fill="#FF3333"/>
-    <rect x="56" y="32" width="4" height="16" fill="#FF3333"/>
-    <rect x="68" y="44" width="4" height="12" transform="rotate(90 68 44)" fill="#FF3333"/>
-    <rect y="48" width="4" height="12" transform="rotate(-90 0 48)" fill="#FF3333"/>
-    </svg>`,
-    [],
-  );
 
   const showExitHoveredState = exitHovered || proposingExit;
   const exitButtonTransitions = useTransition(showExitHoveredState, null, {
@@ -134,7 +122,7 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
           </InnerExitProposal>
         </ExitProposal>
       </ExitLayer>
-      <Journey
+      <JourneyButton
         onMouseEnter={onExitMouseEnter}
         onMouseLeave={onExitMouseLeave}
         onClick={onExitButtonClick}
@@ -144,11 +132,13 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
             {item ? (
               <ExitButton>Exit</ExitButton>
             ) : (
-              <ExitButton dangerouslySetInnerHTML={{ __html: journeySvg }} />
+              <ExitButton>
+                <JourneyIcon size={5} journey={journey} />
+              </ExitButton>
             )}
           </animated.div>
         ))}
-      </Journey>
+      </JourneyButton>
     </>
   );
 }

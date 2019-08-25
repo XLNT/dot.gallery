@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 2rem;
+  margin: 2rem 5rem;
 `;
 
 const ActionContainer = styled.div`
@@ -59,7 +59,7 @@ function PreflightStep({ title, subtitle }: { title: string; subtitle: string })
 const steps = [
   {
     title: "Arrows navigate between works.",
-    subtitle: "Give it a try.",
+    subtitle: "Up, Down, Left, Right. Simple.",
   },
   {
     title: "Give and receive.",

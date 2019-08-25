@@ -1,4 +1,4 @@
-import { Direction } from "lib/rooms";
+import { Coords } from "lib/rooms";
 import { Reducer, useCallback, useReducer } from "react";
 import { createContainer } from "unstated-next";
 
@@ -8,10 +8,10 @@ enum ActionType {
 
 interface Action {
   type: ActionType;
-  payload: Direction;
+  payload: Coords;
 }
 
-type State = Direction[];
+type State = Coords[];
 
 const reducer: Reducer<State, Action> = (state, action) => {
   switch (action.type) {
@@ -22,10 +22,10 @@ const reducer: Reducer<State, Action> = (state, action) => {
   }
 };
 
-function useJourney(): [Direction[], (payload: Direction) => void] {
+function useJourney(): [Coords[], (payload: Coords) => void] {
   const [journey, dispatch] = useReducer<typeof reducer>(reducer, []);
   const appendToJourney = useCallback(
-    (payload: Direction) => dispatch({ type: ActionType.Append, payload }),
+    (payload: Coords) => dispatch({ type: ActionType.Append, payload }),
     [],
   );
 

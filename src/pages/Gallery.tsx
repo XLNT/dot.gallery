@@ -51,6 +51,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const [journey, appendToJourney] = Journey.useContainer();
+  const [lastDirection, setLastDirection] = useState<Direction>();
 
   const { exhibition } = useCurrentExhibition();
 
@@ -62,15 +63,19 @@ export default function Gallery(props: ExhibitionProps<void>) {
         Math.floor(exhibition.extent / 2.0),
         Math.floor(exhibition.extent / 2.0),
       ];
+      appendToJourney(center);
+      appendToJourney(center);
       setCoords(center);
     }
-  }, [exhibition]);
+  }, [appendToJourney, exhibition]);
 
   useKey(
     (pressedKey: number) => {
       if (exhibition) {
-        appendToJourney(directionFor(pressedKey));
-        setCoords(navigate(coords, exhibition.extent, directionFor(pressedKey)));
+        setLastDirection(directionFor(pressedKey));
+        const newCoords = navigate(coords, exhibition.extent, directionFor(pressedKey));
+        appendToJourney(newCoords);
+        setCoords(newCoords);
       }
     },
     {
@@ -83,8 +88,6 @@ export default function Gallery(props: ExhibitionProps<void>) {
     () => (!exhibition || coords === null ? null : findRoom(exhibition.rooms, coords)),
     [coords, exhibition],
   );
-
-  const lastDirection = last(journey);
 
   const width = document.body.clientWidth;
   const height = document.body.clientHeight;

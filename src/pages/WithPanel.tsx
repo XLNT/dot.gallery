@@ -115,8 +115,6 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     },
   });
 
-  console.log(panelWidth);
-
   return (
     <Backboard>
       <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
