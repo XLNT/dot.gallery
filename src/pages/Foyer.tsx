@@ -2,7 +2,6 @@ import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { preloadImage } from "lib/preload";
 import React, { useCallback, useEffect } from "react";
 import arrow from "static/grey_arrow.svg";
-import foyerMp4 from "static/foyer.mp4";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
@@ -54,7 +53,7 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   return (
     <>
       <Video autoPlay onEnded={goGallery}>
-        <source src={foyerMp4} type="video/mp4" />
+        <source src="https://cdn.bydot.app/foyer.mp4" type="video/mp4" />
       </Video>
       <SkipButton onClick={goGallery}>
         Skip <Arrow src={arrow} />
