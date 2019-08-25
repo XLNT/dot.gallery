@@ -5,6 +5,7 @@ import React, { useCallback } from "react";
 import WithContentTransition from "components/WithContentTransition";
 import styled from "styled-components";
 import timeout from "lib/timeout";
+import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const Container = styled.div`
 `;
 
 export default function Preflight({ exhibition, show, setFlow }: ExhibitionProps<void>) {
+  useEnforcePanelVisibility(false);
   const { setFullscreen } = Fullscreen.useContainer();
   const goFoyer = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {

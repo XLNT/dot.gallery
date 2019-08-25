@@ -10,6 +10,7 @@ import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -35,6 +36,7 @@ const InnerCanvas = styled(animated.div)`
 `;
 
 export default function Gallery(props: ExhibitionProps<void>) {
+  useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const [journey, appendToJourney] = Journey.useContainer();
 

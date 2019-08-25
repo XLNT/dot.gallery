@@ -3,6 +3,7 @@ import ForcedPanelState from "context/ForcedPanelState";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
+import PanelVisibility from "context/PanelVisibility";
 import React, { PropsWithChildren, useCallback } from "react";
 import arrow from "components/arrow.svg";
 import fromTheme from "theme/fromTheme";
@@ -41,6 +42,7 @@ const PanelContainer = styled(animated.div)`
 const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   <animated.span {...props} />
 ))`
+  user-select: none;
   z-index: 10;
   position: absolute;
   bottom: -1.75rem;
@@ -92,6 +94,7 @@ const Arrow = styled(animated.img)`
 
 export default function Panel({ children }: PropsWithChildren<{}>) {
   const { forcedState } = ForcedPanelState.useContainer();
+  const [isVisible] = PanelVisibility.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 
   const togglePanel = useCallback(() => setPanelState(!isOpen), [isOpen, setPanelState]);
@@ -101,12 +104,14 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
-  const { x, width, deg } = useSpring({
+  const { x, width, deg, opacity } = useSpring({
+    opacity: isVisible ? 1 : 0,
     x: showPanel ? 0 : 1 * (panelWidth || 0),
     width: showPanel ? panelWidth || 0 : 0,
     deg: showPanel ? 90 : -90,
     from: {
       x: document.body.clientWidth,
+      opacity: isVisible ? 1 : 0,
     },
   });
 
@@ -115,7 +120,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
       <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
       <PanelContainer
         ref={panelRef}
-        style={{ transform: x.interpolate(x => `translateX(${x}px)`) }}
+        style={{ transform: x.interpolate(x => `translateX(${x}px)`), opacity }}
       >
         <Inner>
           <PanelButton

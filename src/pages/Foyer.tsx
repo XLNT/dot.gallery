@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import WithContentTransition from "components/WithContentTransition";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Container = styled.div`
@@ -13,6 +14,7 @@ const Container = styled.div`
 `;
 
 export default function Foyer({ setFlow }: ExhibitionProps<void>) {
+  useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
   const { exhibition } = useCurrentExhibition();
   useEffect(() => {

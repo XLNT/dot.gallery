@@ -16,6 +16,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import Home from "pages/Home";
 import Journey from "context/Journey";
 import PanelState from "context/PanelState";
+import PanelVisibility from "context/PanelVisibility";
 import WithPanel from "pages/WithPanel";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
@@ -35,6 +36,7 @@ const Providers = nest([
   ForcedPanelState.Provider,
   Journey.Provider,
   EntityId.Provider,
+  PanelVisibility.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
   DndProvider,
