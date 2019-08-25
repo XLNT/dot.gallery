@@ -42,17 +42,17 @@ const collect = (monitor: DropTargetMonitor) => ({
 
 export default function Room({ room }: RoomProps) {
   const [entityId] = EntityId.useContainer();
-  const [createAsset] = useCreateAssetMutation({
-    variables: { ownerId: entityId, uri: room.asset.uri },
-    refetchQueries: ["Entity"],
-  });
-  const [deleteAsset] = useDeleteAssetMutation();
   const [result, error, state] = usePromise(() => contentful.getEntry<any>(room.entryId), [
     room.entryId,
     contentful,
   ]);
 
-  room.asset.uri = get(result, "fields.work.fields.file.url");
+  const asset = { id: room.id, uri: get(result, "fields.work.fields.file.url") };
+  const [createAsset] = useCreateAssetMutation({
+    variables: { ownerId: entityId, uri: asset.uri },
+    refetchQueries: ["Entity"],
+  });
+  const [deleteAsset] = useDeleteAssetMutation();
 
   const drop = useCallback(
     item => {
@@ -70,7 +70,7 @@ export default function Room({ room }: RoomProps) {
   return (
     <>
       <Container>
-        <Work ref={dropRef} src={room.asset.uri} style={style} />
+        <Work ref={dropRef} src={asset.uri} style={style} />
       </Container>
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>

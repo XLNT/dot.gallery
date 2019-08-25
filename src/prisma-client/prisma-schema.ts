@@ -26,7 +26,6 @@ type Asset {
   id: ID!
   uri: String!
   owner: Entity!
-  rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -41,7 +40,6 @@ input AssetCreateInput {
   id: ID
   uri: String!
   owner: EntityCreateOneWithoutOwnedAssetsInput!
-  rooms: RoomCreateManyWithoutAssetInput
 }
 
 input AssetCreateManyWithoutOwnerInput {
@@ -49,21 +47,9 @@ input AssetCreateManyWithoutOwnerInput {
   connect: [AssetWhereUniqueInput!]
 }
 
-input AssetCreateOneWithoutRoomsInput {
-  create: AssetCreateWithoutRoomsInput
-  connect: AssetWhereUniqueInput
-}
-
 input AssetCreateWithoutOwnerInput {
   id: ID
   uri: String!
-  rooms: RoomCreateManyWithoutAssetInput
-}
-
-input AssetCreateWithoutRoomsInput {
-  id: ID
-  uri: String!
-  owner: EntityCreateOneWithoutOwnedAssetsInput!
 }
 
 type AssetEdge {
@@ -160,7 +146,6 @@ input AssetSubscriptionWhereInput {
 input AssetUpdateInput {
   uri: String
   owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
-  rooms: RoomUpdateManyWithoutAssetInput
 }
 
 input AssetUpdateManyDataInput {
@@ -188,31 +173,13 @@ input AssetUpdateManyWithWhereNestedInput {
   data: AssetUpdateManyDataInput!
 }
 
-input AssetUpdateOneRequiredWithoutRoomsInput {
-  create: AssetCreateWithoutRoomsInput
-  update: AssetUpdateWithoutRoomsDataInput
-  upsert: AssetUpsertWithoutRoomsInput
-  connect: AssetWhereUniqueInput
-}
-
 input AssetUpdateWithoutOwnerDataInput {
   uri: String
-  rooms: RoomUpdateManyWithoutAssetInput
-}
-
-input AssetUpdateWithoutRoomsDataInput {
-  uri: String
-  owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
 }
 
 input AssetUpdateWithWhereUniqueWithoutOwnerInput {
   where: AssetWhereUniqueInput!
   data: AssetUpdateWithoutOwnerDataInput!
-}
-
-input AssetUpsertWithoutRoomsInput {
-  update: AssetUpdateWithoutRoomsDataInput!
-  create: AssetCreateWithoutRoomsInput!
 }
 
 input AssetUpsertWithWhereUniqueWithoutOwnerInput {
@@ -251,9 +218,6 @@ input AssetWhereInput {
   uri_ends_with: String
   uri_not_ends_with: String
   owner: EntityWhereInput
-  rooms_every: RoomWhereInput
-  rooms_some: RoomWhereInput
-  rooms_none: RoomWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -757,7 +721,6 @@ type Room {
   x: Int!
   y: Int!
   exhibition: Exhibition!
-  asset: Asset!
 }
 
 type RoomConnection {
@@ -772,12 +735,6 @@ input RoomCreateInput {
   x: Int!
   y: Int!
   exhibition: ExhibitionCreateOneWithoutRoomsInput!
-  asset: AssetCreateOneWithoutRoomsInput!
-}
-
-input RoomCreateManyWithoutAssetInput {
-  create: [RoomCreateWithoutAssetInput!]
-  connect: [RoomWhereUniqueInput!]
 }
 
 input RoomCreateManyWithoutExhibitionInput {
@@ -785,20 +742,11 @@ input RoomCreateManyWithoutExhibitionInput {
   connect: [RoomWhereUniqueInput!]
 }
 
-input RoomCreateWithoutAssetInput {
-  id: ID
-  entryId: ID!
-  x: Int!
-  y: Int!
-  exhibition: ExhibitionCreateOneWithoutRoomsInput!
-}
-
 input RoomCreateWithoutExhibitionInput {
   id: ID
   entryId: ID!
   x: Int!
   y: Int!
-  asset: AssetCreateOneWithoutRoomsInput!
 }
 
 type RoomEdge {
@@ -897,7 +845,6 @@ input RoomUpdateInput {
   x: Int
   y: Int
   exhibition: ExhibitionUpdateOneRequiredWithoutRoomsInput
-  asset: AssetUpdateOneRequiredWithoutRoomsInput
 }
 
 input RoomUpdateManyDataInput {
@@ -910,18 +857,6 @@ input RoomUpdateManyMutationInput {
   entryId: ID
   x: Int
   y: Int
-}
-
-input RoomUpdateManyWithoutAssetInput {
-  create: [RoomCreateWithoutAssetInput!]
-  delete: [RoomWhereUniqueInput!]
-  connect: [RoomWhereUniqueInput!]
-  set: [RoomWhereUniqueInput!]
-  disconnect: [RoomWhereUniqueInput!]
-  update: [RoomUpdateWithWhereUniqueWithoutAssetInput!]
-  upsert: [RoomUpsertWithWhereUniqueWithoutAssetInput!]
-  deleteMany: [RoomScalarWhereInput!]
-  updateMany: [RoomUpdateManyWithWhereNestedInput!]
 }
 
 input RoomUpdateManyWithoutExhibitionInput {
@@ -941,34 +876,15 @@ input RoomUpdateManyWithWhereNestedInput {
   data: RoomUpdateManyDataInput!
 }
 
-input RoomUpdateWithoutAssetDataInput {
-  entryId: ID
-  x: Int
-  y: Int
-  exhibition: ExhibitionUpdateOneRequiredWithoutRoomsInput
-}
-
 input RoomUpdateWithoutExhibitionDataInput {
   entryId: ID
   x: Int
   y: Int
-  asset: AssetUpdateOneRequiredWithoutRoomsInput
-}
-
-input RoomUpdateWithWhereUniqueWithoutAssetInput {
-  where: RoomWhereUniqueInput!
-  data: RoomUpdateWithoutAssetDataInput!
 }
 
 input RoomUpdateWithWhereUniqueWithoutExhibitionInput {
   where: RoomWhereUniqueInput!
   data: RoomUpdateWithoutExhibitionDataInput!
-}
-
-input RoomUpsertWithWhereUniqueWithoutAssetInput {
-  where: RoomWhereUniqueInput!
-  update: RoomUpdateWithoutAssetDataInput!
-  create: RoomCreateWithoutAssetInput!
 }
 
 input RoomUpsertWithWhereUniqueWithoutExhibitionInput {
@@ -1023,7 +939,6 @@ input RoomWhereInput {
   y_gt: Int
   y_gte: Int
   exhibition: ExhibitionWhereInput
-  asset: AssetWhereInput
   AND: [RoomWhereInput!]
   OR: [RoomWhereInput!]
   NOT: [RoomWhereInput!]

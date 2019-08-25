@@ -16,8 +16,6 @@ type Asset {
   # asset belongs_to: owner
   owner: Entity! @relation(name: "OwnedAssets")
 
-  rooms: [Room!]! @relation(name: "AssetRooms")
-
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -29,8 +27,8 @@ type Exhibition {
   theme: Json
   extent: Int! @default(value: 7)
 
-  shows: [Show!]!
-  rooms: [Room!]! @relation(name: "ExhibitionRooms")
+  shows: [Show!]! @relation(onDelete: CASCADE)
+  rooms: [Room!]! @relation(name: "ExhibitionRooms" onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -56,5 +54,4 @@ type Room {
   y: Int!
 
   exhibition: Exhibition! @relation(name: "ExhibitionRooms")
-  asset: Asset! @relation(name: "AssetRooms")
 }

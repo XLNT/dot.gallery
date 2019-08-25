@@ -42,14 +42,6 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
 
   const goGallery = useCallback(() => setFlow(Flow.Gallery), [setFlow]);
 
-  const { exhibition } = useCurrentExhibition();
-  useEffect(() => {
-    if (exhibition) {
-      // preload all of the uris
-      Promise.all(exhibition.rooms.map(room => room.asset.uri).map(preloadImage));
-    }
-  }, [exhibition]);
-
   return (
     <>
       <Video autoPlay onEnded={goGallery}>
