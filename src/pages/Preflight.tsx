@@ -80,7 +80,7 @@ export default function Preflight({ exhibition, show, setFlow }: ExhibitionProps
   const goFoyer = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
       setFullscreen(true);
-      await timeout(2000);
+      await timeout(1000);
     }
 
     setFlow(Flow.Foyer);

@@ -95,7 +95,7 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   const goHome = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
       setFullscreen(false);
-      await timeout(2000);
+      await timeout(1000);
     }
 
     history.replace("/");
