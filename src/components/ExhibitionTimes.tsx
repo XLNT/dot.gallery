@@ -84,7 +84,7 @@ export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: 
 
   const goExhibition = useCallback(async () => {
     if (assets.length === 0) {
-      await Promise.all(times(5, () => grantToken()));
+      await Promise.all(times(3, () => grantToken()));
     }
     history.push(`/${format(exhibition.number, number)}`);
   }, [assets.length, exhibition.number, grantToken, history, number]);
