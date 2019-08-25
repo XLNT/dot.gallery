@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <0.6.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721Full.sol";
 import "@openzeppelin/contracts/drafts/Counters.sol";
 
-contract GameItem is ERC721Full {
+contract DotGalleryItem is ERC721Full {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
