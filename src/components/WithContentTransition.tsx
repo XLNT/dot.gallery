@@ -1,13 +1,10 @@
 import { animated, useTransition } from "react-spring";
 import React, { PropsWithChildren } from "react";
+import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 
-const Container = styled.div`
-  flex: 1;
-  position: relative;
-`;
-
 const Content = styled(animated.div)`
+  background-color: ${fromTheme("panel")};
   position: absolute;
   left: 0;
   top: 0;
@@ -25,12 +22,12 @@ export default function WithContentTransition({ children }: PropsWithChildren<{}
   });
 
   return (
-    <Container>
+    <>
       {contentTransitions.map(({ item, key, props }) => (
         <Content key={key} style={props}>
           {item}
         </Content>
       ))}
-    </Container>
+    </>
   );
 }

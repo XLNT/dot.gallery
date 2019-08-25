@@ -3,7 +3,7 @@ export default {
   secondary: "#FF3333",
   secondaryText: "#FFFFFF",
   background: "#F0F0F0",
-  panel: "#FFFF",
+  panel: "#FFFFFF",
   panelText: "#000000",
   fontFamily: "Effra, Helvetica Neue, sans-serif;",
 };

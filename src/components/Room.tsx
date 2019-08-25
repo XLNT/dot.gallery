@@ -60,8 +60,6 @@ export default function Room({ room }: RoomProps) {
 
   const [{ isOver }, dropRef] = useDrop({ accept: DragTypes.Asset, drop, collect });
 
-  console.log(isOver);
-
   const style = useSpring({
     transform: `translateZ(${isOver ? "100px" : "0px"})`,
   });

@@ -1,24 +1,34 @@
 import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
+import { animated, useTransition } from "react-spring";
+import { last } from "lodash-es";
 import AssetDragLayer from "./Gallery/AssetDragLayer";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
-import Layer from "components/Layer";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
-import useEntityAssets from "hook/useEntityAssets";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
-const Canvas = styled(Layer)`
-  display: flex;
-`;
+const Canvas = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
 
-const InnerCanvas = styled(Layer)`
-  flex: 1;
+  perspective: 1000px;
+`;
+const InnerCanvas = styled(animated.div)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
   margin: 5rem;
 
   display: flex;
@@ -29,10 +39,8 @@ export default function Gallery(props: ExhibitionProps<void>) {
   const [journey, appendToJourney] = Journey.useContainer();
 
   const { exhibition } = useCurrentExhibition();
-  const assets = useEntityAssets();
 
   const [coords, setCoords] = useState<Coords>(null);
-  // const prevCoords = usePreviousValue(coords, isEqual);
 
   useEffect(() => {
     if (exhibition) {
@@ -62,12 +70,34 @@ export default function Gallery(props: ExhibitionProps<void>) {
     [coords, exhibition],
   );
 
+  const lastDirection = last(journey);
+
+  const width = document.body.clientWidth;
+  const height = document.body.clientHeight;
+  const outX =
+    lastDirection === Direction.Left ? width : lastDirection === Direction.Right ? -width : 0;
+  const outY =
+    lastDirection === Direction.Down ? -height : lastDirection === Direction.Up ? height : 0;
+
+  const transitions = useTransition(room, room => room && room.id, {
+    initial: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
+    from: { transform: `translate3d(${-outX}px, ${-outY}px, 0)`, opacity: 0 },
+    enter: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
+    leave: { transform: `translate3d(${outX}px, ${outY}px, 0)`, opacity: 0 },
+  });
+
   return (
-    <Canvas>
+    <>
       <JourneyAndExit {...props} />
-      <InnerCanvas>{room && <Room room={room} />}</InnerCanvas>
+      <Canvas>
+        {transitions.map(({ item, key, props }) => (
+          <InnerCanvas key={key} style={props}>
+            {item && <Room room={item} />}
+          </InnerCanvas>
+        ))}
+      </Canvas>
       <SocialLayer />
       <AssetDragLayer />
-    </Canvas>
+    </>
   );
 }
