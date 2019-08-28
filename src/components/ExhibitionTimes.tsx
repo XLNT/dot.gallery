@@ -4,7 +4,6 @@ import { format } from "lib/exhibitionSlug";
 import { useCreateAssetMutation } from "graphql";
 import CalendarSvg from "static/calendar.svg";
 import React, { useCallback, useMemo } from "react";
-import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useRouter from "context/useRouter";
@@ -15,16 +14,23 @@ import EntityId from "context/EntityId";
 import tokenURI from "static/token.png";
 import useEntityAssets from "hook/useEntityAssets";
 
+const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
+const toGoogleCalendarDatetime = (isoString: string) =>
+  DateTime.fromISO(isoString)
+    .toUTC()
+    .toFormat(GOOGLE_CALENDAR_FORMAT);
+const getTimezoneName = (isoDate: string) => DateTime.fromISO(isoDate).zoneName;
+
 const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
+  cursor: ${({ isOpen }) => (isOpen ? "cursor" : "not-allowed")};
   margin-bottom: 3rem;
 
   transition: color 100ms linear;
   &:hover {
-    color: ${fromTheme("secondary")};
+    color: ${({ theme, isOpen }) => (isOpen ? theme.secondary : "inherit")};
   }
 `;
 
@@ -45,6 +51,7 @@ const Calendar = styled.img`
   margin-left: 0.5rem;
   width: 1.5rem;
   height: 1.5rem;
+  cursor: pointer;
 
   transform: scale(1);
   transition: transform 150ms linear, box-shadow 150ms linear;
@@ -54,9 +61,11 @@ const Calendar = styled.img`
   }
 `;
 
-export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: any) {
+export default function ExhibitionTimes({ show: { number, opensAt, closesAt }, ...rest }: any) {
   const { history } = useRouter();
   const { exhibition } = useCurrentExhibition();
+
+  const state = getShowState(opensAt, closesAt);
 
   const [entityId] = EntityId.useContainer();
   const { assets } = useEntityAssets();
@@ -76,10 +85,6 @@ export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: 
     [closesAt],
   );
 
-  const goCalendar = useCallback(e => {
-    e.stopPropagation();
-  }, []);
-
   const showState = getShowState(opensAt, closesAt);
 
   const goExhibition = useCallback(async () => {
@@ -91,10 +96,30 @@ export default function ExhibitionTimes({ number, opensAt, closesAt, ...rest }: 
 
   const goRequest = useCallback(() => {}, []);
 
+  const calendarLink = useMemo(
+    () =>
+      `http://www.google.com/calendar/event?${new URLSearchParams({
+        action: "TEMPLATE",
+        dates: `${toGoogleCalendarDatetime(opensAt)}/${toGoogleCalendarDatetime(closesAt)}`,
+        text: `dot.gallery ${format(exhibition.number, number)}`,
+        location: "https://dot.gallery",
+        details: `dot.gallery ${format(exhibition.number, number)} Opening`,
+        ctz: getTimezoneName(opensAt),
+      })}`,
+    [closesAt, exhibition.number, number, opensAt],
+  );
+
   return (
-    <Container {...rest} onClick={showState === ShowState.Open ? goExhibition : goRequest}>
+    <Container
+      onClick={showState === ShowState.Open ? goExhibition : goRequest}
+      isOpen={state === ShowState.Open}
+      {...rest}
+    >
       <OpenDate>
-        opens {opensAtDate} <Calendar onClick={goCalendar} src={CalendarSvg} />
+        opens {opensAtDate}{" "}
+        <a href={calendarLink} target="_blank" rel="noopener noreferrer">
+          <Calendar src={CalendarSvg} />
+        </a>
       </OpenDate>
       <OpenTime>
         {showState === ShowState.Open ? "Enter" : `${opensAtTime}-${closesAtTime}`}

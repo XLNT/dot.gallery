@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { Wallet } from "ethers";
 import { format } from "lib/exhibitionSlug";
@@ -42,6 +41,22 @@ const Container = styled.div`
 const ExhibitionTitle = styled.h1`
   margin: 4rem 2rem;
   font-size: 3rem;
+  /* font-family: rotor;
+
+  font-variation-settings: "rtnx" 90;
+  transition: font-variation-settings 1.5s ease-in-out, letter-spacing 1.5s, text-indent 1.5s;
+  letter-spacing: -75px;
+  text-indent: -75px;
+
+  &:hover {
+    font-variation-settings: "rtnx" 0;
+    letter-spacing: 0px;
+    text-indent: 0px;
+  } */
+`;
+
+const Underlined = styled.span`
+  text-decoration: underline;
 `;
 
 const ShowTimes = styled.div`
@@ -93,21 +108,12 @@ export default function Home() {
     return (
       <>
         <ExhibitionTitle>
-          {format(exhibition.number)}: {exhibition.title}
+          {format(exhibition.number)}: <Underlined>{exhibition.title}</Underlined>
         </ExhibitionTitle>
 
         <ShowTimes>
-          {shows.map((show, i) => {
-            const realOpensAt =
-              i === 0
-                ? DateTime.local()
-                    .toUTC()
-                    .minus({ hour: 1 })
-                    .toString()
-                : show.opensAt;
-            return (
-              <ExhibitionTimes key={show.number} opensAt={realOpensAt} closesAt={show.closesAt} />
-            );
+          {shows.map(show => {
+            return <ExhibitionTimes key={show.number} show={show} />;
           })}
         </ShowTimes>
       </>

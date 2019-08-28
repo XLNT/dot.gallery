@@ -8,11 +8,13 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "parcel -p 3000 index.html",
+    "start": "parcel -p ${PORT:-3000} index.html",
     "build": "parcel build index.html",
     "clear-cache": "rm -rf .cache",
     "codegen": "graphql-codegen --schema codegen.yml",
-    "ganache": "yarn ganache-cli --blockTime 1 -m 'ritual pioneer maze shine retreat mother salute height walk alien mail chat'"
+    "ganache": "yarn ganache-cli --blockTime 1 -m 'ritual pioneer maze shine retreat mother salute height walk alien mail chat'",
+    "now-dev": "yarn start",
+    "now-build": "yarn build"
   },
   "dependencies": {
     "@apollo/react-common": "^3.0.1",
@@ -54,6 +56,7 @@
     "react-spring": "^8.0.27",
     "react-use-dimensions": "^1.2.1",
     "react-use-promise": "^0.2.0",
+    "static": "^2.0.0",
     "styled-components": "^4.3.2",
     "subscriptions-transport-ws": "^0.9.16",
     "truffle-hdwallet-provider": "^1.0.17",

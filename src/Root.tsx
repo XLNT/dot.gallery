@@ -22,12 +22,18 @@ import WithPanel from "pages/WithPanel";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
 import nest from "lib/nest";
+import rotor from "static/rotor_Black_FuFo/ttf-vf/rotor_VF_rvrn.ttf";
 import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${fromTheme("fontFamily")};
+  }
+
+  @font-face {
+    font-family: rotor;
+    src: url(${rotor});
   }
 `;
 
