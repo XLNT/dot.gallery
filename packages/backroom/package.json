@@ -6,9 +6,11 @@
   "homepage": "https://github.com/XLNT/dot.gallery#readme",
   "license": "GPL-3.0-or-later",
   "main": "src/index.ts",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
     "start": "ts-node ./node_modules/.bin/micro-dev -d .env -p 4000",
-    "now-build": "parcel build src/client/index.html",
     "ganache": "yarn ganache-cli --blockTime 5 -m 'ritual pioneer maze shine retreat mother salute height walk alien mail chat'"
   },
   "repository": {

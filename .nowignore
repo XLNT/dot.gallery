@@ -1,4 +1,6 @@
 bin
-build
-contracts
-migrations
+public
+packages/src/gallery/dist
+packages/contracts/
+packages/prisma
+node_modules

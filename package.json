@@ -7,7 +7,9 @@
   "author": "Matt Condon (shrugs)",
   "license": "GPL-3.0-or-later",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "now-build": "lerna exec --scope gallery -- yarn build -- -d ../../public"
+  },
   "devDependencies": {
     "@types/node": "^12.7.2",
     "@typescript-eslint/eslint-plugin": "^2.0.0",

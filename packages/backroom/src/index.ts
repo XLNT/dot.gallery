@@ -15,8 +15,7 @@ const prisma = new Prisma({
   debug: true,
 });
 
-console.log(process.env);
-console.log(resolvers);
+console.log(resolvers)
 
 const server = new ApolloServer({
   typeDefs,
