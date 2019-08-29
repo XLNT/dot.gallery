@@ -1,9 +1,0 @@
-mutation CreateAsset($ownerId: ID!, $uri: String!) {
-  createAsset(data: {owner: {connect: {id: $ownerId}}, uri: $uri}) {
-    id
-    uri
-    owner {
-      id
-    }
-  }
-}
