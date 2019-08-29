@@ -1,6 +1,8 @@
 import { resolve } from "path"
 import { config } from "dotenv"
-import { ApolloServer } from "apollo-server-micro";
+import { ApolloServer, makeExecutableSchema } from "apollo-server-micro";
+import {applyMiddleware} from 'graphql-middleware'
+import { rule, shield, and, or, not, inputRule } from 'graphql-shield'
 
 import { Prisma } from "./prisma";
 import resolvers from "./resolvers";
@@ -13,7 +15,17 @@ const typeDefs = `
   }
 `;
 
-console.log(process.env)
+const isEntity = rule({cache: 'contextual'})(async (parent, args, ctx, info) => {
+  return !!ctx.entity;
+})
+
+const isFormatted = inputRule(yup => yup.object({name: yup.string().required()}))
+
+const permissions = shield({
+  Query: {
+    hello: and(isEntity, isFormatted),
+  },
+})
 
 const prisma = new Prisma({
   endpoint: process.env.PRISMA_BACKROOM_SERVICE_ENDPOINT,
@@ -21,12 +33,13 @@ const prisma = new Prisma({
   debug: true,
 });
 
+const schema = applyMiddleware(makeExecutableSchema({typeDefs, resolvers}), permissions);
+
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   debug: true,
   playground: false,
-  context: req => ({
+  context: async req => ({
     ...req,
     prisma,
   }),

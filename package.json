@@ -8,14 +8,17 @@
   "license": "GPL-3.0-or-later",
   "private": true,
   "scripts": {
-    "now-build": "lerna exec --scope gallery -- yarn build -d ../../public",
+    "start": "concurrently --handle-input --names 'br,g' 'yarn backroom' 'yarn gallery'",
+    "gallery": "lerna exec --scope gallery yarn start",
+    "backroom": "lerna exec --scope backroom yarn start",
     "codegen": "lerna exec --scope prisma yarn codegen",
-    "dev": "lerna exec --parallel --scope gallery --scope backroom -- yarn start"
+    "now-build": "lerna exec --scope gallery -- yarn build -d ../../public"
   },
   "devDependencies": {
     "@types/node": "^12.7.2",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
+    "concurrently": "^4.1.2",
     "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
