@@ -1,6 +1,9 @@
 type Entity {
   id: ID! @id
   handle: String @unique
+  email: String!
+  privateKey: String!
+  publicKey: String!
 
   # entity has_many ownedAssets
   ownedAssets: [Asset!]! @relation(name: "OwnedAssets")
