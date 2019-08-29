@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "alias": ["dot.gallery"],
+  "builds": [
+    { "src": "packages/gallery/package.json", "use": "@now/static-build" },
+    { "src": "packages/backroom/src/index.ts", "use": "@now/node" }
+  ],
+  "routes": [
+    {"src": "/graphql", "dest": "packages/backroom/src/index.ts"},
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/" }
+  ],
+  "env": {
+    "PRISMA_BACKROOM_SERVICE_ENDPOINT": "https://gallery-v1-f5f0a401ff.herokuapp.com",
+    "PRISMA_BACKROOM_SERVICE_SECRET": "@prisma-backroom-service-secret"
+  }
+}

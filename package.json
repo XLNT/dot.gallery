@@ -1,0 +1,27 @@
+{
+  "name": "dot.gallery",
+  "version": "1.0.0",
+  "description": "dot.gallery",
+  "main": "index.js",
+  "repository": "https://github.com/xlnt/dot.gallery",
+  "author": "Matt Condon (shrugs)",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {
+    "@types/node": "^12.7.2",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.2.2",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.4.0",
+    "ganache-cli": "^6.6.0",
+    "lerna": "^3.16.4",
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
