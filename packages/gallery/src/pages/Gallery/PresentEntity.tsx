@@ -42,7 +42,9 @@ export default function PresentEntity({
   draggable?: boolean;
   wrappable?: boolean;
   entity: Pick<Entity, "id" | "handle"> & {
-    ownedAssets: Maybe<Array<{ __typename?: "Asset" } & Pick<Asset, "id" | "uri">>>;
+    ownedAssets: Maybe<
+      Array<{ __typename?: "Asset" } & Pick<Asset, "id" | "uri">>
+    >;
   };
 }>) {
   return (

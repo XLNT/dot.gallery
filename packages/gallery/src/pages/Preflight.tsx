@@ -47,7 +47,13 @@ const PreflightHeader = styled.h2`
 `;
 const PreflightSubtitle = styled.span``;
 
-function PreflightStep({ title, subtitle }: { title: string; subtitle: string }) {
+function PreflightStep({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle: string;
+}) {
   return (
     <PreflightContainer>
       <PreflightHeader>{title}</PreflightHeader>
@@ -63,7 +69,8 @@ const steps = [
   },
   {
     title: "Give and receive.",
-    subtitle: "Drag a token onto a work and the work will give you something in return.",
+    subtitle:
+      "Drag a token onto a work and the work will give you something in return.",
   },
   {
     title: "Be where you are.",
@@ -72,7 +79,11 @@ const steps = [
   },
 ];
 
-export default function Preflight({ exhibition, show, setFlow }: ExhibitionProps<void>) {
+export default function Preflight({
+  exhibition,
+  show,
+  setFlow,
+}: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
   const { setFullscreen } = Fullscreen.useContainer();

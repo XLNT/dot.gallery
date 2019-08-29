@@ -19,7 +19,9 @@ import styled from "styled-components";
 import usePromise from "react-use-promise";
 
 interface RoomProps {
-  room: Pick<RoomModel, "id" | "entryId" | "x" | "y"> & { asset: Pick<AssetModel, "id" | "uri"> };
+  room: Pick<RoomModel, "id" | "entryId" | "x" | "y"> & {
+    asset: Pick<AssetModel, "id" | "uri">;
+  };
 }
 
 const Container = styled.div`
@@ -42,12 +44,15 @@ const collect = (monitor: DropTargetMonitor) => ({
 
 export default function Room({ room }: RoomProps) {
   const [entityId] = EntityId.useContainer();
-  const [result, error, state] = usePromise(() => contentful.getEntry<any>(room.entryId), [
-    room.entryId,
-    contentful,
-  ]);
+  const [result, error, state] = usePromise(
+    () => contentful.getEntry<any>(room.entryId),
+    [room.entryId, contentful],
+  );
 
-  const asset = { id: room.id, uri: get(result, "fields.work.fields.file.url") };
+  const asset = {
+    id: room.id,
+    uri: get(result, "fields.work.fields.file.url"),
+  };
   const [createAsset] = useCreateAssetMutation({
     variables: { ownerId: entityId, uri: asset.uri },
     refetchQueries: ["Entity"],
@@ -61,7 +66,11 @@ export default function Room({ room }: RoomProps) {
     [createAsset, deleteAsset],
   );
 
-  const [{ isOver }, dropRef] = useDrop({ accept: DragTypes.Asset, drop, collect });
+  const [{ isOver }, dropRef] = useDrop({
+    accept: DragTypes.Asset,
+    drop,
+    collect,
+  });
 
   const style = useSpring({
     transform: `translateZ(${isOver ? "100px" : "0px"})`,
@@ -75,7 +84,9 @@ export default function Room({ room }: RoomProps) {
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
-          {state === "resolved" && <GalleryRichText richText={result.fields.body} />}
+          {state === "resolved" && (
+            <GalleryRichText richText={result.fields.body} />
+          )}
           {state === "rejected" && (
             <>
               <h1>Error</h1>

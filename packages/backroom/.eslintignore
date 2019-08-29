@@ -1,0 +1,2 @@
+src/prisma/*
+src/resolvers-types.ts

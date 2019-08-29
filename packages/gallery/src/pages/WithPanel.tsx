@@ -97,7 +97,10 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
   const [isVisible] = PanelVisibility.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 
-  const togglePanel = useCallback(() => setPanelState(!isOpen), [isOpen, setPanelState]);
+  const togglePanel = useCallback(() => setPanelState(!isOpen), [
+    isOpen,
+    setPanelState,
+  ]);
 
   const [panelRef, { width: panelWidth }] = useDimensions();
 
@@ -117,7 +120,9 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
 
   return (
     <Backboard>
-      <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>{children}</Content>
+      <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>
+        {children}
+      </Content>
       <PanelContainer
         ref={panelRef}
         style={{

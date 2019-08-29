@@ -64,4 +64,6 @@ function Root() {
   );
 }
 
-export default process.env.NODE_ENV === "development" ? hot(module)(Root) : Root;
+export default process.env.NODE_ENV === "development"
+  ? hot(module)(Root)
+  : Root;

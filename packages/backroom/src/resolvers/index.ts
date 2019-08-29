@@ -1,5 +1,5 @@
 import { mergeResolvers } from "merge-graphql-schemas";
 
-import hello from './hello.resolver'
+import entity from "./entity.resolver";
 
-export default mergeResolvers([hello]);
+export default mergeResolvers([entity]);

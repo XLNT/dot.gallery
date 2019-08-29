@@ -1,31 +1,16 @@
-import { resolve } from "path"
-import { config } from "dotenv"
 import { ApolloServer, makeExecutableSchema } from "apollo-server-micro";
-import {applyMiddleware} from 'graphql-middleware'
-import { rule, shield, and, or, not, inputRule } from 'graphql-shield'
+import { applyMiddleware } from "graphql-middleware";
+import { config } from "dotenv";
+import { importSchema } from "graphql-import";
+import { resolve } from "path";
 
 import { Prisma } from "./prisma";
+import permissions from "./permissions";
 import resolvers from "./resolvers";
 
-config({path: resolve(__dirname, '../../../.env')});
+config({ path: resolve(__dirname, "../../../.env") });
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`;
-
-const isEntity = rule({cache: 'contextual'})(async (parent, args, ctx, info) => {
-  return !!ctx.entity;
-})
-
-const isFormatted = inputRule(yup => yup.object({name: yup.string().required()}))
-
-const permissions = shield({
-  Query: {
-    hello: and(isEntity, isFormatted),
-  },
-})
+const typeDefs = importSchema(resolve(__dirname, "backroom.graphql"));
 
 const prisma = new Prisma({
   endpoint: process.env.PRISMA_BACKROOM_SERVICE_ENDPOINT,
@@ -33,7 +18,10 @@ const prisma = new Prisma({
   debug: true,
 });
 
-const schema = applyMiddleware(makeExecutableSchema({typeDefs, resolvers}), permissions);
+const schema = applyMiddleware(
+  makeExecutableSchema({ typeDefs, resolvers }),
+  permissions,
+);
 
 const server = new ApolloServer({
   schema,

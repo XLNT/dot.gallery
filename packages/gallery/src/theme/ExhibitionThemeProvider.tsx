@@ -8,7 +8,8 @@ export default function ExhibitionThemeProvider(props: PropsWithChildren<{}>) {
   const { exhibition, loading, error } = useCurrentExhibition();
   const exhibitionTheme = get(exhibition, "theme", {});
 
-  const currentTheme = loading || error ? theme : { ...theme, ...exhibitionTheme };
+  const currentTheme =
+    loading || error ? theme : { ...theme, ...exhibitionTheme };
 
   return <ThemeProvider theme={currentTheme} {...props} />;
 }

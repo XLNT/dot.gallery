@@ -1,0 +1,58 @@
+scalar DateTime
+scalar Json
+
+type Asset {
+  id: ID!
+  uri: String!
+  owner: Entity!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Entity {
+  id: ID!
+  handle: String
+  ownedAssets: [Asset!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Exhibition {
+  id: ID!
+  title: String!
+  number: Int!
+  theme: Json
+  extent: Int!
+  shows: [Show!]
+  rooms: [Room!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Show {
+  id: ID!
+  number: Int!
+  opensAt: DateTime!
+  closesAt: DateTime!
+  exhibition: Exhibition!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Room {
+  id: ID!
+  entryId: ID!
+  x: Int!
+  y: Int!
+  exhibition: Exhibition!
+}
+
+type Query {
+  entity(id: ID!): Entity!
+  currentExhibition: Exhibition
+}
+
+type Mutation  {
+  createEntity: Entity!
+  createAsset(ownerId: ID!, uri: String!): Asset!
+}

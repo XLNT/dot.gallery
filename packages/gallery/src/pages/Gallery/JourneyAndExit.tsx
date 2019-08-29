@@ -117,8 +117,11 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
           <InnerExitProposal>
             You are about to exit the gallery, hands on the door.
             <br />
-            Do you want to <ThemeLink onClick={goExit}>continue to exit</ThemeLink> or{" "}
-            <ThemeLink onClick={cancelExitProposal}>stay a little longer?</ThemeLink>
+            Do you want to{" "}
+            <ThemeLink onClick={goExit}>continue to exit</ThemeLink> or{" "}
+            <ThemeLink onClick={cancelExitProposal}>
+              stay a little longer?
+            </ThemeLink>
           </InnerExitProposal>
         </ExitProposal>
       </ExitLayer>

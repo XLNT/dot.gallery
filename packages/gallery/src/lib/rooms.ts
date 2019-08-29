@@ -24,19 +24,27 @@ const kKeycodesToDirections: { [_: number]: number } = {
   40: Direction.Down,
 };
 
-export const keycodeFor = (direction: Direction) => kDirectionsToKeycodes[direction];
+export const keycodeFor = (direction: Direction) =>
+  kDirectionsToKeycodes[direction];
 export const directionFor = (keycode: number) => kKeycodesToDirections[keycode];
 
 const toNumber = (direction: Direction, a: Direction, b: Direction): number =>
   direction === a ? -1 : direction === b ? 1 : 0;
 
-export const navigate = (coords: Coords, extent: number, direction: Direction): Coords => {
+export const navigate = (
+  coords: Coords,
+  extent: number,
+  direction: Direction,
+): Coords => {
   const [x, y] = coords;
 
-  const newX = extent + x + toNumber(direction, Direction.Left, Direction.Right);
+  const newX =
+    extent + x + toNumber(direction, Direction.Left, Direction.Right);
   const newY = extent + y + toNumber(direction, Direction.Up, Direction.Down);
   return [newX % extent, newY % extent];
 };
 
-export const findRoom = <T extends Pick<Room, "x" | "y">>(rooms: Array<T>, coords: Coords) =>
-  find(rooms, room => room.x === coords[0] && room.y === coords[1]) || null;
+export const findRoom = <T extends Pick<Room, "x" | "y">>(
+  rooms: Array<T>,
+  coords: Coords,
+) => find(rooms, room => room.x === coords[0] && room.y === coords[1]) || null;

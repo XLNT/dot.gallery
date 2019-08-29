@@ -22,7 +22,9 @@ export default function SocialLayer() {
 
   return (
     <PresenceList>
-      {!loading && !error && data.entity && <PresentEntity entity={data.entity} />}
+      {!loading && !error && data.entity && (
+        <PresentEntity entity={data.entity} />
+      )}
     </PresenceList>
   );
 }

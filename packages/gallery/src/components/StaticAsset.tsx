@@ -8,6 +8,8 @@ const AssetImg = styled.img`
 `;
 
 // eslint-disable-next-line react/display-name
-export default React.forwardRef(({ asset, ...rest }: { asset: Pick<Asset, "id" | "uri"> }, ref) => (
-  <AssetImg ref={ref} src={asset.uri} {...rest} />
-));
+export default React.forwardRef(
+  ({ asset, ...rest }: { asset: Pick<Asset, "id" | "uri"> }, ref) => (
+    <AssetImg ref={ref} src={asset.uri} {...rest} />
+  ),
+);

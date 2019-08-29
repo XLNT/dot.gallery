@@ -11,6 +11,8 @@
   },
   "scripts": {
     "start": "nodemon -r ts-node/register ./node_modules/.bin/micro-dev -d .env -p 4000",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "ganache": "yarn ganache-cli --blockTime 5 -m 'ritual pioneer maze shine retreat mother salute height walk alien mail chat'"
   },
   "repository": {
@@ -24,6 +26,7 @@
     "apollo-server-micro": "^2.9.1",
     "dotenv": "^8.1.0",
     "graphql": "^14.5.4",
+    "graphql-import": "^0.7.1",
     "graphql-middleware": "^4.0.1",
     "graphql-shield": "^6.0.6",
     "merge-graphql-schemas": "^1.7.0",
@@ -34,6 +37,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
+    "eslint-plugin-import": "^2.18.2",
     "graphql-tag-pluck": "^0.8.4",
     "nodemon": "^1.19.1"
   }

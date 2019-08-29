@@ -32,10 +32,19 @@ export default React.forwardRef(
       const _tX = originOffset + toX * length;
       const _tY = originOffset + toY * length;
 
-      things.push(<line key={i} x1={_fX} y1={_fY} x2={_tX} y2={_tY} stroke="red" />);
+      things.push(
+        <line key={i} x1={_fX} y1={_fY} x2={_tX} y2={_tY} stroke="red" />,
+      );
       if (i === journey.length - 1) {
         things.push(
-          <circle key="circle" fill="white" r={extent / 20} cx={_tX} cy={_tY} stroke="red" />,
+          <circle
+            key="circle"
+            fill="white"
+            r={extent / 20}
+            cx={_tX}
+            cy={_tY}
+            stroke="red"
+          />,
         );
       }
     }
@@ -50,7 +59,14 @@ export default React.forwardRef(
           strokeLinecap="square"
           {...rest}
         >
-          <rect fill="white" stroke="red" x="0" y="0" width={extent} height={extent}></rect>
+          <rect
+            fill="white"
+            stroke="red"
+            x="0"
+            y="0"
+            width={extent}
+            height={extent}
+          ></rect>
           {things}
         </svg>
       </div>

@@ -20,7 +20,9 @@ const P = styled.p`
   line-height: 1.3rem;
 `;
 
-export default function GalleryRichText(props: PropsWithChildren<ComponentProps<RichText>>) {
+export default function GalleryRichText(
+  props: PropsWithChildren<ComponentProps<RichText>>,
+) {
   return (
     <RichText
       {...props}

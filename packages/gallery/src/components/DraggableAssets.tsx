@@ -15,7 +15,12 @@ const collect = (monitor: DragSourceMonitor) => ({
   isDragging: monitor.isDragging(),
 });
 
-export default function DraggableAsset({ asset, ...rest }: { asset: Pick<Asset, "id" | "uri"> }) {
+export default function DraggableAsset({
+  asset,
+  ...rest
+}: {
+  asset: Pick<Asset, "id" | "uri">;
+}) {
   const [{ isDragging }, drag, connectDragPreview] = useDrag({
     item: { type: DragTypes.Asset, id: asset.id, uri: asset.uri },
     collect,
@@ -31,5 +36,12 @@ export default function DraggableAsset({ asset, ...rest }: { asset: Pick<Asset, 
     });
   }, [connectDragPreview]);
 
-  return <StyledStaticAsset ref={drag} asset={asset} isDragging={isDragging} {...rest} />;
+  return (
+    <StyledStaticAsset
+      ref={drag}
+      asset={asset}
+      isDragging={isDragging}
+      {...rest}
+    />
+  );
 }

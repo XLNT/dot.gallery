@@ -1,5 +1,5 @@
 mutation CreateEntity {
-  createEntity(data: {}) {
+  createEntity {
     id
   }
 }

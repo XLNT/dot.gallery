@@ -9,6 +9,8 @@
   "scripts": {
     "start": "parcel -p ${PORT:-3000} src/index.html",
     "build": "parcel build src/index.html",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "clear-cache": "rm -rf .cache",
     "now-dev": "yarn start",
     "now-build": "yarn build"
@@ -73,6 +75,9 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-styled-components": "^1.10.6",
     "babel-preset-env": "^1.7.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-clean-dist": "^0.0.6"
   }

@@ -12,6 +12,8 @@
     "gallery": "lerna exec --scope gallery yarn start",
     "backroom": "lerna exec --scope backroom yarn start",
     "codegen": "lerna exec --scope prisma yarn codegen",
+    "lint": "lerna exec --scope backroom --scope gallery yarn lint",
+    "lint:fix": "lerna exec --scope backroom --scope gallery yarn lint:fix",
     "now-build": "lerna exec --scope gallery -- yarn build -d ../../public"
   },
   "devDependencies": {

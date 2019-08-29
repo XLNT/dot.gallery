@@ -55,9 +55,16 @@ export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
-  const [result, , state] = usePromise(() => contentful.getEntry<any>(ABOUT_ID), [contentful]);
+  const [result, , state] = usePromise(
+    () => contentful.getEntry<any>(ABOUT_ID),
+    [contentful],
+  );
   const [entityId, setEntityId, entityIdHydrated] = EntityId.useContainer();
-  const [privateKey, setPrivateKey, privateKeyHydrated] = PrivateKey.useContainer();
+  const [
+    privateKey,
+    setPrivateKey,
+    privateKeyHydrated,
+  ] = PrivateKey.useContainer();
   const [mutate] = useCreateEntityMutation();
 
   useEffect(() => {
@@ -96,7 +103,8 @@ export default function Home() {
     return (
       <>
         <ExhibitionTitle>
-          {format(exhibition.number)}: <Underlined>{exhibition.title}</Underlined>
+          {format(exhibition.number)}:{" "}
+          <Underlined>{exhibition.title}</Underlined>
         </ExhibitionTitle>
 
         <ShowTimes>
@@ -114,7 +122,9 @@ export default function Home() {
       <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>
         <WithContentTransition>
-          {state === "resolved" && <GalleryRichText richText={result.fields.body} />}
+          {state === "resolved" && (
+            <GalleryRichText richText={result.fields.body} />
+          )}
           {state === "rejected" && (
             <>
               <h1>dot.gallery</h1>

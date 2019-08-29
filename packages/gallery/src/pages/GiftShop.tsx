@@ -1,5 +1,10 @@
 import { Contract, Wallet, providers } from "ethers";
-import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import {
+  DragSourceMonitor,
+  DropTargetMonitor,
+  useDrag,
+  useDrop,
+} from "react-dnd";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { useCreateAssetMutation, useEntityQuery } from "operations";
@@ -21,7 +26,9 @@ import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const contractAddress = "0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF";
 
-const abi = ["function awardItem(address visitor, string tokenURI) public returns (uint256)"];
+const abi = [
+  "function awardItem(address visitor, string tokenURI) public returns (uint256)",
+];
 
 const provider = new providers.JsonRpcProvider({
   url: "https://ethberlin01.skalenodes.com:10183",
@@ -85,8 +92,12 @@ const LeaveButton = styled.span`
   cursor: pointer;
 `;
 
-const connectDrag = (monitor: DragSourceMonitor) => ({ isDragging: monitor.isDragging() });
-const collectDrop = (monitor: DropTargetMonitor) => ({ isOver: monitor.isOver({ shallow: true }) });
+const connectDrag = (monitor: DragSourceMonitor) => ({
+  isDragging: monitor.isDragging(),
+});
+const collectDrop = (monitor: DropTargetMonitor) => ({
+  isOver: monitor.isOver({ shallow: true }),
+});
 
 export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
@@ -166,7 +177,8 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
         <StepsContainer>
           <Header>We hope you enjoyed your walk.</Header>
           <Subtitle>
-            Take home your personalized journey by dragging it into your collection.
+            Take home your personalized journey by dragging it into your
+            collection.
           </Subtitle>
         </StepsContainer>
         <GiftContainer>
@@ -188,7 +200,9 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
           <PresentEntity entity={data.entity} draggable={false} wrappable>
             {(() => {
               if (isOver) {
-                return <JourneyIcon svgRef={svgRef} size={5} journey={journey} />;
+                return (
+                  <JourneyIcon svgRef={svgRef} size={5} journey={journey} />
+                );
               }
 
               if (didDrag && !createAssetData) {

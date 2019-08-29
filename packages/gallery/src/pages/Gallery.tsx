@@ -1,4 +1,11 @@
-import { Coords, Direction, directionFor, findRoom, keycodeFor, navigate } from "lib/rooms";
+import {
+  Coords,
+  Direction,
+  directionFor,
+  findRoom,
+  keycodeFor,
+  navigate,
+} from "lib/rooms";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { animated, useTransition } from "react-spring";
 import { format } from "lib/exhibitionSlug";
@@ -73,28 +80,48 @@ export default function Gallery(props: ExhibitionProps<void>) {
     (pressedKey: number) => {
       if (exhibition) {
         setLastDirection(directionFor(pressedKey));
-        const newCoords = navigate(coords, exhibition.extent, directionFor(pressedKey));
+        const newCoords = navigate(
+          coords,
+          exhibition.extent,
+          directionFor(pressedKey),
+        );
         appendToJourney(newCoords);
         setCoords(newCoords);
       }
     },
     {
-      detectKeys: [Direction.Left, Direction.Up, Direction.Right, Direction.Down].map(keycodeFor),
+      detectKeys: [
+        Direction.Left,
+        Direction.Up,
+        Direction.Right,
+        Direction.Down,
+      ].map(keycodeFor),
     },
     { dependencies: [exhibition, coords] },
   );
 
   const room = useMemo(
-    () => (!exhibition || coords === null ? null : findRoom(exhibition.rooms, coords)),
+    () =>
+      !exhibition || coords === null
+        ? null
+        : findRoom(exhibition.rooms, coords),
     [coords, exhibition],
   );
 
   const width = document.body.clientWidth;
   const height = document.body.clientHeight;
   const outX =
-    lastDirection === Direction.Left ? width : lastDirection === Direction.Right ? -width : 0;
+    lastDirection === Direction.Left
+      ? width
+      : lastDirection === Direction.Right
+      ? -width
+      : 0;
   const outY =
-    lastDirection === Direction.Down ? -height : lastDirection === Direction.Up ? height : 0;
+    lastDirection === Direction.Down
+      ? -height
+      : lastDirection === Direction.Up
+      ? height
+      : 0;
 
   const transitions = useTransition(room, room => room && room.id, {
     initial: { transform: `translate3d(0, 0, 0)`, opacity: 1 },

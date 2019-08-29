@@ -6,6 +6,6 @@ export default class TicketButton extends React.Component<any> {
       <div>
         <button onClick={this.props.onClick}>{this.props.label}</button>
       </div>
-    )
+    );
   }
 }

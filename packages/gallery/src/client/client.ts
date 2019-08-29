@@ -1,8 +1,7 @@
 import { ApolloClient } from "apollo-client";
-import { ApolloLink, split } from "apollo-link";
+import { ApolloLink } from "apollo-link";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { getMainDefinition } from "apollo-utilities";
 import { onError } from "apollo-link-error";
 
 const BASE_URL = "gallery-v1-f5f0a401ff.herokuapp.com";

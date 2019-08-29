@@ -61,7 +61,10 @@ const Calendar = styled.img`
   }
 `;
 
-export default function ExhibitionTimes({ show: { number, opensAt, closesAt }, ...rest }: any) {
+export default function ExhibitionTimes({
+  show: { number, opensAt, closesAt },
+  ...rest
+}: any) {
   const { history } = useRouter();
   const { exhibition } = useCurrentExhibition();
 
@@ -73,9 +76,10 @@ export default function ExhibitionTimes({ show: { number, opensAt, closesAt }, .
     variables: { ownerId: entityId, uri: buildTokenUri(tokenURI) },
   });
 
-  const opensAtDate = useMemo(() => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_MED), [
-    opensAt,
-  ]);
+  const opensAtDate = useMemo(
+    () => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_MED),
+    [opensAt],
+  );
   const opensAtTime = useMemo(
     () => DateTime.fromISO(opensAt).toLocaleString(DateTime.TIME_24_SIMPLE),
     [opensAt],
@@ -100,7 +104,9 @@ export default function ExhibitionTimes({ show: { number, opensAt, closesAt }, .
     () =>
       `http://www.google.com/calendar/event?${new URLSearchParams({
         action: "TEMPLATE",
-        dates: `${toGoogleCalendarDatetime(opensAt)}/${toGoogleCalendarDatetime(closesAt)}`,
+        dates: `${toGoogleCalendarDatetime(opensAt)}/${toGoogleCalendarDatetime(
+          closesAt,
+        )}`,
         text: `dot.gallery ${format(exhibition.number, number)}`,
         location: "https://dot.gallery",
         details: `dot.gallery ${format(exhibition.number, number)} Opening`,
@@ -122,7 +128,9 @@ export default function ExhibitionTimes({ show: { number, opensAt, closesAt }, .
         </a>
       </OpenDate>
       <OpenTime>
-        {showState === ShowState.Open ? "Enter" : `${opensAtTime}-${closesAtTime}`}
+        {showState === ShowState.Open
+          ? "Enter"
+          : `${opensAtTime}-${closesAtTime}`}
       </OpenTime>
     </Container>
   );

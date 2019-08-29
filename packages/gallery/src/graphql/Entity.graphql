@@ -1,5 +1,5 @@
 query Entity($id: ID!) {
-  entity(where: {id: $id}) {
+  entity(id: $id) {
     id
     handle
     ownedAssets {

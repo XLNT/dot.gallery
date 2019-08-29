@@ -1,5 +1,5 @@
 query CurrentExhibition {
-  exhibitions(last: 1, orderBy: number_DESC) {
+  currentExhibition {
     id
     title
     number

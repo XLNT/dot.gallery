@@ -34,9 +34,13 @@ const routes: { [_: number]: FunctionComponent<ExhibitionProps<any>> } = {
   [Flow.GiftShop]: GiftShop,
 };
 
-export default function Exhibition({ match }: RouteComponentProps<{ slug: string }>) {
+export default function Exhibition({
+  match,
+}: RouteComponentProps<{ slug: string }>) {
   const [flow, setFlow] = useState<Flow>(Flow.Preflight);
-  const [exhibition, show] = useMemo(() => parse(match.params.slug), [match.params.slug]);
+  const [exhibition, show] = useMemo(() => parse(match.params.slug), [
+    match.params.slug,
+  ]);
   const { isFullscreen } = Fullscreen.useContainer();
 
   const wasFullscreen = usePreviousValue(isFullscreen);
