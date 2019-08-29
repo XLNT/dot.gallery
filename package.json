@@ -8,7 +8,9 @@
   "license": "GPL-3.0-or-later",
   "private": true,
   "scripts": {
-    "now-build": "lerna exec --scope gallery -- yarn build -- -d ../../public"
+    "now-build": "lerna exec --scope gallery -- yarn build -d ../../public",
+    "codegen": "lerna exec --scope prisma yarn codegen",
+    "dev": "lerna exec --parallel --scope gallery --scope backroom -- yarn start"
   },
   "devDependencies": {
     "@types/node": "^12.7.2",

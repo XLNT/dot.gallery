@@ -1,4 +1,5 @@
-import * as path from "path";
-import { fileLoader, mergeResolvers } from "merge-graphql-schemas";
+import { mergeResolvers } from "merge-graphql-schemas";
 
-export default mergeResolvers(fileLoader(path.join(__dirname, "./**/*.resolver.*")));
+import hello from './hello.resolver'
+
+export default mergeResolvers([hello]);
