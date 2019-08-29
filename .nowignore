@@ -1,6 +1,5 @@
-bin
-public
-packages/src/gallery/dist
+bin/
+public/
 packages/contracts/
-packages/prisma
-node_modules
+packages/prisma/
+node_modules/
