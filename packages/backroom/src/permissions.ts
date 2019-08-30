@@ -14,4 +14,15 @@ export default shield({
   Query: {
     // hello: and(isEntity, isFormatted),
   },
+  Mutation: {
+    loginAs: inputRule(yup =>
+      yup.object({
+        privateKey: yup
+          .string()
+          .length(66)
+          .matches(/^0x[0-9a-fA-F]{64}/)
+          .required(),
+      }),
+    ),
+  },
 });

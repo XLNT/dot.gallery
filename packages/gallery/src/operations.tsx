@@ -48,8 +48,15 @@ export type Exhibition = {
 
 export type Mutation = {
   __typename?: 'Mutation',
+  loginAs: Entity,
   createEntity: Entity,
   createAsset: Asset,
+};
+
+
+export type MutationLoginAsArgs = {
+  accessToken: Scalars['String'],
+  privateKey: Scalars['String']
 };
 
 

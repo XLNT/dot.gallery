@@ -1,7 +1,7 @@
 type Entity {
   id: ID! @id
   handle: String @unique
-  email: String!
+  email: String! @unique
   privateKey: String!
   publicKey: String!
 

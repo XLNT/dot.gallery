@@ -12,7 +12,7 @@
     "gallery": "lerna exec --scope gallery yarn start",
     "backroom": "lerna exec --scope backroom yarn start",
     "codegen": "lerna exec --scope prisma yarn codegen",
-    "prisma": "lerna exec --scope prisma prisma deploy",
+    "prisma": "lerna exec --scope prisma yarn deploy",
     "lint": "lerna exec --scope backroom --scope gallery yarn lint",
     "lint:fix": "lerna exec --scope backroom --scope gallery yarn lint:fix",
     "now-build": "lerna exec --scope gallery -- yarn build -d ../../public"

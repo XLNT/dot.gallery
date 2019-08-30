@@ -8,6 +8,7 @@ services:
     environment:
       PRISMA_CONFIG: |
         port: 4466
+        managementApiSecret: password
         databases:
           default:
             connector: mysql

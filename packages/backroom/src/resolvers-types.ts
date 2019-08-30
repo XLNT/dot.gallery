@@ -47,8 +47,15 @@ export type Exhibition = {
 
 export type Mutation = {
   __typename?: 'Mutation',
+  loginAs: Entity,
   createEntity: Entity,
   createAsset: Asset,
+};
+
+
+export type MutationLoginAsArgs = {
+  accessToken: Scalars['String'],
+  privateKey: Scalars['String']
 };
 
 
@@ -227,6 +234,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  loginAs?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<MutationLoginAsArgs, 'accessToken' | 'privateKey'>>,
   createEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   createAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'ownerId' | 'uri'>>,
 };

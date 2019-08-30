@@ -470,6 +470,7 @@ input EntityWhereInput {
 input EntityWhereUniqueInput {
   id: ID
   handle: String
+  email: String
 }
 
 type Exhibition {

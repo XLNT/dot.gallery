@@ -3,3 +3,4 @@ public/
 packages/contracts/
 packages/prisma/
 node_modules/
+.cache/

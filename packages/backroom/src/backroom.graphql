@@ -12,6 +12,10 @@ type Asset {
 type Entity {
   id: ID!
   handle: String
+  email: String!
+  privateKey: String!
+  publicKey: String!
+
   ownedAssets: [Asset!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -53,6 +57,7 @@ type Query {
 }
 
 type Mutation  {
+  loginAs(accessToken: String!, privateKey: String!): Entity!
   createEntity: Entity!
   createAsset(ownerId: ID!, uri: String!): Asset!
 }
