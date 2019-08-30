@@ -1,7 +1,8 @@
-import { MutationResolvers, PlacementResolvers } from "../resolvers-types";
+import { MutationResolvers } from "../resolvers-types";
+import relation from "../../lib/relation";
 
 const placeAsset: MutationResolvers["placeAsset"] = async (
-  parent,
+  root,
   { assetId, roomId, x, y },
   { prisma, currentEntity },
 ) => {
@@ -24,29 +25,13 @@ const placeAsset: MutationResolvers["placeAsset"] = async (
   return placement;
 };
 
-const placementEntity: PlacementResolvers["entity"] = async (
-  { id },
-  args,
-  { prisma },
-) => prisma.placement({ id }).entity();
-const placementCounterfactualToken: PlacementResolvers["counterfactualToken"] = async (
-  { id },
-  args,
-  { prisma },
-) => prisma.placement({ id }).counterfactualToken();
-const placementRoom: PlacementResolvers["room"] = async (
-  { id },
-  args,
-  { prisma },
-) => prisma.placement({ id }).room();
-
 export default {
   Mutation: {
     placeAsset,
   },
   Placement: {
-    entity: placementEntity,
-    room: placementRoom,
-    counterfactualToken: placementCounterfactualToken,
+    entity: relation("entity"),
+    room: relation("room"),
+    counterfactualToken: relation("counterfactualToken"),
   },
 };
