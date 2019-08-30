@@ -38,11 +38,10 @@ export type Entity = {
   id: Scalars['ID'],
   handle?: Maybe<Scalars['String']>,
   email: Scalars['String'],
-  privateKey: Scalars['String'],
-  publicKey: Scalars['String'],
   assets: Array<Asset>,
   counterfactualTokens: Array<CounterfactualToken>,
   placements: Array<Placement>,
+  tickets: Array<Ticket>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -58,21 +57,23 @@ export type Exhibition = {
   rooms?: Maybe<Array<Room>>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
+  ticketsAvailable: Scalars['Int'],
+  currentTicketPrice: Scalars['Int'],
 };
 
 
 export type Mutation = {
   __typename?: 'Mutation',
-  loginAs: Entity,
+  loginAs: Scalars['String'],
   placeAsset?: Maybe<Placement>,
   createEntity: Entity,
   createAsset: Asset,
+  modIssueTicket?: Maybe<Ticket>,
 };
 
 
 export type MutationLoginAsArgs = {
-  accessToken: Scalars['String'],
-  privateKey: Scalars['String']
+  accessToken: Scalars['String']
 };
 
 
@@ -89,6 +90,13 @@ export type MutationCreateAssetArgs = {
   uri: Scalars['String']
 };
 
+
+export type MutationModIssueTicketArgs = {
+  exhibitionId: Scalars['ID'],
+  email?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['String']>
+};
+
 export type Placement = {
   __typename?: 'Placement',
   id: Scalars['ID'],
@@ -102,8 +110,9 @@ export type Placement = {
 
 export type Query = {
   __typename?: 'Query',
-  entity: Entity,
+  currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
+  entity: Entity,
 };
 
 
@@ -127,6 +136,14 @@ export type Show = {
   number: Scalars['Int'],
   opensAt: Scalars['DateTime'],
   closesAt: Scalars['DateTime'],
+  exhibition: Exhibition,
+  createdAt: Scalars['DateTime'],
+  updatedAt: Scalars['DateTime'],
+};
+
+export type Ticket = {
+  __typename?: 'Ticket',
+  id: Scalars['ID'],
   exhibition: Exhibition,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],

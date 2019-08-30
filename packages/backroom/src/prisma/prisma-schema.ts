@@ -263,7 +263,7 @@ type CounterfactualToken {
   id: ID!
   tokenURI: String!
   owner: Entity!
-  placement: Placement!
+  placement: Placement
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -278,7 +278,7 @@ input CounterfactualTokenCreateInput {
   id: ID
   tokenURI: String!
   owner: EntityCreateOneWithoutCounterfactualTokensInput!
-  placement: PlacementCreateOneWithoutCounterfactualTokenInput!
+  placement: PlacementCreateOneWithoutCounterfactualTokenInput
 }
 
 input CounterfactualTokenCreateManyWithoutOwnerInput {
@@ -294,7 +294,7 @@ input CounterfactualTokenCreateOneWithoutPlacementInput {
 input CounterfactualTokenCreateWithoutOwnerInput {
   id: ID
   tokenURI: String!
-  placement: PlacementCreateOneWithoutCounterfactualTokenInput!
+  placement: PlacementCreateOneWithoutCounterfactualTokenInput
 }
 
 input CounterfactualTokenCreateWithoutPlacementInput {
@@ -397,7 +397,7 @@ input CounterfactualTokenSubscriptionWhereInput {
 input CounterfactualTokenUpdateInput {
   tokenURI: String
   owner: EntityUpdateOneRequiredWithoutCounterfactualTokensInput
-  placement: PlacementUpdateOneRequiredWithoutCounterfactualTokenInput
+  placement: PlacementUpdateOneWithoutCounterfactualTokenInput
 }
 
 input CounterfactualTokenUpdateManyDataInput {
@@ -434,7 +434,7 @@ input CounterfactualTokenUpdateOneRequiredWithoutPlacementInput {
 
 input CounterfactualTokenUpdateWithoutOwnerDataInput {
   tokenURI: String
-  placement: PlacementUpdateOneRequiredWithoutCounterfactualTokenInput
+  placement: PlacementUpdateOneWithoutCounterfactualTokenInput
 }
 
 input CounterfactualTokenUpdateWithoutPlacementDataInput {
@@ -520,8 +520,6 @@ type Entity {
   id: ID!
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
   counterfactualTokens(where: CounterfactualTokenWhereInput, orderBy: CounterfactualTokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CounterfactualToken!]
   placements(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Placement!]
@@ -540,8 +538,6 @@ input EntityCreateInput {
   id: ID
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   assets: AssetCreateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
@@ -572,8 +568,6 @@ input EntityCreateWithoutAssetsInput {
   id: ID
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
   tickets: TicketCreateManyWithoutOwnerInput
@@ -583,8 +577,6 @@ input EntityCreateWithoutCounterfactualTokensInput {
   id: ID
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   assets: AssetCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
   tickets: TicketCreateManyWithoutOwnerInput
@@ -594,8 +586,6 @@ input EntityCreateWithoutPlacementsInput {
   id: ID
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   assets: AssetCreateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
   tickets: TicketCreateManyWithoutOwnerInput
@@ -605,8 +595,6 @@ input EntityCreateWithoutTicketsInput {
   id: ID
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   assets: AssetCreateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
@@ -624,10 +612,6 @@ enum EntityOrderByInput {
   handle_DESC
   email_ASC
   email_DESC
-  privateKey_ASC
-  privateKey_DESC
-  publicKey_ASC
-  publicKey_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -638,8 +622,6 @@ type EntityPreviousValues {
   id: ID!
   handle: String
   email: String!
-  privateKey: String!
-  publicKey: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -665,8 +647,6 @@ input EntitySubscriptionWhereInput {
 input EntityUpdateInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
   assets: AssetUpdateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
@@ -676,8 +656,6 @@ input EntityUpdateInput {
 input EntityUpdateManyMutationInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
 }
 
 input EntityUpdateOneRequiredWithoutAssetsInput {
@@ -711,8 +689,6 @@ input EntityUpdateOneRequiredWithoutTicketsInput {
 input EntityUpdateWithoutAssetsDataInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
   counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
   tickets: TicketUpdateManyWithoutOwnerInput
@@ -721,8 +697,6 @@ input EntityUpdateWithoutAssetsDataInput {
 input EntityUpdateWithoutCounterfactualTokensDataInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
   assets: AssetUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
   tickets: TicketUpdateManyWithoutOwnerInput
@@ -731,8 +705,6 @@ input EntityUpdateWithoutCounterfactualTokensDataInput {
 input EntityUpdateWithoutPlacementsDataInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
   assets: AssetUpdateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
   tickets: TicketUpdateManyWithoutOwnerInput
@@ -741,8 +713,6 @@ input EntityUpdateWithoutPlacementsDataInput {
 input EntityUpdateWithoutTicketsDataInput {
   handle: String
   email: String
-  privateKey: String
-  publicKey: String
   assets: AssetUpdateManyWithoutOwnerInput
   counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
@@ -811,34 +781,6 @@ input EntityWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  privateKey: String
-  privateKey_not: String
-  privateKey_in: [String!]
-  privateKey_not_in: [String!]
-  privateKey_lt: String
-  privateKey_lte: String
-  privateKey_gt: String
-  privateKey_gte: String
-  privateKey_contains: String
-  privateKey_not_contains: String
-  privateKey_starts_with: String
-  privateKey_not_starts_with: String
-  privateKey_ends_with: String
-  privateKey_not_ends_with: String
-  publicKey: String
-  publicKey_not: String
-  publicKey_in: [String!]
-  publicKey_not_in: [String!]
-  publicKey_lt: String
-  publicKey_lte: String
-  publicKey_gt: String
-  publicKey_gte: String
-  publicKey_contains: String
-  publicKey_not_contains: String
-  publicKey_starts_with: String
-  publicKey_not_starts_with: String
-  publicKey_ends_with: String
-  publicKey_not_ends_with: String
   assets_every: AssetWhereInput
   assets_some: AssetWhereInput
   assets_none: AssetWhereInput
@@ -882,6 +824,7 @@ type Exhibition {
   id: ID!
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int!
   shows(where: ShowWhereInput, orderBy: ShowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Show!]
@@ -901,6 +844,7 @@ input ExhibitionCreateInput {
   id: ID
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int
   shows: ShowCreateManyWithoutExhibitionInput
@@ -927,6 +871,7 @@ input ExhibitionCreateWithoutRoomsInput {
   id: ID
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int
   shows: ShowCreateManyWithoutExhibitionInput
@@ -937,6 +882,7 @@ input ExhibitionCreateWithoutShowsInput {
   id: ID
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int
   rooms: RoomCreateManyWithoutExhibitionInput
@@ -947,6 +893,7 @@ input ExhibitionCreateWithoutTicketsInput {
   id: ID
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int
   shows: ShowCreateManyWithoutExhibitionInput
@@ -965,6 +912,8 @@ enum ExhibitionOrderByInput {
   title_DESC
   number_ASC
   number_DESC
+  capacity_ASC
+  capacity_DESC
   theme_ASC
   theme_DESC
   extent_ASC
@@ -979,6 +928,7 @@ type ExhibitionPreviousValues {
   id: ID!
   title: String!
   number: Int!
+  capacity: Int!
   theme: Json
   extent: Int!
   createdAt: DateTime!
@@ -1006,6 +956,7 @@ input ExhibitionSubscriptionWhereInput {
 input ExhibitionUpdateInput {
   title: String
   number: Int
+  capacity: Int
   theme: Json
   extent: Int
   shows: ShowUpdateManyWithoutExhibitionInput
@@ -1016,6 +967,7 @@ input ExhibitionUpdateInput {
 input ExhibitionUpdateManyMutationInput {
   title: String
   number: Int
+  capacity: Int
   theme: Json
   extent: Int
 }
@@ -1044,6 +996,7 @@ input ExhibitionUpdateOneRequiredWithoutTicketsInput {
 input ExhibitionUpdateWithoutRoomsDataInput {
   title: String
   number: Int
+  capacity: Int
   theme: Json
   extent: Int
   shows: ShowUpdateManyWithoutExhibitionInput
@@ -1053,6 +1006,7 @@ input ExhibitionUpdateWithoutRoomsDataInput {
 input ExhibitionUpdateWithoutShowsDataInput {
   title: String
   number: Int
+  capacity: Int
   theme: Json
   extent: Int
   rooms: RoomUpdateManyWithoutExhibitionInput
@@ -1062,6 +1016,7 @@ input ExhibitionUpdateWithoutShowsDataInput {
 input ExhibitionUpdateWithoutTicketsDataInput {
   title: String
   number: Int
+  capacity: Int
   theme: Json
   extent: Int
   shows: ShowUpdateManyWithoutExhibitionInput
@@ -1120,6 +1075,14 @@ input ExhibitionWhereInput {
   number_lte: Int
   number_gt: Int
   number_gte: Int
+  capacity: Int
+  capacity_not: Int
+  capacity_in: [Int!]
+  capacity_not_in: [Int!]
+  capacity_lt: Int
+  capacity_lte: Int
+  capacity_gt: Int
+  capacity_gte: Int
   extent: Int
   extent_not: Int
   extent_in: [Int!]
@@ -1430,10 +1393,12 @@ input PlacementUpdateManyWithWhereNestedInput {
   data: PlacementUpdateManyDataInput!
 }
 
-input PlacementUpdateOneRequiredWithoutCounterfactualTokenInput {
+input PlacementUpdateOneWithoutCounterfactualTokenInput {
   create: PlacementCreateWithoutCounterfactualTokenInput
   update: PlacementUpdateWithoutCounterfactualTokenDataInput
   upsert: PlacementUpsertWithoutCounterfactualTokenInput
+  delete: Boolean
+  disconnect: Boolean
   connect: PlacementWhereUniqueInput
 }
 

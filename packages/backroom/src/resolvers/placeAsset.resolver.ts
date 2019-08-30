@@ -30,8 +30,8 @@ export default {
     placeAsset,
   },
   Placement: {
-    entity: relation("entity"),
-    room: relation("room"),
-    counterfactualToken: relation("counterfactualToken"),
+    entity: relation("placement", "entity"),
+    room: relation("placement", "room"),
+    counterfactualToken: relation("placement", "counterfactualToken"),
   },
 };

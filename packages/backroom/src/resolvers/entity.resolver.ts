@@ -1,12 +1,19 @@
 import { MutationResolvers, QueryResolvers } from "../resolvers-types";
+import { makeForEntity } from "../api/auth";
 import relation from "../lib/relation";
+
+const currentEntity: QueryResolvers["currentEntity"] = async (
+  root,
+  args,
+  { currentEntity },
+) => currentEntity;
 
 const entity: QueryResolvers["entity"] = async (root, { id }, { prisma }) =>
   prisma.entity({ id });
 
 const loginAs: MutationResolvers["loginAs"] = async (
   root,
-  { accessToken, privateKey },
+  { accessToken },
   { prisma, auth0 },
 ) => {
   const userInfo = await auth0.users.getInfo(accessToken);
@@ -21,28 +28,26 @@ const loginAs: MutationResolvers["loginAs"] = async (
 
   const existingEntity = await prisma.entity({ email });
   if (existingEntity) {
-    return existingEntity;
+    return makeForEntity(existingEntity);
   }
 
-  const publicKey = "";
+  const entity = await prisma.createEntity({ email });
 
-  return await prisma.createEntity({
-    email,
-    privateKey,
-    publicKey,
-  });
+  return makeForEntity(entity);
 };
 
 export default {
   Query: {
+    currentEntity,
     entity,
   },
   Mutation: {
     loginAs,
   },
   Entity: {
-    assets: relation("assets"),
-    counterfactualTokens: relation("counterfactualTokens"),
-    placements: relation("placements"),
+    assets: relation("entity", "assets"),
+    counterfactualTokens: relation("entity", "counterfactualTokens"),
+    placements: relation("entity", "placements"),
+    tickets: relation("entity", "tickets"),
   },
 };

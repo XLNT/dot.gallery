@@ -2,13 +2,11 @@ type Entity {
   id: ID! @id
   handle: String @unique
   email: String! @unique
-  privateKey: String!
-  publicKey: String!
 
   # entity has_many assets
-  assets: [Asset!]! @relation(name: "EntityAssets")
+  assets: [Asset!]! @relation(name: "EntityAssets", onDelete: CASCADE)
   # entity has_many counterfactualTokens
-  counterfactualTokens: [CounterfactualToken!]! @relation(name: "EntityCounterfactualToken")
+  counterfactualTokens: [CounterfactualToken!]! @relation(name: "EntityCounterfactualToken", onDelete: CASCADE)
   # entity has_many placements
   placements: [Placement!]! @relation(name: "EntityPlacements", onDelete: CASCADE)
   # entity has_many tickets
@@ -36,7 +34,7 @@ type CounterfactualToken {
   # token belongs_to owner
   owner: Entity! @relation(name: "EntityCounterfactualToken")
   # token belongs_to placement
-  placement: Placement! @relation(link: INLINE)
+  placement: Placement @relation(link: INLINE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -58,6 +56,7 @@ type Exhibition {
   id: ID! @id
   title: String!
   number: Int! @unique
+  capacity: Int!
   theme: Json
   extent: Int! @default(value: 7)
 
@@ -95,7 +94,7 @@ type Room {
   # room belongs_to exhibition
   exhibition: Exhibition! @relation(name: "ExhibitionRooms")
   # room has_many placements
-  placements: [Placement!]! @relation(name: "RoomPlacements")
+  placements: [Placement!]! @relation(name: "RoomPlacements", onDelete: CASCADE)
 }
 
 

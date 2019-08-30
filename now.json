@@ -20,7 +20,7 @@
   "routes": [
     {
       "src": "/stripe/webhook",
-      "dest": "packages/backroom/src/stripe_.ts"
+      "dest": "packages/backroom/src/stripe.ts"
     },
     {
       "src": "/graphql",

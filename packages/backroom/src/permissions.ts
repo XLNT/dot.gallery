@@ -2,7 +2,6 @@ import { AuthenticationError } from "apollo-server-core";
 import { BackroomContext } from "./types";
 import { GalleryIsNotOpenError } from "../errors";
 import { and, chain, inputRule, not, or, rule, shield } from "graphql-shield";
-import { first } from "lodash";
 import Yup from "yup";
 
 // yup
@@ -17,8 +16,8 @@ const isValidPlacementCoodinate = (yup: typeof Yup) =>
 // shields
 
 const isKnownEntity = rule({ cache: "contextual" })(
-  async (parent, args, ctx) => {
-    if (ctx.currentEntity === null) {
+  async (parent, args, { currentEntity }: BackroomContext) => {
+    if (!currentEntity || currentEntity === null) {
       return new AuthenticationError("Entity not known.");
     }
 
@@ -39,15 +38,22 @@ const ownsAsset = mapper =>
   );
 
 const onlyDuringActiveShow = rule()(
-  async (parent, args, { prisma }: BackroomContext) => {
-    const exhibitions = await prisma.exhibitions({
-      first: 1,
-      orderBy: "number_DESC",
-    });
-
-    const exhibition = first(exhibitions);
-    if (!exhibition) {
+  async (parent, args, { prisma, currentExhibition }: BackroomContext) => {
+    if (!currentExhibition) {
       return new GalleryIsNotOpenError();
+    }
+
+    const shows = await prisma.exhibition({ id: currentExhibition.id }).shows();
+    // TODO: make sure we're in a show
+
+    return true;
+  },
+);
+
+const onlyMod = rule({ cache: "contextual" })(
+  async (parent, args, { currentEntity }: BackroomContext) => {
+    if (!currentEntity.email.endsWith("@bydot.app")) {
+      return new AuthenticationError("You are not a mod.");
     }
 
     return true;
@@ -57,18 +63,10 @@ const onlyDuringActiveShow = rule()(
 export default shield(
   {
     Query: {
-      //
+      currentEntity: isKnownEntity,
     },
     Mutation: {
-      loginAs: inputRule(yup =>
-        yup.object({
-          privateKey: yup
-            .string()
-            .length(66)
-            .matches(/^0x[0-9a-fA-F]{64}/)
-            .required(),
-        }),
-      ),
+      // loginAs: ,
       placeAsset: chain(
         and(
           onlyDuringActiveShow,
@@ -84,6 +82,7 @@ export default shield(
         isKnownEntity,
         ownsAsset(({ assetId }) => assetId),
       ),
+      modIssueTicket: chain(isKnownEntity, onlyMod),
     },
   },
   {

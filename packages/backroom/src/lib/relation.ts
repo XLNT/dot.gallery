@@ -1,2 +1,5 @@
-export default (relation: string) => async ({ id }, args, { prisma }) =>
-  prisma.entity({ id })[relation]();
+export default (type: string, relation: string) => async (
+  { id },
+  args,
+  { prisma },
+) => prisma[type]({ id })[relation]();
