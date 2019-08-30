@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { BackroomContext } from './types';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -21,12 +22,27 @@ export type Asset = {
   updatedAt: Scalars['DateTime'],
 };
 
+export type CounterfactualToken = {
+  __typename?: 'CounterfactualToken',
+  id: Scalars['ID'],
+  tokenURI: Scalars['String'],
+  owner: Entity,
+  placement: Placement,
+  createdAt: Scalars['DateTime'],
+  updatedAt: Scalars['DateTime'],
+};
+
 
 export type Entity = {
   __typename?: 'Entity',
   id: Scalars['ID'],
   handle?: Maybe<Scalars['String']>,
-  ownedAssets?: Maybe<Array<Asset>>,
+  email: Scalars['String'],
+  privateKey: Scalars['String'],
+  publicKey: Scalars['String'],
+  assets: Array<Asset>,
+  counterfactualTokens: Array<CounterfactualToken>,
+  placements: Array<Placement>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -48,6 +64,7 @@ export type Exhibition = {
 export type Mutation = {
   __typename?: 'Mutation',
   loginAs: Entity,
+  placeAsset?: Maybe<Placement>,
   createEntity: Entity,
   createAsset: Asset,
 };
@@ -59,9 +76,28 @@ export type MutationLoginAsArgs = {
 };
 
 
+export type MutationPlaceAssetArgs = {
+  assetId: Scalars['ID'],
+  roomId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int']
+};
+
+
 export type MutationCreateAssetArgs = {
   ownerId: Scalars['ID'],
   uri: Scalars['String']
+};
+
+export type Placement = {
+  __typename?: 'Placement',
+  id: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  entity: Entity,
+  room: Room,
+  counterfactualToken: CounterfactualToken,
+  createdAt: Scalars['DateTime'],
 };
 
 export type Query = {
@@ -82,6 +118,7 @@ export type Room = {
   x: Scalars['Int'],
   y: Scalars['Int'],
   exhibition: Exhibition,
+  placements: Array<Placement>,
 };
 
 export type Show = {
@@ -166,41 +203,54 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
-  Entity: ResolverTypeWrapper<Entity>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  Asset: ResolverTypeWrapper<Asset>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
-  Exhibition: ResolverTypeWrapper<Exhibition>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
-  Json: ResolverTypeWrapper<Scalars['Json']>,
-  Show: ResolverTypeWrapper<Show>,
-  Room: ResolverTypeWrapper<Room>,
+  ID: ResolverTypeWrapper<Partial<Scalars['ID']>>,
+  Entity: ResolverTypeWrapper<Partial<Entity>>,
+  String: ResolverTypeWrapper<Partial<Scalars['String']>>,
+  Asset: ResolverTypeWrapper<Partial<Asset>>,
+  DateTime: ResolverTypeWrapper<Partial<Scalars['DateTime']>>,
+  CounterfactualToken: ResolverTypeWrapper<Partial<CounterfactualToken>>,
+  Placement: ResolverTypeWrapper<Partial<Placement>>,
+  Int: ResolverTypeWrapper<Partial<Scalars['Int']>>,
+  Room: ResolverTypeWrapper<Partial<Room>>,
+  Exhibition: ResolverTypeWrapper<Partial<Exhibition>>,
+  Json: ResolverTypeWrapper<Partial<Scalars['Json']>>,
+  Show: ResolverTypeWrapper<Partial<Show>>,
   Mutation: ResolverTypeWrapper<{}>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  ID: Scalars['ID'],
-  Entity: Entity,
-  String: Scalars['String'],
-  Asset: Asset,
-  DateTime: Scalars['DateTime'],
-  Exhibition: Exhibition,
-  Int: Scalars['Int'],
-  Json: Scalars['Json'],
-  Show: Show,
-  Room: Room,
+  ID: Partial<Scalars['ID']>,
+  Entity: Partial<Entity>,
+  String: Partial<Scalars['String']>,
+  Asset: Partial<Asset>,
+  DateTime: Partial<Scalars['DateTime']>,
+  CounterfactualToken: Partial<CounterfactualToken>,
+  Placement: Partial<Placement>,
+  Int: Partial<Scalars['Int']>,
+  Room: Partial<Room>,
+  Exhibition: Partial<Exhibition>,
+  Json: Partial<Scalars['Json']>,
+  Show: Partial<Show>,
   Mutation: {},
-  Boolean: Scalars['Boolean'],
+  Boolean: Partial<Scalars['Boolean']>,
 };
 
-export type AssetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Asset'] = ResolversParentTypes['Asset']> = {
+export type AssetResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Asset'] = ResolversParentTypes['Asset']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   owner?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
+};
+
+export type CounterfactualTokenResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['CounterfactualToken'] = ResolversParentTypes['CounterfactualToken']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  tokenURI?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
+  placement?: Resolver<ResolversTypes['Placement'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
 };
@@ -209,15 +259,20 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime'
 }
 
-export type EntityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Entity'] = ResolversParentTypes['Entity']> = {
+export type EntityResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Entity'] = ResolversParentTypes['Entity']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   handle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  ownedAssets?: Resolver<Maybe<Array<ResolversTypes['Asset']>>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  privateKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  assets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>,
+  counterfactualTokens?: Resolver<Array<ResolversTypes['CounterfactualToken']>, ParentType, ContextType>,
+  placements?: Resolver<Array<ResolversTypes['Placement']>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
 };
 
-export type ExhibitionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Exhibition'] = ResolversParentTypes['Exhibition']> = {
+export type ExhibitionResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Exhibition'] = ResolversParentTypes['Exhibition']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
@@ -233,26 +288,38 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Json'
 }
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+export type MutationResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginAs?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<MutationLoginAsArgs, 'accessToken' | 'privateKey'>>,
+  placeAsset?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationPlaceAssetArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   createEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   createAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'ownerId' | 'uri'>>,
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type PlacementResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Placement'] = ResolversParentTypes['Placement']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  x?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  y?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  entity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
+  room?: Resolver<ResolversTypes['Room'], ParentType, ContextType>,
+  counterfactualToken?: Resolver<ResolversTypes['CounterfactualToken'], ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
+};
+
+export type QueryResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   entity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<QueryEntityArgs, 'id'>>,
   currentExhibition?: Resolver<Maybe<ResolversTypes['Exhibition']>, ParentType, ContextType>,
 };
 
-export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
+export type RoomResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   entryId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   x?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   y?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   exhibition?: Resolver<ResolversTypes['Exhibition'], ParentType, ContextType>,
+  placements?: Resolver<Array<ResolversTypes['Placement']>, ParentType, ContextType>,
 };
 
-export type ShowResolvers<ContextType = any, ParentType extends ResolversParentTypes['Show'] = ResolversParentTypes['Show']> = {
+export type ShowResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Show'] = ResolversParentTypes['Show']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   opensAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
@@ -262,13 +329,15 @@ export type ShowResolvers<ContextType = any, ParentType extends ResolversParentT
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
 };
 
-export type Resolvers<ContextType = any> = {
+export type Resolvers<ContextType = BackroomContext> = {
   Asset?: AssetResolvers<ContextType>,
+  CounterfactualToken?: CounterfactualTokenResolvers<ContextType>,
   DateTime?: GraphQLScalarType,
   Entity?: EntityResolvers<ContextType>,
   Exhibition?: ExhibitionResolvers<ContextType>,
   Json?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
+  Placement?: PlacementResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Room?: RoomResolvers<ContextType>,
   Show?: ShowResolvers<ContextType>,
@@ -279,4 +348,4 @@ export type Resolvers<ContextType = any> = {
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type IResolvers<ContextType = BackroomContext> = Resolvers<ContextType>;

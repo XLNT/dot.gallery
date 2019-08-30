@@ -5,8 +5,12 @@ type Entity {
   privateKey: String!
   publicKey: String!
 
-  # entity has_many ownedAssets
-  ownedAssets: [Asset!]! @relation(name: "OwnedAssets")
+  # entity has_many assets
+  assets: [Asset!]! @relation(name: "EntityAssets")
+  # entity has_many counterfactualTokens
+  counterfactualTokens: [CounterfactualToken!]! @relation(name: "EntityCounterfactualToken")
+  # entity has_many placements
+  placements: [Placement!]! @relation(name: "EntityPlacements", onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -16,8 +20,21 @@ type Asset {
   id: ID! @id
   uri: String!
 
-  # asset belongs_to: owner
-  owner: Entity! @relation(name: "OwnedAssets")
+  # asset belongs_to owner
+  owner: Entity! @relation(name: "EntityAssets")
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type CounterfactualToken {
+  id: ID! @id
+  tokenURI: String!
+
+  # token belongs_to owner
+  owner: Entity! @relation(name: "EntityCounterfactualToken")
+  # token belongs_to placement
+  placement: Placement! @relation(link: INLINE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -30,7 +47,9 @@ type Exhibition {
   theme: Json
   extent: Int! @default(value: 7)
 
+  # exhibition has_many shows
   shows: [Show!]! @relation(onDelete: CASCADE)
+  # exhibition has_many rooms
   rooms: [Room!]! @relation(name: "ExhibitionRooms" onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
@@ -43,6 +62,7 @@ type Show {
   opensAt: DateTime!
   closesAt: DateTime!
 
+  # show belongs_to exhibition
   exhibition: Exhibition!
 
   createdAt: DateTime! @createdAt
@@ -56,5 +76,24 @@ type Room {
   x: Int!
   y: Int!
 
+  # room belongs_to exhibition
   exhibition: Exhibition! @relation(name: "ExhibitionRooms")
+  # room has_many placements
+  placements: [Placement!]! @relation(name: "RoomPlacements")
+}
+
+
+type Placement {
+  id: ID! @id
+  x: Int!
+  y: Int!
+
+  # placement references entity
+  entity: Entity! @relation(name: "EntityPlacements")
+  # placement references room
+  room: Room! @relation(name: "RoomPlacements")
+  # placement references token
+  counterfactualToken: CounterfactualToken!
+
+  createdAt: DateTime! @createdAt
 }

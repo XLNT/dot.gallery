@@ -42,16 +42,14 @@ export default function PresentEntity({
   draggable?: boolean;
   wrappable?: boolean;
   entity: Pick<Entity, "id" | "handle"> & {
-    ownedAssets: Maybe<
-      Array<{ __typename?: "Asset" } & Pick<Asset, "id" | "uri">>
-    >;
+    assets: Maybe<Array<{ __typename?: "Asset" } & Pick<Asset, "id" | "uri">>>;
   };
 }>) {
   return (
     <Container {...rest}>
       <Name>{entity.handle}</Name>
       <Assets wrappable={wrappable}>
-        {entity.ownedAssets.map(asset =>
+        {entity.assets.map(asset =>
           draggable ? (
             <StyledDraggableAsset key={asset.id} asset={asset} />
           ) : (

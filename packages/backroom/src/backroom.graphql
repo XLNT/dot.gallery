@@ -1,14 +1,6 @@
 scalar DateTime
 scalar Json
 
-type Asset {
-  id: ID!
-  uri: String!
-  owner: Entity!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Entity {
   id: ID!
   handle: String
@@ -16,7 +8,31 @@ type Entity {
   privateKey: String!
   publicKey: String!
 
-  ownedAssets: [Asset!]
+  assets: [Asset!]!
+  counterfactualTokens: [CounterfactualToken!]!
+  placements: [Placement!]!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Asset {
+  id: ID!
+  uri: String!
+
+  owner: Entity!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CounterfactualToken {
+  id: ID!
+  tokenURI: String!
+
+  owner: Entity!
+  placement: Placement!
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -27,8 +43,10 @@ type Exhibition {
   number: Int!
   theme: Json
   extent: Int!
+
   shows: [Show!]
   rooms: [Room!]
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -38,7 +56,9 @@ type Show {
   number: Int!
   opensAt: DateTime!
   closesAt: DateTime!
+
   exhibition: Exhibition!
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -48,7 +68,21 @@ type Room {
   entryId: ID!
   x: Int!
   y: Int!
+
   exhibition: Exhibition!
+  placements: [Placement!]!
+}
+
+type Placement {
+  id: ID!
+  x: Int!
+  y: Int!
+
+  entity: Entity!
+  room: Room!
+  counterfactualToken: CounterfactualToken!
+
+  createdAt: DateTime!
 }
 
 type Query {
@@ -58,6 +92,7 @@ type Query {
 
 type Mutation  {
   loginAs(accessToken: String!, privateKey: String!): Entity!
+  placeAsset(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   createEntity: Entity!
   createAsset(ownerId: ID!, uri: String!): Asset!
 }

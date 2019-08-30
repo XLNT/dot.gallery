@@ -2,11 +2,19 @@ type AggregateAsset {
   count: Int!
 }
 
+type AggregateCounterfactualToken {
+  count: Int!
+}
+
 type AggregateEntity {
   count: Int!
 }
 
 type AggregateExhibition {
+  count: Int!
+}
+
+type AggregatePlacement {
   count: Int!
 }
 
@@ -35,7 +43,7 @@ type AssetConnection {
 input AssetCreateInput {
   id: ID
   uri: String!
-  owner: EntityCreateOneWithoutOwnedAssetsInput!
+  owner: EntityCreateOneWithoutAssetsInput!
 }
 
 input AssetCreateManyWithoutOwnerInput {
@@ -141,7 +149,7 @@ input AssetSubscriptionWhereInput {
 
 input AssetUpdateInput {
   uri: String
-  owner: EntityUpdateOneRequiredWithoutOwnedAssetsInput
+  owner: EntityUpdateOneRequiredWithoutAssetsInput
 }
 
 input AssetUpdateManyDataInput {
@@ -243,6 +251,261 @@ type BatchPayload {
   count: Long!
 }
 
+type CounterfactualToken {
+  id: ID!
+  tokenURI: String!
+  owner: Entity!
+  placement: Placement!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CounterfactualTokenConnection {
+  pageInfo: PageInfo!
+  edges: [CounterfactualTokenEdge]!
+  aggregate: AggregateCounterfactualToken!
+}
+
+input CounterfactualTokenCreateInput {
+  id: ID
+  tokenURI: String!
+  owner: EntityCreateOneWithoutCounterfactualTokensInput!
+  placement: PlacementCreateOneWithoutCounterfactualTokenInput!
+}
+
+input CounterfactualTokenCreateManyWithoutOwnerInput {
+  create: [CounterfactualTokenCreateWithoutOwnerInput!]
+  connect: [CounterfactualTokenWhereUniqueInput!]
+}
+
+input CounterfactualTokenCreateOneWithoutPlacementInput {
+  create: CounterfactualTokenCreateWithoutPlacementInput
+  connect: CounterfactualTokenWhereUniqueInput
+}
+
+input CounterfactualTokenCreateWithoutOwnerInput {
+  id: ID
+  tokenURI: String!
+  placement: PlacementCreateOneWithoutCounterfactualTokenInput!
+}
+
+input CounterfactualTokenCreateWithoutPlacementInput {
+  id: ID
+  tokenURI: String!
+  owner: EntityCreateOneWithoutCounterfactualTokensInput!
+}
+
+type CounterfactualTokenEdge {
+  node: CounterfactualToken!
+  cursor: String!
+}
+
+enum CounterfactualTokenOrderByInput {
+  id_ASC
+  id_DESC
+  tokenURI_ASC
+  tokenURI_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CounterfactualTokenPreviousValues {
+  id: ID!
+  tokenURI: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CounterfactualTokenScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  tokenURI: String
+  tokenURI_not: String
+  tokenURI_in: [String!]
+  tokenURI_not_in: [String!]
+  tokenURI_lt: String
+  tokenURI_lte: String
+  tokenURI_gt: String
+  tokenURI_gte: String
+  tokenURI_contains: String
+  tokenURI_not_contains: String
+  tokenURI_starts_with: String
+  tokenURI_not_starts_with: String
+  tokenURI_ends_with: String
+  tokenURI_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CounterfactualTokenScalarWhereInput!]
+  OR: [CounterfactualTokenScalarWhereInput!]
+  NOT: [CounterfactualTokenScalarWhereInput!]
+}
+
+type CounterfactualTokenSubscriptionPayload {
+  mutation: MutationType!
+  node: CounterfactualToken
+  updatedFields: [String!]
+  previousValues: CounterfactualTokenPreviousValues
+}
+
+input CounterfactualTokenSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CounterfactualTokenWhereInput
+  AND: [CounterfactualTokenSubscriptionWhereInput!]
+  OR: [CounterfactualTokenSubscriptionWhereInput!]
+  NOT: [CounterfactualTokenSubscriptionWhereInput!]
+}
+
+input CounterfactualTokenUpdateInput {
+  tokenURI: String
+  owner: EntityUpdateOneRequiredWithoutCounterfactualTokensInput
+  placement: PlacementUpdateOneRequiredWithoutCounterfactualTokenInput
+}
+
+input CounterfactualTokenUpdateManyDataInput {
+  tokenURI: String
+}
+
+input CounterfactualTokenUpdateManyMutationInput {
+  tokenURI: String
+}
+
+input CounterfactualTokenUpdateManyWithoutOwnerInput {
+  create: [CounterfactualTokenCreateWithoutOwnerInput!]
+  delete: [CounterfactualTokenWhereUniqueInput!]
+  connect: [CounterfactualTokenWhereUniqueInput!]
+  set: [CounterfactualTokenWhereUniqueInput!]
+  disconnect: [CounterfactualTokenWhereUniqueInput!]
+  update: [CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput!]
+  deleteMany: [CounterfactualTokenScalarWhereInput!]
+  updateMany: [CounterfactualTokenUpdateManyWithWhereNestedInput!]
+}
+
+input CounterfactualTokenUpdateManyWithWhereNestedInput {
+  where: CounterfactualTokenScalarWhereInput!
+  data: CounterfactualTokenUpdateManyDataInput!
+}
+
+input CounterfactualTokenUpdateOneRequiredWithoutPlacementInput {
+  create: CounterfactualTokenCreateWithoutPlacementInput
+  update: CounterfactualTokenUpdateWithoutPlacementDataInput
+  upsert: CounterfactualTokenUpsertWithoutPlacementInput
+  connect: CounterfactualTokenWhereUniqueInput
+}
+
+input CounterfactualTokenUpdateWithoutOwnerDataInput {
+  tokenURI: String
+  placement: PlacementUpdateOneRequiredWithoutCounterfactualTokenInput
+}
+
+input CounterfactualTokenUpdateWithoutPlacementDataInput {
+  tokenURI: String
+  owner: EntityUpdateOneRequiredWithoutCounterfactualTokensInput
+}
+
+input CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput {
+  where: CounterfactualTokenWhereUniqueInput!
+  data: CounterfactualTokenUpdateWithoutOwnerDataInput!
+}
+
+input CounterfactualTokenUpsertWithoutPlacementInput {
+  update: CounterfactualTokenUpdateWithoutPlacementDataInput!
+  create: CounterfactualTokenCreateWithoutPlacementInput!
+}
+
+input CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput {
+  where: CounterfactualTokenWhereUniqueInput!
+  update: CounterfactualTokenUpdateWithoutOwnerDataInput!
+  create: CounterfactualTokenCreateWithoutOwnerInput!
+}
+
+input CounterfactualTokenWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  tokenURI: String
+  tokenURI_not: String
+  tokenURI_in: [String!]
+  tokenURI_not_in: [String!]
+  tokenURI_lt: String
+  tokenURI_lte: String
+  tokenURI_gt: String
+  tokenURI_gte: String
+  tokenURI_contains: String
+  tokenURI_not_contains: String
+  tokenURI_starts_with: String
+  tokenURI_not_starts_with: String
+  tokenURI_ends_with: String
+  tokenURI_not_ends_with: String
+  owner: EntityWhereInput
+  placement: PlacementWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CounterfactualTokenWhereInput!]
+  OR: [CounterfactualTokenWhereInput!]
+  NOT: [CounterfactualTokenWhereInput!]
+}
+
+input CounterfactualTokenWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 type Entity {
@@ -251,7 +514,9 @@ type Entity {
   email: String!
   privateKey: String!
   publicKey: String!
-  ownedAssets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
+  assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
+  counterfactualTokens(where: CounterfactualTokenWhereInput, orderBy: CounterfactualTokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CounterfactualToken!]
+  placements(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Placement!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -268,20 +533,54 @@ input EntityCreateInput {
   email: String!
   privateKey: String!
   publicKey: String!
-  ownedAssets: AssetCreateManyWithoutOwnerInput
+  assets: AssetCreateManyWithoutOwnerInput
+  counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
+  placements: PlacementCreateManyWithoutEntityInput
 }
 
-input EntityCreateOneWithoutOwnedAssetsInput {
-  create: EntityCreateWithoutOwnedAssetsInput
+input EntityCreateOneWithoutAssetsInput {
+  create: EntityCreateWithoutAssetsInput
   connect: EntityWhereUniqueInput
 }
 
-input EntityCreateWithoutOwnedAssetsInput {
+input EntityCreateOneWithoutCounterfactualTokensInput {
+  create: EntityCreateWithoutCounterfactualTokensInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityCreateOneWithoutPlacementsInput {
+  create: EntityCreateWithoutPlacementsInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityCreateWithoutAssetsInput {
   id: ID
   handle: String
   email: String!
   privateKey: String!
   publicKey: String!
+  counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
+  placements: PlacementCreateManyWithoutEntityInput
+}
+
+input EntityCreateWithoutCounterfactualTokensInput {
+  id: ID
+  handle: String
+  email: String!
+  privateKey: String!
+  publicKey: String!
+  assets: AssetCreateManyWithoutOwnerInput
+  placements: PlacementCreateManyWithoutEntityInput
+}
+
+input EntityCreateWithoutPlacementsInput {
+  id: ID
+  handle: String
+  email: String!
+  privateKey: String!
+  publicKey: String!
+  assets: AssetCreateManyWithoutOwnerInput
+  counterfactualTokens: CounterfactualTokenCreateManyWithoutOwnerInput
 }
 
 type EntityEdge {
@@ -339,7 +638,9 @@ input EntityUpdateInput {
   email: String
   privateKey: String
   publicKey: String
-  ownedAssets: AssetUpdateManyWithoutOwnerInput
+  assets: AssetUpdateManyWithoutOwnerInput
+  counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
+  placements: PlacementUpdateManyWithoutEntityInput
 }
 
 input EntityUpdateManyMutationInput {
@@ -349,23 +650,67 @@ input EntityUpdateManyMutationInput {
   publicKey: String
 }
 
-input EntityUpdateOneRequiredWithoutOwnedAssetsInput {
-  create: EntityCreateWithoutOwnedAssetsInput
-  update: EntityUpdateWithoutOwnedAssetsDataInput
-  upsert: EntityUpsertWithoutOwnedAssetsInput
+input EntityUpdateOneRequiredWithoutAssetsInput {
+  create: EntityCreateWithoutAssetsInput
+  update: EntityUpdateWithoutAssetsDataInput
+  upsert: EntityUpsertWithoutAssetsInput
   connect: EntityWhereUniqueInput
 }
 
-input EntityUpdateWithoutOwnedAssetsDataInput {
+input EntityUpdateOneRequiredWithoutCounterfactualTokensInput {
+  create: EntityCreateWithoutCounterfactualTokensInput
+  update: EntityUpdateWithoutCounterfactualTokensDataInput
+  upsert: EntityUpsertWithoutCounterfactualTokensInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityUpdateOneRequiredWithoutPlacementsInput {
+  create: EntityCreateWithoutPlacementsInput
+  update: EntityUpdateWithoutPlacementsDataInput
+  upsert: EntityUpsertWithoutPlacementsInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityUpdateWithoutAssetsDataInput {
   handle: String
   email: String
   privateKey: String
   publicKey: String
+  counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
+  placements: PlacementUpdateManyWithoutEntityInput
 }
 
-input EntityUpsertWithoutOwnedAssetsInput {
-  update: EntityUpdateWithoutOwnedAssetsDataInput!
-  create: EntityCreateWithoutOwnedAssetsInput!
+input EntityUpdateWithoutCounterfactualTokensDataInput {
+  handle: String
+  email: String
+  privateKey: String
+  publicKey: String
+  assets: AssetUpdateManyWithoutOwnerInput
+  placements: PlacementUpdateManyWithoutEntityInput
+}
+
+input EntityUpdateWithoutPlacementsDataInput {
+  handle: String
+  email: String
+  privateKey: String
+  publicKey: String
+  assets: AssetUpdateManyWithoutOwnerInput
+  counterfactualTokens: CounterfactualTokenUpdateManyWithoutOwnerInput
+}
+
+input EntityUpsertWithoutAssetsInput {
+  update: EntityUpdateWithoutAssetsDataInput!
+  create: EntityCreateWithoutAssetsInput!
+}
+
+input EntityUpsertWithoutCounterfactualTokensInput {
+  update: EntityUpdateWithoutCounterfactualTokensDataInput!
+  create: EntityCreateWithoutCounterfactualTokensInput!
+}
+
+input EntityUpsertWithoutPlacementsInput {
+  update: EntityUpdateWithoutPlacementsDataInput!
+  create: EntityCreateWithoutPlacementsInput!
 }
 
 input EntityWhereInput {
@@ -439,9 +784,15 @@ input EntityWhereInput {
   publicKey_not_starts_with: String
   publicKey_ends_with: String
   publicKey_not_ends_with: String
-  ownedAssets_every: AssetWhereInput
-  ownedAssets_some: AssetWhereInput
-  ownedAssets_none: AssetWhereInput
+  assets_every: AssetWhereInput
+  assets_some: AssetWhereInput
+  assets_none: AssetWhereInput
+  counterfactualTokens_every: CounterfactualTokenWhereInput
+  counterfactualTokens_some: CounterfactualTokenWhereInput
+  counterfactualTokens_none: CounterfactualTokenWhereInput
+  placements_every: PlacementWhereInput
+  placements_some: PlacementWhereInput
+  placements_none: PlacementWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -719,6 +1070,12 @@ type Mutation {
   upsertAsset(where: AssetWhereUniqueInput!, create: AssetCreateInput!, update: AssetUpdateInput!): Asset!
   deleteAsset(where: AssetWhereUniqueInput!): Asset
   deleteManyAssets(where: AssetWhereInput): BatchPayload!
+  createCounterfactualToken(data: CounterfactualTokenCreateInput!): CounterfactualToken!
+  updateCounterfactualToken(data: CounterfactualTokenUpdateInput!, where: CounterfactualTokenWhereUniqueInput!): CounterfactualToken
+  updateManyCounterfactualTokens(data: CounterfactualTokenUpdateManyMutationInput!, where: CounterfactualTokenWhereInput): BatchPayload!
+  upsertCounterfactualToken(where: CounterfactualTokenWhereUniqueInput!, create: CounterfactualTokenCreateInput!, update: CounterfactualTokenUpdateInput!): CounterfactualToken!
+  deleteCounterfactualToken(where: CounterfactualTokenWhereUniqueInput!): CounterfactualToken
+  deleteManyCounterfactualTokens(where: CounterfactualTokenWhereInput): BatchPayload!
   createEntity(data: EntityCreateInput!): Entity!
   updateEntity(data: EntityUpdateInput!, where: EntityWhereUniqueInput!): Entity
   updateManyEntities(data: EntityUpdateManyMutationInput!, where: EntityWhereInput): BatchPayload!
@@ -731,6 +1088,12 @@ type Mutation {
   upsertExhibition(where: ExhibitionWhereUniqueInput!, create: ExhibitionCreateInput!, update: ExhibitionUpdateInput!): Exhibition!
   deleteExhibition(where: ExhibitionWhereUniqueInput!): Exhibition
   deleteManyExhibitions(where: ExhibitionWhereInput): BatchPayload!
+  createPlacement(data: PlacementCreateInput!): Placement!
+  updatePlacement(data: PlacementUpdateInput!, where: PlacementWhereUniqueInput!): Placement
+  updateManyPlacements(data: PlacementUpdateManyMutationInput!, where: PlacementWhereInput): BatchPayload!
+  upsertPlacement(where: PlacementWhereUniqueInput!, create: PlacementCreateInput!, update: PlacementUpdateInput!): Placement!
+  deletePlacement(where: PlacementWhereUniqueInput!): Placement
+  deleteManyPlacements(where: PlacementWhereInput): BatchPayload!
   createRoom(data: RoomCreateInput!): Room!
   updateRoom(data: RoomUpdateInput!, where: RoomWhereUniqueInput!): Room
   updateManyRooms(data: RoomUpdateManyMutationInput!, where: RoomWhereInput): BatchPayload!
@@ -762,16 +1125,324 @@ type PageInfo {
   endCursor: String
 }
 
+type Placement {
+  id: ID!
+  x: Int!
+  y: Int!
+  entity: Entity!
+  room: Room!
+  counterfactualToken: CounterfactualToken!
+  createdAt: DateTime!
+}
+
+type PlacementConnection {
+  pageInfo: PageInfo!
+  edges: [PlacementEdge]!
+  aggregate: AggregatePlacement!
+}
+
+input PlacementCreateInput {
+  id: ID
+  x: Int!
+  y: Int!
+  entity: EntityCreateOneWithoutPlacementsInput!
+  room: RoomCreateOneWithoutPlacementsInput!
+  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput!
+}
+
+input PlacementCreateManyWithoutEntityInput {
+  create: [PlacementCreateWithoutEntityInput!]
+  connect: [PlacementWhereUniqueInput!]
+}
+
+input PlacementCreateManyWithoutRoomInput {
+  create: [PlacementCreateWithoutRoomInput!]
+  connect: [PlacementWhereUniqueInput!]
+}
+
+input PlacementCreateOneWithoutCounterfactualTokenInput {
+  create: PlacementCreateWithoutCounterfactualTokenInput
+  connect: PlacementWhereUniqueInput
+}
+
+input PlacementCreateWithoutCounterfactualTokenInput {
+  id: ID
+  x: Int!
+  y: Int!
+  entity: EntityCreateOneWithoutPlacementsInput!
+  room: RoomCreateOneWithoutPlacementsInput!
+}
+
+input PlacementCreateWithoutEntityInput {
+  id: ID
+  x: Int!
+  y: Int!
+  room: RoomCreateOneWithoutPlacementsInput!
+  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput!
+}
+
+input PlacementCreateWithoutRoomInput {
+  id: ID
+  x: Int!
+  y: Int!
+  entity: EntityCreateOneWithoutPlacementsInput!
+  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput!
+}
+
+type PlacementEdge {
+  node: Placement!
+  cursor: String!
+}
+
+enum PlacementOrderByInput {
+  id_ASC
+  id_DESC
+  x_ASC
+  x_DESC
+  y_ASC
+  y_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type PlacementPreviousValues {
+  id: ID!
+  x: Int!
+  y: Int!
+  createdAt: DateTime!
+}
+
+input PlacementScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  x: Int
+  x_not: Int
+  x_in: [Int!]
+  x_not_in: [Int!]
+  x_lt: Int
+  x_lte: Int
+  x_gt: Int
+  x_gte: Int
+  y: Int
+  y_not: Int
+  y_in: [Int!]
+  y_not_in: [Int!]
+  y_lt: Int
+  y_lte: Int
+  y_gt: Int
+  y_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [PlacementScalarWhereInput!]
+  OR: [PlacementScalarWhereInput!]
+  NOT: [PlacementScalarWhereInput!]
+}
+
+type PlacementSubscriptionPayload {
+  mutation: MutationType!
+  node: Placement
+  updatedFields: [String!]
+  previousValues: PlacementPreviousValues
+}
+
+input PlacementSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PlacementWhereInput
+  AND: [PlacementSubscriptionWhereInput!]
+  OR: [PlacementSubscriptionWhereInput!]
+  NOT: [PlacementSubscriptionWhereInput!]
+}
+
+input PlacementUpdateInput {
+  x: Int
+  y: Int
+  entity: EntityUpdateOneRequiredWithoutPlacementsInput
+  room: RoomUpdateOneRequiredWithoutPlacementsInput
+  counterfactualToken: CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+}
+
+input PlacementUpdateManyDataInput {
+  x: Int
+  y: Int
+}
+
+input PlacementUpdateManyMutationInput {
+  x: Int
+  y: Int
+}
+
+input PlacementUpdateManyWithoutEntityInput {
+  create: [PlacementCreateWithoutEntityInput!]
+  delete: [PlacementWhereUniqueInput!]
+  connect: [PlacementWhereUniqueInput!]
+  set: [PlacementWhereUniqueInput!]
+  disconnect: [PlacementWhereUniqueInput!]
+  update: [PlacementUpdateWithWhereUniqueWithoutEntityInput!]
+  upsert: [PlacementUpsertWithWhereUniqueWithoutEntityInput!]
+  deleteMany: [PlacementScalarWhereInput!]
+  updateMany: [PlacementUpdateManyWithWhereNestedInput!]
+}
+
+input PlacementUpdateManyWithoutRoomInput {
+  create: [PlacementCreateWithoutRoomInput!]
+  delete: [PlacementWhereUniqueInput!]
+  connect: [PlacementWhereUniqueInput!]
+  set: [PlacementWhereUniqueInput!]
+  disconnect: [PlacementWhereUniqueInput!]
+  update: [PlacementUpdateWithWhereUniqueWithoutRoomInput!]
+  upsert: [PlacementUpsertWithWhereUniqueWithoutRoomInput!]
+  deleteMany: [PlacementScalarWhereInput!]
+  updateMany: [PlacementUpdateManyWithWhereNestedInput!]
+}
+
+input PlacementUpdateManyWithWhereNestedInput {
+  where: PlacementScalarWhereInput!
+  data: PlacementUpdateManyDataInput!
+}
+
+input PlacementUpdateOneRequiredWithoutCounterfactualTokenInput {
+  create: PlacementCreateWithoutCounterfactualTokenInput
+  update: PlacementUpdateWithoutCounterfactualTokenDataInput
+  upsert: PlacementUpsertWithoutCounterfactualTokenInput
+  connect: PlacementWhereUniqueInput
+}
+
+input PlacementUpdateWithoutCounterfactualTokenDataInput {
+  x: Int
+  y: Int
+  entity: EntityUpdateOneRequiredWithoutPlacementsInput
+  room: RoomUpdateOneRequiredWithoutPlacementsInput
+}
+
+input PlacementUpdateWithoutEntityDataInput {
+  x: Int
+  y: Int
+  room: RoomUpdateOneRequiredWithoutPlacementsInput
+  counterfactualToken: CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+}
+
+input PlacementUpdateWithoutRoomDataInput {
+  x: Int
+  y: Int
+  entity: EntityUpdateOneRequiredWithoutPlacementsInput
+  counterfactualToken: CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+}
+
+input PlacementUpdateWithWhereUniqueWithoutEntityInput {
+  where: PlacementWhereUniqueInput!
+  data: PlacementUpdateWithoutEntityDataInput!
+}
+
+input PlacementUpdateWithWhereUniqueWithoutRoomInput {
+  where: PlacementWhereUniqueInput!
+  data: PlacementUpdateWithoutRoomDataInput!
+}
+
+input PlacementUpsertWithoutCounterfactualTokenInput {
+  update: PlacementUpdateWithoutCounterfactualTokenDataInput!
+  create: PlacementCreateWithoutCounterfactualTokenInput!
+}
+
+input PlacementUpsertWithWhereUniqueWithoutEntityInput {
+  where: PlacementWhereUniqueInput!
+  update: PlacementUpdateWithoutEntityDataInput!
+  create: PlacementCreateWithoutEntityInput!
+}
+
+input PlacementUpsertWithWhereUniqueWithoutRoomInput {
+  where: PlacementWhereUniqueInput!
+  update: PlacementUpdateWithoutRoomDataInput!
+  create: PlacementCreateWithoutRoomInput!
+}
+
+input PlacementWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  x: Int
+  x_not: Int
+  x_in: [Int!]
+  x_not_in: [Int!]
+  x_lt: Int
+  x_lte: Int
+  x_gt: Int
+  x_gte: Int
+  y: Int
+  y_not: Int
+  y_in: [Int!]
+  y_not_in: [Int!]
+  y_lt: Int
+  y_lte: Int
+  y_gt: Int
+  y_gte: Int
+  entity: EntityWhereInput
+  room: RoomWhereInput
+  counterfactualToken: CounterfactualTokenWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [PlacementWhereInput!]
+  OR: [PlacementWhereInput!]
+  NOT: [PlacementWhereInput!]
+}
+
+input PlacementWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   asset(where: AssetWhereUniqueInput!): Asset
   assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset]!
   assetsConnection(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AssetConnection!
+  counterfactualToken(where: CounterfactualTokenWhereUniqueInput!): CounterfactualToken
+  counterfactualTokens(where: CounterfactualTokenWhereInput, orderBy: CounterfactualTokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CounterfactualToken]!
+  counterfactualTokensConnection(where: CounterfactualTokenWhereInput, orderBy: CounterfactualTokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CounterfactualTokenConnection!
   entity(where: EntityWhereUniqueInput!): Entity
   entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity]!
   entitiesConnection(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntityConnection!
   exhibition(where: ExhibitionWhereUniqueInput!): Exhibition
   exhibitions(where: ExhibitionWhereInput, orderBy: ExhibitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Exhibition]!
   exhibitionsConnection(where: ExhibitionWhereInput, orderBy: ExhibitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExhibitionConnection!
+  placement(where: PlacementWhereUniqueInput!): Placement
+  placements(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Placement]!
+  placementsConnection(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PlacementConnection!
   room(where: RoomWhereUniqueInput!): Room
   rooms(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Room]!
   roomsConnection(where: RoomWhereInput, orderBy: RoomOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoomConnection!
@@ -787,6 +1458,7 @@ type Room {
   x: Int!
   y: Int!
   exhibition: Exhibition!
+  placements(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Placement!]
 }
 
 type RoomConnection {
@@ -801,6 +1473,7 @@ input RoomCreateInput {
   x: Int!
   y: Int!
   exhibition: ExhibitionCreateOneWithoutRoomsInput!
+  placements: PlacementCreateManyWithoutRoomInput
 }
 
 input RoomCreateManyWithoutExhibitionInput {
@@ -808,11 +1481,25 @@ input RoomCreateManyWithoutExhibitionInput {
   connect: [RoomWhereUniqueInput!]
 }
 
+input RoomCreateOneWithoutPlacementsInput {
+  create: RoomCreateWithoutPlacementsInput
+  connect: RoomWhereUniqueInput
+}
+
 input RoomCreateWithoutExhibitionInput {
   id: ID
   entryId: ID!
   x: Int!
   y: Int!
+  placements: PlacementCreateManyWithoutRoomInput
+}
+
+input RoomCreateWithoutPlacementsInput {
+  id: ID
+  entryId: ID!
+  x: Int!
+  y: Int!
+  exhibition: ExhibitionCreateOneWithoutRoomsInput!
 }
 
 type RoomEdge {
@@ -911,6 +1598,7 @@ input RoomUpdateInput {
   x: Int
   y: Int
   exhibition: ExhibitionUpdateOneRequiredWithoutRoomsInput
+  placements: PlacementUpdateManyWithoutRoomInput
 }
 
 input RoomUpdateManyDataInput {
@@ -942,15 +1630,35 @@ input RoomUpdateManyWithWhereNestedInput {
   data: RoomUpdateManyDataInput!
 }
 
+input RoomUpdateOneRequiredWithoutPlacementsInput {
+  create: RoomCreateWithoutPlacementsInput
+  update: RoomUpdateWithoutPlacementsDataInput
+  upsert: RoomUpsertWithoutPlacementsInput
+  connect: RoomWhereUniqueInput
+}
+
 input RoomUpdateWithoutExhibitionDataInput {
   entryId: ID
   x: Int
   y: Int
+  placements: PlacementUpdateManyWithoutRoomInput
+}
+
+input RoomUpdateWithoutPlacementsDataInput {
+  entryId: ID
+  x: Int
+  y: Int
+  exhibition: ExhibitionUpdateOneRequiredWithoutRoomsInput
 }
 
 input RoomUpdateWithWhereUniqueWithoutExhibitionInput {
   where: RoomWhereUniqueInput!
   data: RoomUpdateWithoutExhibitionDataInput!
+}
+
+input RoomUpsertWithoutPlacementsInput {
+  update: RoomUpdateWithoutPlacementsDataInput!
+  create: RoomCreateWithoutPlacementsInput!
 }
 
 input RoomUpsertWithWhereUniqueWithoutExhibitionInput {
@@ -1005,6 +1713,9 @@ input RoomWhereInput {
   y_gt: Int
   y_gte: Int
   exhibition: ExhibitionWhereInput
+  placements_every: PlacementWhereInput
+  placements_some: PlacementWhereInput
+  placements_none: PlacementWhereInput
   AND: [RoomWhereInput!]
   OR: [RoomWhereInput!]
   NOT: [RoomWhereInput!]
@@ -1278,8 +1989,10 @@ input ShowWhereUniqueInput {
 
 type Subscription {
   asset(where: AssetSubscriptionWhereInput): AssetSubscriptionPayload
+  counterfactualToken(where: CounterfactualTokenSubscriptionWhereInput): CounterfactualTokenSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   exhibition(where: ExhibitionSubscriptionWhereInput): ExhibitionSubscriptionPayload
+  placement(where: PlacementSubscriptionWhereInput): PlacementSubscriptionPayload
   room(where: RoomSubscriptionWhereInput): RoomSubscriptionPayload
   show(where: ShowSubscriptionWhereInput): ShowSubscriptionPayload
 }

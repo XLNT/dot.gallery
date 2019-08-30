@@ -1,6 +1,6 @@
-endpoint: ${env:PRISMA_BACKROOM_SERVICE_ENDPOINT}
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: datamodel.prisma
-secret: ${env:PRISMA_BACKROOM_SERVICE_SECRET}
+# secret: ${env:PRISMA_SECRET}
 
 generate:
   - generator: typescript-client

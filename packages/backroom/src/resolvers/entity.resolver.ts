@@ -1,13 +1,10 @@
-import { BackroomContext } from "../types";
 import { MutationResolvers, QueryResolvers } from "../resolvers-types";
+import relation from "../../lib/relation";
 
-const entity: QueryResolvers<BackroomContext>["entity"] = async (
-  root,
-  { id },
-  { prisma },
-) => prisma.entity({ id });
+const entity: QueryResolvers["entity"] = async (root, { id }, { prisma }) =>
+  prisma.entity({ id });
 
-const loginAs: MutationResolvers<BackroomContext>["loginAs"] = async (
+const loginAs: MutationResolvers["loginAs"] = async (
   root,
   { accessToken, privateKey },
   { prisma, auth0 },
@@ -42,5 +39,10 @@ export default {
   },
   Mutation: {
     loginAs,
+  },
+  Entity: {
+    assets: relation("assets"),
+    counterfactualTokens: relation("counterfactualTokens"),
+    placements: relation("placements"),
   },
 };

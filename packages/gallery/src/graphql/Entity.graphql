@@ -2,7 +2,7 @@ query Entity($id: ID!) {
   entity(id: $id) {
     id
     handle
-    ownedAssets {
+    assets {
       id
       uri
     }

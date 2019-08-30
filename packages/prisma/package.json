@@ -11,7 +11,8 @@
     "url": "git+https://github.com/XLNT/dot.gallery.git"
   },
   "scripts": {
-    "deploy": "env $(cat .env | xargs) prisma deploy",
+    "deploy": "prisma deploy -e .env",
+    "token": "prisma token -e .env",
     "codegen": "prisma generate && graphql-codegen --schema codegen.yml"
   },
   "bugs": {

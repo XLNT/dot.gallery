@@ -22,12 +22,27 @@ export type Asset = {
   updatedAt: Scalars['DateTime'],
 };
 
+export type CounterfactualToken = {
+  __typename?: 'CounterfactualToken',
+  id: Scalars['ID'],
+  tokenURI: Scalars['String'],
+  owner: Entity,
+  placement: Placement,
+  createdAt: Scalars['DateTime'],
+  updatedAt: Scalars['DateTime'],
+};
+
 
 export type Entity = {
   __typename?: 'Entity',
   id: Scalars['ID'],
   handle?: Maybe<Scalars['String']>,
-  ownedAssets?: Maybe<Array<Asset>>,
+  email: Scalars['String'],
+  privateKey: Scalars['String'],
+  publicKey: Scalars['String'],
+  assets: Array<Asset>,
+  counterfactualTokens: Array<CounterfactualToken>,
+  placements: Array<Placement>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -49,6 +64,7 @@ export type Exhibition = {
 export type Mutation = {
   __typename?: 'Mutation',
   loginAs: Entity,
+  placeAsset?: Maybe<Placement>,
   createEntity: Entity,
   createAsset: Asset,
 };
@@ -60,9 +76,28 @@ export type MutationLoginAsArgs = {
 };
 
 
+export type MutationPlaceAssetArgs = {
+  assetId: Scalars['ID'],
+  roomId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int']
+};
+
+
 export type MutationCreateAssetArgs = {
   ownerId: Scalars['ID'],
   uri: Scalars['String']
+};
+
+export type Placement = {
+  __typename?: 'Placement',
+  id: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int'],
+  entity: Entity,
+  room: Room,
+  counterfactualToken: CounterfactualToken,
+  createdAt: Scalars['DateTime'],
 };
 
 export type Query = {
@@ -83,6 +118,7 @@ export type Room = {
   x: Scalars['Int'],
   y: Scalars['Int'],
   exhibition: Exhibition,
+  placements: Array<Placement>,
 };
 
 export type Show = {
@@ -152,10 +188,10 @@ export type EntityQuery = (
   & { entity: (
     { __typename?: 'Entity' }
     & Pick<Entity, 'id' | 'handle'>
-    & { ownedAssets: Maybe<Array<(
+    & { assets: Array<(
       { __typename?: 'Asset' }
       & Pick<Asset, 'id' | 'uri'>
-    )>> }
+    )> }
   ) }
 );
 
@@ -231,7 +267,7 @@ export const EntityDocument = gql`
   entity(id: $id) {
     id
     handle
-    ownedAssets {
+    assets {
       id
       uri
     }

@@ -15,9 +15,8 @@ import resolvers from "./resolvers";
 const typeDefs = importSchema(resolve(__dirname, "backroom.graphql"));
 
 const prisma = new Prisma({
-  endpoint: process.env.PRISMA_BACKROOM_SERVICE_ENDPOINT,
-  secret: process.env.PRISMA_BACKROOM_SERVICE_SECRET,
-  debug: true,
+  endpoint: process.env.PRISMA_ENDPOINT,
+  secret: process.env.PRISMA_SECRET,
 });
 
 const schema = applyMiddleware(
@@ -32,6 +31,7 @@ const server = new ApolloServer({
     ...req,
     prisma,
     auth0,
+    currentEntity: await prisma.entity({ id: "cjzxvsxji007w0723ffo0gp5i" }),
   }),
 });
 
