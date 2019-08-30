@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "api",
     "module": "commonjs",
     "target": "es2017",
     "lib": [

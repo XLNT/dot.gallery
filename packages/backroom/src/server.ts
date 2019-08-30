@@ -1,23 +1,17 @@
 import { config } from "dotenv";
 import { resolve } from "path";
-config({ path: resolve(__dirname, "../../../packages/prisma/.env") });
-config({ path: resolve(__dirname, ".env") });
+config({ path: resolve(__dirname, "../../../.env") });
 
 import { ApolloServer, makeExecutableSchema } from "apollo-server-micro";
 import { applyMiddleware } from "graphql-middleware";
 import { importSchema } from "graphql-import";
 
-import { Prisma } from "./prisma";
-import auth0 from "./auth0/client";
+import auth0 from "./api/auth0";
 import permissions from "./permissions";
+import prisma from "./api/prisma";
 import resolvers from "./resolvers";
 
 const typeDefs = importSchema(resolve(__dirname, "backroom.graphql"));
-
-const prisma = new Prisma({
-  endpoint: process.env.PRISMA_ENDPOINT,
-  secret: process.env.PRISMA_SECRET,
-});
 
 const schema = applyMiddleware(
   makeExecutableSchema({ typeDefs, resolvers }),

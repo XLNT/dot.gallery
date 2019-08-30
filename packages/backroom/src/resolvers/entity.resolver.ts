@@ -1,5 +1,5 @@
 import { MutationResolvers, QueryResolvers } from "../resolvers-types";
-import relation from "../../lib/relation";
+import relation from "../lib/relation";
 
 const entity: QueryResolvers["entity"] = async (root, { id }, { prisma }) =>
   prisma.entity({ id });

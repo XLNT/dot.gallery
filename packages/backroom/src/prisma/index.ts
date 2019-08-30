@@ -25,6 +25,7 @@ export interface Exists {
   placement: (where?: PlacementWhereInput) => Promise<boolean>;
   room: (where?: RoomWhereInput) => Promise<boolean>;
   show: (where?: ShowWhereInput) => Promise<boolean>;
+  ticket: (where?: TicketWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -181,6 +182,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ShowConnectionPromise;
+  ticket: (where: TicketWhereUniqueInput) => TicketNullablePromise;
+  tickets: (args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Ticket>;
+  ticketsConnection: (args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => TicketConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -305,6 +325,18 @@ export interface Prisma {
   }) => ShowPromise;
   deleteShow: (where: ShowWhereUniqueInput) => ShowPromise;
   deleteManyShows: (where?: ShowWhereInput) => BatchPayloadPromise;
+  createTicket: (data: TicketCreateInput) => TicketPromise;
+  updateTicket: (args: {
+    data: TicketUpdateInput;
+    where: TicketWhereUniqueInput;
+  }) => TicketPromise;
+  upsertTicket: (args: {
+    where: TicketWhereUniqueInput;
+    create: TicketCreateInput;
+    update: TicketUpdateInput;
+  }) => TicketPromise;
+  deleteTicket: (where: TicketWhereUniqueInput) => TicketPromise;
+  deleteManyTickets: (where?: TicketWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -335,6 +367,9 @@ export interface Subscription {
   show: (
     where?: ShowSubscriptionWhereInput
   ) => ShowSubscriptionPayloadSubscription;
+  ticket: (
+    where?: TicketSubscriptionWhereInput
+  ) => TicketSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -389,6 +424,14 @@ export type RoomOrderByInput =
   | "y_ASC"
   | "y_DESC";
 
+export type TicketOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type PlacementOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -433,23 +476,11 @@ export type ExhibitionOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface AssetUpdateManyDataInput {
-  uri?: Maybe<String>;
-}
-
 export type AssetWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface ExhibitionUpdateWithoutRoomsDataInput {
-  title?: Maybe<String>;
-  number?: Maybe<Int>;
-  theme?: Maybe<Json>;
-  extent?: Maybe<Int>;
-  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
-}
-
-export interface RoomWhereInput {
+export interface AssetWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -464,264 +495,21 @@ export interface RoomWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  entryId?: Maybe<ID_Input>;
-  entryId_not?: Maybe<ID_Input>;
-  entryId_in?: Maybe<ID_Input[] | ID_Input>;
-  entryId_not_in?: Maybe<ID_Input[] | ID_Input>;
-  entryId_lt?: Maybe<ID_Input>;
-  entryId_lte?: Maybe<ID_Input>;
-  entryId_gt?: Maybe<ID_Input>;
-  entryId_gte?: Maybe<ID_Input>;
-  entryId_contains?: Maybe<ID_Input>;
-  entryId_not_contains?: Maybe<ID_Input>;
-  entryId_starts_with?: Maybe<ID_Input>;
-  entryId_not_starts_with?: Maybe<ID_Input>;
-  entryId_ends_with?: Maybe<ID_Input>;
-  entryId_not_ends_with?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  x_not?: Maybe<Int>;
-  x_in?: Maybe<Int[] | Int>;
-  x_not_in?: Maybe<Int[] | Int>;
-  x_lt?: Maybe<Int>;
-  x_lte?: Maybe<Int>;
-  x_gt?: Maybe<Int>;
-  x_gte?: Maybe<Int>;
-  y?: Maybe<Int>;
-  y_not?: Maybe<Int>;
-  y_in?: Maybe<Int[] | Int>;
-  y_not_in?: Maybe<Int[] | Int>;
-  y_lt?: Maybe<Int>;
-  y_lte?: Maybe<Int>;
-  y_gt?: Maybe<Int>;
-  y_gte?: Maybe<Int>;
-  exhibition?: Maybe<ExhibitionWhereInput>;
-  placements_every?: Maybe<PlacementWhereInput>;
-  placements_some?: Maybe<PlacementWhereInput>;
-  placements_none?: Maybe<PlacementWhereInput>;
-  AND?: Maybe<RoomWhereInput[] | RoomWhereInput>;
-  OR?: Maybe<RoomWhereInput[] | RoomWhereInput>;
-  NOT?: Maybe<RoomWhereInput[] | RoomWhereInput>;
-}
-
-export interface ShowUpdateManyWithoutExhibitionInput {
-  create?: Maybe<
-    ShowCreateWithoutExhibitionInput[] | ShowCreateWithoutExhibitionInput
-  >;
-  delete?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
-  connect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
-  set?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
-  disconnect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
-  update?: Maybe<
-    | ShowUpdateWithWhereUniqueWithoutExhibitionInput[]
-    | ShowUpdateWithWhereUniqueWithoutExhibitionInput
-  >;
-  upsert?: Maybe<
-    | ShowUpsertWithWhereUniqueWithoutExhibitionInput[]
-    | ShowUpsertWithWhereUniqueWithoutExhibitionInput
-  >;
-  deleteMany?: Maybe<ShowScalarWhereInput[] | ShowScalarWhereInput>;
-  updateMany?: Maybe<
-    ShowUpdateManyWithWhereNestedInput[] | ShowUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ShowWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  number?: Maybe<Int>;
-  number_not?: Maybe<Int>;
-  number_in?: Maybe<Int[] | Int>;
-  number_not_in?: Maybe<Int[] | Int>;
-  number_lt?: Maybe<Int>;
-  number_lte?: Maybe<Int>;
-  number_gt?: Maybe<Int>;
-  number_gte?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  opensAt_not?: Maybe<DateTimeInput>;
-  opensAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  opensAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  opensAt_lt?: Maybe<DateTimeInput>;
-  opensAt_lte?: Maybe<DateTimeInput>;
-  opensAt_gt?: Maybe<DateTimeInput>;
-  opensAt_gte?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
-  closesAt_not?: Maybe<DateTimeInput>;
-  closesAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  closesAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  closesAt_lt?: Maybe<DateTimeInput>;
-  closesAt_lte?: Maybe<DateTimeInput>;
-  closesAt_gt?: Maybe<DateTimeInput>;
-  closesAt_gte?: Maybe<DateTimeInput>;
-  exhibition?: Maybe<ExhibitionWhereInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<ShowWhereInput[] | ShowWhereInput>;
-  OR?: Maybe<ShowWhereInput[] | ShowWhereInput>;
-  NOT?: Maybe<ShowWhereInput[] | ShowWhereInput>;
-}
-
-export interface EntityCreateWithoutCounterfactualTokensInput {
-  id?: Maybe<ID_Input>;
-  handle?: Maybe<String>;
-  email: String;
-  privateKey: String;
-  publicKey: String;
-  assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
-}
-
-export interface PlacementCreateManyWithoutRoomInput {
-  create?: Maybe<
-    PlacementCreateWithoutRoomInput[] | PlacementCreateWithoutRoomInput
-  >;
-  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-}
-
-export interface AssetUpdateInput {
   uri?: Maybe<String>;
-  owner?: Maybe<EntityUpdateOneRequiredWithoutAssetsInput>;
-}
-
-export interface ShowUpdateWithWhereUniqueWithoutExhibitionInput {
-  where: ShowWhereUniqueInput;
-  data: ShowUpdateWithoutExhibitionDataInput;
-}
-
-export interface EntityUpdateOneRequiredWithoutAssetsInput {
-  create?: Maybe<EntityCreateWithoutAssetsInput>;
-  update?: Maybe<EntityUpdateWithoutAssetsDataInput>;
-  upsert?: Maybe<EntityUpsertWithoutAssetsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface RoomSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<RoomWhereInput>;
-  AND?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
-  OR?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
-  NOT?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
-}
-
-export interface EntityUpdateWithoutAssetsDataInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  privateKey?: Maybe<String>;
-  publicKey?: Maybe<String>;
-  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
-}
-
-export interface ExhibitionSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ExhibitionWhereInput>;
-  AND?: Maybe<
-    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
-  >;
-}
-
-export interface CounterfactualTokenUpdateManyWithoutOwnerInput {
-  create?: Maybe<
-    | CounterfactualTokenCreateWithoutOwnerInput[]
-    | CounterfactualTokenCreateWithoutOwnerInput
-  >;
-  delete?: Maybe<
-    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
-  >;
-  connect?: Maybe<
-    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
-  >;
-  set?: Maybe<
-    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
-  >;
-  disconnect?: Maybe<
-    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
-  >;
-  update?: Maybe<
-    | CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput[]
-    | CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput
-  >;
-  upsert?: Maybe<
-    | CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput[]
-    | CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput
-  >;
-  deleteMany?: Maybe<
-    CounterfactualTokenScalarWhereInput[] | CounterfactualTokenScalarWhereInput
-  >;
-  updateMany?: Maybe<
-    | CounterfactualTokenUpdateManyWithWhereNestedInput[]
-    | CounterfactualTokenUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface CounterfactualTokenWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  tokenURI?: Maybe<String>;
-  tokenURI_not?: Maybe<String>;
-  tokenURI_in?: Maybe<String[] | String>;
-  tokenURI_not_in?: Maybe<String[] | String>;
-  tokenURI_lt?: Maybe<String>;
-  tokenURI_lte?: Maybe<String>;
-  tokenURI_gt?: Maybe<String>;
-  tokenURI_gte?: Maybe<String>;
-  tokenURI_contains?: Maybe<String>;
-  tokenURI_not_contains?: Maybe<String>;
-  tokenURI_starts_with?: Maybe<String>;
-  tokenURI_not_starts_with?: Maybe<String>;
-  tokenURI_ends_with?: Maybe<String>;
-  tokenURI_not_ends_with?: Maybe<String>;
+  uri_not?: Maybe<String>;
+  uri_in?: Maybe<String[] | String>;
+  uri_not_in?: Maybe<String[] | String>;
+  uri_lt?: Maybe<String>;
+  uri_lte?: Maybe<String>;
+  uri_gt?: Maybe<String>;
+  uri_gte?: Maybe<String>;
+  uri_contains?: Maybe<String>;
+  uri_not_contains?: Maybe<String>;
+  uri_starts_with?: Maybe<String>;
+  uri_not_starts_with?: Maybe<String>;
+  uri_ends_with?: Maybe<String>;
+  uri_not_ends_with?: Maybe<String>;
   owner?: Maybe<EntityWhereInput>;
-  placement?: Maybe<PlacementWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -738,14 +526,9 @@ export interface CounterfactualTokenWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
-  OR?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
-  NOT?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
-}
-
-export interface CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput {
-  where: CounterfactualTokenWhereUniqueInput;
-  data: CounterfactualTokenUpdateWithoutOwnerDataInput;
+  AND?: Maybe<AssetWhereInput[] | AssetWhereInput>;
+  OR?: Maybe<AssetWhereInput[] | AssetWhereInput>;
+  NOT?: Maybe<AssetWhereInput[] | AssetWhereInput>;
 }
 
 export interface EntityWhereInput {
@@ -828,6 +611,9 @@ export interface EntityWhereInput {
   placements_every?: Maybe<PlacementWhereInput>;
   placements_some?: Maybe<PlacementWhereInput>;
   placements_none?: Maybe<PlacementWhereInput>;
+  tickets_every?: Maybe<TicketWhereInput>;
+  tickets_some?: Maybe<TicketWhereInput>;
+  tickets_none?: Maybe<TicketWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -849,143 +635,7 @@ export interface EntityWhereInput {
   NOT?: Maybe<EntityWhereInput[] | EntityWhereInput>;
 }
 
-export interface CounterfactualTokenUpdateWithoutOwnerDataInput {
-  tokenURI?: Maybe<String>;
-  placement?: Maybe<PlacementUpdateOneRequiredWithoutCounterfactualTokenInput>;
-}
-
-export interface AssetSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<AssetWhereInput>;
-  AND?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
-  OR?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
-  NOT?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
-}
-
-export interface PlacementUpdateOneRequiredWithoutCounterfactualTokenInput {
-  create?: Maybe<PlacementCreateWithoutCounterfactualTokenInput>;
-  update?: Maybe<PlacementUpdateWithoutCounterfactualTokenDataInput>;
-  upsert?: Maybe<PlacementUpsertWithoutCounterfactualTokenInput>;
-  connect?: Maybe<PlacementWhereUniqueInput>;
-}
-
-export interface ExhibitionUpsertWithoutShowsInput {
-  update: ExhibitionUpdateWithoutShowsDataInput;
-  create: ExhibitionCreateWithoutShowsInput;
-}
-
-export interface PlacementUpdateWithoutCounterfactualTokenDataInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
-  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
-}
-
-export interface ExhibitionUpdateOneRequiredWithoutShowsInput {
-  create?: Maybe<ExhibitionCreateWithoutShowsInput>;
-  update?: Maybe<ExhibitionUpdateWithoutShowsDataInput>;
-  upsert?: Maybe<ExhibitionUpsertWithoutShowsInput>;
-  connect?: Maybe<ExhibitionWhereUniqueInput>;
-}
-
-export interface EntityUpdateOneRequiredWithoutPlacementsInput {
-  create?: Maybe<EntityCreateWithoutPlacementsInput>;
-  update?: Maybe<EntityUpdateWithoutPlacementsDataInput>;
-  upsert?: Maybe<EntityUpsertWithoutPlacementsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface ShowUpdateInput {
-  number?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
-  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutShowsInput>;
-}
-
-export interface EntityUpdateWithoutPlacementsDataInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  privateKey?: Maybe<String>;
-  publicKey?: Maybe<String>;
-  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
-}
-
-export interface ExhibitionCreateOneWithoutShowsInput {
-  create?: Maybe<ExhibitionCreateWithoutShowsInput>;
-  connect?: Maybe<ExhibitionWhereUniqueInput>;
-}
-
-export interface AssetUpdateManyWithoutOwnerInput {
-  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
-  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-  update?: Maybe<
-    | AssetUpdateWithWhereUniqueWithoutOwnerInput[]
-    | AssetUpdateWithWhereUniqueWithoutOwnerInput
-  >;
-  upsert?: Maybe<
-    | AssetUpsertWithWhereUniqueWithoutOwnerInput[]
-    | AssetUpsertWithWhereUniqueWithoutOwnerInput
-  >;
-  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  updateMany?: Maybe<
-    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ShowCreateInput {
-  id?: Maybe<ID_Input>;
-  number: Int;
-  opensAt: DateTimeInput;
-  closesAt: DateTimeInput;
-  exhibition: ExhibitionCreateOneWithoutShowsInput;
-}
-
-export interface AssetUpdateWithWhereUniqueWithoutOwnerInput {
-  where: AssetWhereUniqueInput;
-  data: AssetUpdateWithoutOwnerDataInput;
-}
-
-export interface RoomUpdateInput {
-  entryId?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>;
-  placements?: Maybe<PlacementUpdateManyWithoutRoomInput>;
-}
-
-export interface AssetUpdateWithoutOwnerDataInput {
-  uri?: Maybe<String>;
-}
-
-export type ExhibitionWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  number?: Maybe<Int>;
-}>;
-
-export interface AssetUpsertWithWhereUniqueWithoutOwnerInput {
-  where: AssetWhereUniqueInput;
-  update: AssetUpdateWithoutOwnerDataInput;
-  create: AssetCreateWithoutOwnerInput;
-}
-
-export interface PlacementUpdateInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
-  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
-  counterfactualToken?: Maybe<
-    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
-  >;
-}
-
-export interface AssetScalarWhereInput {
+export interface CounterfactualTokenWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1000,20 +650,22 @@ export interface AssetScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  uri?: Maybe<String>;
-  uri_not?: Maybe<String>;
-  uri_in?: Maybe<String[] | String>;
-  uri_not_in?: Maybe<String[] | String>;
-  uri_lt?: Maybe<String>;
-  uri_lte?: Maybe<String>;
-  uri_gt?: Maybe<String>;
-  uri_gte?: Maybe<String>;
-  uri_contains?: Maybe<String>;
-  uri_not_contains?: Maybe<String>;
-  uri_starts_with?: Maybe<String>;
-  uri_not_starts_with?: Maybe<String>;
-  uri_ends_with?: Maybe<String>;
-  uri_not_ends_with?: Maybe<String>;
+  tokenURI?: Maybe<String>;
+  tokenURI_not?: Maybe<String>;
+  tokenURI_in?: Maybe<String[] | String>;
+  tokenURI_not_in?: Maybe<String[] | String>;
+  tokenURI_lt?: Maybe<String>;
+  tokenURI_lte?: Maybe<String>;
+  tokenURI_gt?: Maybe<String>;
+  tokenURI_gte?: Maybe<String>;
+  tokenURI_contains?: Maybe<String>;
+  tokenURI_not_contains?: Maybe<String>;
+  tokenURI_starts_with?: Maybe<String>;
+  tokenURI_not_starts_with?: Maybe<String>;
+  tokenURI_ends_with?: Maybe<String>;
+  tokenURI_not_ends_with?: Maybe<String>;
+  owner?: Maybe<EntityWhereInput>;
+  placement?: Maybe<PlacementWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1030,35 +682,59 @@ export interface AssetScalarWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  OR?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
-  NOT?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  AND?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
+  OR?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
+  NOT?: Maybe<CounterfactualTokenWhereInput[] | CounterfactualTokenWhereInput>;
 }
 
-export interface ExhibitionUpdateManyMutationInput {
-  title?: Maybe<String>;
-  number?: Maybe<Int>;
-  theme?: Maybe<Json>;
-  extent?: Maybe<Int>;
-}
-
-export interface AssetUpdateManyWithWhereNestedInput {
-  where: AssetScalarWhereInput;
-  data: AssetUpdateManyDataInput;
-}
-
-export interface RoomUpdateManyDataInput {
-  entryId?: Maybe<ID_Input>;
+export interface PlacementWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
   x?: Maybe<Int>;
+  x_not?: Maybe<Int>;
+  x_in?: Maybe<Int[] | Int>;
+  x_not_in?: Maybe<Int[] | Int>;
+  x_lt?: Maybe<Int>;
+  x_lte?: Maybe<Int>;
+  x_gt?: Maybe<Int>;
+  x_gte?: Maybe<Int>;
   y?: Maybe<Int>;
+  y_not?: Maybe<Int>;
+  y_in?: Maybe<Int[] | Int>;
+  y_not_in?: Maybe<Int[] | Int>;
+  y_lt?: Maybe<Int>;
+  y_lte?: Maybe<Int>;
+  y_gt?: Maybe<Int>;
+  y_gte?: Maybe<Int>;
+  entity?: Maybe<EntityWhereInput>;
+  room?: Maybe<RoomWhereInput>;
+  counterfactualToken?: Maybe<CounterfactualTokenWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
+  OR?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
+  NOT?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
 }
 
-export interface RoomUpdateWithWhereUniqueWithoutExhibitionInput {
-  where: RoomWhereUniqueInput;
-  data: RoomUpdateWithoutExhibitionDataInput;
-}
-
-export interface RoomScalarWhereInput {
+export interface RoomWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1103,62 +779,13 @@ export interface RoomScalarWhereInput {
   y_lte?: Maybe<Int>;
   y_gt?: Maybe<Int>;
   y_gte?: Maybe<Int>;
-  AND?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
-  OR?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
-  NOT?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
-}
-
-export interface EntityUpsertWithoutPlacementsInput {
-  update: EntityUpdateWithoutPlacementsDataInput;
-  create: EntityCreateWithoutPlacementsInput;
-}
-
-export interface RoomUpsertWithWhereUniqueWithoutExhibitionInput {
-  where: RoomWhereUniqueInput;
-  update: RoomUpdateWithoutExhibitionDataInput;
-  create: RoomCreateWithoutExhibitionInput;
-}
-
-export interface RoomUpdateOneRequiredWithoutPlacementsInput {
-  create?: Maybe<RoomCreateWithoutPlacementsInput>;
-  update?: Maybe<RoomUpdateWithoutPlacementsDataInput>;
-  upsert?: Maybe<RoomUpsertWithoutPlacementsInput>;
-  connect?: Maybe<RoomWhereUniqueInput>;
-}
-
-export interface PlacementUpdateWithoutRoomDataInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
-  counterfactualToken?: Maybe<
-    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
-  >;
-}
-
-export interface RoomUpdateWithoutPlacementsDataInput {
-  entryId?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>;
-}
-
-export interface PlacementUpdateWithWhereUniqueWithoutRoomInput {
-  where: PlacementWhereUniqueInput;
-  data: PlacementUpdateWithoutRoomDataInput;
-}
-
-export interface ExhibitionUpdateOneRequiredWithoutRoomsInput {
-  create?: Maybe<ExhibitionCreateWithoutRoomsInput>;
-  update?: Maybe<ExhibitionUpdateWithoutRoomsDataInput>;
-  upsert?: Maybe<ExhibitionUpsertWithoutRoomsInput>;
-  connect?: Maybe<ExhibitionWhereUniqueInput>;
-}
-
-export interface RoomUpdateWithoutExhibitionDataInput {
-  entryId?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  placements?: Maybe<PlacementUpdateManyWithoutRoomInput>;
+  exhibition?: Maybe<ExhibitionWhereInput>;
+  placements_every?: Maybe<PlacementWhereInput>;
+  placements_some?: Maybe<PlacementWhereInput>;
+  placements_none?: Maybe<PlacementWhereInput>;
+  AND?: Maybe<RoomWhereInput[] | RoomWhereInput>;
+  OR?: Maybe<RoomWhereInput[] | RoomWhereInput>;
+  NOT?: Maybe<RoomWhereInput[] | RoomWhereInput>;
 }
 
 export interface ExhibitionWhereInput {
@@ -1212,6 +839,9 @@ export interface ExhibitionWhereInput {
   rooms_every?: Maybe<RoomWhereInput>;
   rooms_some?: Maybe<RoomWhereInput>;
   rooms_none?: Maybe<RoomWhereInput>;
+  tickets_every?: Maybe<TicketWhereInput>;
+  tickets_some?: Maybe<TicketWhereInput>;
+  tickets_none?: Maybe<TicketWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1233,45 +863,7 @@ export interface ExhibitionWhereInput {
   NOT?: Maybe<ExhibitionWhereInput[] | ExhibitionWhereInput>;
 }
 
-export interface AssetCreateInput {
-  id?: Maybe<ID_Input>;
-  uri: String;
-  owner: EntityCreateOneWithoutAssetsInput;
-}
-
-export interface RoomUpdateManyWithoutExhibitionInput {
-  create?: Maybe<
-    RoomCreateWithoutExhibitionInput[] | RoomCreateWithoutExhibitionInput
-  >;
-  delete?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
-  connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
-  set?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
-  disconnect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
-  update?: Maybe<
-    | RoomUpdateWithWhereUniqueWithoutExhibitionInput[]
-    | RoomUpdateWithWhereUniqueWithoutExhibitionInput
-  >;
-  upsert?: Maybe<
-    | RoomUpsertWithWhereUniqueWithoutExhibitionInput[]
-    | RoomUpsertWithWhereUniqueWithoutExhibitionInput
-  >;
-  deleteMany?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
-  updateMany?: Maybe<
-    RoomUpdateManyWithWhereNestedInput[] | RoomUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface EntityCreateWithoutAssetsInput {
-  id?: Maybe<ID_Input>;
-  handle?: Maybe<String>;
-  email: String;
-  privateKey: String;
-  publicKey: String;
-  counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
-}
-
-export interface PlacementWhereInput {
+export interface ShowWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1286,25 +878,31 @@ export interface PlacementWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  x_not?: Maybe<Int>;
-  x_in?: Maybe<Int[] | Int>;
-  x_not_in?: Maybe<Int[] | Int>;
-  x_lt?: Maybe<Int>;
-  x_lte?: Maybe<Int>;
-  x_gt?: Maybe<Int>;
-  x_gte?: Maybe<Int>;
-  y?: Maybe<Int>;
-  y_not?: Maybe<Int>;
-  y_in?: Maybe<Int[] | Int>;
-  y_not_in?: Maybe<Int[] | Int>;
-  y_lt?: Maybe<Int>;
-  y_lte?: Maybe<Int>;
-  y_gt?: Maybe<Int>;
-  y_gte?: Maybe<Int>;
-  entity?: Maybe<EntityWhereInput>;
-  room?: Maybe<RoomWhereInput>;
-  counterfactualToken?: Maybe<CounterfactualTokenWhereInput>;
+  number?: Maybe<Int>;
+  number_not?: Maybe<Int>;
+  number_in?: Maybe<Int[] | Int>;
+  number_not_in?: Maybe<Int[] | Int>;
+  number_lt?: Maybe<Int>;
+  number_lte?: Maybe<Int>;
+  number_gt?: Maybe<Int>;
+  number_gte?: Maybe<Int>;
+  opensAt?: Maybe<DateTimeInput>;
+  opensAt_not?: Maybe<DateTimeInput>;
+  opensAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  opensAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  opensAt_lt?: Maybe<DateTimeInput>;
+  opensAt_lte?: Maybe<DateTimeInput>;
+  opensAt_gt?: Maybe<DateTimeInput>;
+  opensAt_gte?: Maybe<DateTimeInput>;
+  closesAt?: Maybe<DateTimeInput>;
+  closesAt_not?: Maybe<DateTimeInput>;
+  closesAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  closesAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  closesAt_lt?: Maybe<DateTimeInput>;
+  closesAt_lte?: Maybe<DateTimeInput>;
+  closesAt_gt?: Maybe<DateTimeInput>;
+  closesAt_gte?: Maybe<DateTimeInput>;
+  exhibition?: Maybe<ExhibitionWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1313,9 +911,119 @@ export interface PlacementWhereInput {
   createdAt_lte?: Maybe<DateTimeInput>;
   createdAt_gt?: Maybe<DateTimeInput>;
   createdAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
-  OR?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
-  NOT?: Maybe<PlacementWhereInput[] | PlacementWhereInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<ShowWhereInput[] | ShowWhereInput>;
+  OR?: Maybe<ShowWhereInput[] | ShowWhereInput>;
+  NOT?: Maybe<ShowWhereInput[] | ShowWhereInput>;
+}
+
+export interface TicketWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  owner?: Maybe<EntityWhereInput>;
+  exhibition?: Maybe<ExhibitionWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<TicketWhereInput[] | TicketWhereInput>;
+  OR?: Maybe<TicketWhereInput[] | TicketWhereInput>;
+  NOT?: Maybe<TicketWhereInput[] | TicketWhereInput>;
+}
+
+export type CounterfactualTokenWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type EntityWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+}>;
+
+export type ExhibitionWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  number?: Maybe<Int>;
+}>;
+
+export type PlacementWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type RoomWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  entryId?: Maybe<ID_Input>;
+}>;
+
+export type ShowWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type TicketWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface AssetCreateInput {
+  id?: Maybe<ID_Input>;
+  uri: String;
+  owner: EntityCreateOneWithoutAssetsInput;
+}
+
+export interface EntityCreateOneWithoutAssetsInput {
+  create?: Maybe<EntityCreateWithoutAssetsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityCreateWithoutAssetsInput {
+  id?: Maybe<ID_Input>;
+  handle?: Maybe<String>;
+  email: String;
+  privateKey: String;
+  publicKey: String;
+  counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketCreateManyWithoutOwnerInput>;
+}
+
+export interface CounterfactualTokenCreateManyWithoutOwnerInput {
+  create?: Maybe<
+    | CounterfactualTokenCreateWithoutOwnerInput[]
+    | CounterfactualTokenCreateWithoutOwnerInput
+  >;
+  connect?: Maybe<
+    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
+  >;
 }
 
 export interface CounterfactualTokenCreateWithoutOwnerInput {
@@ -1324,10 +1032,9 @@ export interface CounterfactualTokenCreateWithoutOwnerInput {
   placement: PlacementCreateOneWithoutCounterfactualTokenInput;
 }
 
-export interface ShowUpdateWithoutExhibitionDataInput {
-  number?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
+export interface PlacementCreateOneWithoutCounterfactualTokenInput {
+  create?: Maybe<PlacementCreateWithoutCounterfactualTokenInput>;
+  connect?: Maybe<PlacementWhereUniqueInput>;
 }
 
 export interface PlacementCreateWithoutCounterfactualTokenInput {
@@ -1338,10 +1045,9 @@ export interface PlacementCreateWithoutCounterfactualTokenInput {
   room: RoomCreateOneWithoutPlacementsInput;
 }
 
-export interface ShowUpsertWithWhereUniqueWithoutExhibitionInput {
-  where: ShowWhereUniqueInput;
-  update: ShowUpdateWithoutExhibitionDataInput;
-  create: ShowCreateWithoutExhibitionInput;
+export interface EntityCreateOneWithoutPlacementsInput {
+  create?: Maybe<EntityCreateWithoutPlacementsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
 }
 
 export interface EntityCreateWithoutPlacementsInput {
@@ -1352,6 +1058,460 @@ export interface EntityCreateWithoutPlacementsInput {
   publicKey: String;
   assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
   counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
+  tickets?: Maybe<TicketCreateManyWithoutOwnerInput>;
+}
+
+export interface AssetCreateManyWithoutOwnerInput {
+  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+}
+
+export interface AssetCreateWithoutOwnerInput {
+  id?: Maybe<ID_Input>;
+  uri: String;
+}
+
+export interface TicketCreateManyWithoutOwnerInput {
+  create?: Maybe<
+    TicketCreateWithoutOwnerInput[] | TicketCreateWithoutOwnerInput
+  >;
+  connect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+}
+
+export interface TicketCreateWithoutOwnerInput {
+  id?: Maybe<ID_Input>;
+  exhibition: ExhibitionCreateOneWithoutTicketsInput;
+}
+
+export interface ExhibitionCreateOneWithoutTicketsInput {
+  create?: Maybe<ExhibitionCreateWithoutTicketsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionCreateWithoutTicketsInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  number: Int;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
+  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
+}
+
+export interface ShowCreateManyWithoutExhibitionInput {
+  create?: Maybe<
+    ShowCreateWithoutExhibitionInput[] | ShowCreateWithoutExhibitionInput
+  >;
+  connect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
+}
+
+export interface ShowCreateWithoutExhibitionInput {
+  id?: Maybe<ID_Input>;
+  number: Int;
+  opensAt: DateTimeInput;
+  closesAt: DateTimeInput;
+}
+
+export interface RoomCreateManyWithoutExhibitionInput {
+  create?: Maybe<
+    RoomCreateWithoutExhibitionInput[] | RoomCreateWithoutExhibitionInput
+  >;
+  connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+}
+
+export interface RoomCreateWithoutExhibitionInput {
+  id?: Maybe<ID_Input>;
+  entryId: ID_Input;
+  x: Int;
+  y: Int;
+  placements?: Maybe<PlacementCreateManyWithoutRoomInput>;
+}
+
+export interface PlacementCreateManyWithoutRoomInput {
+  create?: Maybe<
+    PlacementCreateWithoutRoomInput[] | PlacementCreateWithoutRoomInput
+  >;
+  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+}
+
+export interface PlacementCreateWithoutRoomInput {
+  id?: Maybe<ID_Input>;
+  x: Int;
+  y: Int;
+  entity: EntityCreateOneWithoutPlacementsInput;
+  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput;
+}
+
+export interface CounterfactualTokenCreateOneWithoutPlacementInput {
+  create?: Maybe<CounterfactualTokenCreateWithoutPlacementInput>;
+  connect?: Maybe<CounterfactualTokenWhereUniqueInput>;
+}
+
+export interface CounterfactualTokenCreateWithoutPlacementInput {
+  id?: Maybe<ID_Input>;
+  tokenURI: String;
+  owner: EntityCreateOneWithoutCounterfactualTokensInput;
+}
+
+export interface EntityCreateOneWithoutCounterfactualTokensInput {
+  create?: Maybe<EntityCreateWithoutCounterfactualTokensInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityCreateWithoutCounterfactualTokensInput {
+  id?: Maybe<ID_Input>;
+  handle?: Maybe<String>;
+  email: String;
+  privateKey: String;
+  publicKey: String;
+  assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketCreateManyWithoutOwnerInput>;
+}
+
+export interface PlacementCreateManyWithoutEntityInput {
+  create?: Maybe<
+    PlacementCreateWithoutEntityInput[] | PlacementCreateWithoutEntityInput
+  >;
+  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+}
+
+export interface PlacementCreateWithoutEntityInput {
+  id?: Maybe<ID_Input>;
+  x: Int;
+  y: Int;
+  room: RoomCreateOneWithoutPlacementsInput;
+  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput;
+}
+
+export interface RoomCreateOneWithoutPlacementsInput {
+  create?: Maybe<RoomCreateWithoutPlacementsInput>;
+  connect?: Maybe<RoomWhereUniqueInput>;
+}
+
+export interface RoomCreateWithoutPlacementsInput {
+  id?: Maybe<ID_Input>;
+  entryId: ID_Input;
+  x: Int;
+  y: Int;
+  exhibition: ExhibitionCreateOneWithoutRoomsInput;
+}
+
+export interface ExhibitionCreateOneWithoutRoomsInput {
+  create?: Maybe<ExhibitionCreateWithoutRoomsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionCreateWithoutRoomsInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  number: Int;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketCreateManyWithoutExhibitionInput>;
+}
+
+export interface TicketCreateManyWithoutExhibitionInput {
+  create?: Maybe<
+    TicketCreateWithoutExhibitionInput[] | TicketCreateWithoutExhibitionInput
+  >;
+  connect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+}
+
+export interface TicketCreateWithoutExhibitionInput {
+  id?: Maybe<ID_Input>;
+  owner: EntityCreateOneWithoutTicketsInput;
+}
+
+export interface EntityCreateOneWithoutTicketsInput {
+  create?: Maybe<EntityCreateWithoutTicketsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityCreateWithoutTicketsInput {
+  id?: Maybe<ID_Input>;
+  handle?: Maybe<String>;
+  email: String;
+  privateKey: String;
+  publicKey: String;
+  assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
+  counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
+}
+
+export interface AssetUpdateInput {
+  uri?: Maybe<String>;
+  owner?: Maybe<EntityUpdateOneRequiredWithoutAssetsInput>;
+}
+
+export interface EntityUpdateOneRequiredWithoutAssetsInput {
+  create?: Maybe<EntityCreateWithoutAssetsInput>;
+  update?: Maybe<EntityUpdateWithoutAssetsDataInput>;
+  upsert?: Maybe<EntityUpsertWithoutAssetsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityUpdateWithoutAssetsDataInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutOwnerInput>;
+}
+
+export interface CounterfactualTokenUpdateManyWithoutOwnerInput {
+  create?: Maybe<
+    | CounterfactualTokenCreateWithoutOwnerInput[]
+    | CounterfactualTokenCreateWithoutOwnerInput
+  >;
+  delete?: Maybe<
+    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
+  >;
+  connect?: Maybe<
+    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
+  >;
+  set?: Maybe<
+    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
+  >;
+  disconnect?: Maybe<
+    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
+  >;
+  update?: Maybe<
+    | CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput[]
+    | CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput
+  >;
+  upsert?: Maybe<
+    | CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput[]
+    | CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput
+  >;
+  deleteMany?: Maybe<
+    CounterfactualTokenScalarWhereInput[] | CounterfactualTokenScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | CounterfactualTokenUpdateManyWithWhereNestedInput[]
+    | CounterfactualTokenUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CounterfactualTokenUpdateWithWhereUniqueWithoutOwnerInput {
+  where: CounterfactualTokenWhereUniqueInput;
+  data: CounterfactualTokenUpdateWithoutOwnerDataInput;
+}
+
+export interface CounterfactualTokenUpdateWithoutOwnerDataInput {
+  tokenURI?: Maybe<String>;
+  placement?: Maybe<PlacementUpdateOneRequiredWithoutCounterfactualTokenInput>;
+}
+
+export interface PlacementUpdateOneRequiredWithoutCounterfactualTokenInput {
+  create?: Maybe<PlacementCreateWithoutCounterfactualTokenInput>;
+  update?: Maybe<PlacementUpdateWithoutCounterfactualTokenDataInput>;
+  upsert?: Maybe<PlacementUpsertWithoutCounterfactualTokenInput>;
+  connect?: Maybe<PlacementWhereUniqueInput>;
+}
+
+export interface PlacementUpdateWithoutCounterfactualTokenDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
+  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
+}
+
+export interface EntityUpdateOneRequiredWithoutPlacementsInput {
+  create?: Maybe<EntityCreateWithoutPlacementsInput>;
+  update?: Maybe<EntityUpdateWithoutPlacementsDataInput>;
+  upsert?: Maybe<EntityUpsertWithoutPlacementsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityUpdateWithoutPlacementsDataInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
+  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutOwnerInput>;
+}
+
+export interface AssetUpdateManyWithoutOwnerInput {
+  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
+  delete?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  set?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  disconnect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
+  update?: Maybe<
+    | AssetUpdateWithWhereUniqueWithoutOwnerInput[]
+    | AssetUpdateWithWhereUniqueWithoutOwnerInput
+  >;
+  upsert?: Maybe<
+    | AssetUpsertWithWhereUniqueWithoutOwnerInput[]
+    | AssetUpsertWithWhereUniqueWithoutOwnerInput
+  >;
+  deleteMany?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  updateMany?: Maybe<
+    AssetUpdateManyWithWhereNestedInput[] | AssetUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface AssetUpdateWithWhereUniqueWithoutOwnerInput {
+  where: AssetWhereUniqueInput;
+  data: AssetUpdateWithoutOwnerDataInput;
+}
+
+export interface AssetUpdateWithoutOwnerDataInput {
+  uri?: Maybe<String>;
+}
+
+export interface AssetUpsertWithWhereUniqueWithoutOwnerInput {
+  where: AssetWhereUniqueInput;
+  update: AssetUpdateWithoutOwnerDataInput;
+  create: AssetCreateWithoutOwnerInput;
+}
+
+export interface AssetScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  uri?: Maybe<String>;
+  uri_not?: Maybe<String>;
+  uri_in?: Maybe<String[] | String>;
+  uri_not_in?: Maybe<String[] | String>;
+  uri_lt?: Maybe<String>;
+  uri_lte?: Maybe<String>;
+  uri_gt?: Maybe<String>;
+  uri_gte?: Maybe<String>;
+  uri_contains?: Maybe<String>;
+  uri_not_contains?: Maybe<String>;
+  uri_starts_with?: Maybe<String>;
+  uri_not_starts_with?: Maybe<String>;
+  uri_ends_with?: Maybe<String>;
+  uri_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  OR?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+  NOT?: Maybe<AssetScalarWhereInput[] | AssetScalarWhereInput>;
+}
+
+export interface AssetUpdateManyWithWhereNestedInput {
+  where: AssetScalarWhereInput;
+  data: AssetUpdateManyDataInput;
+}
+
+export interface AssetUpdateManyDataInput {
+  uri?: Maybe<String>;
+}
+
+export interface TicketUpdateManyWithoutOwnerInput {
+  create?: Maybe<
+    TicketCreateWithoutOwnerInput[] | TicketCreateWithoutOwnerInput
+  >;
+  delete?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  connect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  set?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  disconnect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  update?: Maybe<
+    | TicketUpdateWithWhereUniqueWithoutOwnerInput[]
+    | TicketUpdateWithWhereUniqueWithoutOwnerInput
+  >;
+  upsert?: Maybe<
+    | TicketUpsertWithWhereUniqueWithoutOwnerInput[]
+    | TicketUpsertWithWhereUniqueWithoutOwnerInput
+  >;
+  deleteMany?: Maybe<TicketScalarWhereInput[] | TicketScalarWhereInput>;
+}
+
+export interface TicketUpdateWithWhereUniqueWithoutOwnerInput {
+  where: TicketWhereUniqueInput;
+  data: TicketUpdateWithoutOwnerDataInput;
+}
+
+export interface TicketUpdateWithoutOwnerDataInput {
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutTicketsInput>;
+}
+
+export interface ExhibitionUpdateOneRequiredWithoutTicketsInput {
+  create?: Maybe<ExhibitionCreateWithoutTicketsInput>;
+  update?: Maybe<ExhibitionUpdateWithoutTicketsDataInput>;
+  upsert?: Maybe<ExhibitionUpsertWithoutTicketsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionUpdateWithoutTicketsDataInput {
+  title?: Maybe<String>;
+  number?: Maybe<Int>;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
+  rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
+}
+
+export interface ShowUpdateManyWithoutExhibitionInput {
+  create?: Maybe<
+    ShowCreateWithoutExhibitionInput[] | ShowCreateWithoutExhibitionInput
+  >;
+  delete?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
+  connect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
+  set?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
+  disconnect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
+  update?: Maybe<
+    | ShowUpdateWithWhereUniqueWithoutExhibitionInput[]
+    | ShowUpdateWithWhereUniqueWithoutExhibitionInput
+  >;
+  upsert?: Maybe<
+    | ShowUpsertWithWhereUniqueWithoutExhibitionInput[]
+    | ShowUpsertWithWhereUniqueWithoutExhibitionInput
+  >;
+  deleteMany?: Maybe<ShowScalarWhereInput[] | ShowScalarWhereInput>;
+  updateMany?: Maybe<
+    ShowUpdateManyWithWhereNestedInput[] | ShowUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ShowUpdateWithWhereUniqueWithoutExhibitionInput {
+  where: ShowWhereUniqueInput;
+  data: ShowUpdateWithoutExhibitionDataInput;
+}
+
+export interface ShowUpdateWithoutExhibitionDataInput {
+  number?: Maybe<Int>;
+  opensAt?: Maybe<DateTimeInput>;
+  closesAt?: Maybe<DateTimeInput>;
+}
+
+export interface ShowUpsertWithWhereUniqueWithoutExhibitionInput {
+  where: ShowWhereUniqueInput;
+  update: ShowUpdateWithoutExhibitionDataInput;
+  create: ShowCreateWithoutExhibitionInput;
 }
 
 export interface ShowScalarWhereInput {
@@ -1414,22 +1574,9 @@ export interface ShowScalarWhereInput {
   NOT?: Maybe<ShowScalarWhereInput[] | ShowScalarWhereInput>;
 }
 
-export interface AssetCreateWithoutOwnerInput {
-  id?: Maybe<ID_Input>;
-  uri: String;
-}
-
 export interface ShowUpdateManyWithWhereNestedInput {
   where: ShowScalarWhereInput;
   data: ShowUpdateManyDataInput;
-}
-
-export interface RoomCreateWithoutPlacementsInput {
-  id?: Maybe<ID_Input>;
-  entryId: ID_Input;
-  x: Int;
-  y: Int;
-  exhibition: ExhibitionCreateOneWithoutRoomsInput;
 }
 
 export interface ShowUpdateManyDataInput {
@@ -1438,13 +1585,263 @@ export interface ShowUpdateManyDataInput {
   closesAt?: Maybe<DateTimeInput>;
 }
 
-export interface ExhibitionCreateWithoutRoomsInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  number: Int;
+export interface RoomUpdateManyWithoutExhibitionInput {
+  create?: Maybe<
+    RoomCreateWithoutExhibitionInput[] | RoomCreateWithoutExhibitionInput
+  >;
+  delete?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+  connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+  set?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+  disconnect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+  update?: Maybe<
+    | RoomUpdateWithWhereUniqueWithoutExhibitionInput[]
+    | RoomUpdateWithWhereUniqueWithoutExhibitionInput
+  >;
+  upsert?: Maybe<
+    | RoomUpsertWithWhereUniqueWithoutExhibitionInput[]
+    | RoomUpsertWithWhereUniqueWithoutExhibitionInput
+  >;
+  deleteMany?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
+  updateMany?: Maybe<
+    RoomUpdateManyWithWhereNestedInput[] | RoomUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface RoomUpdateWithWhereUniqueWithoutExhibitionInput {
+  where: RoomWhereUniqueInput;
+  data: RoomUpdateWithoutExhibitionDataInput;
+}
+
+export interface RoomUpdateWithoutExhibitionDataInput {
+  entryId?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  placements?: Maybe<PlacementUpdateManyWithoutRoomInput>;
+}
+
+export interface PlacementUpdateManyWithoutRoomInput {
+  create?: Maybe<
+    PlacementCreateWithoutRoomInput[] | PlacementCreateWithoutRoomInput
+  >;
+  delete?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  set?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  disconnect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  update?: Maybe<
+    | PlacementUpdateWithWhereUniqueWithoutRoomInput[]
+    | PlacementUpdateWithWhereUniqueWithoutRoomInput
+  >;
+  upsert?: Maybe<
+    | PlacementUpsertWithWhereUniqueWithoutRoomInput[]
+    | PlacementUpsertWithWhereUniqueWithoutRoomInput
+  >;
+  deleteMany?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
+  updateMany?: Maybe<
+    | PlacementUpdateManyWithWhereNestedInput[]
+    | PlacementUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PlacementUpdateWithWhereUniqueWithoutRoomInput {
+  where: PlacementWhereUniqueInput;
+  data: PlacementUpdateWithoutRoomDataInput;
+}
+
+export interface PlacementUpdateWithoutRoomDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
+  counterfactualToken?: Maybe<
+    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+  >;
+}
+
+export interface CounterfactualTokenUpdateOneRequiredWithoutPlacementInput {
+  create?: Maybe<CounterfactualTokenCreateWithoutPlacementInput>;
+  update?: Maybe<CounterfactualTokenUpdateWithoutPlacementDataInput>;
+  upsert?: Maybe<CounterfactualTokenUpsertWithoutPlacementInput>;
+  connect?: Maybe<CounterfactualTokenWhereUniqueInput>;
+}
+
+export interface CounterfactualTokenUpdateWithoutPlacementDataInput {
+  tokenURI?: Maybe<String>;
+  owner?: Maybe<EntityUpdateOneRequiredWithoutCounterfactualTokensInput>;
+}
+
+export interface EntityUpdateOneRequiredWithoutCounterfactualTokensInput {
+  create?: Maybe<EntityCreateWithoutCounterfactualTokensInput>;
+  update?: Maybe<EntityUpdateWithoutCounterfactualTokensDataInput>;
+  upsert?: Maybe<EntityUpsertWithoutCounterfactualTokensInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityUpdateWithoutCounterfactualTokensDataInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutOwnerInput>;
+}
+
+export interface PlacementUpdateManyWithoutEntityInput {
+  create?: Maybe<
+    PlacementCreateWithoutEntityInput[] | PlacementCreateWithoutEntityInput
+  >;
+  delete?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  set?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  disconnect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
+  update?: Maybe<
+    | PlacementUpdateWithWhereUniqueWithoutEntityInput[]
+    | PlacementUpdateWithWhereUniqueWithoutEntityInput
+  >;
+  upsert?: Maybe<
+    | PlacementUpsertWithWhereUniqueWithoutEntityInput[]
+    | PlacementUpsertWithWhereUniqueWithoutEntityInput
+  >;
+  deleteMany?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
+  updateMany?: Maybe<
+    | PlacementUpdateManyWithWhereNestedInput[]
+    | PlacementUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PlacementUpdateWithWhereUniqueWithoutEntityInput {
+  where: PlacementWhereUniqueInput;
+  data: PlacementUpdateWithoutEntityDataInput;
+}
+
+export interface PlacementUpdateWithoutEntityDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
+  counterfactualToken?: Maybe<
+    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+  >;
+}
+
+export interface RoomUpdateOneRequiredWithoutPlacementsInput {
+  create?: Maybe<RoomCreateWithoutPlacementsInput>;
+  update?: Maybe<RoomUpdateWithoutPlacementsDataInput>;
+  upsert?: Maybe<RoomUpsertWithoutPlacementsInput>;
+  connect?: Maybe<RoomWhereUniqueInput>;
+}
+
+export interface RoomUpdateWithoutPlacementsDataInput {
+  entryId?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>;
+}
+
+export interface ExhibitionUpdateOneRequiredWithoutRoomsInput {
+  create?: Maybe<ExhibitionCreateWithoutRoomsInput>;
+  update?: Maybe<ExhibitionUpdateWithoutRoomsDataInput>;
+  upsert?: Maybe<ExhibitionUpsertWithoutRoomsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionUpdateWithoutRoomsDataInput {
+  title?: Maybe<String>;
+  number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
+  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutExhibitionInput>;
+}
+
+export interface TicketUpdateManyWithoutExhibitionInput {
+  create?: Maybe<
+    TicketCreateWithoutExhibitionInput[] | TicketCreateWithoutExhibitionInput
+  >;
+  delete?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  connect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  set?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  disconnect?: Maybe<TicketWhereUniqueInput[] | TicketWhereUniqueInput>;
+  update?: Maybe<
+    | TicketUpdateWithWhereUniqueWithoutExhibitionInput[]
+    | TicketUpdateWithWhereUniqueWithoutExhibitionInput
+  >;
+  upsert?: Maybe<
+    | TicketUpsertWithWhereUniqueWithoutExhibitionInput[]
+    | TicketUpsertWithWhereUniqueWithoutExhibitionInput
+  >;
+  deleteMany?: Maybe<TicketScalarWhereInput[] | TicketScalarWhereInput>;
+}
+
+export interface TicketUpdateWithWhereUniqueWithoutExhibitionInput {
+  where: TicketWhereUniqueInput;
+  data: TicketUpdateWithoutExhibitionDataInput;
+}
+
+export interface TicketUpdateWithoutExhibitionDataInput {
+  owner?: Maybe<EntityUpdateOneRequiredWithoutTicketsInput>;
+}
+
+export interface EntityUpdateOneRequiredWithoutTicketsInput {
+  create?: Maybe<EntityCreateWithoutTicketsInput>;
+  update?: Maybe<EntityUpdateWithoutTicketsDataInput>;
+  upsert?: Maybe<EntityUpsertWithoutTicketsInput>;
+  connect?: Maybe<EntityWhereUniqueInput>;
+}
+
+export interface EntityUpdateWithoutTicketsDataInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
+  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
+}
+
+export interface EntityUpsertWithoutTicketsInput {
+  update: EntityUpdateWithoutTicketsDataInput;
+  create: EntityCreateWithoutTicketsInput;
+}
+
+export interface TicketUpsertWithWhereUniqueWithoutExhibitionInput {
+  where: TicketWhereUniqueInput;
+  update: TicketUpdateWithoutExhibitionDataInput;
+  create: TicketCreateWithoutExhibitionInput;
+}
+
+export interface TicketScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<TicketScalarWhereInput[] | TicketScalarWhereInput>;
+  OR?: Maybe<TicketScalarWhereInput[] | TicketScalarWhereInput>;
+  NOT?: Maybe<TicketScalarWhereInput[] | TicketScalarWhereInput>;
 }
 
 export interface ExhibitionUpsertWithoutRoomsInput {
@@ -1452,24 +1849,168 @@ export interface ExhibitionUpsertWithoutRoomsInput {
   create: ExhibitionCreateWithoutRoomsInput;
 }
 
-export interface ShowCreateWithoutExhibitionInput {
-  id?: Maybe<ID_Input>;
-  number: Int;
-  opensAt: DateTimeInput;
-  closesAt: DateTimeInput;
-}
-
 export interface RoomUpsertWithoutPlacementsInput {
   update: RoomUpdateWithoutPlacementsDataInput;
   create: RoomCreateWithoutPlacementsInput;
 }
 
-export interface PlacementCreateWithoutEntityInput {
+export interface PlacementUpsertWithWhereUniqueWithoutEntityInput {
+  where: PlacementWhereUniqueInput;
+  update: PlacementUpdateWithoutEntityDataInput;
+  create: PlacementCreateWithoutEntityInput;
+}
+
+export interface PlacementScalarWhereInput {
   id?: Maybe<ID_Input>;
-  x: Int;
-  y: Int;
-  room: RoomCreateOneWithoutPlacementsInput;
-  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  x_not?: Maybe<Int>;
+  x_in?: Maybe<Int[] | Int>;
+  x_not_in?: Maybe<Int[] | Int>;
+  x_lt?: Maybe<Int>;
+  x_lte?: Maybe<Int>;
+  x_gt?: Maybe<Int>;
+  x_gte?: Maybe<Int>;
+  y?: Maybe<Int>;
+  y_not?: Maybe<Int>;
+  y_in?: Maybe<Int[] | Int>;
+  y_not_in?: Maybe<Int[] | Int>;
+  y_lt?: Maybe<Int>;
+  y_lte?: Maybe<Int>;
+  y_gt?: Maybe<Int>;
+  y_gte?: Maybe<Int>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
+  OR?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
+  NOT?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
+}
+
+export interface PlacementUpdateManyWithWhereNestedInput {
+  where: PlacementScalarWhereInput;
+  data: PlacementUpdateManyDataInput;
+}
+
+export interface PlacementUpdateManyDataInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+}
+
+export interface EntityUpsertWithoutCounterfactualTokensInput {
+  update: EntityUpdateWithoutCounterfactualTokensDataInput;
+  create: EntityCreateWithoutCounterfactualTokensInput;
+}
+
+export interface CounterfactualTokenUpsertWithoutPlacementInput {
+  update: CounterfactualTokenUpdateWithoutPlacementDataInput;
+  create: CounterfactualTokenCreateWithoutPlacementInput;
+}
+
+export interface PlacementUpsertWithWhereUniqueWithoutRoomInput {
+  where: PlacementWhereUniqueInput;
+  update: PlacementUpdateWithoutRoomDataInput;
+  create: PlacementCreateWithoutRoomInput;
+}
+
+export interface RoomUpsertWithWhereUniqueWithoutExhibitionInput {
+  where: RoomWhereUniqueInput;
+  update: RoomUpdateWithoutExhibitionDataInput;
+  create: RoomCreateWithoutExhibitionInput;
+}
+
+export interface RoomScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  entryId?: Maybe<ID_Input>;
+  entryId_not?: Maybe<ID_Input>;
+  entryId_in?: Maybe<ID_Input[] | ID_Input>;
+  entryId_not_in?: Maybe<ID_Input[] | ID_Input>;
+  entryId_lt?: Maybe<ID_Input>;
+  entryId_lte?: Maybe<ID_Input>;
+  entryId_gt?: Maybe<ID_Input>;
+  entryId_gte?: Maybe<ID_Input>;
+  entryId_contains?: Maybe<ID_Input>;
+  entryId_not_contains?: Maybe<ID_Input>;
+  entryId_starts_with?: Maybe<ID_Input>;
+  entryId_not_starts_with?: Maybe<ID_Input>;
+  entryId_ends_with?: Maybe<ID_Input>;
+  entryId_not_ends_with?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  x_not?: Maybe<Int>;
+  x_in?: Maybe<Int[] | Int>;
+  x_not_in?: Maybe<Int[] | Int>;
+  x_lt?: Maybe<Int>;
+  x_lte?: Maybe<Int>;
+  x_gt?: Maybe<Int>;
+  x_gte?: Maybe<Int>;
+  y?: Maybe<Int>;
+  y_not?: Maybe<Int>;
+  y_in?: Maybe<Int[] | Int>;
+  y_not_in?: Maybe<Int[] | Int>;
+  y_lt?: Maybe<Int>;
+  y_lte?: Maybe<Int>;
+  y_gt?: Maybe<Int>;
+  y_gte?: Maybe<Int>;
+  AND?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
+  OR?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
+  NOT?: Maybe<RoomScalarWhereInput[] | RoomScalarWhereInput>;
+}
+
+export interface RoomUpdateManyWithWhereNestedInput {
+  where: RoomScalarWhereInput;
+  data: RoomUpdateManyDataInput;
+}
+
+export interface RoomUpdateManyDataInput {
+  entryId?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+}
+
+export interface ExhibitionUpsertWithoutTicketsInput {
+  update: ExhibitionUpdateWithoutTicketsDataInput;
+  create: ExhibitionCreateWithoutTicketsInput;
+}
+
+export interface TicketUpsertWithWhereUniqueWithoutOwnerInput {
+  where: TicketWhereUniqueInput;
+  update: TicketUpdateWithoutOwnerDataInput;
+  create: TicketCreateWithoutOwnerInput;
+}
+
+export interface EntityUpsertWithoutPlacementsInput {
+  update: EntityUpdateWithoutPlacementsDataInput;
+  create: EntityCreateWithoutPlacementsInput;
 }
 
 export interface PlacementUpsertWithoutCounterfactualTokenInput {
@@ -1477,27 +2018,10 @@ export interface PlacementUpsertWithoutCounterfactualTokenInput {
   create: PlacementCreateWithoutCounterfactualTokenInput;
 }
 
-export interface CounterfactualTokenCreateWithoutPlacementInput {
-  id?: Maybe<ID_Input>;
-  tokenURI: String;
-  owner: EntityCreateOneWithoutCounterfactualTokensInput;
-}
-
 export interface CounterfactualTokenUpsertWithWhereUniqueWithoutOwnerInput {
   where: CounterfactualTokenWhereUniqueInput;
   update: CounterfactualTokenUpdateWithoutOwnerDataInput;
   create: CounterfactualTokenCreateWithoutOwnerInput;
-}
-
-export interface ShowSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ShowWhereInput>;
-  AND?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
-  OR?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
-  NOT?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
 }
 
 export interface CounterfactualTokenScalarWhereInput {
@@ -1556,306 +2080,13 @@ export interface CounterfactualTokenScalarWhereInput {
   >;
 }
 
-export interface EntitySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<EntityWhereInput>;
-  AND?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
-  OR?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
-  NOT?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
-}
-
 export interface CounterfactualTokenUpdateManyWithWhereNestedInput {
   where: CounterfactualTokenScalarWhereInput;
   data: CounterfactualTokenUpdateManyDataInput;
 }
 
-export interface AssetWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  uri?: Maybe<String>;
-  uri_not?: Maybe<String>;
-  uri_in?: Maybe<String[] | String>;
-  uri_not_in?: Maybe<String[] | String>;
-  uri_lt?: Maybe<String>;
-  uri_lte?: Maybe<String>;
-  uri_gt?: Maybe<String>;
-  uri_gte?: Maybe<String>;
-  uri_contains?: Maybe<String>;
-  uri_not_contains?: Maybe<String>;
-  uri_starts_with?: Maybe<String>;
-  uri_not_starts_with?: Maybe<String>;
-  uri_ends_with?: Maybe<String>;
-  uri_not_ends_with?: Maybe<String>;
-  owner?: Maybe<EntityWhereInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<AssetWhereInput[] | AssetWhereInput>;
-  OR?: Maybe<AssetWhereInput[] | AssetWhereInput>;
-  NOT?: Maybe<AssetWhereInput[] | AssetWhereInput>;
-}
-
 export interface CounterfactualTokenUpdateManyDataInput {
   tokenURI?: Maybe<String>;
-}
-
-export interface ExhibitionUpdateWithoutShowsDataInput {
-  title?: Maybe<String>;
-  number?: Maybe<Int>;
-  theme?: Maybe<Json>;
-  extent?: Maybe<Int>;
-  rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
-}
-
-export interface PlacementUpdateManyWithoutEntityInput {
-  create?: Maybe<
-    PlacementCreateWithoutEntityInput[] | PlacementCreateWithoutEntityInput
-  >;
-  delete?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  set?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  disconnect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  update?: Maybe<
-    | PlacementUpdateWithWhereUniqueWithoutEntityInput[]
-    | PlacementUpdateWithWhereUniqueWithoutEntityInput
-  >;
-  upsert?: Maybe<
-    | PlacementUpsertWithWhereUniqueWithoutEntityInput[]
-    | PlacementUpsertWithWhereUniqueWithoutEntityInput
-  >;
-  deleteMany?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
-  updateMany?: Maybe<
-    | PlacementUpdateManyWithWhereNestedInput[]
-    | PlacementUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ExhibitionCreateWithoutShowsInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  number: Int;
-  theme?: Maybe<Json>;
-  extent?: Maybe<Int>;
-  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
-}
-
-export interface PlacementUpdateWithWhereUniqueWithoutEntityInput {
-  where: PlacementWhereUniqueInput;
-  data: PlacementUpdateWithoutEntityDataInput;
-}
-
-export interface RoomUpdateManyMutationInput {
-  entryId?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-}
-
-export interface PlacementUpdateWithoutEntityDataInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
-  counterfactualToken?: Maybe<
-    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
-  >;
-}
-
-export interface PlacementUpdateManyMutationInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-}
-
-export interface CounterfactualTokenUpdateOneRequiredWithoutPlacementInput {
-  create?: Maybe<CounterfactualTokenCreateWithoutPlacementInput>;
-  update?: Maybe<CounterfactualTokenUpdateWithoutPlacementDataInput>;
-  upsert?: Maybe<CounterfactualTokenUpsertWithoutPlacementInput>;
-  connect?: Maybe<CounterfactualTokenWhereUniqueInput>;
-}
-
-export type PlacementWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface CounterfactualTokenUpdateWithoutPlacementDataInput {
-  tokenURI?: Maybe<String>;
-  owner?: Maybe<EntityUpdateOneRequiredWithoutCounterfactualTokensInput>;
-}
-
-export type RoomWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  entryId?: Maybe<ID_Input>;
-}>;
-
-export interface EntityUpdateOneRequiredWithoutCounterfactualTokensInput {
-  create?: Maybe<EntityCreateWithoutCounterfactualTokensInput>;
-  update?: Maybe<EntityUpdateWithoutCounterfactualTokensDataInput>;
-  upsert?: Maybe<EntityUpsertWithoutCounterfactualTokensInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export type ShowWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface EntityUpdateWithoutCounterfactualTokensDataInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  privateKey?: Maybe<String>;
-  publicKey?: Maybe<String>;
-  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
-}
-
-export interface CounterfactualTokenCreateManyWithoutOwnerInput {
-  create?: Maybe<
-    | CounterfactualTokenCreateWithoutOwnerInput[]
-    | CounterfactualTokenCreateWithoutOwnerInput
-  >;
-  connect?: Maybe<
-    CounterfactualTokenWhereUniqueInput[] | CounterfactualTokenWhereUniqueInput
-  >;
-}
-
-export interface EntityUpsertWithoutCounterfactualTokensInput {
-  update: EntityUpdateWithoutCounterfactualTokensDataInput;
-  create: EntityCreateWithoutCounterfactualTokensInput;
-}
-
-export interface EntityCreateOneWithoutPlacementsInput {
-  create?: Maybe<EntityCreateWithoutPlacementsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface CounterfactualTokenUpsertWithoutPlacementInput {
-  update: CounterfactualTokenUpdateWithoutPlacementDataInput;
-  create: CounterfactualTokenCreateWithoutPlacementInput;
-}
-
-export interface RoomCreateOneWithoutPlacementsInput {
-  create?: Maybe<RoomCreateWithoutPlacementsInput>;
-  connect?: Maybe<RoomWhereUniqueInput>;
-}
-
-export interface PlacementUpsertWithWhereUniqueWithoutEntityInput {
-  where: PlacementWhereUniqueInput;
-  update: PlacementUpdateWithoutEntityDataInput;
-  create: PlacementCreateWithoutEntityInput;
-}
-
-export interface ShowCreateManyWithoutExhibitionInput {
-  create?: Maybe<
-    ShowCreateWithoutExhibitionInput[] | ShowCreateWithoutExhibitionInput
-  >;
-  connect?: Maybe<ShowWhereUniqueInput[] | ShowWhereUniqueInput>;
-}
-
-export interface PlacementScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  x?: Maybe<Int>;
-  x_not?: Maybe<Int>;
-  x_in?: Maybe<Int[] | Int>;
-  x_not_in?: Maybe<Int[] | Int>;
-  x_lt?: Maybe<Int>;
-  x_lte?: Maybe<Int>;
-  x_gt?: Maybe<Int>;
-  x_gte?: Maybe<Int>;
-  y?: Maybe<Int>;
-  y_not?: Maybe<Int>;
-  y_in?: Maybe<Int[] | Int>;
-  y_not_in?: Maybe<Int[] | Int>;
-  y_lt?: Maybe<Int>;
-  y_lte?: Maybe<Int>;
-  y_gt?: Maybe<Int>;
-  y_gte?: Maybe<Int>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
-  OR?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
-  NOT?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
-}
-
-export interface CounterfactualTokenCreateOneWithoutPlacementInput {
-  create?: Maybe<CounterfactualTokenCreateWithoutPlacementInput>;
-  connect?: Maybe<CounterfactualTokenWhereUniqueInput>;
-}
-
-export interface PlacementUpdateManyWithWhereNestedInput {
-  where: PlacementScalarWhereInput;
-  data: PlacementUpdateManyDataInput;
-}
-
-export interface PlacementSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<PlacementWhereInput>;
-  AND?: Maybe<
-    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
-  >;
-}
-
-export interface PlacementUpdateManyDataInput {
-  x?: Maybe<Int>;
-  y?: Maybe<Int>;
-}
-
-export interface ShowUpdateManyMutationInput {
-  number?: Maybe<Int>;
-  opensAt?: Maybe<DateTimeInput>;
-  closesAt?: Maybe<DateTimeInput>;
 }
 
 export interface EntityUpsertWithoutAssetsInput {
@@ -1863,14 +2094,83 @@ export interface EntityUpsertWithoutAssetsInput {
   create: EntityCreateWithoutAssetsInput;
 }
 
-export type EntityWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-}>;
-
 export interface AssetUpdateManyMutationInput {
   uri?: Maybe<String>;
+}
+
+export interface CounterfactualTokenCreateInput {
+  id?: Maybe<ID_Input>;
+  tokenURI: String;
+  owner: EntityCreateOneWithoutCounterfactualTokensInput;
+  placement: PlacementCreateOneWithoutCounterfactualTokenInput;
+}
+
+export interface CounterfactualTokenUpdateInput {
+  tokenURI?: Maybe<String>;
+  owner?: Maybe<EntityUpdateOneRequiredWithoutCounterfactualTokensInput>;
+  placement?: Maybe<PlacementUpdateOneRequiredWithoutCounterfactualTokenInput>;
+}
+
+export interface CounterfactualTokenUpdateManyMutationInput {
+  tokenURI?: Maybe<String>;
+}
+
+export interface EntityCreateInput {
+  id?: Maybe<ID_Input>;
+  handle?: Maybe<String>;
+  email: String;
+  privateKey: String;
+  publicKey: String;
+  assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
+  counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketCreateManyWithoutOwnerInput>;
+}
+
+export interface EntityUpdateInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
+  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
+  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutOwnerInput>;
+}
+
+export interface EntityUpdateManyMutationInput {
+  handle?: Maybe<String>;
+  email?: Maybe<String>;
+  privateKey?: Maybe<String>;
+  publicKey?: Maybe<String>;
+}
+
+export interface ExhibitionCreateInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  number: Int;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
+  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketCreateManyWithoutExhibitionInput>;
+}
+
+export interface ExhibitionUpdateInput {
+  title?: Maybe<String>;
+  number?: Maybe<Int>;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
+  rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutExhibitionInput>;
+}
+
+export interface ExhibitionUpdateManyMutationInput {
+  title?: Maybe<String>;
+  number?: Maybe<Int>;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
 }
 
 export interface PlacementCreateInput {
@@ -1882,61 +2182,121 @@ export interface PlacementCreateInput {
   counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput;
 }
 
-export interface ExhibitionUpdateInput {
+export interface PlacementUpdateInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  entity?: Maybe<EntityUpdateOneRequiredWithoutPlacementsInput>;
+  room?: Maybe<RoomUpdateOneRequiredWithoutPlacementsInput>;
+  counterfactualToken?: Maybe<
+    CounterfactualTokenUpdateOneRequiredWithoutPlacementInput
+  >;
+}
+
+export interface PlacementUpdateManyMutationInput {
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+}
+
+export interface RoomCreateInput {
+  id?: Maybe<ID_Input>;
+  entryId: ID_Input;
+  x: Int;
+  y: Int;
+  exhibition: ExhibitionCreateOneWithoutRoomsInput;
+  placements?: Maybe<PlacementCreateManyWithoutRoomInput>;
+}
+
+export interface RoomUpdateInput {
+  entryId?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutRoomsInput>;
+  placements?: Maybe<PlacementUpdateManyWithoutRoomInput>;
+}
+
+export interface RoomUpdateManyMutationInput {
+  entryId?: Maybe<ID_Input>;
+  x?: Maybe<Int>;
+  y?: Maybe<Int>;
+}
+
+export interface ShowCreateInput {
+  id?: Maybe<ID_Input>;
+  number: Int;
+  opensAt: DateTimeInput;
+  closesAt: DateTimeInput;
+  exhibition: ExhibitionCreateOneWithoutShowsInput;
+}
+
+export interface ExhibitionCreateOneWithoutShowsInput {
+  create?: Maybe<ExhibitionCreateWithoutShowsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionCreateWithoutShowsInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  number: Int;
+  theme?: Maybe<Json>;
+  extent?: Maybe<Int>;
+  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketCreateManyWithoutExhibitionInput>;
+}
+
+export interface ShowUpdateInput {
+  number?: Maybe<Int>;
+  opensAt?: Maybe<DateTimeInput>;
+  closesAt?: Maybe<DateTimeInput>;
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutShowsInput>;
+}
+
+export interface ExhibitionUpdateOneRequiredWithoutShowsInput {
+  create?: Maybe<ExhibitionCreateWithoutShowsInput>;
+  update?: Maybe<ExhibitionUpdateWithoutShowsDataInput>;
+  upsert?: Maybe<ExhibitionUpsertWithoutShowsInput>;
+  connect?: Maybe<ExhibitionWhereUniqueInput>;
+}
+
+export interface ExhibitionUpdateWithoutShowsDataInput {
   title?: Maybe<String>;
   number?: Maybe<Int>;
   theme?: Maybe<Json>;
   extent?: Maybe<Int>;
-  shows?: Maybe<ShowUpdateManyWithoutExhibitionInput>;
   rooms?: Maybe<RoomUpdateManyWithoutExhibitionInput>;
+  tickets?: Maybe<TicketUpdateManyWithoutExhibitionInput>;
 }
 
-export interface PlacementUpsertWithWhereUniqueWithoutRoomInput {
-  where: PlacementWhereUniqueInput;
-  update: PlacementUpdateWithoutRoomDataInput;
-  create: PlacementCreateWithoutRoomInput;
+export interface ExhibitionUpsertWithoutShowsInput {
+  update: ExhibitionUpdateWithoutShowsDataInput;
+  create: ExhibitionCreateWithoutShowsInput;
 }
 
-export interface PlacementCreateWithoutRoomInput {
+export interface ShowUpdateManyMutationInput {
+  number?: Maybe<Int>;
+  opensAt?: Maybe<DateTimeInput>;
+  closesAt?: Maybe<DateTimeInput>;
+}
+
+export interface TicketCreateInput {
   id?: Maybe<ID_Input>;
-  x: Int;
-  y: Int;
-  entity: EntityCreateOneWithoutPlacementsInput;
-  counterfactualToken: CounterfactualTokenCreateOneWithoutPlacementInput;
+  owner: EntityCreateOneWithoutTicketsInput;
+  exhibition: ExhibitionCreateOneWithoutTicketsInput;
 }
 
-export interface EntityCreateOneWithoutAssetsInput {
-  create?: Maybe<EntityCreateWithoutAssetsInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
+export interface TicketUpdateInput {
+  owner?: Maybe<EntityUpdateOneRequiredWithoutTicketsInput>;
+  exhibition?: Maybe<ExhibitionUpdateOneRequiredWithoutTicketsInput>;
 }
 
-export interface CounterfactualTokenCreateInput {
-  id?: Maybe<ID_Input>;
-  tokenURI: String;
-  owner: EntityCreateOneWithoutCounterfactualTokensInput;
-  placement: PlacementCreateOneWithoutCounterfactualTokenInput;
-}
-
-export interface AssetCreateManyWithoutOwnerInput {
-  create?: Maybe<AssetCreateWithoutOwnerInput[] | AssetCreateWithoutOwnerInput>;
-  connect?: Maybe<AssetWhereUniqueInput[] | AssetWhereUniqueInput>;
-}
-
-export interface CounterfactualTokenUpdateInput {
-  tokenURI?: Maybe<String>;
-  owner?: Maybe<EntityUpdateOneRequiredWithoutCounterfactualTokensInput>;
-  placement?: Maybe<PlacementUpdateOneRequiredWithoutCounterfactualTokenInput>;
-}
-
-export interface PlacementCreateManyWithoutEntityInput {
-  create?: Maybe<
-    PlacementCreateWithoutEntityInput[] | PlacementCreateWithoutEntityInput
-  >;
-  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-}
-
-export interface CounterfactualTokenUpdateManyMutationInput {
-  tokenURI?: Maybe<String>;
+export interface AssetSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<AssetWhereInput>;
+  AND?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
+  OR?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
+  NOT?: Maybe<AssetSubscriptionWhereInput[] | AssetSubscriptionWhereInput>;
 }
 
 export interface CounterfactualTokenSubscriptionWhereInput {
@@ -1959,446 +2319,86 @@ export interface CounterfactualTokenSubscriptionWhereInput {
   >;
 }
 
-export interface EntityCreateInput {
-  id?: Maybe<ID_Input>;
-  handle?: Maybe<String>;
-  email: String;
-  privateKey: String;
-  publicKey: String;
-  assets?: Maybe<AssetCreateManyWithoutOwnerInput>;
-  counterfactualTokens?: Maybe<CounterfactualTokenCreateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementCreateManyWithoutEntityInput>;
+export interface EntitySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<EntityWhereInput>;
+  AND?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
+  OR?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
+  NOT?: Maybe<EntitySubscriptionWhereInput[] | EntitySubscriptionWhereInput>;
 }
 
-export interface RoomCreateInput {
-  id?: Maybe<ID_Input>;
-  entryId: ID_Input;
-  x: Int;
-  y: Int;
-  exhibition: ExhibitionCreateOneWithoutRoomsInput;
-  placements?: Maybe<PlacementCreateManyWithoutRoomInput>;
-}
-
-export interface EntityUpdateInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  privateKey?: Maybe<String>;
-  publicKey?: Maybe<String>;
-  assets?: Maybe<AssetUpdateManyWithoutOwnerInput>;
-  counterfactualTokens?: Maybe<CounterfactualTokenUpdateManyWithoutOwnerInput>;
-  placements?: Maybe<PlacementUpdateManyWithoutEntityInput>;
-}
-
-export interface PlacementUpdateManyWithoutRoomInput {
-  create?: Maybe<
-    PlacementCreateWithoutRoomInput[] | PlacementCreateWithoutRoomInput
+export interface ExhibitionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ExhibitionWhereInput>;
+  AND?: Maybe<
+    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
   >;
-  delete?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  connect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  set?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  disconnect?: Maybe<PlacementWhereUniqueInput[] | PlacementWhereUniqueInput>;
-  update?: Maybe<
-    | PlacementUpdateWithWhereUniqueWithoutRoomInput[]
-    | PlacementUpdateWithWhereUniqueWithoutRoomInput
+  OR?: Maybe<
+    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
   >;
-  upsert?: Maybe<
-    | PlacementUpsertWithWhereUniqueWithoutRoomInput[]
-    | PlacementUpsertWithWhereUniqueWithoutRoomInput
-  >;
-  deleteMany?: Maybe<PlacementScalarWhereInput[] | PlacementScalarWhereInput>;
-  updateMany?: Maybe<
-    | PlacementUpdateManyWithWhereNestedInput[]
-    | PlacementUpdateManyWithWhereNestedInput
+  NOT?: Maybe<
+    ExhibitionSubscriptionWhereInput[] | ExhibitionSubscriptionWhereInput
   >;
 }
 
-export interface RoomCreateWithoutExhibitionInput {
-  id?: Maybe<ID_Input>;
-  entryId: ID_Input;
-  x: Int;
-  y: Int;
-  placements?: Maybe<PlacementCreateManyWithoutRoomInput>;
-}
-
-export interface RoomCreateManyWithoutExhibitionInput {
-  create?: Maybe<
-    RoomCreateWithoutExhibitionInput[] | RoomCreateWithoutExhibitionInput
+export interface PlacementSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PlacementWhereInput>;
+  AND?: Maybe<
+    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
   >;
-  connect?: Maybe<RoomWhereUniqueInput[] | RoomWhereUniqueInput>;
+  OR?: Maybe<
+    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    PlacementSubscriptionWhereInput[] | PlacementSubscriptionWhereInput
+  >;
 }
 
-export interface ExhibitionCreateInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  number: Int;
-  theme?: Maybe<Json>;
-  extent?: Maybe<Int>;
-  shows?: Maybe<ShowCreateManyWithoutExhibitionInput>;
-  rooms?: Maybe<RoomCreateManyWithoutExhibitionInput>;
+export interface RoomSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<RoomWhereInput>;
+  AND?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
+  OR?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
+  NOT?: Maybe<RoomSubscriptionWhereInput[] | RoomSubscriptionWhereInput>;
 }
 
-export interface EntityUpdateManyMutationInput {
-  handle?: Maybe<String>;
-  email?: Maybe<String>;
-  privateKey?: Maybe<String>;
-  publicKey?: Maybe<String>;
+export interface ShowSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ShowWhereInput>;
+  AND?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
+  OR?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
+  NOT?: Maybe<ShowSubscriptionWhereInput[] | ShowSubscriptionWhereInput>;
 }
 
-export interface PlacementCreateOneWithoutCounterfactualTokenInput {
-  create?: Maybe<PlacementCreateWithoutCounterfactualTokenInput>;
-  connect?: Maybe<PlacementWhereUniqueInput>;
-}
-
-export interface RoomUpdateManyWithWhereNestedInput {
-  where: RoomScalarWhereInput;
-  data: RoomUpdateManyDataInput;
-}
-
-export type CounterfactualTokenWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface EntityCreateOneWithoutCounterfactualTokensInput {
-  create?: Maybe<EntityCreateWithoutCounterfactualTokensInput>;
-  connect?: Maybe<EntityWhereUniqueInput>;
-}
-
-export interface ExhibitionCreateOneWithoutRoomsInput {
-  create?: Maybe<ExhibitionCreateWithoutRoomsInput>;
-  connect?: Maybe<ExhibitionWhereUniqueInput>;
+export interface TicketSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<TicketWhereInput>;
+  AND?: Maybe<TicketSubscriptionWhereInput[] | TicketSubscriptionWhereInput>;
+  OR?: Maybe<TicketSubscriptionWhereInput[] | TicketSubscriptionWhereInput>;
+  NOT?: Maybe<TicketSubscriptionWhereInput[] | TicketSubscriptionWhereInput>;
 }
 
 export interface NodeNode {
   id: ID_Output;
-}
-
-export interface ShowPreviousValues {
-  id: ID_Output;
-  number: Int;
-  opensAt: DateTimeOutput;
-  closesAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface ShowPreviousValuesPromise
-  extends Promise<ShowPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  number: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface ShowPreviousValuesSubscription
-  extends Promise<AsyncIterator<ShowPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  number: () => Promise<AsyncIterator<Int>>;
-  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface CounterfactualTokenEdge {
-  node: CounterfactualToken;
-  cursor: String;
-}
-
-export interface CounterfactualTokenEdgePromise
-  extends Promise<CounterfactualTokenEdge>,
-    Fragmentable {
-  node: <T = CounterfactualTokenPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CounterfactualTokenEdgeSubscription
-  extends Promise<AsyncIterator<CounterfactualTokenEdge>>,
-    Fragmentable {
-  node: <T = CounterfactualTokenSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PlacementPreviousValues {
-  id: ID_Output;
-  x: Int;
-  y: Int;
-  createdAt: DateTimeOutput;
-}
-
-export interface PlacementPreviousValuesPromise
-  extends Promise<PlacementPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  x: () => Promise<Int>;
-  y: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface PlacementPreviousValuesSubscription
-  extends Promise<AsyncIterator<PlacementPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  x: () => Promise<AsyncIterator<Int>>;
-  y: () => Promise<AsyncIterator<Int>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface CounterfactualTokenConnection {
-  pageInfo: PageInfo;
-  edges: CounterfactualTokenEdge[];
-}
-
-export interface CounterfactualTokenConnectionPromise
-  extends Promise<CounterfactualTokenConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CounterfactualTokenEdge>>() => T;
-  aggregate: <T = AggregateCounterfactualTokenPromise>() => T;
-}
-
-export interface CounterfactualTokenConnectionSubscription
-  extends Promise<AsyncIterator<CounterfactualTokenConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<CounterfactualTokenEdgeSubscription>>
-  >() => T;
-  aggregate: <T = AggregateCounterfactualTokenSubscription>() => T;
-}
-
-export interface AssetEdge {
-  node: Asset;
-  cursor: String;
-}
-
-export interface AssetEdgePromise extends Promise<AssetEdge>, Fragmentable {
-  node: <T = AssetPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface AssetEdgeSubscription
-  extends Promise<AsyncIterator<AssetEdge>>,
-    Fragmentable {
-  node: <T = AssetSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateAsset {
-  count: Int;
-}
-
-export interface AggregateAssetPromise
-  extends Promise<AggregateAsset>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateAssetSubscription
-  extends Promise<AsyncIterator<AggregateAsset>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CounterfactualToken {
-  id: ID_Output;
-  tokenURI: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface CounterfactualTokenPromise
-  extends Promise<CounterfactualToken>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  tokenURI: () => Promise<String>;
-  owner: <T = EntityPromise>() => T;
-  placement: <T = PlacementPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface CounterfactualTokenSubscription
-  extends Promise<AsyncIterator<CounterfactualToken>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  tokenURI: () => Promise<AsyncIterator<String>>;
-  owner: <T = EntitySubscription>() => T;
-  placement: <T = PlacementSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface CounterfactualTokenNullablePromise
-  extends Promise<CounterfactualToken | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  tokenURI: () => Promise<String>;
-  owner: <T = EntityPromise>() => T;
-  placement: <T = PlacementPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface ShowEdge {
-  node: Show;
-  cursor: String;
-}
-
-export interface ShowEdgePromise extends Promise<ShowEdge>, Fragmentable {
-  node: <T = ShowPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ShowEdgeSubscription
-  extends Promise<AsyncIterator<ShowEdge>>,
-    Fragmentable {
-  node: <T = ShowSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface RoomSubscriptionPayload {
-  mutation: MutationType;
-  node: Room;
-  updatedFields: String[];
-  previousValues: RoomPreviousValues;
-}
-
-export interface RoomSubscriptionPayloadPromise
-  extends Promise<RoomSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = RoomPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = RoomPreviousValuesPromise>() => T;
-}
-
-export interface RoomSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<RoomSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = RoomSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = RoomPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateRoom {
-  count: Int;
-}
-
-export interface AggregateRoomPromise
-  extends Promise<AggregateRoom>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateRoomSubscription
-  extends Promise<AsyncIterator<AggregateRoom>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface RoomConnection {
-  pageInfo: PageInfo;
-  edges: RoomEdge[];
-}
-
-export interface RoomConnectionPromise
-  extends Promise<RoomConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<RoomEdge>>() => T;
-  aggregate: <T = AggregateRoomPromise>() => T;
-}
-
-export interface RoomConnectionSubscription
-  extends Promise<AsyncIterator<RoomConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<RoomEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateRoomSubscription>() => T;
-}
-
-export interface AssetConnection {
-  pageInfo: PageInfo;
-  edges: AssetEdge[];
-}
-
-export interface AssetConnectionPromise
-  extends Promise<AssetConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<AssetEdge>>() => T;
-  aggregate: <T = AggregateAssetPromise>() => T;
-}
-
-export interface AssetConnectionSubscription
-  extends Promise<AsyncIterator<AssetConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<AssetEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateAssetSubscription>() => T;
-}
-
-export interface PlacementEdge {
-  node: Placement;
-  cursor: String;
-}
-
-export interface PlacementEdgePromise
-  extends Promise<PlacementEdge>,
-    Fragmentable {
-  node: <T = PlacementPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface PlacementEdgeSubscription
-  extends Promise<AsyncIterator<PlacementEdge>>,
-    Fragmentable {
-  node: <T = PlacementSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Asset {
@@ -2432,516 +2432,6 @@ export interface AssetNullablePromise
   id: () => Promise<ID_Output>;
   uri: () => Promise<String>;
   owner: <T = EntityPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface AggregateExhibition {
-  count: Int;
-}
-
-export interface AggregateExhibitionPromise
-  extends Promise<AggregateExhibition>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateExhibitionSubscription
-  extends Promise<AsyncIterator<AggregateExhibition>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AssetSubscriptionPayload {
-  mutation: MutationType;
-  node: Asset;
-  updatedFields: String[];
-  previousValues: AssetPreviousValues;
-}
-
-export interface AssetSubscriptionPayloadPromise
-  extends Promise<AssetSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = AssetPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = AssetPreviousValuesPromise>() => T;
-}
-
-export interface AssetSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<AssetSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = AssetSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = AssetPreviousValuesSubscription>() => T;
-}
-
-export interface ExhibitionConnection {
-  pageInfo: PageInfo;
-  edges: ExhibitionEdge[];
-}
-
-export interface ExhibitionConnectionPromise
-  extends Promise<ExhibitionConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ExhibitionEdge>>() => T;
-  aggregate: <T = AggregateExhibitionPromise>() => T;
-}
-
-export interface ExhibitionConnectionSubscription
-  extends Promise<AsyncIterator<ExhibitionConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ExhibitionEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateExhibitionSubscription>() => T;
-}
-
-export interface AssetPreviousValues {
-  id: ID_Output;
-  uri: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface AssetPreviousValuesPromise
-  extends Promise<AssetPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  uri: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface AssetPreviousValuesSubscription
-  extends Promise<AsyncIterator<AssetPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  uri: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateEntity {
-  count: Int;
-}
-
-export interface AggregateEntityPromise
-  extends Promise<AggregateEntity>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateEntitySubscription
-  extends Promise<AsyncIterator<AggregateEntity>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Show {
-  id: ID_Output;
-  number: Int;
-  opensAt: DateTimeOutput;
-  closesAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface ShowPromise extends Promise<Show>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  number: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
-  exhibition: <T = ExhibitionPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface ShowSubscription
-  extends Promise<AsyncIterator<Show>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  number: () => Promise<AsyncIterator<Int>>;
-  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  exhibition: <T = ExhibitionSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface ShowNullablePromise
-  extends Promise<Show | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  number: () => Promise<Int>;
-  opensAt: () => Promise<DateTimeOutput>;
-  closesAt: () => Promise<DateTimeOutput>;
-  exhibition: <T = ExhibitionPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface EntityConnection {
-  pageInfo: PageInfo;
-  edges: EntityEdge[];
-}
-
-export interface EntityConnectionPromise
-  extends Promise<EntityConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<EntityEdge>>() => T;
-  aggregate: <T = AggregateEntityPromise>() => T;
-}
-
-export interface EntityConnectionSubscription
-  extends Promise<AsyncIterator<EntityConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<EntityEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateEntitySubscription>() => T;
-}
-
-export interface CounterfactualTokenSubscriptionPayload {
-  mutation: MutationType;
-  node: CounterfactualToken;
-  updatedFields: String[];
-  previousValues: CounterfactualTokenPreviousValues;
-}
-
-export interface CounterfactualTokenSubscriptionPayloadPromise
-  extends Promise<CounterfactualTokenSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CounterfactualTokenPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CounterfactualTokenPreviousValuesPromise>() => T;
-}
-
-export interface CounterfactualTokenSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CounterfactualTokenSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CounterfactualTokenSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CounterfactualTokenPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateCounterfactualToken {
-  count: Int;
-}
-
-export interface AggregateCounterfactualTokenPromise
-  extends Promise<AggregateCounterfactualToken>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCounterfactualTokenSubscription
-  extends Promise<AsyncIterator<AggregateCounterfactualToken>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CounterfactualTokenPreviousValues {
-  id: ID_Output;
-  tokenURI: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface CounterfactualTokenPreviousValuesPromise
-  extends Promise<CounterfactualTokenPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  tokenURI: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface CounterfactualTokenPreviousValuesSubscription
-  extends Promise<AsyncIterator<CounterfactualTokenPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  tokenURI: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateShow {
-  count: Int;
-}
-
-export interface AggregateShowPromise
-  extends Promise<AggregateShow>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateShowSubscription
-  extends Promise<AsyncIterator<AggregateShow>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Placement {
-  id: ID_Output;
-  x: Int;
-  y: Int;
-  createdAt: DateTimeOutput;
-}
-
-export interface PlacementPromise extends Promise<Placement>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  x: () => Promise<Int>;
-  y: () => Promise<Int>;
-  entity: <T = EntityPromise>() => T;
-  room: <T = RoomPromise>() => T;
-  counterfactualToken: <T = CounterfactualTokenPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface PlacementSubscription
-  extends Promise<AsyncIterator<Placement>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  x: () => Promise<AsyncIterator<Int>>;
-  y: () => Promise<AsyncIterator<Int>>;
-  entity: <T = EntitySubscription>() => T;
-  room: <T = RoomSubscription>() => T;
-  counterfactualToken: <T = CounterfactualTokenSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface PlacementNullablePromise
-  extends Promise<Placement | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  x: () => Promise<Int>;
-  y: () => Promise<Int>;
-  entity: <T = EntityPromise>() => T;
-  room: <T = RoomPromise>() => T;
-  counterfactualToken: <T = CounterfactualTokenPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-}
-
-export interface RoomEdge {
-  node: Room;
-  cursor: String;
-}
-
-export interface RoomEdgePromise extends Promise<RoomEdge>, Fragmentable {
-  node: <T = RoomPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface RoomEdgeSubscription
-  extends Promise<AsyncIterator<RoomEdge>>,
-    Fragmentable {
-  node: <T = RoomSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface EntitySubscriptionPayload {
-  mutation: MutationType;
-  node: Entity;
-  updatedFields: String[];
-  previousValues: EntityPreviousValues;
-}
-
-export interface EntitySubscriptionPayloadPromise
-  extends Promise<EntitySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = EntityPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = EntityPreviousValuesPromise>() => T;
-}
-
-export interface EntitySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<EntitySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = EntitySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = EntityPreviousValuesSubscription>() => T;
-}
-
-export interface PlacementConnection {
-  pageInfo: PageInfo;
-  edges: PlacementEdge[];
-}
-
-export interface PlacementConnectionPromise
-  extends Promise<PlacementConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PlacementEdge>>() => T;
-  aggregate: <T = AggregatePlacementPromise>() => T;
-}
-
-export interface PlacementConnectionSubscription
-  extends Promise<AsyncIterator<PlacementConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PlacementEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePlacementSubscription>() => T;
-}
-
-export interface EntityPreviousValues {
-  id: ID_Output;
-  handle?: String;
-  email: String;
-  privateKey: String;
-  publicKey: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface EntityPreviousValuesPromise
-  extends Promise<EntityPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  handle: () => Promise<String>;
-  email: () => Promise<String>;
-  privateKey: () => Promise<String>;
-  publicKey: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface EntityPreviousValuesSubscription
-  extends Promise<AsyncIterator<EntityPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  handle: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  privateKey: () => Promise<AsyncIterator<String>>;
-  publicKey: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface RoomPreviousValues {
-  id: ID_Output;
-  entryId: ID_Output;
-  x: Int;
-  y: Int;
-}
-
-export interface RoomPreviousValuesPromise
-  extends Promise<RoomPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  entryId: () => Promise<ID_Output>;
-  x: () => Promise<Int>;
-  y: () => Promise<Int>;
-}
-
-export interface RoomPreviousValuesSubscription
-  extends Promise<AsyncIterator<RoomPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  entryId: () => Promise<AsyncIterator<ID_Output>>;
-  x: () => Promise<AsyncIterator<Int>>;
-  y: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Exhibition {
-  id: ID_Output;
-  title: String;
-  number: Int;
-  theme?: Json;
-  extent: Int;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  number: () => Promise<Int>;
-  theme: () => Promise<Json>;
-  extent: () => Promise<Int>;
-  shows: <T = FragmentableArray<Show>>(args?: {
-    where?: ShowWhereInput;
-    orderBy?: ShowOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  rooms: <T = FragmentableArray<Room>>(args?: {
-    where?: RoomWhereInput;
-    orderBy?: RoomOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface ExhibitionSubscription
-  extends Promise<AsyncIterator<Exhibition>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  title: () => Promise<AsyncIterator<String>>;
-  number: () => Promise<AsyncIterator<Int>>;
-  theme: () => Promise<AsyncIterator<Json>>;
-  extent: () => Promise<AsyncIterator<Int>>;
-  shows: <T = Promise<AsyncIterator<ShowSubscription>>>(args?: {
-    where?: ShowWhereInput;
-    orderBy?: ShowOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  rooms: <T = Promise<AsyncIterator<RoomSubscription>>>(args?: {
-    where?: RoomWhereInput;
-    orderBy?: RoomOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface ExhibitionNullablePromise
-  extends Promise<Exhibition | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  number: () => Promise<Int>;
-  theme: () => Promise<Json>;
-  extent: () => Promise<Int>;
-  shows: <T = FragmentableArray<Show>>(args?: {
-    where?: ShowWhereInput;
-    orderBy?: ShowOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  rooms: <T = FragmentableArray<Room>>(args?: {
-    where?: RoomWhereInput;
-    orderBy?: RoomOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2989,6 +2479,15 @@ export interface EntityPromise extends Promise<Entity>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
+  tickets: <T = FragmentableArray<Ticket>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -3024,6 +2523,15 @@ export interface EntitySubscription
   placements: <T = Promise<AsyncIterator<PlacementSubscription>>>(args?: {
     where?: PlacementWhereInput;
     orderBy?: PlacementOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tickets: <T = Promise<AsyncIterator<TicketSubscription>>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -3069,54 +2577,98 @@ export interface EntityNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  tickets: <T = FragmentableArray<Ticket>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface ShowConnection {
-  pageInfo: PageInfo;
-  edges: ShowEdge[];
+export interface CounterfactualToken {
+  id: ID_Output;
+  tokenURI: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
-export interface ShowConnectionPromise
-  extends Promise<ShowConnection>,
+export interface CounterfactualTokenPromise
+  extends Promise<CounterfactualToken>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ShowEdge>>() => T;
-  aggregate: <T = AggregateShowPromise>() => T;
+  id: () => Promise<ID_Output>;
+  tokenURI: () => Promise<String>;
+  owner: <T = EntityPromise>() => T;
+  placement: <T = PlacementPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface ShowConnectionSubscription
-  extends Promise<AsyncIterator<ShowConnection>>,
+export interface CounterfactualTokenSubscription
+  extends Promise<AsyncIterator<CounterfactualToken>>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ShowEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateShowSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  tokenURI: () => Promise<AsyncIterator<String>>;
+  owner: <T = EntitySubscription>() => T;
+  placement: <T = PlacementSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface PlacementSubscriptionPayload {
-  mutation: MutationType;
-  node: Placement;
-  updatedFields: String[];
-  previousValues: PlacementPreviousValues;
-}
-
-export interface PlacementSubscriptionPayloadPromise
-  extends Promise<PlacementSubscriptionPayload>,
+export interface CounterfactualTokenNullablePromise
+  extends Promise<CounterfactualToken | null>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = PlacementPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = PlacementPreviousValuesPromise>() => T;
+  id: () => Promise<ID_Output>;
+  tokenURI: () => Promise<String>;
+  owner: <T = EntityPromise>() => T;
+  placement: <T = PlacementPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface PlacementSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PlacementSubscriptionPayload>>,
+export interface Placement {
+  id: ID_Output;
+  x: Int;
+  y: Int;
+  createdAt: DateTimeOutput;
+}
+
+export interface PlacementPromise extends Promise<Placement>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+  entity: <T = EntityPromise>() => T;
+  room: <T = RoomPromise>() => T;
+  counterfactualToken: <T = CounterfactualTokenPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PlacementSubscription
+  extends Promise<AsyncIterator<Placement>>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PlacementSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PlacementPreviousValuesSubscription>() => T;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  x: () => Promise<AsyncIterator<Int>>;
+  y: () => Promise<AsyncIterator<Int>>;
+  entity: <T = EntitySubscription>() => T;
+  room: <T = RoomSubscription>() => T;
+  counterfactualToken: <T = CounterfactualTokenSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PlacementNullablePromise
+  extends Promise<Placement | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+  entity: <T = EntityPromise>() => T;
+  room: <T = RoomPromise>() => T;
+  counterfactualToken: <T = CounterfactualTokenPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
 export interface Room {
@@ -3181,6 +2733,871 @@ export interface RoomNullablePromise
   }) => T;
 }
 
+export interface Exhibition {
+  id: ID_Output;
+  title: String;
+  number: Int;
+  theme?: Json;
+  extent: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ExhibitionPromise extends Promise<Exhibition>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  number: () => Promise<Int>;
+  theme: () => Promise<Json>;
+  extent: () => Promise<Int>;
+  shows: <T = FragmentableArray<Show>>(args?: {
+    where?: ShowWhereInput;
+    orderBy?: ShowOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  rooms: <T = FragmentableArray<Room>>(args?: {
+    where?: RoomWhereInput;
+    orderBy?: RoomOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tickets: <T = FragmentableArray<Ticket>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ExhibitionSubscription
+  extends Promise<AsyncIterator<Exhibition>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  title: () => Promise<AsyncIterator<String>>;
+  number: () => Promise<AsyncIterator<Int>>;
+  theme: () => Promise<AsyncIterator<Json>>;
+  extent: () => Promise<AsyncIterator<Int>>;
+  shows: <T = Promise<AsyncIterator<ShowSubscription>>>(args?: {
+    where?: ShowWhereInput;
+    orderBy?: ShowOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  rooms: <T = Promise<AsyncIterator<RoomSubscription>>>(args?: {
+    where?: RoomWhereInput;
+    orderBy?: RoomOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tickets: <T = Promise<AsyncIterator<TicketSubscription>>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ExhibitionNullablePromise
+  extends Promise<Exhibition | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  title: () => Promise<String>;
+  number: () => Promise<Int>;
+  theme: () => Promise<Json>;
+  extent: () => Promise<Int>;
+  shows: <T = FragmentableArray<Show>>(args?: {
+    where?: ShowWhereInput;
+    orderBy?: ShowOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  rooms: <T = FragmentableArray<Room>>(args?: {
+    where?: RoomWhereInput;
+    orderBy?: RoomOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  tickets: <T = FragmentableArray<Ticket>>(args?: {
+    where?: TicketWhereInput;
+    orderBy?: TicketOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface Show {
+  id: ID_Output;
+  number: Int;
+  opensAt: DateTimeOutput;
+  closesAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ShowPromise extends Promise<Show>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  number: () => Promise<Int>;
+  opensAt: () => Promise<DateTimeOutput>;
+  closesAt: () => Promise<DateTimeOutput>;
+  exhibition: <T = ExhibitionPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ShowSubscription
+  extends Promise<AsyncIterator<Show>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  number: () => Promise<AsyncIterator<Int>>;
+  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  exhibition: <T = ExhibitionSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ShowNullablePromise
+  extends Promise<Show | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  number: () => Promise<Int>;
+  opensAt: () => Promise<DateTimeOutput>;
+  closesAt: () => Promise<DateTimeOutput>;
+  exhibition: <T = ExhibitionPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface Ticket {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface TicketPromise extends Promise<Ticket>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = EntityPromise>() => T;
+  exhibition: <T = ExhibitionPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface TicketSubscription
+  extends Promise<AsyncIterator<Ticket>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: <T = EntitySubscription>() => T;
+  exhibition: <T = ExhibitionSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface TicketNullablePromise
+  extends Promise<Ticket | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = EntityPromise>() => T;
+  exhibition: <T = ExhibitionPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface AssetConnection {
+  pageInfo: PageInfo;
+  edges: AssetEdge[];
+}
+
+export interface AssetConnectionPromise
+  extends Promise<AssetConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<AssetEdge>>() => T;
+  aggregate: <T = AggregateAssetPromise>() => T;
+}
+
+export interface AssetConnectionSubscription
+  extends Promise<AsyncIterator<AssetConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<AssetEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateAssetSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AssetEdge {
+  node: Asset;
+  cursor: String;
+}
+
+export interface AssetEdgePromise extends Promise<AssetEdge>, Fragmentable {
+  node: <T = AssetPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface AssetEdgeSubscription
+  extends Promise<AsyncIterator<AssetEdge>>,
+    Fragmentable {
+  node: <T = AssetSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateAsset {
+  count: Int;
+}
+
+export interface AggregateAssetPromise
+  extends Promise<AggregateAsset>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateAssetSubscription
+  extends Promise<AsyncIterator<AggregateAsset>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CounterfactualTokenConnection {
+  pageInfo: PageInfo;
+  edges: CounterfactualTokenEdge[];
+}
+
+export interface CounterfactualTokenConnectionPromise
+  extends Promise<CounterfactualTokenConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CounterfactualTokenEdge>>() => T;
+  aggregate: <T = AggregateCounterfactualTokenPromise>() => T;
+}
+
+export interface CounterfactualTokenConnectionSubscription
+  extends Promise<AsyncIterator<CounterfactualTokenConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<CounterfactualTokenEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateCounterfactualTokenSubscription>() => T;
+}
+
+export interface CounterfactualTokenEdge {
+  node: CounterfactualToken;
+  cursor: String;
+}
+
+export interface CounterfactualTokenEdgePromise
+  extends Promise<CounterfactualTokenEdge>,
+    Fragmentable {
+  node: <T = CounterfactualTokenPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CounterfactualTokenEdgeSubscription
+  extends Promise<AsyncIterator<CounterfactualTokenEdge>>,
+    Fragmentable {
+  node: <T = CounterfactualTokenSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCounterfactualToken {
+  count: Int;
+}
+
+export interface AggregateCounterfactualTokenPromise
+  extends Promise<AggregateCounterfactualToken>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCounterfactualTokenSubscription
+  extends Promise<AsyncIterator<AggregateCounterfactualToken>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface EntityConnection {
+  pageInfo: PageInfo;
+  edges: EntityEdge[];
+}
+
+export interface EntityConnectionPromise
+  extends Promise<EntityConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<EntityEdge>>() => T;
+  aggregate: <T = AggregateEntityPromise>() => T;
+}
+
+export interface EntityConnectionSubscription
+  extends Promise<AsyncIterator<EntityConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<EntityEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateEntitySubscription>() => T;
+}
+
+export interface EntityEdge {
+  node: Entity;
+  cursor: String;
+}
+
+export interface EntityEdgePromise extends Promise<EntityEdge>, Fragmentable {
+  node: <T = EntityPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface EntityEdgeSubscription
+  extends Promise<AsyncIterator<EntityEdge>>,
+    Fragmentable {
+  node: <T = EntitySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateEntity {
+  count: Int;
+}
+
+export interface AggregateEntityPromise
+  extends Promise<AggregateEntity>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateEntitySubscription
+  extends Promise<AsyncIterator<AggregateEntity>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ExhibitionConnection {
+  pageInfo: PageInfo;
+  edges: ExhibitionEdge[];
+}
+
+export interface ExhibitionConnectionPromise
+  extends Promise<ExhibitionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ExhibitionEdge>>() => T;
+  aggregate: <T = AggregateExhibitionPromise>() => T;
+}
+
+export interface ExhibitionConnectionSubscription
+  extends Promise<AsyncIterator<ExhibitionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ExhibitionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateExhibitionSubscription>() => T;
+}
+
+export interface ExhibitionEdge {
+  node: Exhibition;
+  cursor: String;
+}
+
+export interface ExhibitionEdgePromise
+  extends Promise<ExhibitionEdge>,
+    Fragmentable {
+  node: <T = ExhibitionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ExhibitionEdgeSubscription
+  extends Promise<AsyncIterator<ExhibitionEdge>>,
+    Fragmentable {
+  node: <T = ExhibitionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateExhibition {
+  count: Int;
+}
+
+export interface AggregateExhibitionPromise
+  extends Promise<AggregateExhibition>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateExhibitionSubscription
+  extends Promise<AsyncIterator<AggregateExhibition>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PlacementConnection {
+  pageInfo: PageInfo;
+  edges: PlacementEdge[];
+}
+
+export interface PlacementConnectionPromise
+  extends Promise<PlacementConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PlacementEdge>>() => T;
+  aggregate: <T = AggregatePlacementPromise>() => T;
+}
+
+export interface PlacementConnectionSubscription
+  extends Promise<AsyncIterator<PlacementConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PlacementEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePlacementSubscription>() => T;
+}
+
+export interface PlacementEdge {
+  node: Placement;
+  cursor: String;
+}
+
+export interface PlacementEdgePromise
+  extends Promise<PlacementEdge>,
+    Fragmentable {
+  node: <T = PlacementPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PlacementEdgeSubscription
+  extends Promise<AsyncIterator<PlacementEdge>>,
+    Fragmentable {
+  node: <T = PlacementSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregatePlacement {
+  count: Int;
+}
+
+export interface AggregatePlacementPromise
+  extends Promise<AggregatePlacement>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePlacementSubscription
+  extends Promise<AsyncIterator<AggregatePlacement>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface RoomConnection {
+  pageInfo: PageInfo;
+  edges: RoomEdge[];
+}
+
+export interface RoomConnectionPromise
+  extends Promise<RoomConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<RoomEdge>>() => T;
+  aggregate: <T = AggregateRoomPromise>() => T;
+}
+
+export interface RoomConnectionSubscription
+  extends Promise<AsyncIterator<RoomConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RoomEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRoomSubscription>() => T;
+}
+
+export interface RoomEdge {
+  node: Room;
+  cursor: String;
+}
+
+export interface RoomEdgePromise extends Promise<RoomEdge>, Fragmentable {
+  node: <T = RoomPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RoomEdgeSubscription
+  extends Promise<AsyncIterator<RoomEdge>>,
+    Fragmentable {
+  node: <T = RoomSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateRoom {
+  count: Int;
+}
+
+export interface AggregateRoomPromise
+  extends Promise<AggregateRoom>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateRoomSubscription
+  extends Promise<AsyncIterator<AggregateRoom>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ShowConnection {
+  pageInfo: PageInfo;
+  edges: ShowEdge[];
+}
+
+export interface ShowConnectionPromise
+  extends Promise<ShowConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ShowEdge>>() => T;
+  aggregate: <T = AggregateShowPromise>() => T;
+}
+
+export interface ShowConnectionSubscription
+  extends Promise<AsyncIterator<ShowConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ShowEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateShowSubscription>() => T;
+}
+
+export interface ShowEdge {
+  node: Show;
+  cursor: String;
+}
+
+export interface ShowEdgePromise extends Promise<ShowEdge>, Fragmentable {
+  node: <T = ShowPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ShowEdgeSubscription
+  extends Promise<AsyncIterator<ShowEdge>>,
+    Fragmentable {
+  node: <T = ShowSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateShow {
+  count: Int;
+}
+
+export interface AggregateShowPromise
+  extends Promise<AggregateShow>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateShowSubscription
+  extends Promise<AsyncIterator<AggregateShow>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface TicketConnection {
+  pageInfo: PageInfo;
+  edges: TicketEdge[];
+}
+
+export interface TicketConnectionPromise
+  extends Promise<TicketConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TicketEdge>>() => T;
+  aggregate: <T = AggregateTicketPromise>() => T;
+}
+
+export interface TicketConnectionSubscription
+  extends Promise<AsyncIterator<TicketConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TicketEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTicketSubscription>() => T;
+}
+
+export interface TicketEdge {
+  node: Ticket;
+  cursor: String;
+}
+
+export interface TicketEdgePromise extends Promise<TicketEdge>, Fragmentable {
+  node: <T = TicketPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface TicketEdgeSubscription
+  extends Promise<AsyncIterator<TicketEdge>>,
+    Fragmentable {
+  node: <T = TicketSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTicket {
+  count: Int;
+}
+
+export interface AggregateTicketPromise
+  extends Promise<AggregateTicket>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTicketSubscription
+  extends Promise<AsyncIterator<AggregateTicket>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AssetSubscriptionPayload {
+  mutation: MutationType;
+  node: Asset;
+  updatedFields: String[];
+  previousValues: AssetPreviousValues;
+}
+
+export interface AssetSubscriptionPayloadPromise
+  extends Promise<AssetSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = AssetPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = AssetPreviousValuesPromise>() => T;
+}
+
+export interface AssetSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<AssetSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = AssetSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = AssetPreviousValuesSubscription>() => T;
+}
+
+export interface AssetPreviousValues {
+  id: ID_Output;
+  uri: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface AssetPreviousValuesPromise
+  extends Promise<AssetPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  uri: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface AssetPreviousValuesSubscription
+  extends Promise<AsyncIterator<AssetPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  uri: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface CounterfactualTokenSubscriptionPayload {
+  mutation: MutationType;
+  node: CounterfactualToken;
+  updatedFields: String[];
+  previousValues: CounterfactualTokenPreviousValues;
+}
+
+export interface CounterfactualTokenSubscriptionPayloadPromise
+  extends Promise<CounterfactualTokenSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CounterfactualTokenPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CounterfactualTokenPreviousValuesPromise>() => T;
+}
+
+export interface CounterfactualTokenSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CounterfactualTokenSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CounterfactualTokenSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CounterfactualTokenPreviousValuesSubscription>() => T;
+}
+
+export interface CounterfactualTokenPreviousValues {
+  id: ID_Output;
+  tokenURI: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface CounterfactualTokenPreviousValuesPromise
+  extends Promise<CounterfactualTokenPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  tokenURI: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CounterfactualTokenPreviousValuesSubscription
+  extends Promise<AsyncIterator<CounterfactualTokenPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  tokenURI: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface EntitySubscriptionPayload {
+  mutation: MutationType;
+  node: Entity;
+  updatedFields: String[];
+  previousValues: EntityPreviousValues;
+}
+
+export interface EntitySubscriptionPayloadPromise
+  extends Promise<EntitySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = EntityPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = EntityPreviousValuesPromise>() => T;
+}
+
+export interface EntitySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<EntitySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = EntitySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = EntityPreviousValuesSubscription>() => T;
+}
+
+export interface EntityPreviousValues {
+  id: ID_Output;
+  handle?: String;
+  email: String;
+  privateKey: String;
+  publicKey: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface EntityPreviousValuesPromise
+  extends Promise<EntityPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  handle: () => Promise<String>;
+  email: () => Promise<String>;
+  privateKey: () => Promise<String>;
+  publicKey: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface EntityPreviousValuesSubscription
+  extends Promise<AsyncIterator<EntityPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  handle: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  privateKey: () => Promise<AsyncIterator<String>>;
+  publicKey: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface ExhibitionSubscriptionPayload {
+  mutation: MutationType;
+  node: Exhibition;
+  updatedFields: String[];
+  previousValues: ExhibitionPreviousValues;
+}
+
+export interface ExhibitionSubscriptionPayloadPromise
+  extends Promise<ExhibitionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ExhibitionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ExhibitionPreviousValuesPromise>() => T;
+}
+
+export interface ExhibitionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ExhibitionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ExhibitionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ExhibitionPreviousValuesSubscription>() => T;
+}
+
 export interface ExhibitionPreviousValues {
   id: ID_Output;
   title: String;
@@ -3215,45 +3632,104 @@ export interface ExhibitionPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ExhibitionSubscriptionPayload {
+export interface PlacementSubscriptionPayload {
   mutation: MutationType;
-  node: Exhibition;
+  node: Placement;
   updatedFields: String[];
-  previousValues: ExhibitionPreviousValues;
+  previousValues: PlacementPreviousValues;
 }
 
-export interface ExhibitionSubscriptionPayloadPromise
-  extends Promise<ExhibitionSubscriptionPayload>,
+export interface PlacementSubscriptionPayloadPromise
+  extends Promise<PlacementSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = ExhibitionPromise>() => T;
+  node: <T = PlacementPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = ExhibitionPreviousValuesPromise>() => T;
+  previousValues: <T = PlacementPreviousValuesPromise>() => T;
 }
 
-export interface ExhibitionSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ExhibitionSubscriptionPayload>>,
+export interface PlacementSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PlacementSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ExhibitionSubscription>() => T;
+  node: <T = PlacementSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ExhibitionPreviousValuesSubscription>() => T;
+  previousValues: <T = PlacementPreviousValuesSubscription>() => T;
 }
 
-export interface AggregatePlacement {
-  count: Int;
+export interface PlacementPreviousValues {
+  id: ID_Output;
+  x: Int;
+  y: Int;
+  createdAt: DateTimeOutput;
 }
 
-export interface AggregatePlacementPromise
-  extends Promise<AggregatePlacement>,
+export interface PlacementPreviousValuesPromise
+  extends Promise<PlacementPreviousValues>,
     Fragmentable {
-  count: () => Promise<Int>;
+  id: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface AggregatePlacementSubscription
-  extends Promise<AsyncIterator<AggregatePlacement>>,
+export interface PlacementPreviousValuesSubscription
+  extends Promise<AsyncIterator<PlacementPreviousValues>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  x: () => Promise<AsyncIterator<Int>>;
+  y: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface RoomSubscriptionPayload {
+  mutation: MutationType;
+  node: Room;
+  updatedFields: String[];
+  previousValues: RoomPreviousValues;
+}
+
+export interface RoomSubscriptionPayloadPromise
+  extends Promise<RoomSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = RoomPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RoomPreviousValuesPromise>() => T;
+}
+
+export interface RoomSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RoomSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RoomSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RoomPreviousValuesSubscription>() => T;
+}
+
+export interface RoomPreviousValues {
+  id: ID_Output;
+  entryId: ID_Output;
+  x: Int;
+  y: Int;
+}
+
+export interface RoomPreviousValuesPromise
+  extends Promise<RoomPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  entryId: () => Promise<ID_Output>;
+  x: () => Promise<Int>;
+  y: () => Promise<Int>;
+}
+
+export interface RoomPreviousValuesSubscription
+  extends Promise<AsyncIterator<RoomPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  entryId: () => Promise<AsyncIterator<ID_Output>>;
+  x: () => Promise<AsyncIterator<Int>>;
+  y: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ShowSubscriptionPayload {
@@ -3281,58 +3757,83 @@ export interface ShowSubscriptionPayloadSubscription
   previousValues: <T = ShowPreviousValuesSubscription>() => T;
 }
 
-export interface EntityEdge {
-  node: Entity;
-  cursor: String;
+export interface ShowPreviousValues {
+  id: ID_Output;
+  number: Int;
+  opensAt: DateTimeOutput;
+  closesAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
-export interface EntityEdgePromise extends Promise<EntityEdge>, Fragmentable {
-  node: <T = EntityPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface EntityEdgeSubscription
-  extends Promise<AsyncIterator<EntityEdge>>,
+export interface ShowPreviousValuesPromise
+  extends Promise<ShowPreviousValues>,
     Fragmentable {
-  node: <T = EntitySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<ID_Output>;
+  number: () => Promise<Int>;
+  opensAt: () => Promise<DateTimeOutput>;
+  closesAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface ExhibitionEdge {
-  node: Exhibition;
-  cursor: String;
-}
-
-export interface ExhibitionEdgePromise
-  extends Promise<ExhibitionEdge>,
+export interface ShowPreviousValuesSubscription
+  extends Promise<AsyncIterator<ShowPreviousValues>>,
     Fragmentable {
-  node: <T = ExhibitionPromise>() => T;
-  cursor: () => Promise<String>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  number: () => Promise<AsyncIterator<Int>>;
+  opensAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  closesAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ExhibitionEdgeSubscription
-  extends Promise<AsyncIterator<ExhibitionEdge>>,
+export interface TicketSubscriptionPayload {
+  mutation: MutationType;
+  node: Ticket;
+  updatedFields: String[];
+  previousValues: TicketPreviousValues;
+}
+
+export interface TicketSubscriptionPayloadPromise
+  extends Promise<TicketSubscriptionPayload>,
     Fragmentable {
-  node: <T = ExhibitionSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<MutationType>;
+  node: <T = TicketPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = TicketPreviousValuesPromise>() => T;
 }
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
+export interface TicketSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<TicketSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = TicketSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = TicketPreviousValuesSubscription>() => T;
+}
 
-export type Long = string;
+export interface TicketPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
 
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
+export interface TicketPreviousValuesPromise
+  extends Promise<TicketPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
 
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
+export interface TicketPreviousValuesSubscription
+  extends Promise<AsyncIterator<TicketPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -3346,11 +3847,28 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+export type Json = any;
+
+/*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
-export type Json = any;
+export type Long = string;
 
 /**
  * Model Metadata
@@ -3367,6 +3885,10 @@ export const models: Model[] = [
   },
   {
     name: "CounterfactualToken",
+    embedded: false
+  },
+  {
+    name: "Ticket",
     embedded: false
   },
   {

@@ -1,8 +1,8 @@
 projects:
+  backroom:
+    endpoint: http://localhost:4000/graphql
+    schemaPath: packages/backroom/src/backroom.graphql
   prisma:
     schemaPath: packages/prisma/prisma.graphql
     extensions:
       prisma: packages/prisma/prisma.yml
-  backroom:
-    endpoint: http://localhost:4000/graphql
-    schemaPath: packages/backroom/src/backroom.graphql

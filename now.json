@@ -9,14 +9,22 @@
       "use": "@now/static-build"
     },
     {
-      "src": "packages/backroom/src/index.ts",
+      "src": "packages/backroom/src/server.ts",
+      "use": "@now/node"
+    },
+    {
+      "src": "packages/backroom/src/stripe.ts",
       "use": "@now/node"
     }
   ],
   "routes": [
     {
+      "src": "/stripe/webhook",
+      "dest": "packages/backroom/src/stripe_.ts"
+    },
+    {
       "src": "/graphql",
-      "dest": "packages/backroom/src/index.ts"
+      "dest": "packages/backroom/src/server.ts"
     },
     {
       "handle": "filesystem"
@@ -27,7 +35,7 @@
     }
   ],
   "env": {
-    "PRISMA_BACKROOM_SERVICE_ENDPOINT": "https://gallery-v1-f5f0a401ff.herokuapp.com",
-    "PRISMA_BACKROOM_SERVICE_SECRET": "@prisma-backroom-service-secret"
+    "PRISMA_ENDPOINT": "https://gallery-v1-f5f0a401ff.herokuapp.com",
+    "STRIPE_SECRET": "@backroom-stripe-secret"
   }
 }

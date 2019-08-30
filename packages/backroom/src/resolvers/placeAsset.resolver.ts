@@ -1,5 +1,5 @@
 import { MutationResolvers } from "../resolvers-types";
-import relation from "../../lib/relation";
+import relation from "../lib/relation";
 
 const placeAsset: MutationResolvers["placeAsset"] = async (
   root,

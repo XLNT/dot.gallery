@@ -11,6 +11,8 @@ type Entity {
   counterfactualTokens: [CounterfactualToken!]! @relation(name: "EntityCounterfactualToken")
   # entity has_many placements
   placements: [Placement!]! @relation(name: "EntityPlacements", onDelete: CASCADE)
+  # entity has_many tickets
+  tickets: [Ticket!]! @relation(name: "EntityTickets", onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -40,6 +42,18 @@ type CounterfactualToken {
   updatedAt: DateTime! @updatedAt
 }
 
+type Ticket {
+  id: ID! @id
+
+  # asset belongs_to owner
+  owner: Entity! @relation(name: "EntityTickets")
+  # asset belongs_to exhibition
+  exhibition: Exhibition! @relation(name: "ExhibitionTickets")
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
 type Exhibition {
   id: ID! @id
   title: String!
@@ -50,7 +64,9 @@ type Exhibition {
   # exhibition has_many shows
   shows: [Show!]! @relation(onDelete: CASCADE)
   # exhibition has_many rooms
-  rooms: [Room!]! @relation(name: "ExhibitionRooms" onDelete: CASCADE)
+  rooms: [Room!]! @relation(name: "ExhibitionRooms", onDelete: CASCADE)
+  # exhibition has_many tickets
+  tickets: [Ticket!]! @relation(name: "ExhibitionTickets", onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
