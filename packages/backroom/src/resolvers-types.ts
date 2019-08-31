@@ -42,6 +42,7 @@ export type Entity = {
   counterfactualTokens: Array<CounterfactualToken>,
   placements: Array<Placement>,
   tickets: Array<Ticket>,
+  availableTicket?: Maybe<Ticket>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -68,6 +69,7 @@ export type Mutation = {
   placeAsset?: Maybe<Placement>,
   createEntity: Entity,
   createAsset: Asset,
+  redeemTicket: Ticket,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -144,6 +146,7 @@ export type Show = {
 export type Ticket = {
   __typename?: 'Ticket',
   id: Scalars['ID'],
+  redeemed: Scalars['Boolean'],
   exhibition: Exhibition,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
@@ -233,8 +236,8 @@ export type ResolversTypes = {
   Json: ResolverTypeWrapper<Partial<Scalars['Json']>>,
   Show: ResolverTypeWrapper<Partial<Show>>,
   Ticket: ResolverTypeWrapper<Partial<Ticket>>,
-  Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
+  Mutation: ResolverTypeWrapper<{}>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -253,8 +256,8 @@ export type ResolversParentTypes = {
   Json: Partial<Scalars['Json']>,
   Show: Partial<Show>,
   Ticket: Partial<Ticket>,
-  Mutation: {},
   Boolean: Partial<Scalars['Boolean']>,
+  Mutation: {},
 };
 
 export type AssetResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Asset'] = ResolversParentTypes['Asset']> = {
@@ -286,6 +289,7 @@ export type EntityResolvers<ContextType = BackroomContext, ParentType extends Re
   counterfactualTokens?: Resolver<Array<ResolversTypes['CounterfactualToken']>, ParentType, ContextType>,
   placements?: Resolver<Array<ResolversTypes['Placement']>, ParentType, ContextType>,
   tickets?: Resolver<Array<ResolversTypes['Ticket']>, ParentType, ContextType>,
+  availableTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
 };
@@ -313,6 +317,7 @@ export type MutationResolvers<ContextType = BackroomContext, ParentType extends 
   placeAsset?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationPlaceAssetArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   createEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   createAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'ownerId' | 'uri'>>,
+  redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
   modIssueTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<MutationModIssueTicketArgs, 'exhibitionId'>>,
 };
 
@@ -353,6 +358,7 @@ export type ShowResolvers<ContextType = BackroomContext, ParentType extends Reso
 
 export type TicketResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Ticket'] = ResolversParentTypes['Ticket']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  redeemed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   exhibition?: Resolver<ResolversTypes['Exhibition'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,

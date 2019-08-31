@@ -18,12 +18,14 @@ const loginAs: MutationResolvers["loginAs"] = async (
 ) => {
   const userInfo = await auth0.users.getInfo(accessToken);
   if (!userInfo) {
-    throw new Error("fuck you");
+    console.log(`Auth0 returned no userInfo for ${accessToken}`);
+    throw new Error("Invalid passwordless auth token.");
   }
 
   const { email } = userInfo;
   if (!email) {
-    throw new Error("the fuck?");
+    console.log(`Auth0 returned no email in ${JSON.stringify(userInfo)}`);
+    throw new Error("Invalid passwordless auth token.");
   }
 
   const existingEntity = await prisma.entity({ email });

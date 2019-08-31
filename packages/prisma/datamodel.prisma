@@ -42,7 +42,7 @@ type CounterfactualToken {
 
 type Ticket {
   id: ID! @id
-
+  redeemed: Boolean! @default(value: false)
   # asset belongs_to owner
   owner: Entity! @relation(name: "EntityTickets")
   # asset belongs_to exhibition

@@ -1175,6 +1175,7 @@ type Mutation {
   deleteManyShows(where: ShowWhereInput): BatchPayload!
   createTicket(data: TicketCreateInput!): Ticket!
   updateTicket(data: TicketUpdateInput!, where: TicketWhereUniqueInput!): Ticket
+  updateManyTickets(data: TicketUpdateManyMutationInput!, where: TicketWhereInput): BatchPayload!
   upsertTicket(where: TicketWhereUniqueInput!, create: TicketCreateInput!, update: TicketUpdateInput!): Ticket!
   deleteTicket(where: TicketWhereUniqueInput!): Ticket
   deleteManyTickets(where: TicketWhereInput): BatchPayload!
@@ -2077,6 +2078,7 @@ type Subscription {
 
 type Ticket {
   id: ID!
+  redeemed: Boolean!
   owner: Entity!
   exhibition: Exhibition!
   createdAt: DateTime!
@@ -2091,6 +2093,7 @@ type TicketConnection {
 
 input TicketCreateInput {
   id: ID
+  redeemed: Boolean
   owner: EntityCreateOneWithoutTicketsInput!
   exhibition: ExhibitionCreateOneWithoutTicketsInput!
 }
@@ -2107,11 +2110,13 @@ input TicketCreateManyWithoutOwnerInput {
 
 input TicketCreateWithoutExhibitionInput {
   id: ID
+  redeemed: Boolean
   owner: EntityCreateOneWithoutTicketsInput!
 }
 
 input TicketCreateWithoutOwnerInput {
   id: ID
+  redeemed: Boolean
   exhibition: ExhibitionCreateOneWithoutTicketsInput!
 }
 
@@ -2123,6 +2128,8 @@ type TicketEdge {
 enum TicketOrderByInput {
   id_ASC
   id_DESC
+  redeemed_ASC
+  redeemed_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2131,6 +2138,7 @@ enum TicketOrderByInput {
 
 type TicketPreviousValues {
   id: ID!
+  redeemed: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2150,6 +2158,8 @@ input TicketScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  redeemed: Boolean
+  redeemed_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2190,8 +2200,17 @@ input TicketSubscriptionWhereInput {
 }
 
 input TicketUpdateInput {
+  redeemed: Boolean
   owner: EntityUpdateOneRequiredWithoutTicketsInput
   exhibition: ExhibitionUpdateOneRequiredWithoutTicketsInput
+}
+
+input TicketUpdateManyDataInput {
+  redeemed: Boolean
+}
+
+input TicketUpdateManyMutationInput {
+  redeemed: Boolean
 }
 
 input TicketUpdateManyWithoutExhibitionInput {
@@ -2203,6 +2222,7 @@ input TicketUpdateManyWithoutExhibitionInput {
   update: [TicketUpdateWithWhereUniqueWithoutExhibitionInput!]
   upsert: [TicketUpsertWithWhereUniqueWithoutExhibitionInput!]
   deleteMany: [TicketScalarWhereInput!]
+  updateMany: [TicketUpdateManyWithWhereNestedInput!]
 }
 
 input TicketUpdateManyWithoutOwnerInput {
@@ -2214,13 +2234,21 @@ input TicketUpdateManyWithoutOwnerInput {
   update: [TicketUpdateWithWhereUniqueWithoutOwnerInput!]
   upsert: [TicketUpsertWithWhereUniqueWithoutOwnerInput!]
   deleteMany: [TicketScalarWhereInput!]
+  updateMany: [TicketUpdateManyWithWhereNestedInput!]
+}
+
+input TicketUpdateManyWithWhereNestedInput {
+  where: TicketScalarWhereInput!
+  data: TicketUpdateManyDataInput!
 }
 
 input TicketUpdateWithoutExhibitionDataInput {
+  redeemed: Boolean
   owner: EntityUpdateOneRequiredWithoutTicketsInput
 }
 
 input TicketUpdateWithoutOwnerDataInput {
+  redeemed: Boolean
   exhibition: ExhibitionUpdateOneRequiredWithoutTicketsInput
 }
 
@@ -2261,6 +2289,8 @@ input TicketWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  redeemed: Boolean
+  redeemed_not: Boolean
   owner: EntityWhereInput
   exhibition: ExhibitionWhereInput
   createdAt: DateTime

@@ -42,6 +42,7 @@ export type Entity = {
   counterfactualTokens: Array<CounterfactualToken>,
   placements: Array<Placement>,
   tickets: Array<Ticket>,
+  availableTicket?: Maybe<Ticket>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -68,6 +69,7 @@ export type Mutation = {
   placeAsset?: Maybe<Placement>,
   createEntity: Entity,
   createAsset: Asset,
+  redeemTicket: Ticket,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -144,6 +146,7 @@ export type Show = {
 export type Ticket = {
   __typename?: 'Ticket',
   id: Scalars['ID'],
+  redeemed: Scalars['Boolean'],
   exhibition: Exhibition,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],

@@ -10,6 +10,7 @@ type Entity {
   counterfactualTokens: [CounterfactualToken!]!
   placements: [Placement!]!
   tickets: [Ticket!]!
+  availableTicket: Ticket
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -38,6 +39,7 @@ type CounterfactualToken {
 
 type Ticket {
   id: ID!
+  redeemed: Boolean!
 
   exhibition: Exhibition!
 
@@ -109,6 +111,7 @@ type Mutation  {
   placeAsset(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   createEntity: Entity!
   createAsset(ownerId: ID!, uri: String!): Asset!
+  redeemTicket: Ticket!
 
   modIssueTicket(exhibitionId: ID!, email: String, id: String): Ticket
 }

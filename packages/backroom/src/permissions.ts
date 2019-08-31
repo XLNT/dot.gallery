@@ -3,6 +3,9 @@ import { BackroomContext } from "./types";
 import { GalleryIsNotOpenError } from "../errors";
 import { and, chain, inputRule, not, or, rule, shield } from "graphql-shield";
 import Yup from "yup";
+import prisma from "./api/prisma";
+
+type ArgsMapper = (any) => string;
 
 // yup
 
@@ -25,7 +28,7 @@ const isKnownEntity = rule({ cache: "contextual" })(
   },
 );
 
-const ownsAsset = mapper =>
+const ownsAsset = (mapper: ArgsMapper) =>
   rule({ cache: "strict" })(
     async (parent, args, { prisma, currentEntity }: BackroomContext) => {
       const assetOwner = await prisma.asset({ id: mapper(args) }).owner();
@@ -60,13 +63,46 @@ const onlyMod = rule({ cache: "contextual" })(
   },
 );
 
+// const ticketNotRedeemed = (mapper: ArgsMapper) =>
+//   rule()(async (parent, args, { prisma }: BackroomContext) => {
+//     const redeemed = await prisma.ticket({ id: mapper(args) }).redeemed();
+
+//     return !redeemed;
+//   });
+
+const ownsAvailableTicketForCurrentExhibition = rule()(
+  async (parent, args, { currentEntity, currentExhibition }) => {
+    const availableTicketsCount = await prisma
+      .ticketsConnection({
+        where: {
+          owner: { id: currentEntity.id },
+          exhibition: { id: currentExhibition.id },
+          redeemed: false,
+        },
+      })
+      .aggregate()
+      .count();
+
+    if (availableTicketsCount < 1) {
+      return new Error("You do not own a ticket for this exhibition.");
+    }
+
+    return true;
+  },
+);
+
 export default shield(
   {
     Query: {
       currentEntity: isKnownEntity,
     },
     Mutation: {
-      // loginAs: ,
+      redeemTicket: chain(
+        isKnownEntity,
+        onlyDuringActiveShow,
+        // ticketNotRedeemed(({ ticketId }) => ticketId),
+        ownsAvailableTicketForCurrentExhibition,
+      ),
       placeAsset: chain(
         and(
           onlyDuringActiveShow,
