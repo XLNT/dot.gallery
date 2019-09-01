@@ -103,7 +103,7 @@ export default shield(
         // ticketNotRedeemed(({ ticketId }) => ticketId),
         ownsAvailableTicketForCurrentExhibition,
       ),
-      placeAsset: chain(
+      createPlacement: chain(
         and(
           onlyDuringActiveShow,
           inputRule(yup =>

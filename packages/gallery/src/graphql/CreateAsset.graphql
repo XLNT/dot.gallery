@@ -1,9 +1,0 @@
-mutation CreateAsset($ownerId: ID!, $uri: String!) {
-  createAsset(ownerId: $ownerId, uri: $uri) {
-    id
-    uri
-    owner {
-      id
-    }
-  }
-}

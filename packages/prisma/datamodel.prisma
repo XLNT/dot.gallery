@@ -5,8 +5,6 @@ type Entity {
 
   # entity has_many assets
   assets: [Asset!]! @relation(name: "EntityAssets", onDelete: CASCADE)
-  # entity has_many counterfactualTokens
-  counterfactualTokens: [CounterfactualToken!]! @relation(name: "EntityCounterfactualToken", onDelete: CASCADE)
   # entity has_many placements
   placements: [Placement!]! @relation(name: "EntityPlacements", onDelete: CASCADE)
   # entity has_many tickets
@@ -16,24 +14,15 @@ type Entity {
   updatedAt: DateTime! @updatedAt
 }
 
+# Asset (sorta) conforms to the 1155 standard, using `domain` as the equivalent of upper bits
 type Asset {
   id: ID! @id
-  uri: String!
+  domain: String!
+  uri: Json! # { image: String! }
 
   # asset belongs_to owner
   owner: Entity! @relation(name: "EntityAssets")
-
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type CounterfactualToken {
-  id: ID! @id
-  tokenURI: String!
-
-  # token belongs_to owner
-  owner: Entity! @relation(name: "EntityCounterfactualToken")
-  # token belongs_to placement
+  # asset may have been granted in response to a placement
   placement: Placement @relation(link: INLINE)
 
   createdAt: DateTime! @createdAt
@@ -107,8 +96,8 @@ type Placement {
   entity: Entity! @relation(name: "EntityPlacements")
   # placement references room
   room: Room! @relation(name: "RoomPlacements")
-  # placement references token
-  counterfactualToken: CounterfactualToken!
+  # placement references assets
+  assets: [Asset!]!
 
   createdAt: DateTime! @createdAt
 }

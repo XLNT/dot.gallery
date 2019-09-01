@@ -7,7 +7,7 @@ type Entity {
   email: String!
 
   assets: [Asset!]!
-  counterfactualTokens: [CounterfactualToken!]!
+  tradableAssets: [Asset!]!
   placements: [Placement!]!
   tickets: [Ticket!]!
   availableTicket: Ticket
@@ -18,20 +18,11 @@ type Entity {
 
 type Asset {
   id: ID!
-  uri: String!
+  domain: String!
+  uri: Json!
 
   owner: Entity!
-
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type CounterfactualToken {
-  id: ID!
-  tokenURI: String!
-
-  owner: Entity!
-  placement: Placement!
+  placement: Placement
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -95,7 +86,7 @@ type Placement {
 
   entity: Entity!
   room: Room!
-  counterfactualToken: CounterfactualToken!
+  assets: [Asset!]!
 
   createdAt: DateTime!
 }
@@ -103,15 +94,13 @@ type Placement {
 type Query {
   currentEntity: Entity!
   currentExhibition: Exhibition
-  entity(id: ID!): Entity!
 }
 
 type Mutation  {
   loginAs(accessToken: String!): String!
-  placeAsset(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
-  createEntity: Entity!
-  createAsset(ownerId: ID!, uri: String!): Asset!
+  createPlacement(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   redeemTicket: Ticket!
 
+  # Moderator Actions
   modIssueTicket(exhibitionId: ID!, email: String, id: String): Ticket
 }

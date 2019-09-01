@@ -1,4 +1,9 @@
-import { MutationResolvers, QueryResolvers } from "../resolvers-types";
+import { AssetDomain } from "../types";
+import {
+  EntityResolvers,
+  MutationResolvers,
+  QueryResolvers,
+} from "../resolvers-types";
 import { makeForEntity } from "../api/auth";
 import relation from "../lib/relation";
 
@@ -7,9 +12,6 @@ const currentEntity: QueryResolvers["currentEntity"] = async (
   args,
   { currentEntity },
 ) => currentEntity;
-
-const entity: QueryResolvers["entity"] = async (root, { id }, { prisma }) =>
-  prisma.entity({ id });
 
 const loginAs: MutationResolvers["loginAs"] = async (
   root,
@@ -38,17 +40,31 @@ const loginAs: MutationResolvers["loginAs"] = async (
   return makeForEntity(entity);
 };
 
+const tradableAssets: EntityResolvers["tradableAssets"] = async (
+  { id },
+  args,
+  { prisma },
+) =>
+  prisma.entity({ id }).assets({
+    where: {
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      domain_in: [
+        AssetDomain.Patronage.toString(),
+        AssetDomain.Memorabilia.toString(),
+      ],
+    },
+  });
+
 export default {
   Query: {
     currentEntity,
-    entity,
   },
   Mutation: {
     loginAs,
   },
   Entity: {
     assets: relation("entity", "assets"),
-    counterfactualTokens: relation("entity", "counterfactualTokens"),
+    tradableAssets,
     placements: relation("entity", "placements"),
     tickets: relation("entity", "tickets"),
   },

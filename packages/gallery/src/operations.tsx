@@ -9,25 +9,17 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
-  DateTime: any,
   Json: any,
+  DateTime: any,
 };
 
 export type Asset = {
   __typename?: 'Asset',
   id: Scalars['ID'],
-  uri: Scalars['String'],
+  domain: Scalars['String'],
+  uri: Scalars['Json'],
   owner: Entity,
-  createdAt: Scalars['DateTime'],
-  updatedAt: Scalars['DateTime'],
-};
-
-export type CounterfactualToken = {
-  __typename?: 'CounterfactualToken',
-  id: Scalars['ID'],
-  tokenURI: Scalars['String'],
-  owner: Entity,
-  placement: Placement,
+  placement?: Maybe<Placement>,
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
@@ -39,7 +31,7 @@ export type Entity = {
   handle?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   assets: Array<Asset>,
-  counterfactualTokens: Array<CounterfactualToken>,
+  tradableAssets: Array<Asset>,
   placements: Array<Placement>,
   tickets: Array<Ticket>,
   availableTicket?: Maybe<Ticket>,
@@ -66,9 +58,7 @@ export type Exhibition = {
 export type Mutation = {
   __typename?: 'Mutation',
   loginAs: Scalars['String'],
-  placeAsset?: Maybe<Placement>,
-  createEntity: Entity,
-  createAsset: Asset,
+  createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   modIssueTicket?: Maybe<Ticket>,
 };
@@ -79,17 +69,11 @@ export type MutationLoginAsArgs = {
 };
 
 
-export type MutationPlaceAssetArgs = {
+export type MutationCreatePlacementArgs = {
   assetId: Scalars['ID'],
   roomId: Scalars['ID'],
   x: Scalars['Int'],
   y: Scalars['Int']
-};
-
-
-export type MutationCreateAssetArgs = {
-  ownerId: Scalars['ID'],
-  uri: Scalars['String']
 };
 
 
@@ -106,7 +90,7 @@ export type Placement = {
   y: Scalars['Int'],
   entity: Entity,
   room: Room,
-  counterfactualToken: CounterfactualToken,
+  assets: Array<Asset>,
   createdAt: Scalars['DateTime'],
 };
 
@@ -114,12 +98,6 @@ export type Query = {
   __typename?: 'Query',
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
-  entity: Entity,
-};
-
-
-export type QueryEntityArgs = {
-  id: Scalars['ID']
 };
 
 export type Room = {
@@ -151,35 +129,6 @@ export type Ticket = {
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
-export type CreateAssetMutationVariables = {
-  ownerId: Scalars['ID'],
-  uri: Scalars['String']
-};
-
-
-export type CreateAssetMutation = (
-  { __typename?: 'Mutation' }
-  & { createAsset: (
-    { __typename?: 'Asset' }
-    & Pick<Asset, 'id' | 'uri'>
-    & { owner: (
-      { __typename?: 'Entity' }
-      & Pick<Entity, 'id'>
-    ) }
-  ) }
-);
-
-export type CreateEntityMutationVariables = {};
-
-
-export type CreateEntityMutation = (
-  { __typename?: 'Mutation' }
-  & { createEntity: (
-    { __typename?: 'Entity' }
-    & Pick<Entity, 'id'>
-  ) }
-);
-
 export type CurrentExhibitionQueryVariables = {};
 
 
@@ -198,57 +147,6 @@ export type CurrentExhibitionQuery = (
   )> }
 );
 
-export type EntityQueryVariables = {
-  id: Scalars['ID']
-};
-
-
-export type EntityQuery = (
-  { __typename?: 'Query' }
-  & { entity: (
-    { __typename?: 'Entity' }
-    & Pick<Entity, 'id' | 'handle'>
-    & { assets: Array<(
-      { __typename?: 'Asset' }
-      & Pick<Asset, 'id' | 'uri'>
-    )> }
-  ) }
-);
-
-export const CreateAssetDocument = gql`
-    mutation CreateAsset($ownerId: ID!, $uri: String!) {
-  createAsset(ownerId: $ownerId, uri: $uri) {
-    id
-    uri
-    owner {
-      id
-    }
-  }
-}
-    `;
-export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<CreateAssetMutation, CreateAssetMutationVariables>;
-
-    export function useCreateAssetMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAssetMutation, CreateAssetMutationVariables>) {
-      return ApolloReactHooks.useMutation<CreateAssetMutation, CreateAssetMutationVariables>(CreateAssetDocument, baseOptions);
-    };
-export type CreateAssetMutationHookResult = ReturnType<typeof useCreateAssetMutation>;
-export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<CreateAssetMutation>;
-export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAssetMutation, CreateAssetMutationVariables>;
-export const CreateEntityDocument = gql`
-    mutation CreateEntity {
-  createEntity {
-    id
-  }
-}
-    `;
-export type CreateEntityMutationFn = ApolloReactCommon.MutationFunction<CreateEntityMutation, CreateEntityMutationVariables>;
-
-    export function useCreateEntityMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateEntityMutation, CreateEntityMutationVariables>) {
-      return ApolloReactHooks.useMutation<CreateEntityMutation, CreateEntityMutationVariables>(CreateEntityDocument, baseOptions);
-    };
-export type CreateEntityMutationHookResult = ReturnType<typeof useCreateEntityMutation>;
-export type CreateEntityMutationResult = ApolloReactCommon.MutationResult<CreateEntityMutation>;
-export type CreateEntityMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateEntityMutation, CreateEntityMutationVariables>;
 export const CurrentExhibitionDocument = gql`
     query CurrentExhibition {
   currentExhibition {
@@ -282,25 +180,3 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
-export const EntityDocument = gql`
-    query Entity($id: ID!) {
-  entity(id: $id) {
-    id
-    handle
-    assets {
-      id
-      uri
-    }
-  }
-}
-    `;
-
-    export function useEntityQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EntityQuery, EntityQueryVariables>) {
-      return ApolloReactHooks.useQuery<EntityQuery, EntityQueryVariables>(EntityDocument, baseOptions);
-    };
-      export function useEntityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EntityQuery, EntityQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<EntityQuery, EntityQueryVariables>(EntityDocument, baseOptions);
-      };
-      
-export type EntityQueryHookResult = ReturnType<typeof useEntityQuery>;
-export type EntityQueryResult = ApolloReactCommon.QueryResult<EntityQuery, EntityQueryVariables>;

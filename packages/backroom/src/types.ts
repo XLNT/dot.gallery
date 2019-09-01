@@ -7,3 +7,9 @@ export interface BackroomContext {
   currentEntity: Entity | null;
   currentExhibition: Exhibition | null;
 }
+
+export enum AssetDomain {
+  Patronage = "patronage",
+  Memorabilia = "memorabilia",
+  Walk = "walk",
+}

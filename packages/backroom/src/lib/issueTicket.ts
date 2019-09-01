@@ -1,5 +1,6 @@
 import { first, times } from "lodash";
 
+import { AssetDomain } from "../types";
 import { EntityWhereUniqueInput, Prisma, Ticket } from "../prisma";
 
 export default async (
@@ -17,7 +18,8 @@ export default async (
       // issue patronage assets
       assets: {
         create: times(3, () => ({
-          uri: "https://dot.gallery/token.png",
+          domain: AssetDomain.Patronage,
+          uri: { image: "https://dot.gallery/token.png" },
         })),
       },
     },

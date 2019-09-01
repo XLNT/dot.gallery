@@ -1,12 +1,14 @@
+import { AssetDomain } from "../types";
 import { MutationResolvers } from "../resolvers-types";
 import relation from "../lib/relation";
 
-const placeAsset: MutationResolvers["placeAsset"] = async (
+const createPlacement: MutationResolvers["createPlacement"] = async (
   root,
   { assetId, roomId, x, y },
   { prisma, currentEntity },
 ) => {
   // TODO: do this in a single transaction
+  // TODO: require that the asset be in the correct domain?
 
   // register placement & grant counterfactual token
   const placement = await prisma.createPlacement({
@@ -14,8 +16,14 @@ const placeAsset: MutationResolvers["placeAsset"] = async (
     y,
     entity: { connect: { id: currentEntity.id } },
     room: { connect: { id: roomId } },
-    counterfactualToken: {
-      create: { owner: { connect: { id: currentEntity.id } }, tokenURI: "" },
+    assets: {
+      create: [
+        {
+          domain: AssetDomain.Memorabilia,
+          owner: { connect: { id: currentEntity.id } },
+          uri: { image: "" },
+        },
+      ],
     },
   });
 
@@ -27,11 +35,11 @@ const placeAsset: MutationResolvers["placeAsset"] = async (
 
 export default {
   Mutation: {
-    placeAsset,
+    createPlacement,
   },
   Placement: {
     entity: relation("placement", "entity"),
     room: relation("placement", "room"),
-    counterfactualToken: relation("placement", "counterfactualToken"),
+    assets: relation("placement", "asses"),
   },
 };
