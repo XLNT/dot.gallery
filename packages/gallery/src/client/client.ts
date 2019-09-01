@@ -4,7 +4,7 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { onError } from "apollo-link-error";
 
-const BASE_URL = "gallery-v1-f5f0a401ff.herokuapp.com";
+const URI = "http://localhost:3000/graphql";
 
 export default () =>
   new ApolloClient({
@@ -19,7 +19,7 @@ export default () =>
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
       new HttpLink({
-        uri: `https://${BASE_URL}`,
+        uri: URI,
       }),
     ]),
     cache: new InMemoryCache(),

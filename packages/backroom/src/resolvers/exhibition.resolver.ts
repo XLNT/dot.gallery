@@ -44,6 +44,7 @@ export default {
   Exhibition: {
     ticketsAvailable,
     currentTicketPrice,
+    shows: relation("exhibition", "shows"),
     rooms: relation("exhibition", "rooms"),
   },
 };

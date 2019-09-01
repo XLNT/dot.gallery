@@ -1,0 +1,10 @@
+mutation CreatePlacement($assetId: ID!, $roomId: ID!, $x: Int!, $y: Int!) {
+  createPlacement(assetId: $assetId, roomId: $roomId, x: $x, y: $y) {
+    id
+    assets {
+      id
+      domain
+      uri
+    }
+  }
+}

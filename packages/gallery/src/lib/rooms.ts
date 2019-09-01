@@ -1,4 +1,4 @@
-import { Room } from "operations";
+import { Room } from "../operations";
 import { find } from "lodash-es";
 
 export type Coords = [number, number];
@@ -44,7 +44,12 @@ export const navigate = (
   return [newX % extent, newY % extent];
 };
 
-export const findRoom = <T extends Pick<Room, "x" | "y">>(
+interface WithCoords {
+  x: number;
+  y: number;
+}
+
+export const findRoom = <T extends WithCoords>(
   rooms: Array<T>,
   coords: Coords,
 ) => find(rooms, room => room.x === coords[0] && room.y === coords[1]) || null;

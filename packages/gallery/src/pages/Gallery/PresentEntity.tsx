@@ -1,6 +1,5 @@
-import { Asset, Entity } from "operations";
+import { CurrentEntityQuery } from "../../operations";
 import DraggableAsset from "components/DraggableAssets";
-import Maybe from "graphql/tsutils/Maybe";
 import React, { PropsWithChildren } from "react";
 import StaticAsset from "components/StaticAsset";
 import styled from "styled-components";
@@ -41,15 +40,13 @@ export default function PresentEntity({
 }: PropsWithChildren<{
   draggable?: boolean;
   wrappable?: boolean;
-  entity: Pick<Entity, "id" | "handle"> & {
-    assets: Maybe<Array<{ __typename?: "Asset" } & Pick<Asset, "id" | "uri">>>;
-  };
+  entity: CurrentEntityQuery["currentEntity"];
 }>) {
   return (
     <Container {...rest}>
       <Name>{entity.handle}</Name>
       <Assets wrappable={wrappable}>
-        {entity.assets.map(asset =>
+        {entity.tradableAssets.map(asset =>
           draggable ? (
             <StyledDraggableAsset key={asset.id} asset={asset} />
           ) : (

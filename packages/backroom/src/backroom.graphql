@@ -100,6 +100,7 @@ type Mutation  {
   loginAs(accessToken: String!): String!
   createPlacement(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   redeemTicket: Ticket!
+  awardWalk(image: String!): Asset!
 
   # Moderator Actions
   modIssueTicket(exhibitionId: ID!, email: String, id: String): Ticket

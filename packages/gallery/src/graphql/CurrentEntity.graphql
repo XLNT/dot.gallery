@@ -1,0 +1,14 @@
+query CurrentEntity {
+  currentEntity {
+    id
+    handle
+    availableTicket {
+      id
+    }
+    tradableAssets {
+      id
+      domain
+      uri
+    }
+  }
+}

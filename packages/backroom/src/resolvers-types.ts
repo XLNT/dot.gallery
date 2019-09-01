@@ -60,6 +60,7 @@ export type Mutation = {
   loginAs: Scalars['String'],
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
+  awardWalk: Asset,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -74,6 +75,11 @@ export type MutationCreatePlacementArgs = {
   roomId: Scalars['ID'],
   x: Scalars['Int'],
   y: Scalars['Int']
+};
+
+
+export type MutationAwardWalkArgs = {
+  image: Scalars['String']
 };
 
 
@@ -285,6 +291,7 @@ export type MutationResolvers<ContextType = BackroomContext, ParentType extends 
   loginAs?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginAsArgs, 'accessToken'>>,
   createPlacement?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationCreatePlacementArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
+  awardWalk?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationAwardWalkArgs, 'image'>>,
   modIssueTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<MutationModIssueTicketArgs, 'exhibitionId'>>,
 };
 

@@ -1,0 +1,6 @@
+mutation RedeemTicket {
+  redeemTicket {
+    id
+    redeemed
+  }
+}

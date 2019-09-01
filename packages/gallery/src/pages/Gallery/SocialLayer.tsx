@@ -1,5 +1,4 @@
-import { useEntityQuery } from "operations";
-import EntityId from "context/EntityId";
+import { useCurrentEntityQuery } from "../../operations";
 import PresentEntity from "./PresentEntity";
 import React from "react";
 import styled from "styled-components";
@@ -14,16 +13,14 @@ const PresenceList = styled.div`
 `;
 
 export default function SocialLayer() {
-  const [entityId] = EntityId.useContainer();
-  const { data, loading, error } = useEntityQuery({
-    variables: { id: entityId },
+  const { data, loading, error } = useCurrentEntityQuery({
     pollInterval: 5000,
   });
 
   return (
     <PresenceList>
-      {!loading && !error && data.entity && (
-        <PresentEntity entity={data.entity} />
+      {!loading && !error && data.currentEntity && (
+        <PresentEntity entity={data.currentEntity} />
       )}
     </PresenceList>
   );

@@ -1,14 +1,12 @@
 import { get } from "lodash-es";
-import { useEntityQuery } from "operations";
-import EntityId from "context/EntityId";
+import { useCurrentEntityQuery } from "../operations";
 
 export default function useEntityAssets() {
-  const [entityId] = EntityId.useContainer();
-  const { data, loading, error } = useEntityQuery({
-    variables: { id: entityId },
+  const { data, loading, error } = useCurrentEntityQuery({
     pollInterval: 5000,
   });
-  const assets = get(data, "entity.ownedAssets", []);
+
+  const assets = get(data, "entity.tradableAssets", []);
 
   return { assets, loading, error };
 }

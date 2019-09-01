@@ -1,4 +1,3 @@
-import { Contract, Wallet, providers } from "ethers";
 import {
   DragSourceMonitor,
   DropTargetMonitor,
@@ -7,15 +6,13 @@ import {
 } from "react-dnd";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { getEmptyImage } from "react-dnd-html5-backend";
-import { useCreateAssetMutation, useEntityQuery } from "operations";
+import { useAwardWalkMutation, useCurrentEntityQuery } from "../operations";
 import DragTypes from "lib/dragTypes";
-import EntityId from "context/EntityId";
 import Fullscreen from "context/Fullscreen";
 import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./Gallery/PresentEntity";
-import PrivateKey from "context/PrivateKey";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
@@ -23,23 +20,6 @@ import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
-
-const contractAddress = "0x2237ED17E7B5973Fd5e855BE7A1fA4a57D2da0cF";
-
-const abi = [
-  "function awardItem(address visitor, string tokenURI) public returns (uint256)",
-];
-
-const provider = new providers.JsonRpcProvider({
-  url: "https://ethberlin01.skalenodes.com:10183",
-  allowInsecure: true,
-});
-
-const wallet = Wallet.fromMnemonic(
-  "ritual pioneer maze shine retreat mother salute height walk alien mail chat",
-).connect(provider);
-
-const contract = new Contract(contractAddress, abi, wallet);
 
 const Column = styled.div`
   flex: 1;
@@ -104,18 +84,15 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
   useSuggestedPanelState(false);
 
   const svgRef = useRef<SVGElement>();
-  const [privateKey] = PrivateKey.useContainer();
 
   const [journey] = Journey.useContainer();
   const { setFullscreen } = Fullscreen.useContainer();
   const { history } = useRouter();
 
-  const [createAsset, { data: createAssetData }] = useCreateAssetMutation({
-    refetchQueries: ["Entity"],
+  const [awardWalk, { data: createAssetData }] = useAwardWalkMutation({
+    refetchQueries: ["CurrentEntity"],
   });
-  const [entityId] = EntityId.useContainer();
-  const { data } = useEntityQuery({
-    variables: { id: entityId },
+  const { data } = useCurrentEntityQuery({
     pollInterval: 5000,
   });
 
@@ -140,19 +117,15 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
       setDidDrag(true);
       const data = new XMLSerializer().serializeToString(svgRef.current);
       const b64 = btoa(data);
-      const uri = `data:image/svg+xml;base64,${b64}`;
-
-      const address = new Wallet(privateKey).address;
+      const image = `data:image/svg+xml;base64,${b64}`;
 
       try {
-        const tx = await contract.awardItem(address, uri);
-        await tx.wait();
-        await createAsset({ variables: { ownerId: entityId, uri } });
+        await awardWalk({ variables: { image } });
       } catch (error) {
         console.error(error);
       }
     },
-    [createAsset, entityId, privateKey],
+    [awardWalk],
   );
 
   useEffect(() => {
@@ -196,8 +169,12 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
       </Container>
       <hr style={{ width: "100%" }} />
       <AssetsContainer ref={drop}>
-        {data.entity && (
-          <PresentEntity entity={data.entity} draggable={false} wrappable>
+        {data.currentEntity && (
+          <PresentEntity
+            entity={data.currentEntity}
+            draggable={false}
+            wrappable
+          >
             {(() => {
               if (isOver) {
                 return (

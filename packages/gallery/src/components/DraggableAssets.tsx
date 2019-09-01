@@ -1,4 +1,4 @@
-import { Asset } from "operations";
+import { Asset } from "../operations";
 import { DragSourceMonitor, useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import DragTypes from "lib/dragTypes";

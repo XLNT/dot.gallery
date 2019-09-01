@@ -1,14 +1,11 @@
+import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
-import { Wallet } from "ethers";
 import { format } from "lib/exhibitionSlug";
-import { useCreateEntityMutation } from "operations";
-import EntityId from "context/EntityId";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
-import PrivateKey from "context/PrivateKey";
-import React, { useEffect } from "react";
+import React from "react";
 import WithContentTransition from "components/WithContentTransition";
 import contentful from "client/contentful";
 import styled from "styled-components";
@@ -59,29 +56,6 @@ export default function Home() {
     () => contentful.getEntry<any>(ABOUT_ID),
     [contentful],
   );
-  const [entityId, setEntityId, entityIdHydrated] = EntityId.useContainer();
-  const [
-    privateKey,
-    setPrivateKey,
-    privateKeyHydrated,
-  ] = PrivateKey.useContainer();
-  const [mutate] = useCreateEntityMutation();
-
-  useEffect(() => {
-    if (entityIdHydrated && !entityId) {
-      mutate().then(({ data: { createEntity: { id } } }) => setEntityId(id));
-    }
-  }, [entityId, entityIdHydrated, mutate, setEntityId, setPrivateKey]);
-
-  useEffect(() => {
-    if (privateKeyHydrated && !privateKey) {
-      setPrivateKey(Wallet.createRandom().privateKey);
-    }
-  }, [privateKey, privateKeyHydrated, setPrivateKey]);
-
-  if (!entityId) {
-    return null;
-  }
 
   const renderExhibitionInfo = () => {
     if (loading) {
@@ -108,7 +82,12 @@ export default function Home() {
         </ExhibitionTitle>
 
         <ShowTimes>
-          {shows.map(show => {
+          {shows.map((show, i) => {
+            if (i === 0) {
+              show.opensAt = DateTime.local()
+                .minus({ minute: 1 })
+                .toISO();
+            }
             return <ExhibitionTimes key={show.number} show={show} />;
           })}
         </ShowTimes>

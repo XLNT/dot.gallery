@@ -6,10 +6,10 @@ import {
   keycodeFor,
   navigate,
 } from "lib/rooms";
+import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { animated, useTransition } from "react-spring";
 import { format } from "lib/exhibitionSlug";
-import { last } from "lodash-es";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import React, { useEffect, useMemo, useState } from "react";
@@ -104,7 +104,10 @@ export default function Gallery(props: ExhibitionProps<void>) {
     () =>
       !exhibition || coords === null
         ? null
-        : findRoom(exhibition.rooms, coords),
+        : findRoom<CurrentExhibitionQuery["currentExhibition"]["rooms"][0]>(
+            exhibition.rooms,
+            coords,
+          ),
     [coords, exhibition],
   );
 

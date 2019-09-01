@@ -60,6 +60,7 @@ export type Mutation = {
   loginAs: Scalars['String'],
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
+  awardWalk: Asset,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -74,6 +75,11 @@ export type MutationCreatePlacementArgs = {
   roomId: Scalars['ID'],
   x: Scalars['Int'],
   y: Scalars['Int']
+};
+
+
+export type MutationAwardWalkArgs = {
+  image: Scalars['String']
 };
 
 
@@ -129,6 +135,57 @@ export type Ticket = {
   createdAt: Scalars['DateTime'],
   updatedAt: Scalars['DateTime'],
 };
+export type AwardWalkMutationVariables = {
+  image: Scalars['String']
+};
+
+
+export type AwardWalkMutation = (
+  { __typename?: 'Mutation' }
+  & { awardWalk: (
+    { __typename?: 'Asset' }
+    & Pick<Asset, 'id' | 'domain' | 'uri'>
+  ) }
+);
+
+export type CreatePlacementMutationVariables = {
+  assetId: Scalars['ID'],
+  roomId: Scalars['ID'],
+  x: Scalars['Int'],
+  y: Scalars['Int']
+};
+
+
+export type CreatePlacementMutation = (
+  { __typename?: 'Mutation' }
+  & { createPlacement: Maybe<(
+    { __typename?: 'Placement' }
+    & Pick<Placement, 'id'>
+    & { assets: Array<(
+      { __typename?: 'Asset' }
+      & Pick<Asset, 'id' | 'domain' | 'uri'>
+    )> }
+  )> }
+);
+
+export type CurrentEntityQueryVariables = {};
+
+
+export type CurrentEntityQuery = (
+  { __typename?: 'Query' }
+  & { currentEntity: (
+    { __typename?: 'Entity' }
+    & Pick<Entity, 'id' | 'handle'>
+    & { availableTicket: Maybe<(
+      { __typename?: 'Ticket' }
+      & Pick<Ticket, 'id'>
+    )>, tradableAssets: Array<(
+      { __typename?: 'Asset' }
+      & Pick<Asset, 'id' | 'domain' | 'uri'>
+    )> }
+  ) }
+);
+
 export type CurrentExhibitionQueryVariables = {};
 
 
@@ -147,6 +204,80 @@ export type CurrentExhibitionQuery = (
   )> }
 );
 
+export type RedeemTicketMutationVariables = {};
+
+
+export type RedeemTicketMutation = (
+  { __typename?: 'Mutation' }
+  & { redeemTicket: (
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'id' | 'redeemed'>
+  ) }
+);
+
+export const AwardWalkDocument = gql`
+    mutation AwardWalk($image: String!) {
+  awardWalk(image: $image) {
+    id
+    domain
+    uri
+  }
+}
+    `;
+export type AwardWalkMutationFn = ApolloReactCommon.MutationFunction<AwardWalkMutation, AwardWalkMutationVariables>;
+
+    export function useAwardWalkMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AwardWalkMutation, AwardWalkMutationVariables>) {
+      return ApolloReactHooks.useMutation<AwardWalkMutation, AwardWalkMutationVariables>(AwardWalkDocument, baseOptions);
+    };
+export type AwardWalkMutationHookResult = ReturnType<typeof useAwardWalkMutation>;
+export type AwardWalkMutationResult = ApolloReactCommon.MutationResult<AwardWalkMutation>;
+export type AwardWalkMutationOptions = ApolloReactCommon.BaseMutationOptions<AwardWalkMutation, AwardWalkMutationVariables>;
+export const CreatePlacementDocument = gql`
+    mutation CreatePlacement($assetId: ID!, $roomId: ID!, $x: Int!, $y: Int!) {
+  createPlacement(assetId: $assetId, roomId: $roomId, x: $x, y: $y) {
+    id
+    assets {
+      id
+      domain
+      uri
+    }
+  }
+}
+    `;
+export type CreatePlacementMutationFn = ApolloReactCommon.MutationFunction<CreatePlacementMutation, CreatePlacementMutationVariables>;
+
+    export function useCreatePlacementMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreatePlacementMutation, CreatePlacementMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreatePlacementMutation, CreatePlacementMutationVariables>(CreatePlacementDocument, baseOptions);
+    };
+export type CreatePlacementMutationHookResult = ReturnType<typeof useCreatePlacementMutation>;
+export type CreatePlacementMutationResult = ApolloReactCommon.MutationResult<CreatePlacementMutation>;
+export type CreatePlacementMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePlacementMutation, CreatePlacementMutationVariables>;
+export const CurrentEntityDocument = gql`
+    query CurrentEntity {
+  currentEntity {
+    id
+    handle
+    availableTicket {
+      id
+    }
+    tradableAssets {
+      id
+      domain
+      uri
+    }
+  }
+}
+    `;
+
+    export function useCurrentEntityQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentEntityQuery, CurrentEntityQueryVariables>) {
+      return ApolloReactHooks.useQuery<CurrentEntityQuery, CurrentEntityQueryVariables>(CurrentEntityDocument, baseOptions);
+    };
+      export function useCurrentEntityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentEntityQuery, CurrentEntityQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<CurrentEntityQuery, CurrentEntityQueryVariables>(CurrentEntityDocument, baseOptions);
+      };
+      
+export type CurrentEntityQueryHookResult = ReturnType<typeof useCurrentEntityQuery>;
+export type CurrentEntityQueryResult = ApolloReactCommon.QueryResult<CurrentEntityQuery, CurrentEntityQueryVariables>;
 export const CurrentExhibitionDocument = gql`
     query CurrentExhibition {
   currentExhibition {
@@ -180,3 +311,19 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
+export const RedeemTicketDocument = gql`
+    mutation RedeemTicket {
+  redeemTicket {
+    id
+    redeemed
+  }
+}
+    `;
+export type RedeemTicketMutationFn = ApolloReactCommon.MutationFunction<RedeemTicketMutation, RedeemTicketMutationVariables>;
+
+    export function useRedeemTicketMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RedeemTicketMutation, RedeemTicketMutationVariables>) {
+      return ApolloReactHooks.useMutation<RedeemTicketMutation, RedeemTicketMutationVariables>(RedeemTicketDocument, baseOptions);
+    };
+export type RedeemTicketMutationHookResult = ReturnType<typeof useRedeemTicketMutation>;
+export type RedeemTicketMutationResult = ApolloReactCommon.MutationResult<RedeemTicketMutation>;
+export type RedeemTicketMutationOptions = ApolloReactCommon.BaseMutationOptions<RedeemTicketMutation, RedeemTicketMutationVariables>;

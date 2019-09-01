@@ -7,7 +7,6 @@ import { hot } from "react-hot-loader";
 import React from "react";
 
 import { DndProvider } from "react-dnd";
-import EntityId from "context/EntityId";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
@@ -17,7 +16,6 @@ import Home from "pages/Home";
 import Journey from "context/Journey";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
-import PrivateKey from "context/PrivateKey";
 import WithPanel from "pages/WithPanel";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
@@ -36,9 +34,7 @@ const Providers = nest([
   PanelState.Provider,
   ForcedPanelState.Provider,
   Journey.Provider,
-  EntityId.Provider,
   PanelVisibility.Provider,
-  PrivateKey.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
   DndProvider,

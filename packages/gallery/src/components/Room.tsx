@@ -1,14 +1,12 @@
 import {
   Asset as AssetModel,
   Room as RoomModel,
-  useCreateAssetMutation,
-  useDeleteAssetMutation,
-} from "operations";
+  useCreatePlacementMutation,
+} from "../operations";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { animated, useSpring } from "react-spring";
 import { get } from "lodash-es";
 import DragTypes from "lib/dragTypes";
-import EntityId from "context/EntityId";
 import GalleryRichText from "./GalleryRichText";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
@@ -19,9 +17,7 @@ import styled from "styled-components";
 import usePromise from "react-use-promise";
 
 interface RoomProps {
-  room: Pick<RoomModel, "id" | "entryId" | "x" | "y"> & {
-    asset: Pick<AssetModel, "id" | "uri">;
-  };
+  room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
 }
 
 const Container = styled.div`
@@ -43,7 +39,6 @@ const collect = (monitor: DropTargetMonitor) => ({
 });
 
 export default function Room({ room }: RoomProps) {
-  const [entityId] = EntityId.useContainer();
   const [result, error, state] = usePromise(
     () => contentful.getEntry<any>(room.entryId),
     [room.entryId, contentful],
@@ -53,17 +48,23 @@ export default function Room({ room }: RoomProps) {
     id: room.id,
     uri: get(result, "fields.work.fields.file.url"),
   };
-  const [createAsset] = useCreateAssetMutation({
-    variables: { ownerId: entityId, uri: asset.uri },
-    refetchQueries: ["Entity"],
+  const [createAsset] = useCreatePlacementMutation({
+    refetchQueries: ["CurrentEntity"],
   });
-  const [deleteAsset] = useDeleteAssetMutation();
 
   const drop = useCallback(
-    item => {
-      Promise.all([deleteAsset({ variables: { id: item.id } }), createAsset()]);
+    async item => {
+      // TODO: collect x, y like stickers
+      await createAsset({
+        variables: {
+          assetId: item.id,
+          roomId: room.id,
+          x: 500,
+          y: 500,
+        },
+      });
     },
-    [createAsset, deleteAsset],
+    [createAsset, room.id],
   );
 
   const [{ isOver }, dropRef] = useDrop({
@@ -79,7 +80,7 @@ export default function Room({ room }: RoomProps) {
   return (
     <>
       <Container>
-        <Work ref={dropRef} src={asset.uri} style={style} />
+        <Work ref={dropRef} src={asset.uri.image} style={style} />
       </Container>
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
       <PanelContent.Source>

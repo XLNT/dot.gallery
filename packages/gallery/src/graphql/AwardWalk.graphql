@@ -1,0 +1,7 @@
+mutation AwardWalk($image: String!) {
+  awardWalk(image: $image) {
+    id
+    domain
+    uri
+  }
+}

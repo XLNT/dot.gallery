@@ -1,18 +1,13 @@
 import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
-import { useCreateAssetMutation } from "operations";
 import CalendarSvg from "static/calendar.svg";
 import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useRouter from "context/useRouter";
 
-import { buildTokenUri } from "lib/tokenURI";
-import { times } from "lodash-es";
-import EntityId from "context/EntityId";
-import tokenURI from "static/token.png";
-import useEntityAssets from "hook/useEntityAssets";
+import { useRedeemTicketMutation } from "../operations";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 const toGoogleCalendarDatetime = (isoString: string) =>
@@ -25,12 +20,13 @@ const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  cursor: ${({ isOpen }) => (isOpen ? "cursor" : "not-allowed")};
+  cursor: ${({ isOpen }) => (isOpen ? "pointer" : "not-allowed")};
+  color: ${({ theme, isOpen }) => (isOpen ? theme.secondary : "inherit")};
   margin-bottom: 3rem;
 
   transition: color 100ms linear;
   &:hover {
-    color: ${({ theme, isOpen }) => (isOpen ? theme.secondary : "inherit")};
+    font-style: italic;
   }
 `;
 
@@ -70,10 +66,9 @@ export default function ExhibitionTimes({
 
   const state = getShowState(opensAt, closesAt);
 
-  const [entityId] = EntityId.useContainer();
-  const { assets } = useEntityAssets();
-  const [grantToken] = useCreateAssetMutation({
-    variables: { ownerId: entityId, uri: buildTokenUri(tokenURI) },
+  const [redeemTicket] = useRedeemTicketMutation({
+    refetchQueries: ["CurrentEntity"],
+    awaitRefetchQueries: true,
   });
 
   const opensAtDate = useMemo(
@@ -92,11 +87,9 @@ export default function ExhibitionTimes({
   const showState = getShowState(opensAt, closesAt);
 
   const goExhibition = useCallback(async () => {
-    if (assets.length === 0) {
-      await Promise.all(times(3, () => grantToken()));
-    }
+    await redeemTicket();
     history.push(`/${format(exhibition.number, number)}`);
-  }, [assets.length, exhibition.number, grantToken, history, number]);
+  }, [exhibition.number, history, number, redeemTicket]);
 
   const goRequest = useCallback(() => {}, []);
 
