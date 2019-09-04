@@ -7,6 +7,7 @@ import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React from "react";
 import WithContentTransition from "components/WithContentTransition";
+import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useContentful from "hook/useContentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
@@ -43,8 +44,16 @@ const Underlined = styled.span`
   text-decoration: underline;
 `;
 
-const ShowTimes = styled.div`
+const InnerContainer = styled.div`
   margin: 0 auto;
+  max-width: 90%;
+`;
+
+const ErrorBox = styled.pre`
+  padding: 0.5rem;
+  border: 4px solid ${fromTheme("primary")};
+  word-wrap: break-word;
+  white-space: pre-wrap;
 `;
 
 export default function Home() {
@@ -53,13 +62,29 @@ export default function Home() {
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = useContentful(ABOUT_ID);
 
+  // TODO: use react-spring to animate this transition between states
   const renderExhibitionInfo = () => {
     if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <>
+          <ExhibitionTitle>Loading the dot.gallery...</ExhibitionTitle>
+        </>
+      );
     }
 
     if (error) {
-      return <code>{JSON.stringify(error)}</code>;
+      return (
+        <>
+          <ExhibitionTitle>An Error Ocurred.</ExhibitionTitle>
+
+          <InnerContainer>
+            <p>{error.message}</p>
+            <ErrorBox>
+              <code>{JSON.stringify(error)}</code>
+            </ErrorBox>
+          </InnerContainer>
+        </>
+      );
     }
 
     if (!exhibition) {
@@ -77,7 +102,7 @@ export default function Home() {
           <Underlined>{exhibition.title}</Underlined>
         </ExhibitionTitle>
 
-        <ShowTimes>
+        <InnerContainer>
           {shows.map((show, i) => {
             if (i === 0) {
               show.opensAt = DateTime.local()
@@ -86,7 +111,7 @@ export default function Home() {
             }
             return <ExhibitionTimes key={show.number} show={show} />;
           })}
-        </ShowTimes>
+        </InnerContainer>
       </>
     );
   };

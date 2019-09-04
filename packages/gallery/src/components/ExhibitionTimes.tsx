@@ -38,7 +38,7 @@ const OpenTime = styled.div`
   text-transform: uppercase;
 
   &:hover {
-    font-style: italic;
+    font-style: ${({ isOpen }) => (isOpen ? "italic" : "inherit")};
   }
 `;
 
@@ -119,7 +119,7 @@ export default function ExhibitionTimes({
           <Calendar src={CalendarSvg} />
         </a>
       </OpenDate>
-      <OpenTime>
+      <OpenTime isOpen={state === ShowState.Open}>
         {showState === ShowState.Open
           ? "Enter"
           : `${opensAtTime}-${closesAtTime}`}
