@@ -4,7 +4,7 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { onError } from "apollo-link-error";
 
-const URI = "http://localhost:3000/graphql";
+const URI = "http://localhost:4000/graphql";
 
 export default () =>
   new ApolloClient({

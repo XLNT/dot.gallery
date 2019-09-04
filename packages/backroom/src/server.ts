@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { resolve } from "path";
 config({ path: resolve(__dirname, "../../../.env") });
 
+import cors = require("micro-cors");
 import { ApolloServer, makeExecutableSchema } from "apollo-server-micro";
 import { applyMiddleware } from "graphql-middleware";
 import { importSchema } from "graphql-import";
@@ -64,4 +65,13 @@ const server = new ApolloServer({
   }),
 });
 
-export default server.createHandler();
+const handler = server.createHandler();
+
+export default cors()((req, res) => {
+  if (req.method === "OPTIONS") {
+    res.end();
+    return;
+  }
+
+  return handler(req, res);
+});

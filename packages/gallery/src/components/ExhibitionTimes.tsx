@@ -23,11 +23,6 @@ const Container = styled.div`
   cursor: ${({ isOpen }) => (isOpen ? "pointer" : "not-allowed")};
   color: ${({ theme, isOpen }) => (isOpen ? theme.secondary : "inherit")};
   margin-bottom: 3rem;
-
-  transition: color 100ms linear;
-  &:hover {
-    font-style: italic;
-  }
 `;
 
 const OpenDate = styled.div`
@@ -41,6 +36,10 @@ const OpenTime = styled.div`
   font-weight: bold;
   font-size: 4.5rem;
   text-transform: uppercase;
+
+  &:hover {
+    font-style: italic;
+  }
 `;
 
 const Calendar = styled.img`
