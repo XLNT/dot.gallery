@@ -14,6 +14,7 @@ import React, { useCallback } from "react";
 import WithContentTransition from "./WithContentTransition";
 import contentful from "client/contentful";
 import styled from "styled-components";
+import useContentful from "hook/useContentful";
 import usePromise from "react-use-promise";
 
 interface RoomProps {
@@ -39,10 +40,7 @@ const collect = (monitor: DropTargetMonitor) => ({
 });
 
 export default function Room({ room }: RoomProps) {
-  const [result, error, state] = usePromise(
-    () => contentful.getEntry<any>(room.entryId),
-    [room.entryId, contentful],
-  );
+  const [result, error, state] = useContentful(room.entryId);
 
   const asset = {
     id: room.id,

@@ -7,11 +7,10 @@ import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import React from "react";
 import WithContentTransition from "components/WithContentTransition";
-import contentful from "client/contentful";
 import styled from "styled-components";
+import useContentful from "hook/useContentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
-import usePromise from "react-use-promise";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const ABOUT_ID = "3myaHf3JO0keiFVJvbvgL4";
@@ -52,10 +51,7 @@ export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
-  const [result, , state] = usePromise(
-    () => contentful.getEntry<any>(ABOUT_ID),
-    [contentful],
-  );
+  const [result, , state] = useContentful(ABOUT_ID);
 
   const renderExhibitionInfo = () => {
     if (loading) {
