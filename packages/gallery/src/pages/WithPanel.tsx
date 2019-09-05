@@ -1,3 +1,4 @@
+import { ZIndex } from "lib/zIndex";
 import { animated, useSpring } from "react-spring";
 import ForcedPanelState from "context/ForcedPanelState";
 import PanelAction from "context/PanelAction";
@@ -27,7 +28,7 @@ const Content = styled(animated.div)`
 `;
 
 const PanelContainer = styled(animated.div)`
-  z-index: 10;
+  z-index: ${ZIndex.Panel};
   position: absolute;
   top: 0;
   right: 0;
@@ -43,7 +44,7 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
   <animated.span {...props} />
 ))`
   user-select: none;
-  z-index: 10;
+  z-index: ${ZIndex.Panel};
   position: absolute;
   bottom: -1.75rem;
   right: calc(1rem + ${({ panelWidth }) => panelWidth}px);

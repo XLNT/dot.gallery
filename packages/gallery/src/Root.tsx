@@ -1,19 +1,20 @@
 import "normalize.css";
 
 import { ApolloProvider } from "@apollo/react-hooks";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
+import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 
-import { DndProvider } from "react-dnd";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
-import HTML5Backend from "react-dnd-html5-backend";
 import Home from "pages/Home";
 import Journey from "context/Journey";
+import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
 import WithPanel from "pages/WithPanel";
@@ -38,6 +39,7 @@ const Providers = nest([
   ApolloProvider,
   ExhibitionThemeProvider,
   DndProvider,
+  Router,
 ]);
 
 function Root() {
@@ -49,11 +51,13 @@ function Root() {
         <>
           <GlobalStyle />
           <WithPanel>
-            <Router>
+            <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/:slug" component={Exhibition} />
-            </Router>
+              <Route path="/:slug([eE]\d\d[sS]\d\d)" component={Exhibition} />
+              <Route component={Home} />
+            </Switch>
           </WithPanel>
+          <Modal.Target />
         </>
       </Providers>
     </>

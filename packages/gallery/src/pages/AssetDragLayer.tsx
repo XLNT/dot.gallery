@@ -1,4 +1,5 @@
 import { DragLayerMonitor, useDragLayer } from "react-dnd";
+import { ZIndex } from "lib/zIndex";
 import DragTypes from "lib/dragTypes";
 import JourneyIcon from "components/JourneyIcon";
 import Layer from "components/Layer";
@@ -9,7 +10,7 @@ import styled from "styled-components";
 const DragLayerBackboard = styled(Layer)`
   pointer-events: none;
 
-  z-index: 100;
+  z-index: ${ZIndex.DragLayer};
 `;
 
 const DragEffect = styled.div.attrs(({ pointerOffset }) => {

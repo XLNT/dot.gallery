@@ -7,7 +7,7 @@ import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useRouter from "context/useRouter";
 
-import { useRedeemTicketMutation } from "../operations";
+import { Show, useRedeemTicketMutation } from "../operations";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 const toGoogleCalendarDatetime = (isoString: string) =>
@@ -57,62 +57,51 @@ const Calendar = styled.img`
 `;
 
 export default function ExhibitionTimes({
-  show: { number, opensAt, closesAt },
+  show,
   ...rest
-}: any) {
-  const { history } = useRouter();
+}: {
+  show: Pick<Show, "id" | "number" | "opensAt" | "closesAt">;
+  [_: string]: any;
+}) {
   const { exhibition } = useCurrentExhibition();
 
-  const state = getShowState(opensAt, closesAt);
-
-  const [redeemTicket] = useRedeemTicketMutation({
-    refetchQueries: ["CurrentEntity"],
-    awaitRefetchQueries: true,
-  });
+  const state = getShowState(show.opensAt, show.closesAt);
 
   const opensAtDate = useMemo(
-    () => DateTime.fromISO(opensAt).toLocaleString(DateTime.DATE_MED),
-    [opensAt],
+    () => DateTime.fromISO(show.opensAt).toLocaleString(DateTime.DATE_MED),
+    [show.opensAt],
   );
   const opensAtTime = useMemo(
-    () => DateTime.fromISO(opensAt).toLocaleString(DateTime.TIME_24_SIMPLE),
-    [opensAt],
+    () =>
+      DateTime.fromISO(show.opensAt).toLocaleString(DateTime.TIME_24_SIMPLE),
+    [show.opensAt],
   );
   const closesAtTime = useMemo(
-    () => DateTime.fromISO(closesAt).toLocaleString(DateTime.TIME_24_SIMPLE),
-    [closesAt],
+    () =>
+      DateTime.fromISO(show.closesAt).toLocaleString(DateTime.TIME_24_SIMPLE),
+    [show.closesAt],
   );
-
-  const showState = getShowState(opensAt, closesAt);
-
-  const goExhibition = useCallback(async () => {
-    await redeemTicket();
-    history.push(`/${format(exhibition.number, number)}`);
-  }, [exhibition.number, history, number, redeemTicket]);
-
-  const goRequest = useCallback(() => {}, []);
 
   const calendarLink = useMemo(
     () =>
       `http://www.google.com/calendar/event?${new URLSearchParams({
         action: "TEMPLATE",
-        dates: `${toGoogleCalendarDatetime(opensAt)}/${toGoogleCalendarDatetime(
-          closesAt,
-        )}`,
-        text: `dot.gallery ${format(exhibition.number, number)}`,
+        dates: `${toGoogleCalendarDatetime(
+          show.opensAt,
+        )}/${toGoogleCalendarDatetime(show.closesAt)}`,
+        text: `dot.gallery ${format(exhibition.number, show.number)}`,
         location: "https://dot.gallery",
-        details: `dot.gallery ${format(exhibition.number, number)} Opening`,
-        ctz: getTimezoneName(opensAt),
+        details: `dot.gallery ${format(
+          exhibition.number,
+          show.number,
+        )} Opening`,
+        ctz: getTimezoneName(show.opensAt),
       })}`,
-    [closesAt, exhibition.number, number, opensAt],
+    [exhibition.number, show.closesAt, show.number, show.opensAt],
   );
 
   return (
-    <Container
-      onClick={showState === ShowState.Open ? goExhibition : goRequest}
-      isOpen={state === ShowState.Open}
-      {...rest}
-    >
+    <Container isOpen={state === ShowState.Open} {...rest}>
       <OpenDate>
         opens {opensAtDate}{" "}
         <a href={calendarLink} target="_blank" rel="noopener noreferrer">
@@ -120,9 +109,7 @@ export default function ExhibitionTimes({
         </a>
       </OpenDate>
       <OpenTime isOpen={state === ShowState.Open}>
-        {showState === ShowState.Open
-          ? "Enter"
-          : `${opensAtTime}-${closesAtTime}`}
+        {state === ShowState.Open ? "Enter" : `${opensAtTime}-${closesAtTime}`}
       </OpenTime>
     </Container>
   );

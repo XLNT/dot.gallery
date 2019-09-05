@@ -1,21 +1,14 @@
-import {
-  Asset as AssetModel,
-  Room as RoomModel,
-  useCreatePlacementMutation,
-} from "../operations";
 import { DropTargetMonitor, useDrop } from "react-dnd";
+import { Room as RoomModel, useCreatePlacementMutation } from "../operations";
 import { animated, useSpring } from "react-spring";
 import { get } from "lodash-es";
+import AnimatedPanelContent from "./AnimatedPanelContent";
 import DragTypes from "lib/dragTypes";
 import GalleryRichText from "./GalleryRichText";
 import PanelAction from "context/PanelAction";
-import PanelContent from "context/PanelContent";
 import React, { useCallback } from "react";
-import WithContentTransition from "./WithContentTransition";
-import contentful from "client/contentful";
 import styled from "styled-components";
 import useContentful from "hook/useContentful";
-import usePromise from "react-use-promise";
 
 interface RoomProps {
   room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
@@ -81,19 +74,17 @@ export default function Room({ room }: RoomProps) {
         <Work ref={dropRef} src={asset.uri.image} style={style} />
       </Container>
       <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
-      <PanelContent.Source>
-        <WithContentTransition>
-          {state === "resolved" && (
-            <GalleryRichText richText={result.fields.body} />
-          )}
-          {state === "rejected" && (
-            <>
-              <h1>Error</h1>
-              <code>{error.message}</code>
-            </>
-          )}
-        </WithContentTransition>
-      </PanelContent.Source>
+      <AnimatedPanelContent>
+        {state === "resolved" && (
+          <GalleryRichText richText={result.fields.body} />
+        )}
+        {state === "rejected" && (
+          <>
+            <h1>Error</h1>
+            <code>{error.message}</code>
+          </>
+        )}
+      </AnimatedPanelContent>
     </>
   );
 }

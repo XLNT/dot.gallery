@@ -1,9 +1,9 @@
 import { ExhibitionProps, Flow } from "pages/ExhibitionProps";
+import { ZIndex } from "lib/zIndex";
 import { animated, config, useSpring, useTransition } from "react-spring";
 import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
-import Layer from "components/Layer";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useDimensions from "react-use-dimensions";
@@ -17,7 +17,8 @@ const ExitLayer = styled.div`
   display: flex;
   justify-content: center;
 
-  z-index: ${({ proposingExit }) => (proposingExit ? 8 : 0)};
+  z-index: ${({ proposingExit }) =>
+    proposingExit ? ZIndex.ExitOpen : ZIndex.Lowest};
 `;
 
 const ExitProposal = styled(animated.div)`
@@ -32,7 +33,7 @@ const InnerExitProposal = styled.div`
 `;
 
 const JourneyButton = styled.div`
-  z-index: 1;
+  z-index: ${ZIndex.Journey};
   position: absolute;
   top: 1rem;
   right: 1rem;

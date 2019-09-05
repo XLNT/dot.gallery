@@ -3,8 +3,8 @@ import React, { PropsWithChildren, useEffect } from "react";
 import useForceUpdate from "use-force-update";
 
 export default () => {
-  let _forceUpdate;
-  let el;
+  let _forceUpdate: () => void;
+  let el: any;
 
   function Source({ children }: PropsWithChildren<{}>) {
     _forceUpdate = useForceUpdate();

@@ -1,17 +1,21 @@
 import { DateTime } from "luxon";
+import { Link } from "react-router-dom";
+import { Route, Switch } from "react-router";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
+import { useRedeemTicketMutation } from "operations";
+import AnimatedPanelContent from "components/AnimatedPanelContent";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
+import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
-import PanelContent from "context/PanelContent";
-import React from "react";
-import WithContentTransition from "components/WithContentTransition";
+import React, { useCallback } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useContentful from "hook/useContentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const ABOUT_ID = "3myaHf3JO0keiFVJvbvgL4";
@@ -61,6 +65,26 @@ export default function Home() {
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = useContentful(ABOUT_ID);
+  const { history } = useRouter();
+
+  const [redeemTicket] = useRedeemTicketMutation({
+    refetchQueries: ["CurrentEntity"],
+    awaitRefetchQueries: true,
+  });
+
+  const goHome = useCallback(() => history.push("/"), [history]);
+
+  // const goExhibition = useCallback(async () => {
+  //   await redeemTicket();
+  //   history.push(`/${format(exhibition.number, number)}`);
+  // }, [exhibition.number, history, redeemTicket]);
+
+  const onExhibitionClick = useCallback(
+    show => {
+      history.push("/request");
+    },
+    [history],
+  );
 
   // TODO: use react-spring to animate this transition between states
   const renderExhibitionInfo = () => {
@@ -109,7 +133,13 @@ export default function Home() {
                 .minus({ minute: 1 })
                 .toISO();
             }
-            return <ExhibitionTimes key={show.number} show={show} />;
+            return (
+              <ExhibitionTimes
+                key={show.number}
+                show={show}
+                onClick={onExhibitionClick}
+              />
+            );
           })}
         </InnerContainer>
       </>
@@ -117,21 +147,27 @@ export default function Home() {
   };
 
   return (
-    <Container>
-      {renderExhibitionInfo()}
+    <>
+      <Container>{renderExhibitionInfo()}</Container>
       <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
-      <PanelContent.Source>
-        <WithContentTransition>
-          {state === "resolved" && (
-            <GalleryRichText richText={result.fields.body} />
-          )}
-          {state === "rejected" && (
-            <>
-              <h1>dot.gallery</h1>
-            </>
-          )}
-        </WithContentTransition>
-      </PanelContent.Source>
-    </Container>
+      <AnimatedPanelContent>
+        {state === "resolved" && (
+          <GalleryRichText richText={result.fields.body} />
+        )}
+        {state === "rejected" && (
+          <>
+            <h1>dot.gallery</h1>
+          </>
+        )}
+      </AnimatedPanelContent>
+
+      <ModalView
+        onDismiss={goHome}
+        routes={{
+          "/request": <Link to="/login">login</Link>,
+          "/login": "login",
+        }}
+      />
+    </>
   );
 }
