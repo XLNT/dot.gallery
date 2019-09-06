@@ -1,10 +1,8 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
-import { preloadImage } from "lib/preload";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import arrow from "static/grey_arrow.svg";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
-import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 

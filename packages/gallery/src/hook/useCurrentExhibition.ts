@@ -1,9 +1,15 @@
-import { get } from "lodash-es";
+import { ShowState, getShowState } from "lib/shows";
+import { find, get } from "lodash-es";
 import { useCurrentExhibitionQuery } from "../operations";
 
 export default function useCurrentExhibition() {
   const { loading, error, data } = useCurrentExhibitionQuery();
   const exhibition = get(data, ["currentExhibition"]);
 
-  return { exhibition, loading, error };
+  const shows = get(exhibition, ["shows"], []);
+  const show: typeof exhibition["shows"][0] = find(
+    shows,
+    show => getShowState(show.opensAt, show.closesAt) === ShowState.Open,
+  );
+  return { exhibition, show, loading, error };
 }

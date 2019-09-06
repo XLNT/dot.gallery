@@ -204,6 +204,16 @@ export type CurrentExhibitionQuery = (
   )> }
 );
 
+export type LoginAsMutationVariables = {
+  accessToken: Scalars['String']
+};
+
+
+export type LoginAsMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'loginAs'>
+);
+
 export type RedeemTicketMutationVariables = {};
 
 
@@ -311,6 +321,19 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
+export const LoginAsDocument = gql`
+    mutation LoginAs($accessToken: String!) {
+  loginAs(accessToken: $accessToken)
+}
+    `;
+export type LoginAsMutationFn = ApolloReactCommon.MutationFunction<LoginAsMutation, LoginAsMutationVariables>;
+
+    export function useLoginAsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginAsMutation, LoginAsMutationVariables>) {
+      return ApolloReactHooks.useMutation<LoginAsMutation, LoginAsMutationVariables>(LoginAsDocument, baseOptions);
+    };
+export type LoginAsMutationHookResult = ReturnType<typeof useLoginAsMutation>;
+export type LoginAsMutationResult = ApolloReactCommon.MutationResult<LoginAsMutation>;
+export type LoginAsMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginAsMutation, LoginAsMutationVariables>;
 export const RedeemTicketDocument = gql`
     mutation RedeemTicket {
   redeemTicket {

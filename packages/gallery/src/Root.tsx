@@ -8,12 +8,14 @@ import { hot } from "react-hot-loader";
 import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 
+import EntityToken from "context/EntityToken";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
 import Journey from "context/Journey";
+import Login from "pages/Login";
 import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
@@ -38,6 +40,7 @@ const Providers = nest([
   PanelVisibility.Provider,
   ApolloProvider,
   ExhibitionThemeProvider,
+  EntityToken.Provider,
   DndProvider,
   Router,
 ]);
@@ -53,6 +56,7 @@ function Root() {
           <WithPanel>
             <Switch>
               <Route path="/" exact component={Home} />
+              <Route path="/login" exact component={Login} />
               <Route path="/:slug([eE]\d\d[sS]\d\d)" component={Exhibition} />
               <Route component={Home} />
             </Switch>

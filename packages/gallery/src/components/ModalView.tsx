@@ -3,8 +3,9 @@ import { ZIndex } from "lib/zIndex";
 import { animated, useTransition } from "react-spring";
 import { map } from "lodash-es";
 import Modal from "context/Modal";
-import React, { ReactNode, useCallback } from "react";
+import React, { ComponentType, useCallback } from "react";
 import styled from "styled-components";
+import useKey from "use-key-hook";
 import useRouter from "context/useRouter";
 
 const Container = styled(animated.div)`
@@ -24,15 +25,11 @@ const Container = styled(animated.div)`
   z-index: ${ZIndex.ModalBackground};
 `;
 
-const ModalContainer = styled(animated.div)`
-  background-color: blue;
-`;
-
 export default function ModalView({
   routes,
   onDismiss,
 }: {
-  routes: { [path: string]: ReactNode };
+  routes: { [path: string]: ComponentType<any> };
   onDismiss?: () => void;
 }) {
   const { location } = useRouter();
@@ -58,6 +55,14 @@ export default function ModalView({
     [onDismiss],
   );
 
+  useKey(
+    () => isOpen && onDismiss(),
+    {
+      detectKeys: [27], // ESC
+    },
+    { dependencies: [isOpen, onDismiss] },
+  );
+
   return (
     <>
       <Modal.Source>
@@ -77,13 +82,13 @@ export default function ModalView({
                 ),
               }}
             >
-              <ModalContainer style={props}>
+              <animated.div style={props}>
                 <Switch location={item}>
                   {map(routes, (node, path) => (
-                    <Route key={path} exact path={path} render={() => node} />
+                    <Route key={path} exact path={path} component={node} />
                   ))}
                 </Switch>
-              </ModalContainer>
+              </animated.div>
             </Container>
           );
         })}

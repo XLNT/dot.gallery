@@ -1,0 +1,3 @@
+mutation LoginAs($accessToken: String!) {
+  loginAs(accessToken: $accessToken)
+}

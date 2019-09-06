@@ -7,9 +7,11 @@ import { useRedeemTicketMutation } from "operations";
 import AnimatedPanelContent from "components/AnimatedPanelContent";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
+import HaveTicketModal from "./HaveTicketModal";
 import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
 import React, { useCallback } from "react";
+import RequestTicketModal from "./RequestTicketModal";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useContentful from "hook/useContentful";
@@ -164,8 +166,10 @@ export default function Home() {
       <ModalView
         onDismiss={goHome}
         routes={{
-          "/request": <Link to="/login">login</Link>,
-          "/login": "login",
+          "/request": RequestTicketModal,
+          "/login": RequestTicketModal,
+          "/have-ticket": HaveTicketModal,
+          "/want-ticket": HaveTicketModal,
         }}
       />
     </>
