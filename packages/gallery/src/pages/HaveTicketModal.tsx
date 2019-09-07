@@ -1,16 +1,16 @@
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-import auth0 = require("auth0-js");
 
 import { format } from "lib/exhibitionSlug";
+import { requestLogin } from "client/auth0";
 import EmailInput from "components/EmailInput";
 import EnterButton from "components/EnterButton";
-import EntityToken from "context/EntityToken";
 import ModalFrame from "components/ModalFrame";
 import ModalHeader from "components/ModalHeader";
 import ModalSubtitle from "components/ModalSubtitle";
 import ModalTitle from "components/ModalTitle";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useIsLoggedIn from "hook/useIsLoggedIn";
 import useRouter from "context/useRouter";
 
 const ModalAction = styled.div`
@@ -24,8 +24,7 @@ const StyledEnterButton = styled(EnterButton)`
 
 export default function HaveTicketModal() {
   const { history } = useRouter();
-  const [token, , hydratedToken] = EntityToken.useContainer();
-  const isLoggedIn = hydratedToken && !!token;
+  const isLoggedIn = useIsLoggedIn();
   const emailInput = useRef<HTMLInputElement>();
 
   const [isRequestingLogin, setIsRequestingLogin] = useState<boolean>(false);
@@ -40,30 +39,15 @@ export default function HaveTicketModal() {
 
   const onSubmit = useCallback(async () => {
     setIsRequestingLogin(true);
-    const webAuth = new auth0.WebAuth({
-      domain: "bydot.auth0.com",
-      clientID: "fNGKI8h4vmuJRIPOC247QJHL7aJb6DPN",
-      redirectUri: `http://localhost:3000/login?${new URLSearchParams({
-        goto: format(exhibition.number, show.number),
-      })}`,
-    });
 
-    webAuth.passwordlessStart(
-      {
-        connection: "email",
-        email: emailInput.current.value,
-        send: "link",
-        authParams: {
-          responseType: "token",
-          scope: "openid email",
-        },
-      },
-      (err, res) => {
-        setIsRequestingLogin(false);
-        setDidRequestLogin(true);
-      },
+    await requestLogin(
+      emailInput.current.value,
+      format(exhibition.number, show.number),
     );
-  }, [exhibition.number, show.number]);
+
+    setIsRequestingLogin(false);
+    setDidRequestLogin(true);
+  }, [exhibition, show]);
 
   return (
     <ModalFrame>

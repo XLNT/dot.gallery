@@ -1,8 +1,8 @@
+import * as Yup from "yup";
 import { AuthenticationError } from "apollo-server-core";
 import { BackroomContext } from "./types";
-import { GalleryIsNotOpenError } from "../errors";
+import { GalleryIsNotOpenError } from "./errors";
 import { and, chain, inputRule, not, or, rule, shield } from "graphql-shield";
-import Yup from "yup";
 import prisma from "./api/prisma";
 
 type ArgsMapper = (any) => string;

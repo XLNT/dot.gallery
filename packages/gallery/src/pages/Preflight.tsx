@@ -1,4 +1,5 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
+import { useRedeemTicketMutation } from "operations";
 import Fullscreen from "context/Fullscreen";
 import React, { useCallback } from "react";
 import fromTheme from "theme/fromTheme";
@@ -90,14 +91,19 @@ export default function Preflight({
   useSuggestedPanelState(false);
   const { setFullscreen } = Fullscreen.useContainer();
 
+  const [redeemTicket] = useRedeemTicketMutation();
+
   const goFoyer = useCallback(async () => {
+    // TODO: handle this error
+    await redeemTicket();
+
     if (process.env.NODE_ENV !== "development") {
       setFullscreen(true);
       await timeout(1000);
     }
 
     setFlow(Flow.Foyer);
-  }, [setFlow, setFullscreen]);
+  }, [redeemTicket, setFlow, setFullscreen]);
 
   return (
     <Container>

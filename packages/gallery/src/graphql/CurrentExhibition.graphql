@@ -6,6 +6,9 @@ query CurrentExhibition {
     extent
     theme
 
+    ticketsAvailable
+    currentTicketPrice
+
     shows {
       id
       number

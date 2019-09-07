@@ -58,6 +58,7 @@ export type Exhibition = {
 export type Mutation = {
   __typename?: 'Mutation',
   loginAs: Scalars['String'],
+  createSession: Scalars['String'],
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
@@ -289,6 +290,7 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginAs?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationLoginAsArgs, 'accessToken'>>,
+  createSession?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   createPlacement?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationCreatePlacementArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
   awardWalk?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationAwardWalkArgs, 'image'>>,

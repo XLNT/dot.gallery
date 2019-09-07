@@ -14,6 +14,7 @@ import getCurrentExhibition from "./lib/getCurrentExhibition";
 import permissions from "./permissions";
 import prisma from "./api/prisma";
 import resolvers from "./resolvers";
+import stripe from "./api/stripe";
 
 const typeDefs = importSchema(resolve(__dirname, "backroom.graphql"));
 
@@ -60,6 +61,7 @@ const server = new ApolloServer({
     ...ctx,
     prisma,
     auth0,
+    stripe,
     currentEntity: await entityFromRequest(ctx.req),
     currentExhibition: await getCurrentExhibition(prisma),
   }),

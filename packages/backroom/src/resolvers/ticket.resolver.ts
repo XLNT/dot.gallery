@@ -3,6 +3,8 @@ import { first } from "lodash";
 import { BackroomContext } from "../types";
 import { Entity } from "../prisma";
 import { EntityResolvers, MutationResolvers } from "../resolvers-types";
+import { formatSlug } from "../lib/exhibitionSlug";
+import { getPrice } from "../lib/pricing";
 import prisma from "../api/prisma";
 import relation from "../lib/relation";
 
@@ -34,12 +36,47 @@ const redeemTicket: MutationResolvers["redeemTicket"] = async (
   });
 };
 
+const createSession: MutationResolvers["createSession"] = async (
+  root,
+  args,
+  { currentEntity, currentExhibition, prisma, stripe },
+) => {
+  const currentPrice = await getPrice(prisma, currentExhibition.id);
+
+  const session = await stripe.checkout.sessions.create({
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    payment_method_types: ["card"],
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    line_items: [
+      {
+        name: `dot.gallery Ticket ${formatSlug(
+          currentExhibition.number,
+        )} Ticket`,
+        description: `${formatSlug(currentExhibition.number)}: Admit One`,
+        amount: currentPrice,
+        currency: "usd",
+        quantity: 1,
+      },
+    ],
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    customer_email: currentEntity ? currentEntity.email : undefined,
+    // TODO: env-dependent
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    success_url: "http://localhost:3000/ticket-success",
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    cancel_url: "http://localhost:3000/ticket-cancel",
+  });
+
+  return session.id;
+};
+
 export default {
   Entity: {
     availableTicket,
   },
   Mutation: {
     redeemTicket,
+    createSession,
   },
   Ticket: {
     exhibition: relation("ticket", "exhibition"),

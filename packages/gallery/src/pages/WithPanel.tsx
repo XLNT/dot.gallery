@@ -78,8 +78,9 @@ const Inner = styled.div`
 `;
 
 const PanelActionText = styled.div`
+  font-weight: bold;
+  text-transform: uppercase;
   color: ${fromTheme("panelText")};
-  display: ${({ isOpen }) => (isOpen ? "none" : "inherit")};
 `;
 
 const PanelContentElement = styled.div`

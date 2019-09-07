@@ -16,7 +16,10 @@ export default () => {
     return createPortal(children, el);
   }
 
-  function Target({ as: As = "div", ...props }: PropsWithChildren<any>) {
+  function Target({
+    as: As = "div",
+    ...props
+  }: PropsWithChildren<{ as: any }>) {
     useEffect(() => {
       _forceUpdate && _forceUpdate();
     }, []);

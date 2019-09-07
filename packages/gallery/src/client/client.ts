@@ -6,7 +6,7 @@ import { onError } from "apollo-link-error";
 import { setContext } from "apollo-link-context";
 import localforage from "localforage";
 
-const URI = "http://localhost:4000/graphql";
+const URI = "http://localhost:3000/graphql";
 
 export default () =>
   new ApolloClient({
@@ -22,7 +22,7 @@ export default () =>
       }),
 
       setContext(async (request, previousContext) => {
-        const token = await localforage.getItem("");
+        const token = await localforage.getItem("entityToken");
         if (token) {
           console.log("sending with token", token);
           return {

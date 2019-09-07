@@ -2,12 +2,11 @@ import { DateTime } from "luxon";
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
 import CalendarSvg from "static/calendar.svg";
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
-import useRouter from "context/useRouter";
 
-import { Show, useRedeemTicketMutation } from "../operations";
+import { Show } from "../operations";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 const toGoogleCalendarDatetime = (isoString: string) =>
@@ -20,7 +19,7 @@ const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  cursor: ${({ isOpen }) => (isOpen ? "pointer" : "not-allowed")};
+  cursor: pointer;
   color: ${({ theme, isOpen }) => (isOpen ? theme.secondary : "inherit")};
   margin-bottom: 3rem;
 `;
@@ -38,7 +37,7 @@ const OpenTime = styled.div`
   text-transform: uppercase;
 
   &:hover {
-    font-style: ${({ isOpen }) => (isOpen ? "italic" : "inherit")};
+    font-style: italic;
   }
 `;
 

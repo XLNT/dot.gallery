@@ -8,10 +8,9 @@ import Stripe from "stripe";
 import getCurrentExhibition from "./lib/getCurrentExhibition";
 import issueTicket from "./lib/issueTicket";
 import prisma from "./api/prisma";
+import stripe from "./api/stripe";
 
 const kStubStripeWebhook = process.env.STUB_STRIPE_WEBHOOK === "true";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 const getRawBody = (req: NowRequest) =>
   new Promise(resolve => {

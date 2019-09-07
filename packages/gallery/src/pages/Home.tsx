@@ -1,22 +1,25 @@
 import { DateTime } from "luxon";
-import { Link } from "react-router-dom";
-import { Route, Switch } from "react-router";
+import { get } from "lodash";
+import React, { useCallback } from "react";
+import styled from "styled-components";
+
 import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
-import { useRedeemTicketMutation } from "operations";
+import { useCurrentEntityQuery } from "operations";
 import AnimatedPanelContent from "components/AnimatedPanelContent";
+import EntityToken from "context/EntityToken";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
-import HaveTicketModal from "./HaveTicketModal";
+import HaveTicketModal from "pages/HaveTicketModal";
 import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
-import React, { useCallback } from "react";
 import RequestTicketModal from "./RequestTicketModal";
+import WantTicketModal from "pages/WantTicketModal";
 import fromTheme from "theme/fromTheme";
-import styled from "styled-components";
 import useContentful from "hook/useContentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import useIsLoggedIn from "hook/useIsLoggedIn";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -68,24 +71,26 @@ export default function Home() {
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = useContentful(ABOUT_ID);
   const { history } = useRouter();
-
-  const [redeemTicket] = useRedeemTicketMutation({
-    refetchQueries: ["CurrentEntity"],
-    awaitRefetchQueries: true,
-  });
+  const isLoggedIn = useIsLoggedIn();
+  const { data } = useCurrentEntityQuery();
+  const availableTicket = get(data, ["currentEntity", "availableTicket"], null);
+  const hasAvailableTicket = !!availableTicket;
 
   const goHome = useCallback(() => history.push("/"), [history]);
 
-  // const goExhibition = useCallback(async () => {
-  //   await redeemTicket();
-  //   history.push(`/${format(exhibition.number, number)}`);
-  // }, [exhibition.number, history, redeemTicket]);
-
   const onExhibitionClick = useCallback(
     show => {
-      history.push("/request");
+      if (isLoggedIn) {
+        if (hasAvailableTicket) {
+          history.push("/have-ticket");
+        } else {
+          history.push("/want-ticket");
+        }
+      } else {
+        history.push("/request");
+      }
     },
-    [history],
+    [hasAvailableTicket, history, isLoggedIn],
   );
 
   // TODO: use react-spring to animate this transition between states
@@ -169,7 +174,7 @@ export default function Home() {
           "/request": RequestTicketModal,
           "/login": RequestTicketModal,
           "/have-ticket": HaveTicketModal,
-          "/want-ticket": HaveTicketModal,
+          "/want-ticket": WantTicketModal,
         }}
       />
     </>

@@ -66,32 +66,34 @@ export default function ModalView({
   return (
     <>
       <Modal.Source>
-        {transitions.map(({ item, key, props }) => {
-          if (!item) {
-            return null;
-          }
+        <>
+          {transitions.map(({ item, key, props }) => {
+            if (!item) {
+              return null;
+            }
 
-          return (
-            <Container
-              key={key}
-              onClick={onContainerClick}
-              style={{
-                opacity: props.opacity,
-                pointerEvents: props.opacity.interpolate(o =>
-                  o > 0.5 ? "all" : "none",
-                ),
-              }}
-            >
-              <animated.div style={props}>
-                <Switch location={item}>
-                  {map(routes, (node, path) => (
-                    <Route key={path} exact path={path} component={node} />
-                  ))}
-                </Switch>
-              </animated.div>
-            </Container>
-          );
-        })}
+            return (
+              <Container
+                key={key}
+                onClick={onContainerClick}
+                style={{
+                  opacity: props.opacity,
+                  pointerEvents: props.opacity.interpolate(o =>
+                    o > 0.5 ? "all" : "none",
+                  ),
+                }}
+              >
+                <animated.div style={props}>
+                  <Switch location={item}>
+                    {map(routes, (node, path) => (
+                      <Route key={path} exact path={path} component={node} />
+                    ))}
+                  </Switch>
+                </animated.div>
+              </Container>
+            );
+          })}
+        </>
       </Modal.Source>
     </>
   );

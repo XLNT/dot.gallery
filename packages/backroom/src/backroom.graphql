@@ -98,6 +98,7 @@ type Query {
 
 type Mutation  {
   loginAs(accessToken: String!): String!
+  createSession: String!
   createPlacement(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   redeemTicket: Ticket!
   awardWalk(image: String!): Asset!

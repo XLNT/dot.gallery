@@ -58,6 +58,7 @@ export type Exhibition = {
 export type Mutation = {
   __typename?: 'Mutation',
   loginAs: Scalars['String'],
+  createSession: Scalars['String'],
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
@@ -168,6 +169,14 @@ export type CreatePlacementMutation = (
   )> }
 );
 
+export type CreateSessionMutationVariables = {};
+
+
+export type CreateSessionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createSession'>
+);
+
 export type CurrentEntityQueryVariables = {};
 
 
@@ -193,7 +202,7 @@ export type CurrentExhibitionQuery = (
   { __typename?: 'Query' }
   & { currentExhibition: Maybe<(
     { __typename?: 'Exhibition' }
-    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme'>
+    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme' | 'ticketsAvailable' | 'currentTicketPrice'>
     & { shows: Maybe<Array<(
       { __typename?: 'Show' }
       & Pick<Show, 'id' | 'number' | 'opensAt' | 'closesAt'>
@@ -262,6 +271,19 @@ export type CreatePlacementMutationFn = ApolloReactCommon.MutationFunction<Creat
 export type CreatePlacementMutationHookResult = ReturnType<typeof useCreatePlacementMutation>;
 export type CreatePlacementMutationResult = ApolloReactCommon.MutationResult<CreatePlacementMutation>;
 export type CreatePlacementMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePlacementMutation, CreatePlacementMutationVariables>;
+export const CreateSessionDocument = gql`
+    mutation CreateSession {
+  createSession
+}
+    `;
+export type CreateSessionMutationFn = ApolloReactCommon.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
+
+    export function useCreateSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, baseOptions);
+    };
+export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
+export type CreateSessionMutationResult = ApolloReactCommon.MutationResult<CreateSessionMutation>;
+export type CreateSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CurrentEntityDocument = gql`
     query CurrentEntity {
   currentEntity {
@@ -296,6 +318,8 @@ export const CurrentExhibitionDocument = gql`
     number
     extent
     theme
+    ticketsAvailable
+    currentTicketPrice
     shows {
       id
       number

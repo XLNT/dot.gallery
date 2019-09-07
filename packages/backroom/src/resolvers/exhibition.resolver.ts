@@ -2,7 +2,7 @@ import { BackroomContext } from "../types";
 import { Exhibition } from "../prisma";
 import { ExhibitionResolvers, QueryResolvers } from "../resolvers-types";
 
-import pricing from "../lib/pricing";
+import { getPrice } from "../lib/pricing";
 import relation from "../lib/relation";
 
 const currentExhibition: QueryResolvers["currentExhibition"] = async (
@@ -22,20 +22,14 @@ const ticketsAvailable: ExhibitionResolvers<
     .aggregate()
     .count();
 
-  console.log(capacity, issuedTicketsCount);
-
   return capacity - issuedTicketsCount;
 };
 
 const currentTicketPrice: ExhibitionResolvers<
   BackroomContext,
   Exhibition
->["currentTicketPrice"] = async (exhibition, args, ctx, info) => {
-  const capacity = exhibition.capacity;
-  const available = await ticketsAvailable(exhibition, args, ctx, info);
-
-  return pricing(capacity, available);
-};
+>["currentTicketPrice"] = async ({ id }, args, { prisma }) =>
+  getPrice(prisma, id);
 
 export default {
   Query: {

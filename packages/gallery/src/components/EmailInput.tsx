@@ -24,6 +24,7 @@ const Arrow = styled(ArrowButton)`
   height: 100%;
   transform: rotate(180deg);
   margin-right: 0.5rem;
+  padding: 0.25rem;
   cursor: pointer;
 `;
 
