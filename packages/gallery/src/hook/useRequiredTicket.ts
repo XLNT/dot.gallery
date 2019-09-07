@@ -11,7 +11,7 @@ export default function useRequiredTicket() {
 
   useEffect(() => {
     if (!loading && !error && !ticket) {
-      history.replace("/");
+      history.replace("/want-ticket");
     }
   }, [error, history, loading, ticket]);
 }
