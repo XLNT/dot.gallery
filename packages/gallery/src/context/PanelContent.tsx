@@ -1,3 +1,3 @@
 import createTeleporter from "lib/teleporter";
 
-export default createTeleporter();
+export default createTeleporter("panel-content");

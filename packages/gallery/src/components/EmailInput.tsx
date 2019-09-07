@@ -5,6 +5,16 @@ import ArrowButton from "./ArrowButton";
 import fromTheme from "theme/fromTheme";
 
 const Form = styled.form`
+  width: 100%;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+`;
+
+const InputContainer = styled.div`
   position: relative;
 `;
 
@@ -45,14 +55,18 @@ export default React.forwardRef(function EmailInput(
 
   return (
     <Form ref={form} className={className} onSubmit={handleSubmit}>
-      <StyledInput
-        ref={ref}
-        type="email"
-        placeholder="email@example.com"
-        autoFocus={true}
-        {...rest}
-      />
-      <Arrow type="submit" />
+      <Label htmlFor="email">Email Address</Label>
+      <InputContainer>
+        <StyledInput
+          id="email"
+          ref={ref}
+          type="email"
+          placeholder="email@example.com"
+          autoFocus={true}
+          {...rest}
+        />
+        <Arrow type="submit" />
+      </InputContainer>
     </Form>
   );
 });

@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import React, { PropsWithChildren, useEffect } from "react";
 import useForceUpdate from "use-force-update";
 
-export default () => {
+export default (id: string) => {
   let _forceUpdate: () => void;
   let el: any;
 
@@ -13,7 +13,7 @@ export default () => {
       return null;
     }
 
-    return createPortal(children, el);
+    return createPortal(children, document.getElementById(id));
   }
 
   function Target({
@@ -24,7 +24,7 @@ export default () => {
       _forceUpdate && _forceUpdate();
     }, []);
 
-    return <As ref={ref => (el = ref)} {...props} />;
+    return <As id={id} ref={ref => (el = ref)} {...props} />;
   }
 
   return {

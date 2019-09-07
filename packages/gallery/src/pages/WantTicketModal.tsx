@@ -5,6 +5,7 @@ import { format } from "lib/exhibitionSlug";
 import { formatCents } from "lib/money";
 import { useCreateSessionMutation } from "operations";
 import BlockButton from "components/BlockButton";
+import EmailInput from "components/EmailInput";
 import EntityToken from "context/EntityToken";
 import ModalFrame from "components/ModalFrame";
 import ModalHeader from "components/ModalHeader";

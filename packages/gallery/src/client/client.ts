@@ -6,7 +6,7 @@ import { onError } from "apollo-link-error";
 import { setContext } from "apollo-link-context";
 import localforage from "localforage";
 
-const URI = "http://localhost:3000/graphql";
+const URI = "/graphql";
 
 export default () =>
   new ApolloClient({
