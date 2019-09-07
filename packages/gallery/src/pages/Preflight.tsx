@@ -7,6 +7,7 @@ import styled from "styled-components";
 import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRequiredLogin from "hook/useRequiredLogin";
+import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Container = styled.div`
@@ -87,6 +88,7 @@ export default function Preflight({
   setFlow,
 }: ExhibitionProps<void>) {
   useRequiredLogin();
+  useRequiredTicket();
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
   const { setFullscreen } = Fullscreen.useContainer();

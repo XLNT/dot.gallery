@@ -7,6 +7,4 @@ const config = {
   STRIPE_PUBLISHABLE: process.env.STRIPE_PUBLISHABLE,
 };
 
-console.log(config);
-
 export default config;

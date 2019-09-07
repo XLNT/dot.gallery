@@ -135,7 +135,7 @@ export default function Home() {
 
         <InnerContainer>
           {shows.map((show, i) => {
-            if (i === 0) {
+            if (i === 0 && process.env.NODE_ENV === "development") {
               show.opensAt = DateTime.local()
                 .minus({ minute: 1 })
                 .toISO();
