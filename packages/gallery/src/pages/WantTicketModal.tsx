@@ -35,12 +35,10 @@ const StyledBlockButton = styled(BlockButton)`
 `;
 
 export default function WantTicketModal() {
-  const isLoggedIn = useIsLoggedIn();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [createSession] = useCreateSessionMutation();
 
-  const { exhibition, show } = useCurrentExhibition();
+  const { exhibition } = useCurrentExhibition();
 
   const onCreditCard = useCallback(async () => {
     setLoading(true);
@@ -56,7 +54,6 @@ export default function WantTicketModal() {
       <ModalHeader>
         <ModalTitle>I want a ticket.</ModalTitle>
         <ModalSubtitle>
-          {isLoggedIn && "Welcome back!"}{" "}
           {exhibition ? (
             <>
               Admission is currently{" "}

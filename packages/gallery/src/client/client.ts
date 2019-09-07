@@ -24,7 +24,6 @@ export default () =>
       setContext(async (request, previousContext) => {
         const token = await localforage.getItem("entityToken");
         if (token) {
-          console.log("sending with token", token);
           return {
             headers: { Authorization: `Bearer ${token}` },
           };
