@@ -1,1 +1,3 @@
-export default () => new window.Stripe("pk_test_qorOrKD11CRfePmJ3w5La9ak");
+import config from "config";
+
+export default () => window.Stripe(config.STRIPE_PUBLISHABLE);

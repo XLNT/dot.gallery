@@ -19,7 +19,7 @@ export default (id: string) => {
   function Target({
     as: As = "div",
     ...props
-  }: PropsWithChildren<{ as: any }>) {
+  }: PropsWithChildren<{ as?: any }>) {
     useEffect(() => {
       _forceUpdate && _forceUpdate();
     }, []);

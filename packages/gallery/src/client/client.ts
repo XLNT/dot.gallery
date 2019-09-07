@@ -6,7 +6,7 @@ import { onError } from "apollo-link-error";
 import { setContext } from "apollo-link-context";
 import localforage from "localforage";
 
-const URI = "/graphql";
+import config from "config";
 
 export default () =>
   new ApolloClient({
@@ -34,7 +34,7 @@ export default () =>
       }),
 
       new HttpLink({
-        uri: URI,
+        uri: config.BACKROOM_URI,
       }),
     ]),
     cache: new InMemoryCache(),

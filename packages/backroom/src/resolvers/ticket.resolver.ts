@@ -62,9 +62,9 @@ const createSession: MutationResolvers["createSession"] = async (
     customer_email: currentEntity ? currentEntity.email : undefined,
     // TODO: env-dependent
     // eslint-disable-next-line @typescript-eslint/camelcase
-    success_url: "http://localhost:3000/ticket-success",
+    success_url: `${process.env.BASE_URL}/ticket-success`,
     // eslint-disable-next-line @typescript-eslint/camelcase
-    cancel_url: "http://localhost:3000/ticket-cancel",
+    cancel_url: `${process.env.BASE_URL}/ticket-cancel`,
   });
 
   return session.id;
