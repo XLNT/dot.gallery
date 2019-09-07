@@ -19,6 +19,7 @@ import Login from "pages/Login";
 import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
+import TicketSuccess from "pages/TicketSuccess";
 import WithPanel from "pages/WithPanel";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
@@ -57,6 +58,7 @@ function Root() {
             <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/login" exact component={Login} />
+              <Route path="/ticket-success" exact component={TicketSuccess} />
               <Route path="/:slug([eE]\d\d[sS]\d\d)" component={Exhibition} />
               <Route component={Home} />
             </Switch>

@@ -49,9 +49,7 @@ const createSession: MutationResolvers["createSession"] = async (
     // eslint-disable-next-line @typescript-eslint/camelcase
     line_items: [
       {
-        name: `dot.gallery Ticket ${formatSlug(
-          currentExhibition.number,
-        )} Ticket`,
+        name: `dot.gallery ${formatSlug(currentExhibition.number)} Ticket`,
         description: `${formatSlug(currentExhibition.number)}: Admit One`,
         amount: currentPrice,
         currency: "usd",
@@ -62,9 +60,9 @@ const createSession: MutationResolvers["createSession"] = async (
     customer_email: currentEntity ? currentEntity.email : undefined,
     // TODO: env-dependent
     // eslint-disable-next-line @typescript-eslint/camelcase
-    success_url: `${process.env.BASE_URL}/ticket-success`,
+    success_url: `${process.env.BASE_URI}/ticket-success`,
     // eslint-disable-next-line @typescript-eslint/camelcase
-    cancel_url: `${process.env.BASE_URL}/ticket-cancel`,
+    cancel_url: `${process.env.BASE_URI}/want-ticket`,
   });
 
   return session.id;

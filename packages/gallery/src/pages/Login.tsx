@@ -27,11 +27,11 @@ export default function Login() {
   const { history, location } = useRouter();
 
   const [, setEntityToken] = EntityToken.useContainer();
-  const [loginAs] = useLoginAsMutation();
+  const [loginAs, { error }] = useLoginAsMutation();
 
   const searchParams = new URLSearchParams(location.search);
   const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
-  const goto = `/${searchParams.get("goto") || ""}`;
+  const goto = `/${searchParams.get("goto") || "have-ticket"}`;
   const accessToken = hashParams.get("access_token");
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <Container>
-      {accessToken ? (
+      {accessToken && !error ? (
         <Loading>Logging you in...</Loading>
       ) : (
         <Loading>

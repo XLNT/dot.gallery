@@ -5,6 +5,7 @@ config({ path: resolve(__dirname, "../../../.env") });
 import { NowRequest, NowResponse } from "@now/node";
 import { get } from "lodash";
 import Stripe from "stripe";
+import auth0 from "./api/auth0";
 import getCurrentExhibition from "./lib/getCurrentExhibition";
 import issueTicket from "./lib/issueTicket";
 import prisma from "./api/prisma";
@@ -43,7 +44,16 @@ export default async (req: NowRequest, res: NowResponse) => {
   // Handle the checkout.session.completed event
   if (event.type === "checkout.session.completed") {
     const session: Record<string, any> = event.data.object;
-    let email: string = get(session, ["customer", "email"]);
+    const customerId: string = get(session, ["customer"]);
+
+    let email: string;
+    if (!customerId) {
+      if (!kStubStripeWebhook) {
+        // get customer Id and set email
+        const customer = await stripe.customers.retrieve(customerId);
+        email = customer.email;
+      }
+    }
 
     if (!email) {
       // no customer!
@@ -54,22 +64,24 @@ export default async (req: NowRequest, res: NowResponse) => {
       email = "matt@bydot.app";
     }
 
-    let exhibitionId: string = get(session, [
-      "display_items",
-      0,
-      "custom",
-      "id",
-    ]);
-
-    if (!exhibitionId) {
-      if (!kStubStripeWebhook) {
-        return bail(`No exhibition id provided.`);
-      }
-      exhibitionId = (await getCurrentExhibition(prisma)).id;
-    }
+    const exhibitionId = (await getCurrentExhibition(prisma)).id;
 
     await issueTicket(prisma, exhibitionId, { email });
+
+    // send login email
+    await auth0.passwordless.sendEmail({
+      email,
+      send: "link",
+      authParams: {
+        responseType: "token",
+        scope: "openid email",
+      },
+    });
+
+    res.json({ received: true, email, exhibitionId });
+    return;
   }
 
   res.json({ received: true });
+  return;
 };

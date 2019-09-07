@@ -57,13 +57,15 @@ export default function WantTicketModal() {
         <ModalTitle>I want a ticket.</ModalTitle>
         <ModalSubtitle>
           {isLoggedIn && "Welcome back!"}{" "}
-          {exhibition && (
+          {exhibition ? (
             <>
               Admission is currently{" "}
               {formatCents(exhibition.currentTicketPrice)} and{" "}
               {exhibition.ticketsAvailable} tickets remain. Tickets are valid
               for any show during the {format(exhibition.number)} exhibition.
             </>
+          ) : (
+            "Loading exhibition info..."
           )}
         </ModalSubtitle>
       </ModalHeader>

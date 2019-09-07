@@ -2036,11 +2036,6 @@
   resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-9.10.6.tgz#9782ac28ea9cff5a2594b780fd3fd0caa615d1e6"
   integrity sha512-tPdhjqzQRJOdILFLssr/zrinjNvYsKKrEzS74XK80ZkQJKejjTERbIh3+T5niFKxx3XYPB3140ys8Y4Q2UFwHw==
 
-"@types/auth0@^2.9.20":
-  version "2.9.20"
-  resolved "https://registry.yarnpkg.com/@types/auth0/-/auth0-2.9.20.tgz#d9379dca974db690723e3506321b44c50f6124c4"
-  integrity sha512-308axzqFXevLHlf4A3/D2bnLHbflGVqHt0qwndA+XroznRK+pQ+4sHe9AAK5jJNRdAL5ZXT+JgPLugUrz96JTw==
-
 "@types/body-parser@*":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.1.tgz#18fcf61768fb5c30ccc508c21d6fd2e8b3bf7897"

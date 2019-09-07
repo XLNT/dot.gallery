@@ -13,14 +13,14 @@
       "use": "@now/node"
     },
     {
-      "src": "packages/backroom/src/stripe.ts",
+      "src": "packages/backroom/src/stripe_webhook.ts",
       "use": "@now/node"
     }
   ],
   "routes": [
     {
       "src": "/stripe/webhook",
-      "dest": "packages/backroom/src/stripe.ts"
+      "dest": "packages/backroom/src/stripe_webhook.ts"
     },
     {
       "src": "/graphql",
@@ -36,7 +36,7 @@
   ],
   "env": {
     "PRISMA_ENDPOINT": "https://gallery-v1-f5f0a401ff.herokuapp.com",
-    "BASE_URL": "https://dot.gallery",
+    "BASE_URI": "https://dot.gallery",
     "BACKROOM_URI": "/graphql",
     "AUTH0_CLIENT_ID": "@backroom-auth0-client-id",
     "STRIPE_PUBLISHABLE": "@backroom-stripe-publishable",
