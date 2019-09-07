@@ -21,10 +21,10 @@ export default function WithContentTransition({
     React.Children.toArray(children),
     null,
     {
-      initial: { transform: "translateY(2rem)", opacity: 0 },
-      from: { transform: "translateY(2rem)", opacity: 0 },
-      enter: { transform: "translateY(0)", opacity: 1 },
-      leave: { transform: "translateY(-2rem)", opacity: 0 },
+      initial: { transform: "scale(1)", opacity: 0 },
+      from: { transform: "scale(1.05)", opacity: 0 },
+      enter: { transform: "scale(1)", opacity: 1 },
+      leave: { transform: "scale(0.95)", opacity: 0 },
     },
   );
 

@@ -9,6 +9,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import arrow from "static/arrow.svg";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
+import useBreakpoints from "hook/useBreakpoints";
 import useDimensions from "react-use-dimensions";
 
 const Backboard = styled.div`
@@ -28,6 +29,8 @@ const Content = styled(animated.div)`
 `;
 
 const PanelContainer = styled(animated.div)`
+  box-sizing: content-box;
+
   z-index: ${ZIndex.Panel};
   position: absolute;
   top: 0;
@@ -39,15 +42,10 @@ const PanelContainer = styled(animated.div)`
   padding-right: 1rem;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
-  <animated.span {...props} />
-))`
+const PanelButton = styled(animated.span)`
   user-select: none;
   z-index: ${ZIndex.Panel};
   position: absolute;
-  bottom: -1.75rem;
-  right: calc(1rem + ${({ panelWidth }) => panelWidth}px);
   font-size: 1rem;
   padding: 0.75rem;
 
@@ -59,10 +57,8 @@ const PanelButton = styled(({ canTogglePanel, panelWidth, ...props }) => (
 
   transition: transform 0.1s ease-in;
 
-  display: ${({ canTogglePanel }) => (canTogglePanel ? "flex" : "none")};
-
-  transform-origin: right;
-  transform: rotate(90deg);
+  transform-origin: 25% 50%;
+  transform: rotate(-90deg);
 `;
 
 const Inner = styled.div`
@@ -78,15 +74,29 @@ const Inner = styled.div`
 `;
 
 const PanelActionText = styled.div`
+  margin-left: 0.5rem;
   font-weight: bold;
   text-transform: uppercase;
   color: ${fromTheme("panelText")};
 `;
 
-const PanelContentElement = styled.div`
+const PanelContentElement = styled(animated.div)`
+  position: relative;
   flex: 1;
   display: flex;
-  width: 33vw;
+  width: 100%;
+
+  height: calc(100% - 120px);
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(transparent, white);
+  }
 `;
 
 const Arrow = styled(animated.img)`
@@ -99,53 +109,80 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
   const [isVisible] = PanelVisibility.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
 
+  const overlayButton = useBreakpoints([true, true, false]);
+  const compressContent = useBreakpoints([false, false, true]);
+  const panelExtentRatio = useBreakpoints([90, 90, 33]);
+
   const togglePanel = useCallback(() => setPanelState(!isOpen), [
     isOpen,
     setPanelState,
   ]);
 
-  const [panelRef, { width: panelWidth }] = useDimensions();
+  const [
+    ref,
+    { width: backboardWidth = document.body.clientWidth },
+  ] = useDimensions();
+  const [buttonRef, { width: buttonWidth = 0 }] = useDimensions();
+
+  const panelWidth = (panelExtentRatio / 100.0) * backboardWidth;
 
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;
 
-  const { x, width, deg, opacity } = useSpring({
+  const {
+    width,
+    panelWidth: animatedPanelWidth,
+    buttonRightOffset,
+    buttonBottomOffset,
+    opacity,
+    transform,
+    arrowTransform,
+    progress,
+  } = useSpring({
+    progress: isVisible ? 1 : 0,
     opacity: isVisible ? 1 : 0,
-    x: showPanel ? 0 : 1 * (panelWidth || 0),
-    width: showPanel ? panelWidth || 0 : 0,
-    deg: showPanel ? 90 : -90,
+    transform: `translateX(${showPanel ? 0 : panelWidth}px)`,
+    arrowTransform: `rotate(${showPanel ? -90 : 90}deg)`,
+    panelWidth,
+    width: backboardWidth - (compressContent && showPanel ? panelWidth : 0),
+    buttonRightOffset:
+      panelWidth -
+      buttonWidth +
+      (showPanel && overlayButton ? -buttonWidth : 0),
+    buttonBottomOffset: showPanel && overlayButton ? 16 : 0,
     from: {
-      x: document.body.clientWidth,
       opacity: isVisible ? 1 : 0,
     },
   });
 
   return (
-    <Backboard>
-      <Content style={{ width: width.interpolate(w => `calc(100% - ${w}px)`) }}>
-        {children}
-      </Content>
+    <Backboard ref={ref}>
+      <Content style={{ width }}>{children}</Content>
       <PanelContainer
-        ref={panelRef}
         style={{
-          transform: x.interpolate(x => `translateX(${x}px)`),
+          width: animatedPanelWidth,
+          transform,
           opacity,
-          pointerEvents: opacity.interpolate(o => (o === 0 ? "none" : "all")),
+          pointerEvents: progress.interpolate(p => (p > 0.5 ? "all" : "none")),
         }}
       >
         <Inner>
           <PanelButton
+            ref={buttonRef}
+            style={{
+              right: buttonRightOffset,
+              bottom: buttonBottomOffset,
+              display: progress.interpolate(p => (p > 0.5 ? "flex" : "none")),
+            }}
             onClick={canTogglePanel ? togglePanel : null}
-            canTogglePanel={canTogglePanel}
-            panelWidth={panelWidth}
           >
-            <PanelAction.Target as={PanelActionText} isOpen={isOpen} />
             <Arrow
               src={arrow}
               style={{
-                transform: deg.interpolate(d => `rotate(${d}deg)`),
+                transform: arrowTransform,
               }}
             />
+            <PanelAction.Target as={PanelActionText} isOpen={isOpen} />
           </PanelButton>
           <PanelContent.Target as={PanelContentElement} />
         </Inner>

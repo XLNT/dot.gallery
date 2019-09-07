@@ -16,6 +16,7 @@ import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
 import Journey from "context/Journey";
 import Login from "pages/Login";
+import MediaQuery from "context/MediaQuery";
 import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
@@ -31,6 +32,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${fromTheme("fontFamily")};
   }
+
+  /* * {
+    box-sizing: content-box;
+  } */
 `;
 
 const Providers = nest([
@@ -42,6 +47,7 @@ const Providers = nest([
   ApolloProvider,
   ExhibitionThemeProvider,
   EntityToken.Provider,
+  MediaQuery.Provider,
   DndProvider,
   Router,
 ]);
