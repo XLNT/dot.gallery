@@ -3,8 +3,9 @@ import React, { ComponentProps, PropsWithChildren } from "react";
 import RichText from "@madebyconnor/rich-text-to-jsx";
 import styled from "styled-components";
 
-const Heading1 = styled.h1`
+export const Heading1 = styled.h1`
   margin-top: 0;
+  margin-bottom: 0;
 `;
 
 const Blockquote = styled.blockquote`
@@ -16,8 +17,10 @@ const Blockquote = styled.blockquote`
   }
 `;
 
-const P = styled.p`
+export const P = styled.p`
   line-height: 1.3rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 `;
 
 export default function GalleryRichText(

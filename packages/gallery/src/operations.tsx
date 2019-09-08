@@ -46,6 +46,7 @@ export type Exhibition = {
   number: Scalars['Int'],
   theme?: Maybe<Scalars['Json']>,
   extent: Scalars['Int'],
+  capacity: Scalars['Int'],
   shows?: Maybe<Array<Show>>,
   rooms?: Maybe<Array<Room>>,
   createdAt: Scalars['DateTime'],
@@ -202,7 +203,7 @@ export type CurrentExhibitionQuery = (
   { __typename?: 'Query' }
   & { currentExhibition: Maybe<(
     { __typename?: 'Exhibition' }
-    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme' | 'ticketsAvailable' | 'currentTicketPrice'>
+    & Pick<Exhibition, 'id' | 'title' | 'number' | 'extent' | 'theme' | 'ticketsAvailable' | 'currentTicketPrice' | 'capacity'>
     & { shows: Maybe<Array<(
       { __typename?: 'Show' }
       & Pick<Show, 'id' | 'number' | 'opensAt' | 'closesAt'>
@@ -320,6 +321,7 @@ export const CurrentExhibitionDocument = gql`
     theme
     ticketsAvailable
     currentTicketPrice
+    capacity
     shows {
       id
       number

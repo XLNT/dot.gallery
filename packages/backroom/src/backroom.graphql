@@ -45,6 +45,7 @@ type Exhibition {
   number: Int!
   theme: Json
   extent: Int!
+  capacity: Int!
 
   shows: [Show!]
   rooms: [Room!]

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { get } from "lodash";
-import React, { useCallback } from "react";
+import { first, get, last } from "lodash";
+import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 
 import { ShowState, getShowState } from "lib/shows";
@@ -8,7 +8,7 @@ import { format } from "lib/exhibitionSlug";
 import { useCurrentEntityQuery } from "operations";
 import AnimatedPanelContent from "components/AnimatedPanelContent";
 import ExhibitionTimes from "components/ExhibitionTimes";
-import GalleryRichText from "components/GalleryRichText";
+import GalleryRichText, { Heading1, P } from "components/GalleryRichText";
 import HaveTicketModal from "pages/HaveTicketModal";
 import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
@@ -51,6 +51,7 @@ const ExhibitionTitle = styled.h1`
 `;
 
 const EmphasizeTitle = styled.span`
+  font-weight: bold;
   font-style: italic;
 `;
 
@@ -88,6 +89,16 @@ const TimezoneSelect = styled.select`
   text-overflow: "";
 `;
 
+const ExhibitionDetails = styled.div`
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const ExhibitionText = styled(P)`
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+`;
+
 export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
@@ -115,6 +126,23 @@ export default function Home() {
       }
     },
     [hasAvailableTicket, history, isLoggedIn],
+  );
+
+  const opensAt: string = get(first(get(exhibition, "shows")), "opensAt");
+  const closesAt: string = get(last(get(exhibition, "shows")), "closesAt");
+  const exhibitionOpen = useMemo(
+    () =>
+      opensAt &&
+      DateTime.fromISO(opensAt).toLocaleString({
+        day: "numeric",
+        month: "long",
+      }),
+    [opensAt],
+  );
+  const exhibitionClose = useMemo(
+    () =>
+      closesAt && DateTime.fromISO(closesAt).toLocaleString(DateTime.DATE_FULL),
+    [closesAt],
   );
 
   // TODO: use react-spring to animate this transition between states
@@ -194,20 +222,35 @@ export default function Home() {
       </Container>
       <PanelAction.Source>&nbsp;&nbsp;About</PanelAction.Source>
       <AnimatedPanelContent>
-        {state === "pending" && (
-          <>
-            <h1>Loading...</h1>
-          </>
-        )}
-        {state === "rejected" && (
-          <>
-            <h1>dot.gallery</h1>
-            <h3>Unable to load info. ¯\_(ツ)_/¯</h3>
-          </>
-        )}
-        {state === "resolved" && (
-          <GalleryRichText richText={result.fields.body} />
-        )}
+        <>
+          {state === "pending" && <h1>Loading...</h1>}
+          {state === "rejected" && (
+            <>
+              <Heading1>About</Heading1>
+              <h3>
+                Unable to load info. Check your internet connection? ¯\_(ツ)_/¯
+              </h3>
+            </>
+          )}
+          {state === "resolved" && (
+            <GalleryRichText richText={result.fields.body} />
+          )}
+          {exhibition && (
+            <ExhibitionDetails>
+              <EmphasizeTitle>{exhibition.title}</EmphasizeTitle>
+              <ExhibitionText>
+                {exhibitionOpen} — {exhibitionClose}
+              </ExhibitionText>
+              <ExhibitionText>
+                {exhibition.ticketsAvailable}/{exhibition.capacity} Tickets are
+                available.
+              </ExhibitionText>
+            </ExhibitionDetails>
+          )}
+          {state === "resolved" && (
+            <GalleryRichText richText={result.fields.bottom} />
+          )}
+        </>
       </AnimatedPanelContent>
 
       <ModalView
