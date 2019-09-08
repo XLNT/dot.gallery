@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -39,14 +40,16 @@ export default function HaveTicketModal() {
 
   const onSubmit = useCallback(async () => {
     setIsRequestingLogin(true);
-
-    await requestLogin(
-      emailInput.current.value,
-      format(exhibition.number, show.number),
-    );
-
-    setIsRequestingLogin(false);
-    setDidRequestLogin(true);
+    try {
+      // if open show, redirect to exhibition, otherwise go home
+      const goto = !!show ? format(exhibition.number, show.number) : "";
+      await requestLogin(emailInput.current.value, goto);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsRequestingLogin(false);
+      setDidRequestLogin(true);
+    }
   }, [exhibition, show]);
 
   return (
