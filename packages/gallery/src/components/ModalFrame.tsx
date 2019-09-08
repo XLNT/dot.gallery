@@ -8,8 +8,8 @@ const Frame = styled.div`
   background-color: ${fromTheme("panel")};
   padding: 0.75rem 1.25rem;
 
-  min-height: ${({ extent }) => extent}vh;
-  max-width: ${({ extent }) => extent}vw;
+  min-height: ${({ height }) => height}vh;
+  max-width: ${({ width }) => width}vw;
 
   display: flex;
   flex-direction: column;
@@ -17,6 +17,7 @@ const Frame = styled.div`
 `;
 
 export default function ModalFrame(props) {
-  const extent = useBreakpoints([80, 60, 40]);
-  return <Frame {...props} extent={extent} />;
+  const width = useBreakpoints([80, 60, 40]);
+  const height = useBreakpoints([60, 60, 40]);
+  return <Frame {...props} width={width} height={height} />;
 }
