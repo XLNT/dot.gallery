@@ -189,6 +189,9 @@ export type CurrentEntityQuery = (
     & { availableTicket: Maybe<(
       { __typename?: 'Ticket' }
       & Pick<Ticket, 'id'>
+    )>, assets: Array<(
+      { __typename?: 'Asset' }
+      & Pick<Asset, 'id' | 'domain' | 'uri'>
     )>, tradableAssets: Array<(
       { __typename?: 'Asset' }
       & Pick<Asset, 'id' | 'domain' | 'uri'>
@@ -292,6 +295,11 @@ export const CurrentEntityDocument = gql`
     handle
     availableTicket {
       id
+    }
+    assets {
+      id
+      domain
+      uri
     }
     tradableAssets {
       id

@@ -7,12 +7,12 @@ import {
 import { ExhibitionProps } from "./ExhibitionProps";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { useAwardWalkMutation, useCurrentEntityQuery } from "../operations";
+import AssetsList from "components/AssetsList";
 import DragTypes from "lib/dragTypes";
 import Fullscreen from "context/Fullscreen";
 import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
-import PresentEntity from "./Gallery/PresentEntity";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
@@ -79,7 +79,7 @@ const collectDrop = (monitor: DropTargetMonitor) => ({
   isOver: monitor.isOver({ shallow: true }),
 });
 
-export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
+export default function GiftShop({  }: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
 
@@ -150,8 +150,9 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
         <StepsContainer>
           <Header>We hope you enjoyed your walk.</Header>
           <Subtitle>
-            Take home your personalized journey by dragging it into your
-            collection.
+            {!!createAssetData
+              ? "We hope you enjoyed the show!"
+              : "Take home your personalized journey by dragging it into your collection."}
           </Subtitle>
         </StepsContainer>
         <GiftContainer>
@@ -170,8 +171,8 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
       <hr style={{ width: "100%" }} />
       <AssetsContainer ref={drop}>
         {data.currentEntity && (
-          <PresentEntity
-            entity={data.currentEntity}
+          <AssetsList
+            assets={data.currentEntity.assets}
             draggable={false}
             wrappable
           >
@@ -188,7 +189,7 @@ export default function GiftShop({ exhibition, show }: ExhibitionProps<void>) {
 
               return null;
             })()}
-          </PresentEntity>
+          </AssetsList>
         )}
       </AssetsContainer>
     </Column>

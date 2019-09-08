@@ -11,6 +11,7 @@ import ModalSubtitle from "components/ModalSubtitle";
 import ModalTitle from "components/ModalTitle";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useIsLoggedIn from "hook/useIsLoggedIn";
+import useIsOpen from "hook/useIsOpen";
 import useRouter from "context/useRouter";
 
 const ModalAction = styled.div`
@@ -24,6 +25,7 @@ const StyledEnterButton = styled(EnterButton)`
 
 export default function HaveTicketModal() {
   const { history } = useRouter();
+  const { isDefinitelyClosed } = useIsOpen();
   const isLoggedIn = useIsLoggedIn();
   const emailInput = useRef<HTMLInputElement>();
 
@@ -54,9 +56,15 @@ export default function HaveTicketModal() {
   return (
     <ModalFrame>
       <ModalHeader>
-        <ModalTitle>I have a ticket.</ModalTitle>
+        <ModalTitle>
+          {isDefinitelyClosed
+            ? "the dot.gallery is closed"
+            : "I have a ticket."}
+        </ModalTitle>
         <ModalSubtitle>
-          {isLoggedIn
+          {isDefinitelyClosed
+            ? "You already have a ticket for this exhibition. Return here for the next showing."
+            : isLoggedIn
             ? "Redeem your ticket to enter the exhibition."
             : didRequestLogin
             ? "Check your email for a link to the exhibition."
@@ -64,7 +72,7 @@ export default function HaveTicketModal() {
         </ModalSubtitle>
       </ModalHeader>
       <ModalAction>
-        {isLoggedIn ? (
+        {isDefinitelyClosed ? null : isLoggedIn ? (
           <StyledEnterButton onClick={goExhibition}>Redeem</StyledEnterButton>
         ) : didRequestLogin ? (
           <ModalSubtitle>

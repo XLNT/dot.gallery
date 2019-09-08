@@ -5,7 +5,6 @@ import { get } from "lodash-es";
 import AnimatedPanelContent from "./AnimatedPanelContent";
 import DragTypes from "lib/dragTypes";
 import GalleryRichText from "./GalleryRichText";
-import PanelAction from "context/PanelAction";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import useContentful from "hook/useContentful";
@@ -36,6 +35,15 @@ export default function Room({ room }: RoomProps) {
   const [result, error, state] = useContentful(room.entryId);
 
   const uri = get(result, "fields.work.fields.file.url");
+  const contentType: string = get(
+    result,
+    "fields.work.fields.file.contentType",
+  );
+  const workElement = contentType
+    ? contentType.startsWith("video")
+      ? "video"
+      : "img"
+    : undefined;
   const [createAsset] = useCreatePlacementMutation({
     refetchQueries: ["CurrentEntity"],
   });
@@ -68,9 +76,17 @@ export default function Room({ room }: RoomProps) {
   return (
     <>
       <Container>
-        <Work ref={dropRef} src={uri} style={style} />
+        {contentType && (
+          <Work
+            as={workElement}
+            ref={dropRef}
+            src={uri}
+            style={style}
+            autoPlay
+            loop
+          />
+        )}
       </Container>
-      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
       <AnimatedPanelContent>
         {state === "resolved" && (
           <GalleryRichText richText={result.fields.body} />

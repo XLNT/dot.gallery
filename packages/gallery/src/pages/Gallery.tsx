@@ -12,6 +12,7 @@ import { animated, useTransition } from "react-spring";
 import { format } from "lib/exhibitionSlug";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
+import PanelAction from "context/PanelAction";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
@@ -145,6 +146,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
         ))}
       </Canvas>
       <SocialLayer />
+      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
     </>
   );
 }

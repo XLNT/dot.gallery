@@ -1,8 +1,9 @@
-import { CurrentEntityQuery } from "../../operations";
-import DraggableAsset from "components/DraggableAssets";
 import React, { PropsWithChildren } from "react";
-import StaticAsset from "components/StaticAsset";
 import styled from "styled-components";
+
+import { CurrentEntityQuery } from "../../operations";
+
+import AssetsList from "components/AssetsList";
 
 const Container = styled.div`
   flex: 1;
@@ -13,23 +14,6 @@ const Container = styled.div`
 `;
 
 const Name = styled.div``;
-
-const Assets = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  flex-wrap: ${({ wrappable }) => (wrappable ? "wrap" : "no-wrap")};
-`;
-
-const StyledDraggableAsset = styled(DraggableAsset)`
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-`;
-
-const StyledStaticAsset = styled(StaticAsset)`
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-`;
 
 export default function PresentEntity({
   entity,
@@ -45,16 +29,13 @@ export default function PresentEntity({
   return (
     <Container {...rest}>
       <Name>{entity.handle}</Name>
-      <Assets wrappable={wrappable}>
-        {entity.tradableAssets.map(asset =>
-          draggable ? (
-            <StyledDraggableAsset key={asset.id} asset={asset} />
-          ) : (
-            <StyledStaticAsset key={asset.id} asset={asset} />
-          ),
-        )}
+      <AssetsList
+        assets={entity.tradableAssets}
+        wrappable={wrappable}
+        draggable={draggable}
+      >
         {children}
-      </Assets>
+      </AssetsList>
     </Container>
   );
 }

@@ -5,6 +5,11 @@ query CurrentEntity {
     availableTicket {
       id
     }
+    assets {
+      id
+      domain
+      uri
+    }
     tradableAssets {
       id
       domain

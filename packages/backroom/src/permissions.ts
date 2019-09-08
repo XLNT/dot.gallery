@@ -118,6 +118,7 @@ export default shield(
         isKnownEntity,
         ownsAsset(({ assetId }) => assetId),
       ),
+      awardWalk: chain(isKnownEntity, onlyDuringActiveShow),
       modIssueTicket: chain(isKnownEntity, onlyMod),
     },
   },
