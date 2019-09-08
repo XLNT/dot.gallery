@@ -22,6 +22,7 @@ const ModalAction = styled.div`
   justify-self: flex-end;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const StyledBlockButton = styled(BlockButton)`
@@ -32,6 +33,7 @@ const StyledBlockButton = styled(BlockButton)`
   background-color: ${fromTheme("background")};
 
   margin-right: 1rem;
+  margin-top: 1rem;
 `;
 
 export default function WantTicketModal() {
