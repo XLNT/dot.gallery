@@ -133,16 +133,21 @@ export default function Home() {
   const exhibitionOpen = useMemo(
     () =>
       opensAt &&
-      DateTime.fromISO(opensAt).toLocaleString({
-        day: "numeric",
-        month: "long",
-      }),
-    [opensAt],
+      DateTime.fromISO(opensAt)
+        .setZone(timezone)
+        .toLocaleString({
+          day: "numeric",
+          month: "long",
+        }),
+    [opensAt, timezone],
   );
   const exhibitionClose = useMemo(
     () =>
-      closesAt && DateTime.fromISO(closesAt).toLocaleString(DateTime.DATE_FULL),
-    [closesAt],
+      closesAt &&
+      DateTime.fromISO(closesAt)
+        .setZone(timezone)
+        .toLocaleString(DateTime.DATE_FULL),
+    [closesAt, timezone],
   );
 
   // TODO: use react-spring to animate this transition between states
