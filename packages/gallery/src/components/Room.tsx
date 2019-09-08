@@ -35,10 +35,7 @@ const collect = (monitor: DropTargetMonitor) => ({
 export default function Room({ room }: RoomProps) {
   const [result, error, state] = useContentful(room.entryId);
 
-  const asset = {
-    id: room.id,
-    uri: get(result, "fields.work.fields.file.url"),
-  };
+  const uri = get(result, "fields.work.fields.file.url");
   const [createAsset] = useCreatePlacementMutation({
     refetchQueries: ["CurrentEntity"],
   });
@@ -71,7 +68,7 @@ export default function Room({ room }: RoomProps) {
   return (
     <>
       <Container>
-        <Work ref={dropRef} src={asset.uri.image} style={style} />
+        <Work ref={dropRef} src={uri} style={style} />
       </Container>
       <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
       <AnimatedPanelContent>

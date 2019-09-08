@@ -22,7 +22,7 @@ export default function DraggableAsset({
   asset: Pick<Asset, "id" | "uri">;
 }) {
   const [{ isDragging }, drag, connectDragPreview] = useDrag({
-    item: { type: DragTypes.Asset, id: asset.id, uri: asset.uri },
+    item: { type: DragTypes.Asset, asset },
     collect,
   });
 

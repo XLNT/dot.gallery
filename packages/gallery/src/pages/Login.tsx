@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import EntityToken from "context/EntityToken";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import useIsOpen from "hook/useIsOpen";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -26,16 +27,17 @@ export default function Login() {
   useEnforcePanelVisibility(false);
   const { history, location } = useRouter();
 
+  const { isOpen, loading } = useIsOpen();
   const [, setEntityToken] = EntityToken.useContainer();
   const [loginAs, { error }] = useLoginAsMutation();
 
   const searchParams = new URLSearchParams(location.search);
   const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
-  const goto = `/${searchParams.get("goto") || "have-ticket"}`;
+  const goto = `/${searchParams.get("goto") || (isOpen ? "have-ticket" : "")}`;
   const accessToken = hashParams.get("access_token");
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && !loading) {
       // submit to backend
       loginAs({ variables: { accessToken } }).then(
         ({ data: { loginAs: entityToken } }) => {
@@ -47,7 +49,7 @@ export default function Login() {
         },
       );
     }
-  }, [accessToken, goto, history, loginAs, setEntityToken]);
+  }, [accessToken, goto, history, loading, loginAs, setEntityToken]);
 
   return (
     <Container>

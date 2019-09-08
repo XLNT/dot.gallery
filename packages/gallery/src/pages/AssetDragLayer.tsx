@@ -46,9 +46,9 @@ export default function MyDragLayer() {
   return (
     <DragLayerBackboard>
       {isDragging && pointerOffset && (
-        <DragEffect pointerOffset={pointerOffset} item={item}>
+        <DragEffect pointerOffset={pointerOffset}>
           {itemType === DragTypes.Asset ? (
-            <StaticAsset asset={item} />
+            <StaticAsset asset={item.asset} />
           ) : itemType === DragTypes.Journey ? (
             <JourneyIcon journey={item.journey} size={5} />
           ) : null}

@@ -19,7 +19,7 @@ export default async (
       assets: {
         create: times(3, () => ({
           domain: AssetDomain.Patronage,
-          uri: { image: "https://dot.gallery/token.png" },
+          uri: { image: "https://cdn.bydot.app/token.png" },
         })),
       },
     },

@@ -1,4 +1,3 @@
-import { Room } from "../operations";
 import { find } from "lodash-es";
 
 export type Coords = [number, number];

@@ -113,20 +113,17 @@ export default function Home() {
 
   const goHome = useCallback(() => history.push("/"), [history]);
 
-  const onExhibitionClick = useCallback(
-    show => {
-      if (isLoggedIn) {
-        if (hasAvailableTicket) {
-          history.push("/have-ticket");
-        } else {
-          history.push("/want-ticket");
-        }
+  const onExhibitionClick = useCallback(() => {
+    if (isLoggedIn) {
+      if (hasAvailableTicket) {
+        history.push("/have-ticket");
       } else {
-        history.push("/request");
+        history.push("/want-ticket");
       }
-    },
-    [hasAvailableTicket, history, isLoggedIn],
-  );
+    } else {
+      history.push("/request");
+    }
+  }, [hasAvailableTicket, history, isLoggedIn]);
 
   const opensAt: string = get(first(get(exhibition, "shows")), "opensAt");
   const closesAt: string = get(last(get(exhibition, "shows")), "closesAt");
@@ -220,7 +217,7 @@ export default function Home() {
         >
           {timezones.map(tz => (
             <option key={tz} value={tz}>
-              {tz === "local" ? DateTime.local().zoneName : tz}
+              {tz === "local" ? `Local (${DateTime.local().zoneName})` : tz}
             </option>
           ))}
         </TimezoneSelect>

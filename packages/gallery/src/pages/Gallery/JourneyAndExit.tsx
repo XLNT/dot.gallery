@@ -36,7 +36,7 @@ const JourneyButton = styled.div`
   z-index: ${ZIndex.Journey};
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  right: 2rem;
   width: 4.25rem;
   height: 4.25rem;
 

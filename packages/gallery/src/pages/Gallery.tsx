@@ -57,7 +57,7 @@ const ExhibitionSlug = styled.div`
 export default function Gallery(props: ExhibitionProps<void>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
-  const [journey, appendToJourney] = Journey.useContainer();
+  const [, appendToJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
 
   const { exhibition } = useCurrentExhibition();

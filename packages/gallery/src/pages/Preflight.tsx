@@ -82,11 +82,7 @@ const steps = [
   },
 ];
 
-export default function Preflight({
-  exhibition,
-  show,
-  setFlow,
-}: ExhibitionProps<void>) {
+export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useRequiredLogin();
   useRequiredTicket();
   useEnforcePanelVisibility(false);
@@ -96,8 +92,17 @@ export default function Preflight({
   const [redeemTicket] = useRedeemTicketMutation();
 
   const goFoyer = useCallback(async () => {
-    // TODO: handle this error
-    await redeemTicket();
+    try {
+      await redeemTicket();
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        // ignore
+        console.log("[dev] redeemTicket failed, ignoring...");
+      } else {
+        // TODO: handle this error with a redirect or notice or something
+        throw error;
+      }
+    }
 
     if (process.env.NODE_ENV !== "development") {
       setFullscreen(true);
