@@ -7,6 +7,7 @@ import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 
 import { Show } from "../operations";
+import Timezone from "context/Timezone";
 import useBreakpoints from "hook/useBreakpoints";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
@@ -64,24 +65,32 @@ export default function ExhibitionTimes({
   [_: string]: any;
 }) {
   const { exhibition } = useCurrentExhibition();
+  const [timezone] = Timezone.useContainer();
 
   const scalar = useBreakpoints([2, 3, 3]);
 
   const state = getShowState(show.opensAt, show.closesAt);
 
   const opensAtDate = useMemo(
-    () => DateTime.fromISO(show.opensAt).toLocaleString(DateTime.DATE_MED),
-    [show.opensAt],
+    () =>
+      DateTime.fromISO(show.opensAt)
+        .setZone(timezone)
+        .toLocaleString(DateTime.DATE_MED),
+    [show.opensAt, timezone],
   );
   const opensAtTime = useMemo(
     () =>
-      DateTime.fromISO(show.opensAt).toLocaleString(DateTime.TIME_24_SIMPLE),
-    [show.opensAt],
+      DateTime.fromISO(show.opensAt)
+        .setZone(timezone)
+        .toLocaleString(DateTime.TIME_24_SIMPLE),
+    [show.opensAt, timezone],
   );
   const closesAtTime = useMemo(
     () =>
-      DateTime.fromISO(show.closesAt).toLocaleString(DateTime.TIME_24_SIMPLE),
-    [show.closesAt],
+      DateTime.fromISO(show.closesAt)
+        .setZone(timezone)
+        .toLocaleString(DateTime.TIME_24_SIMPLE),
+    [show.closesAt, timezone],
   );
 
   const calendarLink = useMemo(

@@ -21,6 +21,7 @@ import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
 import TicketSuccess from "pages/TicketSuccess";
+import Timezone from "context/Timezone";
 import WithPanel from "pages/WithPanel";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
@@ -48,6 +49,7 @@ const Providers = nest([
   ExhibitionThemeProvider,
   EntityToken.Provider,
   MediaQuery.Provider,
+  Timezone.Provider,
   DndProvider,
   Router,
 ]);

@@ -7,7 +7,7 @@ export enum ShowState {
 }
 
 export const getShowState = (opensAt: string, closesAt: string): ShowState => {
-  const now = DateTime.local().toUTC();
+  const now = DateTime.utc();
 
   if (now < DateTime.fromISO(opensAt)) {
     return ShowState.Closed;

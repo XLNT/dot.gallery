@@ -7,15 +7,16 @@ import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
 import { useCurrentEntityQuery } from "operations";
 import AnimatedPanelContent from "components/AnimatedPanelContent";
-import EntityToken from "context/EntityToken";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText from "components/GalleryRichText";
 import HaveTicketModal from "pages/HaveTicketModal";
 import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
 import RequestTicketModal from "./RequestTicketModal";
+import Timezone from "context/Timezone";
 import WantTicketModal from "pages/WantTicketModal";
 import fromTheme from "theme/fromTheme";
+import timezones from "lib/timezones";
 import useContentful from "hook/useContentful";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
@@ -49,13 +50,14 @@ const ExhibitionTitle = styled.h1`
   font-size: 3rem;
 `;
 
-const Underlined = styled.span`
-  text-decoration: underline;
+const EmphasizeTitle = styled.span`
+  font-style: italic;
 `;
 
 const InnerContainer = styled.div`
   margin: 0 auto;
   max-width: 90%;
+  padding-bottom: 5rem;
 `;
 
 const ErrorBox = styled.pre`
@@ -65,6 +67,27 @@ const ErrorBox = styled.pre`
   white-space: pre-wrap;
 `;
 
+const TimezoneSelect = styled.select`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-width: 10rem;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+
+  border: 4px solid ${fromTheme("primary")};
+  background-color: ${fromTheme("panel")};
+  color: ${fromTheme("panelText")};
+  font-weight: bold;
+
+  padding: 0.5rem 0.75rem;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+`;
+
 export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
@@ -72,6 +95,7 @@ export default function Home() {
   const [result, , state] = useContentful(ABOUT_ID);
   const { history } = useRouter();
   const isLoggedIn = useIsLoggedIn();
+  const [timezone, setTimezone] = Timezone.useContainer();
   const { data } = useCurrentEntityQuery();
   const availableTicket = get(data, ["currentEntity", "availableTicket"], null);
   const hasAvailableTicket = !!availableTicket;
@@ -130,7 +154,7 @@ export default function Home() {
       <>
         <ExhibitionTitle>
           {format(exhibition.number)}:{" "}
-          <Underlined>{exhibition.title}</Underlined>
+          <EmphasizeTitle>{exhibition.title}</EmphasizeTitle>
         </ExhibitionTitle>
 
         <InnerContainer>
@@ -155,7 +179,19 @@ export default function Home() {
 
   return (
     <>
-      <Container>{renderExhibitionInfo()}</Container>
+      <Container>
+        {renderExhibitionInfo()}
+        <TimezoneSelect
+          onChange={e => setTimezone(e.target.value)}
+          value={timezone}
+        >
+          {timezones.map(tz => (
+            <option key={tz} value={tz}>
+              {tz === "local" ? DateTime.local().zoneName : tz}
+            </option>
+          ))}
+        </TimezoneSelect>
+      </Container>
       <PanelAction.Source>&nbsp;&nbsp;About</PanelAction.Source>
       <AnimatedPanelContent>
         {state === "pending" && (
