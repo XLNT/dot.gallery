@@ -1,8 +1,8 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { useRedeemTicketMutation } from "operations";
+import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
 import React, { useCallback } from "react";
-import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
@@ -18,19 +18,15 @@ const Container = styled.div`
   margin: 2rem 5rem;
 `;
 
+const StyledEnterButton = styled(EnterButton)`
+  font-size: 4rem;
+`;
+
 const ActionContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const EnterButton = styled.span`
-  font-size: 5rem;
-  font-weight: bold;
-  color: ${fromTheme("secondary")};
-  text-transform: uppercase;
-  cursor: pointer;
 `;
 
 const StepsContainer = styled.div`
@@ -120,7 +116,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ))}
       </StepsContainer>
       <ActionContainer>
-        <EnterButton onClick={goFoyer}>Enter</EnterButton>
+        <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
       </ActionContainer>
     </Container>
   );

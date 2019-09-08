@@ -1,7 +1,9 @@
 import React, { PropsWithChildren } from "react";
+import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 
 const Button = styled.div`
+  font-family: ${fromTheme("secondaryFontFamily")};
   color: red;
   font-weight: bold;
   text-transform: uppercase;

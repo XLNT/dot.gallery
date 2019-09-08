@@ -6,4 +6,5 @@ export default {
   panel: "#FFFFFF",
   panelText: "#000000",
   fontFamily: "Effra, Helvetica Neue, sans-serif;",
+  secondaryFontFamily: "Turnip, Effra, Helvetica Neue, sans-serif",
 };

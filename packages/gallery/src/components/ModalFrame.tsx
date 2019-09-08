@@ -18,7 +18,7 @@ const Frame = styled.div`
 
 export default function ModalFrame(props) {
   const width = useBreakpoints([80, 60, 40]);
-  const height = useBreakpoints([60, 60, 40]);
+  const height = useBreakpoints([40, 40, 40]);
 
   return <Frame {...props} width={width} height={height} />;
 }

@@ -8,6 +8,7 @@ import useCurrentExhibition from "hook/useCurrentExhibition";
 
 import { Show } from "../operations";
 import Timezone from "context/Timezone";
+import fromTheme from "theme/fromTheme";
 import useBreakpoints from "hook/useBreakpoints";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
@@ -34,6 +35,7 @@ const OpenDate = styled.div`
 `;
 
 const OpenTime = styled.div`
+  font-family: ${fromTheme("secondaryFontFamily")};
   font-weight: bold;
   font-size: ${({ scalar }) => scalar * 1.5}rem;
   text-transform: uppercase;
