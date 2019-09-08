@@ -156,15 +156,21 @@ export default function Home() {
   return (
     <>
       <Container>{renderExhibitionInfo()}</Container>
-      <PanelAction.Source>About&nbsp;&nbsp;</PanelAction.Source>
+      <PanelAction.Source>&nbsp;&nbsp;About</PanelAction.Source>
       <AnimatedPanelContent>
-        {state === "resolved" && (
-          <GalleryRichText richText={result.fields.body} />
+        {state === "pending" && (
+          <>
+            <h1>Loading...</h1>
+          </>
         )}
         {state === "rejected" && (
           <>
             <h1>dot.gallery</h1>
+            <h3>Unable to load info. ¯\_(ツ)_/¯</h3>
           </>
+        )}
+        {state === "resolved" && (
+          <GalleryRichText richText={result.fields.body} />
         )}
       </AnimatedPanelContent>
 

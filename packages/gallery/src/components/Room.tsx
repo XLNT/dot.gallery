@@ -73,7 +73,7 @@ export default function Room({ room }: RoomProps) {
       <Container>
         <Work ref={dropRef} src={asset.uri.image} style={style} />
       </Container>
-      <PanelAction.Source>Details&nbsp;&nbsp;</PanelAction.Source>
+      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
       <AnimatedPanelContent>
         {state === "resolved" && (
           <GalleryRichText richText={result.fields.body} />

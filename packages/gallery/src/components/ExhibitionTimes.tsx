@@ -7,6 +7,7 @@ import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 
 import { Show } from "../operations";
+import useBreakpoints from "hook/useBreakpoints";
 
 const GOOGLE_CALENDAR_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 const toGoogleCalendarDatetime = (isoString: string) =>
@@ -33,7 +34,7 @@ const OpenDate = styled.div`
 
 const OpenTime = styled.div`
   font-weight: bold;
-  font-size: 4.5rem;
+  font-size: ${({ scalar }) => scalar * 1.5}rem;
   text-transform: uppercase;
 
   &:hover {
@@ -63,6 +64,8 @@ export default function ExhibitionTimes({
   [_: string]: any;
 }) {
   const { exhibition } = useCurrentExhibition();
+
+  const scalar = useBreakpoints([2, 3, 3]);
 
   const state = getShowState(show.opensAt, show.closesAt);
 
@@ -101,13 +104,13 @@ export default function ExhibitionTimes({
 
   return (
     <Container isOpen={state === ShowState.Open} {...rest}>
-      <OpenDate>
+      <OpenDate scalar={scalar}>
         opens {opensAtDate}{" "}
         <a href={calendarLink} target="_blank" rel="noopener noreferrer">
           <Calendar src={CalendarSvg} />
         </a>
       </OpenDate>
-      <OpenTime isOpen={state === ShowState.Open}>
+      <OpenTime isOpen={state === ShowState.Open} scalar={scalar}>
         {state === ShowState.Open ? "Enter" : `${opensAtTime}-${closesAtTime}`}
       </OpenTime>
     </Container>

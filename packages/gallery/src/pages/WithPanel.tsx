@@ -17,6 +17,7 @@ const Backboard = styled.div`
   width: 100%;
   height: 100%;
   background: ${fromTheme("background")};
+  overflow: hidden;
 `;
 
 const Content = styled(animated.div)`
@@ -73,20 +74,26 @@ const Inner = styled.div`
   display: flex;
 `;
 
-const PanelActionText = styled.div`
-  margin-left: 0.5rem;
+const PanelActionText = styled(animated.div)`
+  overflow: none;
   font-weight: bold;
   text-transform: uppercase;
   color: ${fromTheme("panelText")};
+  transform-origin: 25% 50%;
 `;
 
-const PanelContentElement = styled(animated.div)`
+const PanelContentElement = styled(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, react/display-name
+  React.forwardRef<HTMLDivElement>(({ buttonExtent, ...props }: any, ref) => (
+    <animated.div ref={ref} {...props} />
+  )),
+)`
   position: relative;
   flex: 1;
   display: flex;
   width: 100%;
 
-  height: calc(100% - 120px);
+  height: ${({ buttonExtent }) => `calc(100% - ${buttonExtent}px - 2rem)`};
 
   &:after {
     content: "";
@@ -138,6 +145,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     transform,
     arrowTransform,
     progress,
+    actionOpacity,
   } = useSpring({
     progress: isVisible ? 1 : 0,
     opacity: isVisible ? 1 : 0,
@@ -146,10 +154,9 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     panelWidth,
     width: backboardWidth - (compressContent && showPanel ? panelWidth : 0),
     buttonRightOffset:
-      panelWidth -
-      buttonWidth +
-      (showPanel && overlayButton ? -buttonWidth : 0),
+      panelWidth - buttonWidth + (showPanel && overlayButton ? -0 : 0),
     buttonBottomOffset: showPanel && overlayButton ? 16 : 0,
+    actionOpacity: showPanel ? 0 : 1,
     from: {
       opacity: isVisible ? 1 : 0,
     },
@@ -182,9 +189,20 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
                 transform: arrowTransform,
               }}
             />
-            <PanelAction.Target as={PanelActionText} isOpen={isOpen} />
+            <PanelAction.Target
+              as={PanelActionText}
+              style={{
+                opacity: actionOpacity,
+                display: actionOpacity.interpolate(o =>
+                  o > 0.5 ? "block" : "none",
+                ),
+              }}
+            />
           </PanelButton>
-          <PanelContent.Target as={PanelContentElement} />
+          <PanelContent.Target
+            as={PanelContentElement}
+            buttonExtent={buttonWidth}
+          />
         </Inner>
       </PanelContainer>
     </Backboard>
