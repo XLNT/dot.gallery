@@ -1,12 +1,10 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
 import { format } from "lib/exhibitionSlug";
 import { formatCents } from "lib/money";
 import { useCreateSessionMutation } from "operations";
 import BlockButton from "components/BlockButton";
-import EmailInput from "components/EmailInput";
-import EntityToken from "context/EntityToken";
 import ModalFrame from "components/ModalFrame";
 import ModalHeader from "components/ModalHeader";
 import ModalSubtitle from "components/ModalSubtitle";
@@ -14,8 +12,6 @@ import ModalTitle from "components/ModalTitle";
 import fromTheme from "theme/fromTheme";
 import stripe from "client/stripe";
 import useCurrentExhibition from "hook/useCurrentExhibition";
-import useIsLoggedIn from "hook/useIsLoggedIn";
-import useRouter from "context/useRouter";
 
 const ModalAction = styled.div`
   margin-top: 3rem;
