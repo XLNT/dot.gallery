@@ -1,4 +1,4 @@
-import { BLOCKS } from "@contentful/rich-text-types";
+import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import React, { ComponentProps, PropsWithChildren } from "react";
 import RichText from "@madebyconnor/rich-text-to-jsx";
 import styled from "styled-components";
@@ -8,7 +8,7 @@ export const Heading1 = styled.h1`
   margin-bottom: 0;
 `;
 
-const Blockquote = styled.blockquote`
+export const Blockquote = styled.blockquote`
   margin: 0;
   font-style: italic;
 
@@ -17,10 +17,15 @@ const Blockquote = styled.blockquote`
   }
 `;
 
+export const A = styled.a`
+  color: inherit;
+`;
+
 export const P = styled.p`
   line-height: 1.3rem;
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
+  color: inherit;
 `;
 
 export default function GalleryRichText(
@@ -31,12 +36,9 @@ export default function GalleryRichText(
       {...props}
       overrides={{
         [BLOCKS.PARAGRAPH]: { component: P },
-        [BLOCKS.QUOTE]: {
-          component: Blockquote,
-        },
-        [BLOCKS.HEADING_1]: {
-          component: Heading1,
-        },
+        [BLOCKS.QUOTE]: { component: Blockquote },
+        [BLOCKS.HEADING_1]: { component: Heading1 },
+        [INLINES.HYPERLINK]: { component: A },
       }}
     />
   );

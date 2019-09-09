@@ -9,6 +9,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 
 import EntityToken from "context/EntityToken";
+import EntryCache from "context/EntryCache";
 import Exhibition from "pages/Exhibition";
 import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
@@ -43,6 +44,7 @@ const Providers = nest([
   Fullscreen.Provider,
   PanelState.Provider,
   ForcedPanelState.Provider,
+  EntryCache.Provider,
   Journey.Provider,
   PanelVisibility.Provider,
   ApolloProvider,

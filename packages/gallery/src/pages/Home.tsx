@@ -17,7 +17,7 @@ import Timezone from "context/Timezone";
 import WantTicketModal from "pages/WantTicketModal";
 import fromTheme from "theme/fromTheme";
 import timezones from "lib/timezones";
-import useContentful from "hook/useContentful";
+import useContentfulEntry from "hook/useContentfulEntry";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useIsLoggedIn from "hook/useIsLoggedIn";
@@ -103,7 +103,7 @@ export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const { exhibition, loading, error } = useCurrentExhibition();
-  const [result, , state] = useContentful(ABOUT_ID);
+  const [result, , state] = useContentfulEntry(ABOUT_ID);
   const { history } = useRouter();
   const isLoggedIn = useIsLoggedIn();
   const [timezone, setTimezone] = Timezone.useContainer();

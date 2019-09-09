@@ -9,17 +9,22 @@ import {
 import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { animated, useTransition } from "react-spring";
+import { contentTypeIsImage, contentTypeIsVideo } from "lib/contentType";
 import { format } from "lib/exhibitionSlug";
+import { get } from "lodash";
+import { preloadImage } from "lib/preload";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import PanelAction from "context/PanelAction";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
+import contentful from "client/contentful";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
+import usePreloadedEntries from "hook/usePreloadedEntries";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Canvas = styled.div`
@@ -62,6 +67,8 @@ export default function Gallery(props: ExhibitionProps<void>) {
   const [lastDirection, setLastDirection] = useState<Direction>();
 
   const { exhibition } = useCurrentExhibition();
+  const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
+  usePreloadedEntries(rooms.map(room => room.entryId));
 
   const [coords, setCoords] = useState<Coords>(null);
 

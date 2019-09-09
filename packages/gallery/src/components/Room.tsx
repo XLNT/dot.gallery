@@ -7,7 +7,7 @@ import DragTypes from "lib/dragTypes";
 import GalleryRichText from "./GalleryRichText";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import useContentful from "hook/useContentful";
+import useContentfulEntry from "hook/useContentfulEntry";
 
 interface RoomProps {
   room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
@@ -32,7 +32,7 @@ const collect = (monitor: DropTargetMonitor) => ({
 });
 
 export default function Room({ room }: RoomProps) {
-  const [result, error, state] = useContentful(room.entryId);
+  const [result, error, state] = useContentfulEntry(room.entryId);
 
   const uri = get(result, "fields.work.fields.file.url");
   const contentType: string = get(
