@@ -8,7 +8,7 @@ import {
 } from "lib/rooms";
 import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { animated, useTransition } from "react-spring";
+import { animated, config, useTransition } from "react-spring";
 import { contentTypeIsImage, contentTypeIsVideo } from "lib/contentType";
 import { format } from "lib/exhibitionSlug";
 import { get } from "lodash";
@@ -139,6 +139,7 @@ export default function Gallery(props: ExhibitionProps<void>) {
     from: { transform: `translate3d(${-outX}px, ${-outY}px, 0)`, opacity: 0 },
     enter: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
     leave: { transform: `translate3d(${outX}px, ${outY}px, 0)`, opacity: 0 },
+    config: config.molasses,
   });
 
   return (

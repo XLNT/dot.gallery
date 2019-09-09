@@ -11,8 +11,6 @@ import issueTicket from "./lib/issueTicket";
 import prisma from "./api/prisma";
 import stripe from "./api/stripe";
 
-const kStubStripeWebhook = process.env.STUB_STRIPE_WEBHOOK === "true";
-
 const getRawBody = (req: NowRequest) =>
   new Promise(resolve => {
     let body = "";
@@ -25,63 +23,67 @@ const getRawBody = (req: NowRequest) =>
   });
 
 export default async (req: NowRequest, res: NowResponse) => {
-  const sig = req.headers["stripe-signature"];
-  const body = await getRawBody(req);
+  const bail = (message: string) => {
+    console.log(`Bailing: ${message}`);
+    res.status(400).send(message);
+  };
 
-  const bail = (message: string) => res.status(400).send(message);
-
-  let event: Stripe.events.IEvent;
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      sig,
-      process.env.STRIPE_SIGNING_SECRET,
-    );
-  } catch (err) {
-    return bail(`Webhook Error: ${err.message}`);
-  }
+    const sig = req.headers["stripe-signature"];
+    const body = await getRawBody(req);
 
-  // Handle the checkout.session.completed event
-  if (event.type === "checkout.session.completed") {
-    const session: Record<string, any> = event.data.object;
-    const customerId: string = get(session, ["customer"]);
-
-    let email: string;
-    if (!customerId) {
-      if (!kStubStripeWebhook) {
-        // get customer Id and set email
-        const customer = await stripe.customers.retrieve(customerId);
-        email = customer.email;
-      }
+    let event: Stripe.events.IEvent;
+    try {
+      event = stripe.webhooks.constructEvent(
+        body,
+        sig,
+        process.env.STRIPE_SIGNING_SECRET,
+      );
+    } catch (err) {
+      throw new Error(`Webhook Error: ${err.message}`);
     }
 
-    if (!email) {
-      // no customer!
-      if (!kStubStripeWebhook) {
-        return bail(`No customer information provided.`);
+    // Handle the checkout.session.completed event
+    if (event.type === "checkout.session.completed") {
+      const session: Record<string, any> = event.data.object;
+      const customerId: string = get(session, ["customer"]);
+
+      if (!customerId) {
+        throw new Error(`No customerId present in ${JSON.stringify(session)}`);
       }
 
-      email = "matt@bydot.app";
+      console.log(session);
+      const { email } = await stripe.customers.retrieve(customerId);
+
+      if (!email) {
+        // no customer!
+        throw new Error(
+          `Could not derive customer email from id '${customerId}'`,
+        );
+      }
+
+      const exhibitionId = (await getCurrentExhibition(prisma)).id;
+
+      console.log(`Issuing ticket for exhibition '${exhibitionId}'`);
+      await issueTicket(prisma, exhibitionId, { email });
+
+      // send login email
+      console.log(`Sending login email to ${email}.`);
+      await auth0.passwordless.sendEmail({
+        email,
+        send: "link",
+        authParams: {
+          responseType: "token",
+          scope: "openid email",
+        },
+      });
+
+      return res.json({ received: true, email, exhibitionId });
     }
 
-    const exhibitionId = (await getCurrentExhibition(prisma)).id;
-
-    await issueTicket(prisma, exhibitionId, { email });
-
-    // send login email
-    await auth0.passwordless.sendEmail({
-      email,
-      send: "link",
-      authParams: {
-        responseType: "token",
-        scope: "openid email",
-      },
-    });
-
-    res.json({ received: true, email, exhibitionId });
-    return;
+    return res.json({ received: true });
+  } catch (error) {
+    console.error(error);
+    return bail(error.message);
   }
-
-  res.json({ received: true });
-  return;
 };
