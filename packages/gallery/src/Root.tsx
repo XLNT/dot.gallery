@@ -58,10 +58,11 @@ const Providers = nest([
 
 function Root() {
   const client = useConstant(() => makeClient());
+  const backend = useConstant(() => HTML5Backend);
 
   return (
     <>
-      <Providers theme={theme} client={client} backend={HTML5Backend}>
+      <Providers theme={theme} client={client} backend={backend}>
         <>
           <GlobalStyle />
           <WithPanel>

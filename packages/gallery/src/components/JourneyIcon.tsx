@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from "react";
 const extent = 100.0;
 
 // eslint-disable-next-line react/display-name
-export default React.forwardRef(
+export default React.forwardRef<HTMLDivElement>(
   (
     {
       journey,
