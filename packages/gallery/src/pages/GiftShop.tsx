@@ -15,8 +15,8 @@ import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
+import sleep from "lib/sleep";
 import styled from "styled-components";
-import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
@@ -98,8 +98,7 @@ export default function GiftShop({  }: ExhibitionProps<void>) {
 
   const goHome = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
-      setFullscreen(false);
-      await timeout(1000);
+      await setFullscreen(false);
     }
 
     history.replace("/");

@@ -11,6 +11,7 @@ export default function useRequiredTicket() {
 
   useEffect(() => {
     if (!loading && !error && !ticket) {
+      console.log("useRequiredTicket: user does not have ticket");
       history.replace("/want-ticket");
     }
   }, [error, history, loading, ticket]);

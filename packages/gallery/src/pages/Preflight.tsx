@@ -3,8 +3,8 @@ import { useRedeemTicketMutation } from "operations";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
 import React, { useCallback } from "react";
+import sleep from "lib/sleep";
 import styled from "styled-components";
-import timeout from "lib/timeout";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
@@ -85,28 +85,13 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useSuggestedPanelState(false);
   const { setFullscreen } = Fullscreen.useContainer();
 
-  const [redeemTicket] = useRedeemTicketMutation();
-
   const goFoyer = useCallback(async () => {
-    try {
-      await redeemTicket();
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        // ignore
-        console.log("[dev] redeemTicket failed, ignoring...");
-      } else {
-        // TODO: handle this error with a redirect or notice or something
-        throw error;
-      }
-    }
-
     if (process.env.NODE_ENV !== "development") {
-      setFullscreen(true);
-      await timeout(1000);
+      await setFullscreen(true);
     }
 
     setFlow(Flow.Foyer);
-  }, [redeemTicket, setFlow, setFullscreen]);
+  }, [setFlow, setFullscreen]);
 
   return (
     <Container>

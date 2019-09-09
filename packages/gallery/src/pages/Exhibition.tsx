@@ -3,6 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { animated, useTransition } from "react-spring";
 import { parse } from "lib/exhibitionSlug";
 import AssetDragLayer from "./AssetDragLayer";
+import DoubleConfirm from "./DoubleConfirm";
 import Foyer from "./Foyer";
 import Fullscreen from "context/Fullscreen";
 import Gallery from "./Gallery";
@@ -31,6 +32,7 @@ const routes: { [_: number]: FunctionComponent<ExhibitionProps<any>> } = {
   [Flow.Preflight]: Preflight,
   [Flow.Foyer]: Foyer,
   [Flow.Gallery]: Gallery,
+  [Flow.DoubleConfirm]: DoubleConfirm,
   [Flow.GiftShop]: GiftShop,
 };
 
@@ -47,7 +49,7 @@ export default function Exhibition({
 
   useEffect(() => {
     if (wasFullscreen && !isFullscreen) {
-      setFlow(Flow.GiftShop);
+      setFlow(Flow.DoubleConfirm);
     }
   }, [isFullscreen, wasFullscreen]);
 

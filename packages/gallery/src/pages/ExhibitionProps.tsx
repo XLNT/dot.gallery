@@ -2,6 +2,7 @@ export enum Flow {
   Preflight,
   Foyer,
   Gallery,
+  DoubleConfirm,
   GiftShop,
 }
 

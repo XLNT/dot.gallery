@@ -7,6 +7,7 @@ export default function useRequiredLogin() {
   const [entityToken, , entityTokenHydrated] = EntityToken.useContainer();
   useEffect(() => {
     if (entityTokenHydrated && !entityToken) {
+      console.log("useRequiredLogin: user is not logged in");
       history.replace("/");
     }
   }, [entityToken, entityTokenHydrated, history]);

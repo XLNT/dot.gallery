@@ -9,17 +9,14 @@ import {
 import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { animated, config, useTransition } from "react-spring";
-import { contentTypeIsImage, contentTypeIsVideo } from "lib/contentType";
 import { format } from "lib/exhibitionSlug";
 import { get } from "lodash";
-import { preloadImage } from "lib/preload";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import PanelAction from "context/PanelAction";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
-import contentful from "client/contentful";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
