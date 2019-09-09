@@ -55,7 +55,7 @@ export default React.forwardRef(
           ref={svgRef}
           viewBox={`0 0 ${extent} ${extent}`}
           xmlns="http://www.w3.org/2000/svg"
-          strokeWidth="3"
+          strokeWidth="4"
           strokeLinecap="square"
           {...rest}
         >
@@ -66,6 +66,7 @@ export default React.forwardRef(
             y="0"
             width={extent}
             height={extent}
+            strokeWidth="8"
           ></rect>
           {things}
         </svg>

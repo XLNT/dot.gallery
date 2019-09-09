@@ -26,7 +26,6 @@ export default function usePreloadedEntries(ids: string[]) {
         .then(assets =>
           Promise.all(
             assets.map(async asset => {
-              console.log(asset);
               const uri = get(asset, "fields.file.url");
               const contentType: string = get(asset, "fields.file.contentType");
 
