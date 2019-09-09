@@ -15,6 +15,11 @@ const Container = styled.div`
 
 const Name = styled.div``;
 
+const StyledAssetsList = styled(AssetsList)`
+  padding-left: 1rem;
+  padding-right: 5rem;
+`;
+
 export default function PresentEntity({
   entity,
   draggable = true,
@@ -29,13 +34,13 @@ export default function PresentEntity({
   return (
     <Container {...rest}>
       <Name>{entity.handle}</Name>
-      <AssetsList
+      <StyledAssetsList
         assets={entity.tradableAssets}
         wrappable={wrappable}
         draggable={draggable}
       >
         {children}
-      </AssetsList>
+      </StyledAssetsList>
     </Container>
   );
 }

@@ -1,6 +1,7 @@
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { Room as RoomModel, useCreatePlacementMutation } from "../operations";
 import { animated, useSpring } from "react-spring";
+import { contentTypeIsVideo } from "lib/contentType";
 import { get } from "lodash-es";
 import AnimatedPanelContent from "./AnimatedPanelContent";
 import DragTypes from "lib/dragTypes";
@@ -19,12 +20,22 @@ const Container = styled.div`
 `;
 
 const Work = styled(animated.div)`
+  width: 100%;
+  height: 100%;
+`;
+
+const Image = styled.div`
   background-image: ${({ src }) => `url(${src})`};
   width: 100%;
   height: 100%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+`;
+
+const Video = styled.video`
+  height: 100%;
+  width: 100%;
 `;
 
 const collect = (monitor: DropTargetMonitor) => ({
@@ -39,10 +50,10 @@ export default function Room({ room }: RoomProps) {
     result,
     "fields.work.fields.file.contentType",
   );
-  const workElement = contentType
-    ? contentType.startsWith("video")
-      ? "video"
-      : "img"
+  const ElementType = contentType
+    ? contentTypeIsVideo(contentType)
+      ? Video
+      : Image
     : undefined;
   const [createAsset] = useCreatePlacementMutation({
     refetchQueries: ["CurrentEntity"],
@@ -53,7 +64,7 @@ export default function Room({ room }: RoomProps) {
       // TODO: collect x, y like stickers
       await createAsset({
         variables: {
-          assetId: item.id,
+          assetId: item.asset.id,
           roomId: room.id,
           x: 500,
           y: 500,
@@ -76,16 +87,9 @@ export default function Room({ room }: RoomProps) {
   return (
     <>
       <Container>
-        {contentType && (
-          <Work
-            as={workElement}
-            ref={dropRef}
-            src={uri}
-            style={style}
-            autoPlay
-            loop
-          />
-        )}
+        <Work ref={dropRef} style={style}>
+          {contentType && <ElementType src={uri} autoPlay loop />}
+        </Work>
       </Container>
       <AnimatedPanelContent>
         {state === "resolved" && (

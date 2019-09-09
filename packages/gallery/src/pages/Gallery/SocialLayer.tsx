@@ -5,11 +5,11 @@ import styled from "styled-components";
 
 const PresenceList = styled.div`
   position: absolute;
-  left: 1rem;
-  bottom: 1rem;
+  left: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 5rem);
+  width: calc(100% - 7rem);
 `;
 
 export default function SocialLayer() {

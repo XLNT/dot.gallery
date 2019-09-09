@@ -56,7 +56,7 @@ const createSession: MutationResolvers["createSession"] = async (
         name: `dot.gallery ${formatSlug(currentExhibition.number)} Ticket`,
         description: `${formatSlug(currentExhibition.number)}: Admit One`,
         amount: currentPrice,
-        currency: "usd",
+        currency: "eur",
         quantity: 1,
       },
     ],

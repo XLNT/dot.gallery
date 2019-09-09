@@ -21,7 +21,7 @@ const createPlacement: MutationResolvers["createPlacement"] = async (
         {
           domain: AssetDomain.Memorabilia,
           owner: { connect: { id: currentEntity.id } },
-          uri: { image: "" },
+          uri: { image: "https://placekitten.com/256/256" },
         },
       ],
     },
@@ -40,6 +40,6 @@ export default {
   Placement: {
     entity: relation("placement", "entity"),
     room: relation("placement", "room"),
-    assets: relation("placement", "asses"),
+    assets: relation("placement", "assets"),
   },
 };

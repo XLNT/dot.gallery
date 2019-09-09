@@ -27,13 +27,15 @@ export default function AssetsList({
   wrappable,
   draggable,
   children,
+  ...rest
 }: PropsWithChildren<{
   wrappable: boolean;
   draggable: boolean;
   assets: Pick<Asset, "id" | "uri">[];
+  [_: string]: any;
 }>) {
   return (
-    <Assets wrappable={wrappable}>
+    <Assets wrappable={wrappable} {...rest}>
       {assets.map(asset =>
         draggable ? (
           <StyledDraggableAsset key={asset.id} asset={asset} />
