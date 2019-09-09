@@ -8,9 +8,8 @@ const Frame = styled.div`
   background-color: ${fromTheme("panel")};
   padding: 0.75rem 1.25rem;
 
-  height: ${({ height }) => height}vh;
+  min-height: ${({ height }) => height}vh;
   width: ${({ width }) => width}vw;
-  max-height: 25rem;
   max-width: 25rem;
 
   display: flex;

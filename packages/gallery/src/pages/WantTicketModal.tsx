@@ -33,18 +33,19 @@ const StyledBlockButton = styled(BlockButton)`
 `;
 
 export default function WantTicketModal() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<string>();
   const [createSession] = useCreateSessionMutation();
 
   const { exhibition } = useCurrentExhibition();
 
   const onCreditCard = useCallback(async () => {
-    setLoading(true);
+    setLoading("card");
     const {
       data: { createSession: sessionId },
     } = await createSession();
 
-    stripe().redirectToCheckout({ sessionId });
+    await stripe().redirectToCheckout({ sessionId });
+    setLoading(undefined);
   }, [createSession]);
 
   return (
@@ -65,7 +66,7 @@ export default function WantTicketModal() {
         </ModalSubtitle>
       </ModalHeader>
       <ModalAction>
-        <StyledBlockButton onClick={onCreditCard}>
+        <StyledBlockButton onClick={onCreditCard} loading={loading === "card"}>
           Credit Card
         </StyledBlockButton>
         <StyledBlockButton disabled subtitle="(coming soon)">
