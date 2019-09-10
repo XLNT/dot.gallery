@@ -68,7 +68,7 @@ export type Mutation = {
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
-  redeemCoupon?: Maybe<CouponRedemption>,
+  redeemCoupon: CouponRedemption,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -245,10 +245,10 @@ export type RedeemCouponMutationVariables = {
 
 export type RedeemCouponMutation = (
   { __typename?: 'Mutation' }
-  & { redeemCoupon: Maybe<(
+  & { redeemCoupon: (
     { __typename?: 'CouponRedemption' }
     & Pick<CouponRedemption, 'id'>
-  )> }
+  ) }
 );
 
 export type RedeemTicketMutationVariables = {};

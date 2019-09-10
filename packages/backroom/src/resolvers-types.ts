@@ -68,7 +68,7 @@ export type Mutation = {
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
-  redeemCoupon?: Maybe<CouponRedemption>,
+  redeemCoupon: CouponRedemption,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -313,7 +313,7 @@ export type MutationResolvers<ContextType = BackroomContext, ParentType extends 
   createPlacement?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationCreatePlacementArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
   awardWalk?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationAwardWalkArgs, 'image'>>,
-  redeemCoupon?: Resolver<Maybe<ResolversTypes['CouponRedemption']>, ParentType, ContextType, RequireFields<MutationRedeemCouponArgs, 'code'>>,
+  redeemCoupon?: Resolver<ResolversTypes['CouponRedemption'], ParentType, ContextType, RequireFields<MutationRedeemCouponArgs, 'code'>>,
   modIssueTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<MutationModIssueTicketArgs, 'exhibitionId'>>,
 };
 

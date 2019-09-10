@@ -3,10 +3,17 @@ import { get } from "lodash";
 
 export const ERROR_CODES = {
   COUPON_NOT_FOUND: "Unknown voucher code.",
-  COUPON_AT_CAPACITY: "This voucher has already been redeemed.",
+  COUPON_AT_CAPACITY: "This voucher has already been redeemed to its capacity.",
+  COUPON_ALREADY_REDEEMED: "You have already redeemed this voucher.",
+  INTERNAL_SERVER_ERROR: "An internal error ocurred—try again?",
 };
 
 export const humanize = (error: ApolloError) => {
-  const code = get(error, ["graphQLErrors", 0, "extensions", "code"]);
-  return code ? ERROR_CODES[code] : "An internal error ocurred—try again?";
+  const code = get(
+    error,
+    ["graphQLErrors", 0, "extensions", "code"],
+    "INTERNAL_SERVER_ERROR",
+  );
+
+  return ERROR_CODES[code];
 };

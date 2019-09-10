@@ -1,6 +1,7 @@
 import { mergeResolvers } from "merge-graphql-schemas";
 
 import asset from "./asset.resolver";
+import coupon from "./coupon.resolver";
 import entity from "./entity.resolver";
 import exhibition from "./exhibition.resolver";
 import mod from "./mod.resolvers";
@@ -12,6 +13,7 @@ export default mergeResolvers([
   placement,
   exhibition,
   mod,
+  coupon,
   ticket,
   asset,
 ]);

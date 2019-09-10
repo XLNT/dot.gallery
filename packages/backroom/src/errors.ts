@@ -17,3 +17,9 @@ export class CouponAtCapacityError extends ApolloError {
     super("Coupon at capacity.", "COUPON_AT_CAPACITY", props);
   }
 }
+
+export class CouponAlreadyRedeemedError extends ApolloError {
+  constructor(props?: Record<string, any>) {
+    super("Coupon already redeemed.", "COUPON_ALREADY_REDEEMED", props);
+  }
+}

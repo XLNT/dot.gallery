@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { AuthenticationError } from "apollo-server-core";
 import { BackroomContext } from "./types";
 import {
+  CouponAlreadyRedeemedError,
   CouponAtCapacityError,
   CouponNotFoundError,
   GalleryIsNotOpenError,
@@ -74,13 +75,20 @@ const onlyMod = rule({ cache: "contextual" })(
 //     return !redeemed;
 //   });
 
-const couponHasCapacity = (mapper: ArgsMapper) =>
+const couponExists = (mapper: ArgsMapper) =>
   rule()(async (parent, args, { prisma }: BackroomContext) => {
-    const code = mapper(args);
-    const coupon = await prisma.coupon({ code });
-    if (!coupon) {
+    const exists = await prisma.$exists.coupon({ code: mapper(args) });
+
+    if (!exists) {
       return new CouponNotFoundError();
     }
+
+    return true;
+  });
+
+const couponHasCapacity = (mapper: ArgsMapper) =>
+  rule()(async (parent, args, { prisma }: BackroomContext) => {
+    const coupon = await prisma.coupon({ code: mapper(args) });
 
     const issued = await prisma
       .couponRedemptionsConnection({ where: { coupon: { id: coupon.id } } })
@@ -90,6 +98,20 @@ const couponHasCapacity = (mapper: ArgsMapper) =>
     const canRedeem = coupon.capacity > issued;
     if (!canRedeem) {
       return new CouponAtCapacityError();
+    }
+
+    return true;
+  });
+
+const couponNotRedeemed = (mapper: ArgsMapper) =>
+  rule()(async (parent, args, { prisma, currentEntity }: BackroomContext) => {
+    const hasRedeemed = await prisma.$exists.couponRedemption({
+      coupon: { code: mapper(args) },
+      entity: { id: currentEntity.id },
+    });
+
+    if (hasRedeemed) {
+      return new CouponAlreadyRedeemedError();
     }
 
     return true;
@@ -143,7 +165,12 @@ export default shield(
         isKnownEntity,
         ownsAsset(({ assetId }) => assetId),
       ),
-      redeemCoupon: chain(isKnownEntity, couponHasCapacity(({ code }) => code)),
+      redeemCoupon: chain(
+        isKnownEntity,
+        couponExists(({ code }) => code),
+        couponHasCapacity(({ code }) => code),
+        couponNotRedeemed(({ code }) => code),
+      ),
       awardWalk: chain(isKnownEntity, onlyDuringActiveShow),
       modIssueTicket: chain(isKnownEntity, onlyMod),
     },

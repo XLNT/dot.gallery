@@ -107,7 +107,7 @@ type Mutation  {
   createPlacement(assetId: ID!, roomId: ID!, x: Int!, y: Int!): Placement
   redeemTicket: Ticket!
   awardWalk(image: String!): Asset!
-  redeemCoupon(code: String!): CouponRedemption
+  redeemCoupon(code: String!): CouponRedemption!
 
   # Moderator Actions
   modIssueTicket(exhibitionId: ID!, email: String, id: String): Ticket
