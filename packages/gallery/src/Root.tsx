@@ -16,6 +16,7 @@ import ExhibitionThemeProvider from "theme/ExhibitionThemeProvider";
 import ForcedPanelState from "context/ForcedPanelState";
 import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
+import Interactors from "Interactors";
 import Journey from "context/Journey";
 import Login from "pages/Login";
 import MediaQuery from "context/MediaQuery";
@@ -32,8 +33,7 @@ import nest from "lib/nest";
 import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
-// only initialize if available
-config.GA_TRACKING_ID && ReactGA.initialize(config.GA_TRACKING_ID);
+ReactGA.initialize(config.GA_TRACKING_ID);
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -70,6 +70,7 @@ function Root() {
       <Providers theme={theme} client={client} backend={backend}>
         <>
           <GlobalStyle />
+          <Interactors />
           <WithPanel>
             <Switch>
               <Route path="/" exact component={Home} />
