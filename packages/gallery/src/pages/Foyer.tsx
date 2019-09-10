@@ -1,10 +1,12 @@
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
+import { Direction, keycodeFor } from "lib/rooms";
 import { useRedeemTicketMutation } from "operations";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Video = styled.video`
@@ -60,6 +62,12 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   }, [redeemTicket]);
 
   const goGallery = useCallback(() => setFlow(Flow.Gallery), [setFlow]);
+
+  useKey(
+    (pressedKey: number) => goGallery(),
+    { detectKeys: [Direction.Right].map(keycodeFor) },
+    { dependencies: [goGallery] },
+  );
 
   return (
     <>
