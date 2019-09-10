@@ -9,5 +9,8 @@ export const preloadImage = async (uri: string): Promise<void> => {
 };
 
 export const preloadVideo = async (uri: string): Promise<void> => {
-  await fetch(uri, { headers: { range: "bytes=0-567139" } });
+  await fetch(uri, {
+    headers: { range: "bytes=0-567139" },
+    mode: "cors",
+  });
 };
