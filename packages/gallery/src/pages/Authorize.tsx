@@ -33,7 +33,7 @@ export default function Login() {
 
   const searchParams = new URLSearchParams(location.search);
   const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
-  const goto = `/${searchParams.get("goto") || (isOpen ? "have-ticket" : "")}`;
+  const goto = `${searchParams.get("goto") || (isOpen ? "/have-ticket" : "/")}`;
   const accessToken = hashParams.get("access_token");
 
   useEffect(() => {

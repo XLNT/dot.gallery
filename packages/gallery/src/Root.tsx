@@ -9,6 +9,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 import ReactGA from "react-ga";
 
+import Authorize from "pages/Authorize";
 import EntityToken from "context/EntityToken";
 import EntryCache from "context/EntryCache";
 import Exhibition from "pages/Exhibition";
@@ -18,7 +19,6 @@ import Fullscreen from "context/Fullscreen";
 import Home from "pages/Home";
 import Interactors from "Interactors";
 import Journey from "context/Journey";
-import Login from "pages/Login";
 import MediaQuery from "context/MediaQuery";
 import Modal from "context/Modal";
 import PanelState from "context/PanelState";
@@ -74,7 +74,7 @@ function Root() {
           <WithPanel>
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/login" exact component={Login} />
+              <Route path="/authorize" exact component={Authorize} />
               <Route path="/ticket-success" exact component={TicketSuccess} />
               <Route path="/:slug([eE]\d\d[sS]\d\d)" component={Exhibition} />
               <Route component={Home} />

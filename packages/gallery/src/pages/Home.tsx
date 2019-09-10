@@ -7,9 +7,11 @@ import { ShowState, getShowState } from "lib/shows";
 import { format } from "lib/exhibitionSlug";
 import { useCurrentEntityQuery } from "operations";
 import AnimatedPanelContent from "components/AnimatedPanelContent";
+import CouponModal from "./CouponModal";
 import ExhibitionTimes from "components/ExhibitionTimes";
 import GalleryRichText, { Heading1, P } from "components/GalleryRichText";
 import HaveTicketModal from "pages/HaveTicketModal";
+import LoginModal from "./LoginModal";
 import ModalView from "components/ModalView";
 import PanelAction from "context/PanelAction";
 import RequestTicketModal from "./RequestTicketModal";
@@ -101,7 +103,7 @@ const ExhibitionText = styled(P)`
 
 export default function Home() {
   useEnforcePanelVisibility(true);
-  useSuggestedPanelState(true);
+  useSuggestedPanelState(false);
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = useContentfulEntry(ABOUT_ID);
   const { history } = useRouter();
@@ -152,7 +154,7 @@ export default function Home() {
     if (loading) {
       return (
         <>
-          <ExhibitionTitle>Loading the dot.gallery...</ExhibitionTitle>
+          <ExhibitionTitle>Loading dot.gallery...</ExhibitionTitle>
         </>
       );
     }
@@ -259,9 +261,10 @@ export default function Home() {
         onDismiss={goHome}
         routes={{
           "/request": RequestTicketModal,
-          "/login": RequestTicketModal,
+          "/login": LoginModal,
           "/have-ticket": HaveTicketModal,
           "/want-ticket": WantTicketModal,
+          "/want-ticket/voucher": CouponModal,
         }}
       />
     </>

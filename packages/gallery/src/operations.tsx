@@ -24,6 +24,11 @@ export type Asset = {
   updatedAt: Scalars['DateTime'],
 };
 
+export type CouponRedemption = {
+  __typename?: 'CouponRedemption',
+  id: Scalars['ID'],
+};
+
 
 export type Entity = {
   __typename?: 'Entity',
@@ -63,6 +68,7 @@ export type Mutation = {
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
+  redeemCoupon?: Maybe<CouponRedemption>,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -82,6 +88,11 @@ export type MutationCreatePlacementArgs = {
 
 export type MutationAwardWalkArgs = {
   image: Scalars['String']
+};
+
+
+export type MutationRedeemCouponArgs = {
+  code: Scalars['String']
 };
 
 
@@ -227,6 +238,19 @@ export type LoginAsMutation = (
   & Pick<Mutation, 'loginAs'>
 );
 
+export type RedeemCouponMutationVariables = {
+  code: Scalars['String']
+};
+
+
+export type RedeemCouponMutation = (
+  { __typename?: 'Mutation' }
+  & { redeemCoupon: Maybe<(
+    { __typename?: 'CouponRedemption' }
+    & Pick<CouponRedemption, 'id'>
+  )> }
+);
+
 export type RedeemTicketMutationVariables = {};
 
 
@@ -368,6 +392,21 @@ export type LoginAsMutationFn = ApolloReactCommon.MutationFunction<LoginAsMutati
 export type LoginAsMutationHookResult = ReturnType<typeof useLoginAsMutation>;
 export type LoginAsMutationResult = ApolloReactCommon.MutationResult<LoginAsMutation>;
 export type LoginAsMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginAsMutation, LoginAsMutationVariables>;
+export const RedeemCouponDocument = gql`
+    mutation RedeemCoupon($code: String!) {
+  redeemCoupon(code: $code) {
+    id
+  }
+}
+    `;
+export type RedeemCouponMutationFn = ApolloReactCommon.MutationFunction<RedeemCouponMutation, RedeemCouponMutationVariables>;
+
+    export function useRedeemCouponMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RedeemCouponMutation, RedeemCouponMutationVariables>) {
+      return ApolloReactHooks.useMutation<RedeemCouponMutation, RedeemCouponMutationVariables>(RedeemCouponDocument, baseOptions);
+    };
+export type RedeemCouponMutationHookResult = ReturnType<typeof useRedeemCouponMutation>;
+export type RedeemCouponMutationResult = ApolloReactCommon.MutationResult<RedeemCouponMutation>;
+export type RedeemCouponMutationOptions = ApolloReactCommon.BaseMutationOptions<RedeemCouponMutation, RedeemCouponMutationVariables>;
 export const RedeemTicketDocument = gql`
     mutation RedeemTicket {
   redeemTicket {

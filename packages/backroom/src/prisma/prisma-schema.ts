@@ -6,6 +6,14 @@ export const typeDefs = /* GraphQL */ `type AggregateAsset {
   count: Int!
 }
 
+type AggregateCoupon {
+  count: Int!
+}
+
+type AggregateCouponRedemption {
+  count: Int!
+}
+
 type AggregateEntity {
   count: Int!
 }
@@ -312,6 +320,326 @@ type BatchPayload {
   count: Long!
 }
 
+type Coupon {
+  id: ID!
+  code: String!
+  capacity: Int!
+  redemptions(where: CouponRedemptionWhereInput, orderBy: CouponRedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CouponRedemption!]
+}
+
+type CouponConnection {
+  pageInfo: PageInfo!
+  edges: [CouponEdge]!
+  aggregate: AggregateCoupon!
+}
+
+input CouponCreateInput {
+  id: ID
+  code: String!
+  capacity: Int!
+  redemptions: CouponRedemptionCreateManyWithoutCouponInput
+}
+
+input CouponCreateOneWithoutRedemptionsInput {
+  create: CouponCreateWithoutRedemptionsInput
+  connect: CouponWhereUniqueInput
+}
+
+input CouponCreateWithoutRedemptionsInput {
+  id: ID
+  code: String!
+  capacity: Int!
+}
+
+type CouponEdge {
+  node: Coupon!
+  cursor: String!
+}
+
+enum CouponOrderByInput {
+  id_ASC
+  id_DESC
+  code_ASC
+  code_DESC
+  capacity_ASC
+  capacity_DESC
+}
+
+type CouponPreviousValues {
+  id: ID!
+  code: String!
+  capacity: Int!
+}
+
+type CouponRedemption {
+  id: ID!
+  entity: Entity!
+  coupon: Coupon!
+}
+
+type CouponRedemptionConnection {
+  pageInfo: PageInfo!
+  edges: [CouponRedemptionEdge]!
+  aggregate: AggregateCouponRedemption!
+}
+
+input CouponRedemptionCreateInput {
+  id: ID
+  entity: EntityCreateOneWithoutRedemptionsInput!
+  coupon: CouponCreateOneWithoutRedemptionsInput!
+}
+
+input CouponRedemptionCreateManyWithoutCouponInput {
+  create: [CouponRedemptionCreateWithoutCouponInput!]
+  connect: [CouponRedemptionWhereUniqueInput!]
+}
+
+input CouponRedemptionCreateManyWithoutEntityInput {
+  create: [CouponRedemptionCreateWithoutEntityInput!]
+  connect: [CouponRedemptionWhereUniqueInput!]
+}
+
+input CouponRedemptionCreateWithoutCouponInput {
+  id: ID
+  entity: EntityCreateOneWithoutRedemptionsInput!
+}
+
+input CouponRedemptionCreateWithoutEntityInput {
+  id: ID
+  coupon: CouponCreateOneWithoutRedemptionsInput!
+}
+
+type CouponRedemptionEdge {
+  node: CouponRedemption!
+  cursor: String!
+}
+
+enum CouponRedemptionOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type CouponRedemptionPreviousValues {
+  id: ID!
+}
+
+input CouponRedemptionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  AND: [CouponRedemptionScalarWhereInput!]
+  OR: [CouponRedemptionScalarWhereInput!]
+  NOT: [CouponRedemptionScalarWhereInput!]
+}
+
+type CouponRedemptionSubscriptionPayload {
+  mutation: MutationType!
+  node: CouponRedemption
+  updatedFields: [String!]
+  previousValues: CouponRedemptionPreviousValues
+}
+
+input CouponRedemptionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CouponRedemptionWhereInput
+  AND: [CouponRedemptionSubscriptionWhereInput!]
+  OR: [CouponRedemptionSubscriptionWhereInput!]
+  NOT: [CouponRedemptionSubscriptionWhereInput!]
+}
+
+input CouponRedemptionUpdateInput {
+  entity: EntityUpdateOneRequiredWithoutRedemptionsInput
+  coupon: CouponUpdateOneRequiredWithoutRedemptionsInput
+}
+
+input CouponRedemptionUpdateManyWithoutCouponInput {
+  create: [CouponRedemptionCreateWithoutCouponInput!]
+  delete: [CouponRedemptionWhereUniqueInput!]
+  connect: [CouponRedemptionWhereUniqueInput!]
+  set: [CouponRedemptionWhereUniqueInput!]
+  disconnect: [CouponRedemptionWhereUniqueInput!]
+  update: [CouponRedemptionUpdateWithWhereUniqueWithoutCouponInput!]
+  upsert: [CouponRedemptionUpsertWithWhereUniqueWithoutCouponInput!]
+  deleteMany: [CouponRedemptionScalarWhereInput!]
+}
+
+input CouponRedemptionUpdateManyWithoutEntityInput {
+  create: [CouponRedemptionCreateWithoutEntityInput!]
+  delete: [CouponRedemptionWhereUniqueInput!]
+  connect: [CouponRedemptionWhereUniqueInput!]
+  set: [CouponRedemptionWhereUniqueInput!]
+  disconnect: [CouponRedemptionWhereUniqueInput!]
+  update: [CouponRedemptionUpdateWithWhereUniqueWithoutEntityInput!]
+  upsert: [CouponRedemptionUpsertWithWhereUniqueWithoutEntityInput!]
+  deleteMany: [CouponRedemptionScalarWhereInput!]
+}
+
+input CouponRedemptionUpdateWithoutCouponDataInput {
+  entity: EntityUpdateOneRequiredWithoutRedemptionsInput
+}
+
+input CouponRedemptionUpdateWithoutEntityDataInput {
+  coupon: CouponUpdateOneRequiredWithoutRedemptionsInput
+}
+
+input CouponRedemptionUpdateWithWhereUniqueWithoutCouponInput {
+  where: CouponRedemptionWhereUniqueInput!
+  data: CouponRedemptionUpdateWithoutCouponDataInput!
+}
+
+input CouponRedemptionUpdateWithWhereUniqueWithoutEntityInput {
+  where: CouponRedemptionWhereUniqueInput!
+  data: CouponRedemptionUpdateWithoutEntityDataInput!
+}
+
+input CouponRedemptionUpsertWithWhereUniqueWithoutCouponInput {
+  where: CouponRedemptionWhereUniqueInput!
+  update: CouponRedemptionUpdateWithoutCouponDataInput!
+  create: CouponRedemptionCreateWithoutCouponInput!
+}
+
+input CouponRedemptionUpsertWithWhereUniqueWithoutEntityInput {
+  where: CouponRedemptionWhereUniqueInput!
+  update: CouponRedemptionUpdateWithoutEntityDataInput!
+  create: CouponRedemptionCreateWithoutEntityInput!
+}
+
+input CouponRedemptionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  entity: EntityWhereInput
+  coupon: CouponWhereInput
+  AND: [CouponRedemptionWhereInput!]
+  OR: [CouponRedemptionWhereInput!]
+  NOT: [CouponRedemptionWhereInput!]
+}
+
+input CouponRedemptionWhereUniqueInput {
+  id: ID
+}
+
+type CouponSubscriptionPayload {
+  mutation: MutationType!
+  node: Coupon
+  updatedFields: [String!]
+  previousValues: CouponPreviousValues
+}
+
+input CouponSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CouponWhereInput
+  AND: [CouponSubscriptionWhereInput!]
+  OR: [CouponSubscriptionWhereInput!]
+  NOT: [CouponSubscriptionWhereInput!]
+}
+
+input CouponUpdateInput {
+  code: String
+  capacity: Int
+  redemptions: CouponRedemptionUpdateManyWithoutCouponInput
+}
+
+input CouponUpdateManyMutationInput {
+  code: String
+  capacity: Int
+}
+
+input CouponUpdateOneRequiredWithoutRedemptionsInput {
+  create: CouponCreateWithoutRedemptionsInput
+  update: CouponUpdateWithoutRedemptionsDataInput
+  upsert: CouponUpsertWithoutRedemptionsInput
+  connect: CouponWhereUniqueInput
+}
+
+input CouponUpdateWithoutRedemptionsDataInput {
+  code: String
+  capacity: Int
+}
+
+input CouponUpsertWithoutRedemptionsInput {
+  update: CouponUpdateWithoutRedemptionsDataInput!
+  create: CouponCreateWithoutRedemptionsInput!
+}
+
+input CouponWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  code: String
+  code_not: String
+  code_in: [String!]
+  code_not_in: [String!]
+  code_lt: String
+  code_lte: String
+  code_gt: String
+  code_gte: String
+  code_contains: String
+  code_not_contains: String
+  code_starts_with: String
+  code_not_starts_with: String
+  code_ends_with: String
+  code_not_ends_with: String
+  capacity: Int
+  capacity_not: Int
+  capacity_in: [Int!]
+  capacity_not_in: [Int!]
+  capacity_lt: Int
+  capacity_lte: Int
+  capacity_gt: Int
+  capacity_gte: Int
+  redemptions_every: CouponRedemptionWhereInput
+  redemptions_some: CouponRedemptionWhereInput
+  redemptions_none: CouponRedemptionWhereInput
+  AND: [CouponWhereInput!]
+  OR: [CouponWhereInput!]
+  NOT: [CouponWhereInput!]
+}
+
+input CouponWhereUniqueInput {
+  id: ID
+  code: String
+}
+
 scalar DateTime
 
 type Entity {
@@ -321,6 +649,7 @@ type Entity {
   assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset!]
   placements(where: PlacementWhereInput, orderBy: PlacementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Placement!]
   tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket!]
+  redemptions(where: CouponRedemptionWhereInput, orderBy: CouponRedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CouponRedemption!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -338,6 +667,7 @@ input EntityCreateInput {
   assets: AssetCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
   tickets: TicketCreateManyWithoutOwnerInput
+  redemptions: CouponRedemptionCreateManyWithoutEntityInput
 }
 
 input EntityCreateOneWithoutAssetsInput {
@@ -347,6 +677,11 @@ input EntityCreateOneWithoutAssetsInput {
 
 input EntityCreateOneWithoutPlacementsInput {
   create: EntityCreateWithoutPlacementsInput
+  connect: EntityWhereUniqueInput
+}
+
+input EntityCreateOneWithoutRedemptionsInput {
+  create: EntityCreateWithoutRedemptionsInput
   connect: EntityWhereUniqueInput
 }
 
@@ -361,6 +696,7 @@ input EntityCreateWithoutAssetsInput {
   email: String!
   placements: PlacementCreateManyWithoutEntityInput
   tickets: TicketCreateManyWithoutOwnerInput
+  redemptions: CouponRedemptionCreateManyWithoutEntityInput
 }
 
 input EntityCreateWithoutPlacementsInput {
@@ -368,6 +704,16 @@ input EntityCreateWithoutPlacementsInput {
   handle: String
   email: String!
   assets: AssetCreateManyWithoutOwnerInput
+  tickets: TicketCreateManyWithoutOwnerInput
+  redemptions: CouponRedemptionCreateManyWithoutEntityInput
+}
+
+input EntityCreateWithoutRedemptionsInput {
+  id: ID
+  handle: String
+  email: String!
+  assets: AssetCreateManyWithoutOwnerInput
+  placements: PlacementCreateManyWithoutEntityInput
   tickets: TicketCreateManyWithoutOwnerInput
 }
 
@@ -377,6 +723,7 @@ input EntityCreateWithoutTicketsInput {
   email: String!
   assets: AssetCreateManyWithoutOwnerInput
   placements: PlacementCreateManyWithoutEntityInput
+  redemptions: CouponRedemptionCreateManyWithoutEntityInput
 }
 
 type EntityEdge {
@@ -429,6 +776,7 @@ input EntityUpdateInput {
   assets: AssetUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
   tickets: TicketUpdateManyWithoutOwnerInput
+  redemptions: CouponRedemptionUpdateManyWithoutEntityInput
 }
 
 input EntityUpdateManyMutationInput {
@@ -450,6 +798,13 @@ input EntityUpdateOneRequiredWithoutPlacementsInput {
   connect: EntityWhereUniqueInput
 }
 
+input EntityUpdateOneRequiredWithoutRedemptionsInput {
+  create: EntityCreateWithoutRedemptionsInput
+  update: EntityUpdateWithoutRedemptionsDataInput
+  upsert: EntityUpsertWithoutRedemptionsInput
+  connect: EntityWhereUniqueInput
+}
+
 input EntityUpdateOneRequiredWithoutTicketsInput {
   create: EntityCreateWithoutTicketsInput
   update: EntityUpdateWithoutTicketsDataInput
@@ -462,12 +817,22 @@ input EntityUpdateWithoutAssetsDataInput {
   email: String
   placements: PlacementUpdateManyWithoutEntityInput
   tickets: TicketUpdateManyWithoutOwnerInput
+  redemptions: CouponRedemptionUpdateManyWithoutEntityInput
 }
 
 input EntityUpdateWithoutPlacementsDataInput {
   handle: String
   email: String
   assets: AssetUpdateManyWithoutOwnerInput
+  tickets: TicketUpdateManyWithoutOwnerInput
+  redemptions: CouponRedemptionUpdateManyWithoutEntityInput
+}
+
+input EntityUpdateWithoutRedemptionsDataInput {
+  handle: String
+  email: String
+  assets: AssetUpdateManyWithoutOwnerInput
+  placements: PlacementUpdateManyWithoutEntityInput
   tickets: TicketUpdateManyWithoutOwnerInput
 }
 
@@ -476,6 +841,7 @@ input EntityUpdateWithoutTicketsDataInput {
   email: String
   assets: AssetUpdateManyWithoutOwnerInput
   placements: PlacementUpdateManyWithoutEntityInput
+  redemptions: CouponRedemptionUpdateManyWithoutEntityInput
 }
 
 input EntityUpsertWithoutAssetsInput {
@@ -486,6 +852,11 @@ input EntityUpsertWithoutAssetsInput {
 input EntityUpsertWithoutPlacementsInput {
   update: EntityUpdateWithoutPlacementsDataInput!
   create: EntityCreateWithoutPlacementsInput!
+}
+
+input EntityUpsertWithoutRedemptionsInput {
+  update: EntityUpdateWithoutRedemptionsDataInput!
+  create: EntityCreateWithoutRedemptionsInput!
 }
 
 input EntityUpsertWithoutTicketsInput {
@@ -545,6 +916,9 @@ input EntityWhereInput {
   tickets_every: TicketWhereInput
   tickets_some: TicketWhereInput
   tickets_none: TicketWhereInput
+  redemptions_every: CouponRedemptionWhereInput
+  redemptions_some: CouponRedemptionWhereInput
+  redemptions_none: CouponRedemptionWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -889,6 +1263,17 @@ type Mutation {
   upsertAsset(where: AssetWhereUniqueInput!, create: AssetCreateInput!, update: AssetUpdateInput!): Asset!
   deleteAsset(where: AssetWhereUniqueInput!): Asset
   deleteManyAssets(where: AssetWhereInput): BatchPayload!
+  createCoupon(data: CouponCreateInput!): Coupon!
+  updateCoupon(data: CouponUpdateInput!, where: CouponWhereUniqueInput!): Coupon
+  updateManyCoupons(data: CouponUpdateManyMutationInput!, where: CouponWhereInput): BatchPayload!
+  upsertCoupon(where: CouponWhereUniqueInput!, create: CouponCreateInput!, update: CouponUpdateInput!): Coupon!
+  deleteCoupon(where: CouponWhereUniqueInput!): Coupon
+  deleteManyCoupons(where: CouponWhereInput): BatchPayload!
+  createCouponRedemption(data: CouponRedemptionCreateInput!): CouponRedemption!
+  updateCouponRedemption(data: CouponRedemptionUpdateInput!, where: CouponRedemptionWhereUniqueInput!): CouponRedemption
+  upsertCouponRedemption(where: CouponRedemptionWhereUniqueInput!, create: CouponRedemptionCreateInput!, update: CouponRedemptionUpdateInput!): CouponRedemption!
+  deleteCouponRedemption(where: CouponRedemptionWhereUniqueInput!): CouponRedemption
+  deleteManyCouponRedemptions(where: CouponRedemptionWhereInput): BatchPayload!
   createEntity(data: EntityCreateInput!): Entity!
   updateEntity(data: EntityUpdateInput!, where: EntityWhereUniqueInput!): Entity
   updateManyEntities(data: EntityUpdateManyMutationInput!, where: EntityWhereInput): BatchPayload!
@@ -1254,6 +1639,12 @@ type Query {
   asset(where: AssetWhereUniqueInput!): Asset
   assets(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Asset]!
   assetsConnection(where: AssetWhereInput, orderBy: AssetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AssetConnection!
+  coupon(where: CouponWhereUniqueInput!): Coupon
+  coupons(where: CouponWhereInput, orderBy: CouponOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Coupon]!
+  couponsConnection(where: CouponWhereInput, orderBy: CouponOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CouponConnection!
+  couponRedemption(where: CouponRedemptionWhereUniqueInput!): CouponRedemption
+  couponRedemptions(where: CouponRedemptionWhereInput, orderBy: CouponRedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CouponRedemption]!
+  couponRedemptionsConnection(where: CouponRedemptionWhereInput, orderBy: CouponRedemptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CouponRedemptionConnection!
   entity(where: EntityWhereUniqueInput!): Entity
   entities(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Entity]!
   entitiesConnection(where: EntityWhereInput, orderBy: EntityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EntityConnection!
@@ -1812,6 +2203,8 @@ input ShowWhereUniqueInput {
 
 type Subscription {
   asset(where: AssetSubscriptionWhereInput): AssetSubscriptionPayload
+  coupon(where: CouponSubscriptionWhereInput): CouponSubscriptionPayload
+  couponRedemption(where: CouponRedemptionSubscriptionWhereInput): CouponRedemptionSubscriptionPayload
   entity(where: EntitySubscriptionWhereInput): EntitySubscriptionPayload
   exhibition(where: ExhibitionSubscriptionWhereInput): ExhibitionSubscriptionPayload
   placement(where: PlacementSubscriptionWhereInput): PlacementSubscriptionPayload

@@ -25,7 +25,7 @@ const StyledEnterButton = styled(EnterButton)`
 
 export default function HaveTicketModal() {
   const { history } = useRouter();
-  const { isDefinitelyClosed } = useIsOpen();
+  const { isDefinitelyOpen, isDefinitelyClosed } = useIsOpen();
   const isLoggedIn = useIsLoggedIn();
   const emailInput = useRef<HTMLInputElement>();
 
@@ -43,7 +43,9 @@ export default function HaveTicketModal() {
     setIsRequestingLogin(true);
     try {
       // if open show, redirect to exhibition, otherwise go home
-      const goto = !!show ? format(exhibition.number, show.number) : "";
+      const goto = isDefinitelyOpen
+        ? `/${format(exhibition.number, show.number)}`
+        : "/";
       await requestLogin(emailInput.current.value, goto);
     } catch (error) {
       console.error(error);
@@ -51,15 +53,13 @@ export default function HaveTicketModal() {
       setIsRequestingLogin(false);
       setDidRequestLogin(true);
     }
-  }, [exhibition, show]);
+  }, [exhibition, isDefinitelyOpen, show]);
 
   return (
     <ModalFrame>
       <ModalHeader>
         <ModalTitle>
-          {isDefinitelyClosed
-            ? "the dot.gallery is closed"
-            : "I have a ticket."}
+          {isDefinitelyClosed ? "dot.gallery is closed" : "I have a ticket."}
         </ModalTitle>
         <ModalSubtitle>
           {isDefinitelyClosed

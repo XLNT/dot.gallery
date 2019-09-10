@@ -44,11 +44,10 @@ export default function DoubleConfirm({ setFlow }: ExhibitionProps<void>) {
 
   return (
     <Container>
-      <Text>The dot.gallery can only be viewed in full-screen.</Text>
+      <Text>dot.gallery can only be viewed in full-screen.</Text>
       <StyledEnterButton onClick={goGallery}>Return</StyledEnterButton>
       <Text>
-        Or exit the dot.gallery{" "}
-        <LinkButton onClick={goExit}>from here.</LinkButton>
+        Or exit the gallery <LinkButton onClick={goExit}>from here.</LinkButton>
       </Text>
     </Container>
   );

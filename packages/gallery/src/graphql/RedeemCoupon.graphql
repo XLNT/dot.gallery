@@ -1,0 +1,5 @@
+mutation RedeemCoupon($code: String!) {
+  redeemCoupon(code: $code) {
+    id
+  }
+}

@@ -24,6 +24,11 @@ export type Asset = {
   updatedAt: Scalars['DateTime'],
 };
 
+export type CouponRedemption = {
+  __typename?: 'CouponRedemption',
+  id: Scalars['ID'],
+};
+
 
 export type Entity = {
   __typename?: 'Entity',
@@ -63,6 +68,7 @@ export type Mutation = {
   createPlacement?: Maybe<Placement>,
   redeemTicket: Ticket,
   awardWalk: Asset,
+  redeemCoupon?: Maybe<CouponRedemption>,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -82,6 +88,11 @@ export type MutationCreatePlacementArgs = {
 
 export type MutationAwardWalkArgs = {
   image: Scalars['String']
+};
+
+
+export type MutationRedeemCouponArgs = {
+  code: Scalars['String']
 };
 
 
@@ -223,6 +234,7 @@ export type ResolversTypes = {
   Ticket: ResolverTypeWrapper<Partial<Ticket>>,
   Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
   Mutation: ResolverTypeWrapper<{}>,
+  CouponRedemption: ResolverTypeWrapper<Partial<CouponRedemption>>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -242,6 +254,7 @@ export type ResolversParentTypes = {
   Ticket: Partial<Ticket>,
   Boolean: Partial<Scalars['Boolean']>,
   Mutation: {},
+  CouponRedemption: Partial<CouponRedemption>,
 };
 
 export type AssetResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Asset'] = ResolversParentTypes['Asset']> = {
@@ -252,6 +265,10 @@ export type AssetResolvers<ContextType = BackroomContext, ParentType extends Res
   placement?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
+};
+
+export type CouponRedemptionResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['CouponRedemption'] = ResolversParentTypes['CouponRedemption']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -296,6 +313,7 @@ export type MutationResolvers<ContextType = BackroomContext, ParentType extends 
   createPlacement?: Resolver<Maybe<ResolversTypes['Placement']>, ParentType, ContextType, RequireFields<MutationCreatePlacementArgs, 'assetId' | 'roomId' | 'x' | 'y'>>,
   redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
   awardWalk?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationAwardWalkArgs, 'image'>>,
+  redeemCoupon?: Resolver<Maybe<ResolversTypes['CouponRedemption']>, ParentType, ContextType, RequireFields<MutationRedeemCouponArgs, 'code'>>,
   modIssueTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<MutationModIssueTicketArgs, 'exhibitionId'>>,
 };
 
@@ -343,6 +361,7 @@ export type TicketResolvers<ContextType = BackroomContext, ParentType extends Re
 
 export type Resolvers<ContextType = BackroomContext> = {
   Asset?: AssetResolvers<ContextType>,
+  CouponRedemption?: CouponRedemptionResolvers<ContextType>,
   DateTime?: GraphQLScalarType,
   Entity?: EntityResolvers<ContextType>,
   Exhibition?: ExhibitionResolvers<ContextType>,

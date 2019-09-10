@@ -12,6 +12,8 @@ import ModalTitle from "components/ModalTitle";
 import fromTheme from "theme/fromTheme";
 import stripe from "client/stripe";
 import useCurrentExhibition from "hook/useCurrentExhibition";
+import useIsLoggedIn from "hook/useIsLoggedIn";
+import useRouter from "context/useRouter";
 
 const ModalAction = styled.div`
   margin-top: 3rem;
@@ -33,6 +35,8 @@ const StyledBlockButton = styled(BlockButton)`
 `;
 
 export default function WantTicketModal() {
+  const { history } = useRouter();
+  const isLoggedIn = useIsLoggedIn();
   const [loading, setLoading] = useState<string>();
   const [createSession] = useCreateSessionMutation();
 
@@ -47,6 +51,20 @@ export default function WantTicketModal() {
     await stripe().redirectToCheckout({ sessionId });
     setLoading(undefined);
   }, [createSession]);
+
+  const goCoupon = useCallback(async () => {
+    if (isLoggedIn) {
+      history.push("/want-ticket/voucher");
+    } else {
+      history.push(
+        `/login?${new URLSearchParams({
+          goto: "/want-ticket/voucher",
+          title: "But First, Login.",
+          subtitle: "Click the link to enter your coupon",
+        })}`,
+      );
+    }
+  }, [history, isLoggedIn]);
 
   return (
     <ModalFrame>
@@ -69,11 +87,9 @@ export default function WantTicketModal() {
         <StyledBlockButton onClick={onCreditCard} loading={loading === "card"}>
           Credit Card
         </StyledBlockButton>
+        <StyledBlockButton onClick={goCoupon}>Coupon</StyledBlockButton>
         <StyledBlockButton disabled subtitle="(coming soon)">
           Crypto
-        </StyledBlockButton>
-        <StyledBlockButton disabled subtitle="(coming soon)">
-          PayPal
         </StyledBlockButton>
       </ModalAction>
     </ModalFrame>

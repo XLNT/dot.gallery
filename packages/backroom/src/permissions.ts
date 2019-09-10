@@ -1,7 +1,11 @@
 import * as Yup from "yup";
 import { AuthenticationError } from "apollo-server-core";
 import { BackroomContext } from "./types";
-import { GalleryIsNotOpenError } from "./errors";
+import {
+  CouponAtCapacityError,
+  CouponNotFoundError,
+  GalleryIsNotOpenError,
+} from "./errors";
 import { and, chain, inputRule, not, or, rule, shield } from "graphql-shield";
 import prisma from "./api/prisma";
 
@@ -70,6 +74,27 @@ const onlyMod = rule({ cache: "contextual" })(
 //     return !redeemed;
 //   });
 
+const couponHasCapacity = (mapper: ArgsMapper) =>
+  rule()(async (parent, args, { prisma }: BackroomContext) => {
+    const code = mapper(args);
+    const coupon = await prisma.coupon({ code });
+    if (!coupon) {
+      return new CouponNotFoundError();
+    }
+
+    const issued = await prisma
+      .couponRedemptionsConnection({ where: { coupon: { id: coupon.id } } })
+      .aggregate()
+      .count();
+
+    const canRedeem = coupon.capacity > issued;
+    if (!canRedeem) {
+      return new CouponAtCapacityError();
+    }
+
+    return true;
+  });
+
 const ownsAvailableTicketForCurrentExhibition = rule()(
   async (parent, args, { currentEntity, currentExhibition }) => {
     const availableTicketsCount = await prisma
@@ -118,6 +143,7 @@ export default shield(
         isKnownEntity,
         ownsAsset(({ assetId }) => assetId),
       ),
+      redeemCoupon: chain(isKnownEntity, couponHasCapacity(({ code }) => code)),
       awardWalk: chain(isKnownEntity, onlyDuringActiveShow),
       modIssueTicket: chain(isKnownEntity, onlyMod),
     },

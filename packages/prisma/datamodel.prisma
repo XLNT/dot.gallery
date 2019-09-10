@@ -9,6 +9,7 @@ type Entity {
   placements: [Placement!]! @relation(name: "EntityPlacements", onDelete: CASCADE)
   # entity has_many tickets
   tickets: [Ticket!]! @relation(name: "EntityTickets", onDelete: CASCADE)
+  redemptions: [CouponRedemption!]! @relation(onDelete: CASCADE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -100,4 +101,19 @@ type Placement {
   assets: [Asset!]!
 
   createdAt: DateTime! @createdAt
+}
+
+type Coupon {
+  id: ID! @id
+  code: String! @unique
+  capacity: Int!
+
+  redemptions: [CouponRedemption!]! @relation(onDelete: CASCADE)
+}
+
+type CouponRedemption {
+  id: ID! @id
+
+  entity: Entity!
+  coupon: Coupon!
 }

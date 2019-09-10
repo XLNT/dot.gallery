@@ -5,7 +5,7 @@ export const requestLogin = async (email: string, goto: string) => {
   const webAuth = new auth0.WebAuth({
     domain: "bydot.auth0.com",
     clientID: config.AUTH0_CLIENT_ID,
-    redirectUri: `${config.BASE_URI}/login?${new URLSearchParams({
+    redirectUri: `${config.BASE_URI}/authorize?${new URLSearchParams({
       goto,
     })}`,
   });
