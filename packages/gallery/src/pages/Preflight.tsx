@@ -22,6 +22,7 @@ import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
+import usePreloadedFoyer from "hook/usePreloadedFoyer";
 import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
@@ -109,6 +110,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useRequiredTicket();
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
+
+  usePreloadedFoyer();
   const { setFullscreen } = Fullscreen.useContainer();
   const [currentStep, setCurrentStep] = useState(0);
   const flexDirection = useBreakpoints(["column", "column", "row"]);
@@ -189,7 +192,6 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const opacity = useTrail(steps.length, {
     opacity: 1,
     from: { opacity: 0 },
-    config: { tension: 400, friction: 240 },
   });
 
   const scalars = useSprings<
@@ -214,11 +216,10 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     })),
   );
 
+  const midpoint = Math.floor(steps.length / 2);
+  const dist = midpoint - currentStep;
   const trail = useTrail(steps.length, {
-    transform: `translateY(${((Math.floor(steps.length / 2) - currentStep) *
-      EXTENT) /
-      2}px)`,
-    config: config.slow,
+    transform: `translateY(${dist * EXTENT}px)`,
   });
 
   useKey(
@@ -230,9 +231,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
           return goNext();
       }
     },
-    {
-      detectKeys: [Direction.Up, Direction.Down].map(keycodeFor),
-    },
+    { detectKeys: [Direction.Up, Direction.Down].map(keycodeFor) },
     { dependencies: [goPrev, goNext] },
   );
 
@@ -247,8 +246,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
               opacity: interpolate(
                 [
                   scalars[index].scalar.interpolate(
-                    [Math.floor(steps.length / 2), 0],
-                    // we don't seemt to have an overload for this range remap behavior...
+                    [midpoint, 0],
+                    // we don't seem to have an overload for this range remap behavior...
                     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     [0, 1],

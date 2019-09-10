@@ -7,3 +7,7 @@ export const preloadImage = async (uri: string): Promise<void> => {
     img.src = uri;
   });
 };
+
+export const preloadVideo = async (uri: string): Promise<void> => {
+  await fetch(uri, { headers: { range: "bytes=0-567139" } });
+};

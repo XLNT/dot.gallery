@@ -2,7 +2,7 @@ import { get } from "lodash";
 import { useEffect, useRef } from "react";
 
 import { contentTypeIsImage, contentTypeIsVideo } from "lib/contentType";
-import { preloadImage } from "lib/preload";
+import { preloadImage, preloadVideo } from "lib/preload";
 import EntryCache from "context/EntryCache";
 import contentful from "client/contentful";
 
@@ -32,7 +32,7 @@ export default function usePreloadedEntries(ids: string[]) {
               if (contentTypeIsImage(contentType)) {
                 await preloadImage(uri);
               } else if (contentTypeIsVideo(contentType)) {
-                // await preloadVideo(uri);
+                await preloadVideo(uri);
               }
             }),
           ),
