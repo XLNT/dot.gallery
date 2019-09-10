@@ -1,5 +1,6 @@
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { Room as RoomModel, useCreatePlacementMutation } from "../operations";
+import { Room as SWRTCRoom } from "@andyet/simplewebrtc";
 import { animated, useSpring } from "react-spring";
 import { contentTypeIsVideo } from "lib/contentType";
 import { get } from "lodash-es";
@@ -86,22 +87,31 @@ export default function Room({ room }: RoomProps) {
 
   return (
     <>
-      <Container>
-        <Work ref={dropRef} style={style}>
-          {contentType && <ElementType src={uri} autoPlay loop />}
-        </Work>
-      </Container>
-      <AnimatedPanelContent>
-        {state === "resolved" && (
-          <GalleryRichText richText={result.fields.body} />
-        )}
-        {state === "rejected" && (
-          <>
-            <h1>Error</h1>
-            <code>{error.message}</code>
-          </>
-        )}
-      </AnimatedPanelContent>
+      <SWRTCRoom name={room.id}>
+        {props => {
+          console.log(props);
+          return (
+            <>
+              <Container>
+                <Work ref={dropRef} style={style}>
+                  {contentType && <ElementType src={uri} autoPlay loop />}
+                </Work>
+              </Container>
+              <AnimatedPanelContent>
+                {state === "resolved" && (
+                  <GalleryRichText richText={result.fields.body} />
+                )}
+                {state === "rejected" && (
+                  <>
+                    <h1>Error</h1>
+                    <code>{error.message}</code>
+                  </>
+                )}
+              </AnimatedPanelContent>
+            </>
+          );
+        }}
+      </SWRTCRoom>
     </>
   );
 }

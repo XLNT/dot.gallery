@@ -6,9 +6,10 @@ import {
   keycodeFor,
   navigate,
 } from "lib/rooms";
-import { CurrentExhibitionQuery } from "operations";
+import { CurrentExhibitionQuery, useUserDataTokenQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { animated, config, useTransition } from "react-spring";
+import { Provider as SWRTCProvider } from "@andyet/simplewebrtc";
+import { animated, config as springConfig, useTransition } from "react-spring";
 import { format } from "lib/exhibitionSlug";
 import { get } from "lodash";
 import Journey from "context/Journey";
@@ -17,6 +18,7 @@ import PanelAction from "context/PanelAction";
 import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
+import config from "config";
 import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
@@ -62,6 +64,8 @@ export default function Gallery(props: ExhibitionProps<void>) {
   useSuggestedPanelState(true);
   const [, appendToJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
+  const { data } = useUserDataTokenQuery();
+  const token = get(data, "userDataToken");
 
   const { exhibition } = useCurrentExhibition();
   const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
@@ -136,22 +140,27 @@ export default function Gallery(props: ExhibitionProps<void>) {
     from: { transform: `translate3d(${-outX}px, ${-outY}px, 0)`, opacity: 0 },
     enter: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
     leave: { transform: `translate3d(${outX}px, ${outY}px, 0)`, opacity: 0 },
-    config: config.molasses,
+    config: springConfig.molasses,
   });
 
   return (
     <>
-      <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
-      <JourneyAndExit {...props} />
-      <Canvas>
-        {transitions.map(({ item, key, props }) => (
-          <InnerCanvas key={key} style={props}>
-            {item && <Room room={item} />}
-          </InnerCanvas>
-        ))}
-      </Canvas>
-      <SocialLayer />
-      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
+      <SWRTCProvider
+        configUrl={`https://api.simplewebrtc.com/config/user/${config.SIMPLEWEBRTC_API_KEY}`}
+        userData={token}
+      >
+        <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
+        <JourneyAndExit {...props} />
+        <Canvas>
+          {transitions.map(({ item, key, props }) => (
+            <InnerCanvas key={key} style={props}>
+              {item && <Room room={item} />}
+            </InnerCanvas>
+          ))}
+        </Canvas>
+        <SocialLayer />
+        <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
+      </SWRTCProvider>
     </>
   );
 }

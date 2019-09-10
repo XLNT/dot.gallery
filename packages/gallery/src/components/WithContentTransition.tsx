@@ -11,7 +11,8 @@ const Content = styled(animated.div)`
   right: 0;
   bottom: 0;
   overflow-y: auto;
-  padding: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 `;
 
 export default function WithContentTransition({

@@ -99,6 +99,7 @@ type CouponRedemption {
 type Query {
   currentEntity: Entity!
   currentExhibition: Exhibition
+  userDataToken: String
 }
 
 type Mutation  {

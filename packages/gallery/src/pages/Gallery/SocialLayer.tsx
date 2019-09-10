@@ -1,3 +1,4 @@
+import { PeerList, RemoteAudioPlayer } from "@andyet/simplewebrtc";
 import { useCurrentEntityQuery } from "../../operations";
 import PresentEntity from "./PresentEntity";
 import React from "react";
@@ -18,10 +19,23 @@ export default function SocialLayer() {
   });
 
   return (
-    <PresenceList>
-      {!loading && !error && data.currentEntity && (
-        <PresentEntity entity={data.currentEntity} />
-      )}
-    </PresenceList>
+    <>
+      <RemoteAudioPlayer />
+      <PeerList
+        room="test"
+        render={({ peers }) =>
+          peers.map(peer => {
+            console.log(peer);
+            return (
+              <PresenceList key={peer.id}>
+                {!loading && !error && data.currentEntity && (
+                  <PresentEntity entity={data.currentEntity} />
+                )}
+              </PresenceList>
+            );
+          })
+        }
+      />
+    </>
   );
 }

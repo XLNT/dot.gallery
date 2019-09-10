@@ -8,6 +8,7 @@ import {
 } from "react-spring";
 import { Direction, directionFor, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
+import { RequestUserMedia } from "@andyet/simplewebrtc";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
 import React, {
@@ -28,6 +29,13 @@ import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const EXTENT = 200;
+
+enum PermissionState {
+  Unasked,
+  Pending,
+  Available,
+  Denied,
+}
 
 const Container = styled.div`
   flex: 1;
@@ -73,6 +81,7 @@ const PreflightContainer = styled(animated.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  user-select: none;
 `;
 
 const PreflightHeader = styled.h2`
@@ -116,6 +125,10 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const [currentStep, setCurrentStep] = useState(0);
   const flexDirection = useBreakpoints(["column", "column", "row"]);
 
+  const [permissionState, setPermissionState] = useState<PermissionState>(
+    PermissionState.Unasked,
+  );
+
   const goFoyer = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
       await setFullscreen(true);
@@ -140,9 +153,33 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         subtitle:
           "These works exists in pixels and waves. Set your volume accordingly.",
         element: (
-          <>
-            <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
-          </>
+          <RequestUserMedia
+            audio
+            share
+            microphonePermissionDenied={() =>
+              setPermissionState(PermissionState.Denied)
+            }
+            onError={() => setPermissionState(PermissionState.Denied)}
+            onSuccess={() => setPermissionState(PermissionState.Available)}
+            render={getMedia => (
+              <StyledEnterButton
+                onClick={e => {
+                  setPermissionState(PermissionState.Pending);
+                  return getMedia(e);
+                }}
+                disabled={
+                  permissionState === PermissionState.Available ||
+                  permissionState === PermissionState.Pending
+                }
+              >
+                {permissionState === PermissionState.Available
+                  ? "Granted"
+                  : permissionState === PermissionState.Denied
+                  ? "Denied"
+                  : "Grant"}
+              </StyledEnterButton>
+            )}
+          />
         ),
       },
       {
@@ -176,12 +213,20 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [goFoyer],
+    [goFoyer, permissionState],
   );
 
   const goNext = useCallback(
-    () => setCurrentStep(step => Math.min(step + 1, steps.length - 1)),
-    [steps.length],
+    () =>
+      setCurrentStep(step => {
+        // block until we have audio
+        if (permissionState === PermissionState.Unasked && step == 1) {
+          return step;
+        }
+
+        return Math.min(step + 1, steps.length - 1);
+      }),
+    [permissionState, steps.length],
   );
 
   const goPrev = useCallback(

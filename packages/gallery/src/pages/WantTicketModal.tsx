@@ -59,8 +59,8 @@ export default function WantTicketModal() {
       history.push(
         `/login?${new URLSearchParams({
           goto: "/want-ticket/voucher",
-          title: "But First, Login.",
-          subtitle: "Click the link to enter your coupon",
+          title: "But first, login.",
+          subtitle: "Click the link to enter your voucher code.",
         })}`,
       );
     }
@@ -87,7 +87,7 @@ export default function WantTicketModal() {
         <StyledBlockButton onClick={onCreditCard} loading={loading === "card"}>
           Credit Card
         </StyledBlockButton>
-        <StyledBlockButton onClick={goCoupon}>Coupon</StyledBlockButton>
+        <StyledBlockButton onClick={goCoupon}>Voucher</StyledBlockButton>
         <StyledBlockButton disabled subtitle="(coming soon)">
           Crypto
         </StyledBlockButton>

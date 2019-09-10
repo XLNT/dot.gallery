@@ -65,7 +65,6 @@ const PanelButton = styled(animated.span)`
 const Inner = styled.div`
   position: relative;
 
-  padding: 0.5rem;
   border: 4px solid ${fromTheme("primary")};
   height: 100%;
   background: ${fromTheme("panel")};

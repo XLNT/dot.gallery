@@ -117,6 +117,7 @@ export type Query = {
   __typename?: 'Query',
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
+  userDataToken?: Maybe<Scalars['String']>,
 };
 
 export type Room = {
@@ -330,6 +331,7 @@ export type PlacementResolvers<ContextType = BackroomContext, ParentType extends
 export type QueryResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   currentEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   currentExhibition?: Resolver<Maybe<ResolversTypes['Exhibition']>, ParentType, ContextType>,
+  userDataToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type RoomResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {

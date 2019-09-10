@@ -1,6 +1,6 @@
-import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { Direction, keycodeFor } from "lib/rooms";
-import { useRedeemTicketMutation } from "operations";
+import { ExhibitionProps, Flow } from "./ExhibitionProps";
+import { useRedeemTicketMutation, useUserDataTokenQuery } from "operations";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";
 import fromTheme from "theme/fromTheme";
@@ -40,6 +40,8 @@ const Arrow = styled.img`
 export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
+
+  useUserDataTokenQuery(); // preload token
 
   const skipVisible = useState(false);
 

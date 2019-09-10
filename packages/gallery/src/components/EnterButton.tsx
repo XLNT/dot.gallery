@@ -8,6 +8,7 @@ const Button = styled.div`
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     font-style: italic;

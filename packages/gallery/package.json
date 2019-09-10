@@ -23,8 +23,10 @@
     "url": "https://github.com/XLNT/dot.gallery/issues"
   },
   "dependencies": {
+    "@andyet/simplewebrtc": "^1.15.8",
     "@apollo/react-common": "^3.0.1",
     "@apollo/react-hooks": "^3.0.1",
+    "@babel/runtime": "^7.6.0",
     "@contentful/rich-text-types": "^13.4.0",
     "@hot-loader/react-dom": "^16.9.0",
     "@madebyconnor/rich-text-to-jsx": "^2.1.1",
@@ -64,8 +66,10 @@
     "use-key-hook": "^1.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@types/auth0-js": "^9.10.6",
     "@types/graphql": "^14.2.3",
@@ -84,5 +88,6 @@
     "eslint-plugin-react-hooks": "^2.0.1",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-clean-dist": "^0.0.6"
-  }
+  },
+  "browserslist": "> 0.25%"
 }

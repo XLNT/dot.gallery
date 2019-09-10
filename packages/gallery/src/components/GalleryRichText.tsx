@@ -4,7 +4,7 @@ import RichText from "@madebyconnor/rich-text-to-jsx";
 import styled from "styled-components";
 
 export const Heading1 = styled.h1`
-  margin-top: 0;
+  margin-top: 1rem;
   margin-bottom: 0;
 `;
 

@@ -40,7 +40,8 @@
       "BACKROOM_URI": "/graphql",
       "AUTH0_CLIENT_ID": "@backroom-auth0-client-id",
       "STRIPE_PUBLISHABLE": "@backroom-stripe-publishable",
-      "GA_TRACKING_ID": "@gallery-ga-tracking-id"
+      "GA_TRACKING_ID": "@gallery-ga-tracking-id",
+      "SIMPLEWEBRTC_API_KEY": "@gallery-simplewebrtc-api-key"
     }
   },
   "env": {
@@ -49,6 +50,7 @@
     "AUTH0_CLIENT_ID": "@backroom-auth0-client-id",
     "STRIPE_SECRET": "@backroom-stripe-secret",
     "STRIPE_SIGNING_SECRET": "@backroom-stripe-signing-secret",
-    "BACKROOM_SECRET": "@backroom-secret"
+    "BACKROOM_SECRET": "@backroom-secret",
+    "SIMPLEWEBRTC_API_SECRET": "@backroom-simplewebrtc-api-secret"
   }
 }

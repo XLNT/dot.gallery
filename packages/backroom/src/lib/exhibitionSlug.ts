@@ -1,6 +1,6 @@
 const kSlugLength = 6; // e00s00
 
-const pad = (s: number) => `00${s}`.slice(-2);
+const pad = (s: number) => `000${s}`.slice(-3);
 
 export const parseSlug = (s: string) => {
   if (!s || s.length !== kSlugLength) {
@@ -20,5 +20,5 @@ export const parseSlug = (s: string) => {
 };
 
 export const formatSlug = (e: number, s?: number): string => {
-  return `E${pad(e)}${s !== undefined ? `S${pad(s)}` : ""}`;
+  return `E${pad(e + 1)}${s !== undefined ? `S${pad(s)}` : ""}`;
 };

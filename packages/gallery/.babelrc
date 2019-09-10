@@ -1,11 +1,11 @@
 {
   "presets": [
-    "env",
+    "@babel/preset-env",
+    "@babel/preset-react",
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "react-hot-loader/babel",
-    "babel-plugin-styled-components",
+    "@babel/plugin-transform-runtime",
     [
       "module-resolver",
       {
@@ -19,6 +19,8 @@
           ".tsx"
         ]
       }
-    ]
+    ],
+    "babel-plugin-styled-components",
+    "react-hot-loader/babel"
   ]
 }

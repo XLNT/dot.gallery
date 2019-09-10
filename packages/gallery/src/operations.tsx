@@ -117,6 +117,7 @@ export type Query = {
   __typename?: 'Query',
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
+  userDataToken?: Maybe<Scalars['String']>,
 };
 
 export type Room = {
@@ -260,6 +261,14 @@ export type RedeemTicketMutation = (
     { __typename?: 'Ticket' }
     & Pick<Ticket, 'id' | 'redeemed'>
   ) }
+);
+
+export type UserDataTokenQueryVariables = {};
+
+
+export type UserDataTokenQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'userDataToken'>
 );
 
 export const AwardWalkDocument = gql`
@@ -423,3 +432,18 @@ export type RedeemTicketMutationFn = ApolloReactCommon.MutationFunction<RedeemTi
 export type RedeemTicketMutationHookResult = ReturnType<typeof useRedeemTicketMutation>;
 export type RedeemTicketMutationResult = ApolloReactCommon.MutationResult<RedeemTicketMutation>;
 export type RedeemTicketMutationOptions = ApolloReactCommon.BaseMutationOptions<RedeemTicketMutation, RedeemTicketMutationVariables>;
+export const UserDataTokenDocument = gql`
+    query UserDataToken {
+  userDataToken
+}
+    `;
+
+    export function useUserDataTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDataTokenQuery, UserDataTokenQueryVariables>) {
+      return ApolloReactHooks.useQuery<UserDataTokenQuery, UserDataTokenQueryVariables>(UserDataTokenDocument, baseOptions);
+    };
+      export function useUserDataTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDataTokenQuery, UserDataTokenQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<UserDataTokenQuery, UserDataTokenQueryVariables>(UserDataTokenDocument, baseOptions);
+      };
+      
+export type UserDataTokenQueryHookResult = ReturnType<typeof useUserDataTokenQuery>;
+export type UserDataTokenQueryResult = ApolloReactCommon.QueryResult<UserDataTokenQuery, UserDataTokenQueryVariables>;
