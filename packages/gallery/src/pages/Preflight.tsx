@@ -5,7 +5,6 @@ import {
   interpolate,
   useSprings,
   useTrail,
-  useTransition,
 } from "react-spring";
 import { Direction, directionFor, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
@@ -21,12 +20,13 @@ import React, {
 import arrows from "static/arrows.svg";
 import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
-import useDimensions from "react-use-dimensions";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
+
+const EXTENT = 200;
 
 const Container = styled.div`
   flex: 1;
@@ -50,7 +50,7 @@ const ActionContainer = styled.div`
 `;
 
 const Action = styled(animated.div)`
-  height: 200px;
+  height: ${EXTENT}px;
 
   display: flex;
   justify-content: center;
@@ -67,7 +67,7 @@ const StepsContainer = styled.div`
 `;
 
 const PreflightContainer = styled(animated.div)`
-  height: 200px;
+  height: ${EXTENT}px;
 
   display: flex;
   flex-direction: column;
@@ -113,9 +113,6 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const [currentStep, setCurrentStep] = useState(0);
   const flexDirection = useBreakpoints(["column", "column", "row"]);
 
-  const [firstRef, { height: itemHeight = 200 }] = useDimensions();
-  const [firstActionRef, { height: actionHeight = 200 }] = useDimensions();
-
   const goFoyer = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
       await setFullscreen(true);
@@ -145,16 +142,16 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
           </>
         ),
       },
-      // {
-      //   title: "You are not alone.",
-      //   subtitle:
-      //     "Everyone viewing a work can talk with one another. Enter the name you want others to see. You can mute yourself or others.",
-      //   element: (
-      //     <>
-      //       <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
-      //     </>
-      //   ),
-      // },
+      {
+        title: "You are not alone.",
+        subtitle:
+          "Everyone viewing a work can talk with one another. Enter the name you want others to see. You can mute yourself or others.",
+        element: (
+          <>
+            <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
+          </>
+        ),
+      },
       {
         title: "Give and receive.",
         subtitle:
@@ -218,14 +215,9 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   );
 
   const trail = useTrail(steps.length, {
-    transform: `translateY(${(Math.floor(steps.length / 2) - currentStep) *
-      itemHeight}px)`,
-    config: config.slow,
-  });
-
-  const actionTrail = useTrail(steps.length, {
-    transform: `translateY(${(Math.floor(steps.length / 2) - currentStep) *
-      actionHeight}px)`,
+    transform: `translateY(${((Math.floor(steps.length / 2) - currentStep) *
+      EXTENT) /
+      2}px)`,
     config: config.slow,
   });
 
@@ -249,7 +241,6 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
       <StepsContainer>
         {trail.map((props, index) => (
           <PreflightStep
-            ref={index === 0 ? firstRef : undefined}
             key={index}
             style={{
               ...props,
@@ -272,10 +263,9 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ))}
       </StepsContainer>
       <ActionContainer>
-        {actionTrail.map((props, index) => (
+        {trail.map((props, index) => (
           <Action
             key={index}
-            ref={index === 0 ? firstActionRef : undefined}
             style={{
               ...props,
               opacity: interpolate(
