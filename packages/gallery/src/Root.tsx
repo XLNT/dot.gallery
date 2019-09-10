@@ -7,6 +7,7 @@ import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
+import ReactGA from "react-ga";
 
 import EntityToken from "context/EntityToken";
 import EntryCache from "context/EntryCache";
@@ -24,11 +25,15 @@ import PanelVisibility from "context/PanelVisibility";
 import TicketSuccess from "pages/TicketSuccess";
 import Timezone from "context/Timezone";
 import WithPanel from "pages/WithPanel";
+import config from "config";
 import fromTheme from "theme/fromTheme";
 import makeClient from "client/client";
 import nest from "lib/nest";
 import theme from "theme/theme";
 import useConstant from "hook/useConstant";
+
+// only initialize if available
+config.GA_TRACKING_ID && ReactGA.initialize(config.GA_TRACKING_ID);
 
 const GlobalStyle = createGlobalStyle`
   body {
