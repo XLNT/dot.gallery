@@ -56,14 +56,14 @@ export default function Room({ room }: RoomProps) {
       ? Video
       : Image
     : undefined;
-  const [createAsset] = useCreatePlacementMutation({
+  const [createPlacement] = useCreatePlacementMutation({
     refetchQueries: ["CurrentEntity"],
   });
 
   const drop = useCallback(
     async item => {
       // TODO: collect x, y like stickers
-      await createAsset({
+      await createPlacement({
         variables: {
           assetId: item.asset.id,
           roomId: room.id,
@@ -72,7 +72,7 @@ export default function Room({ room }: RoomProps) {
         },
       });
     },
-    [createAsset, room.id],
+    [createPlacement, room.id],
   );
 
   const [{ isOver }, dropRef] = useDrop({

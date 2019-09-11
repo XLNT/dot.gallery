@@ -10,6 +10,7 @@ import { importSchema } from "graphql-import";
 import { IncomingMessage, ServerResponse } from "http";
 import { verify } from "./api/auth";
 import auth0 from "./api/auth0";
+import contentful from "./api/contentful";
 import getCurrentExhibition from "./lib/getCurrentExhibition";
 import permissions from "./permissions";
 import prisma from "./api/prisma";
@@ -62,6 +63,7 @@ const server = new ApolloServer({
     prisma,
     auth0,
     stripe,
+    contentful,
     currentEntity: await entityFromRequest(ctx.req),
     currentExhibition: await getCurrentExhibition(prisma),
   }),

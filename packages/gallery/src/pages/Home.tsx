@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { first, get, last } from "lodash";
+import { first, get, last } from "lodash-es";
 import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 

@@ -251,6 +251,10 @@ export type KnownEntityQuery = (
   & { knownEntity: (
     { __typename?: 'Entity' }
     & Pick<Entity, 'id' | 'handle'>
+    & { assets: Array<(
+      { __typename?: 'Asset' }
+      & Pick<Asset, 'id' | 'domain' | 'uri'>
+    )> }
   ) }
 );
 
@@ -431,6 +435,11 @@ export const KnownEntityDocument = gql`
   knownEntity(id: $id) {
     id
     handle
+    assets {
+      id
+      domain
+      uri
+    }
   }
 }
     `;

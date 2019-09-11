@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { useEffect, useRef } from "react";
 
 import { contentTypeIsImage, contentTypeIsVideo } from "lib/contentType";

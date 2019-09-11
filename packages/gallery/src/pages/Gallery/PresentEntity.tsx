@@ -1,9 +1,9 @@
-import { get } from "lodash";
+import { get } from "lodash-es";
 import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
+import { CurrentEntityQuery, useKnownEntityQuery } from "../../operations";
 import { Peer, PeerControls } from "@andyet/simplewebrtc";
-import { useKnownEntityQuery } from "../../operations";
 import AssetsList from "components/AssetsList";
 
 const Container = styled.div`
@@ -14,7 +14,12 @@ const Container = styled.div`
   overflow-y: hidden;
 `;
 
-const Handle = styled.div``;
+const Handle = styled.div`
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+`;
 
 const StyledAssetsList = styled(AssetsList)`
   padding-left: 1rem;
@@ -22,39 +27,49 @@ const StyledAssetsList = styled(AssetsList)`
 `;
 
 export default function PresentEntity({
+  id,
+  handle,
+  assets,
   peer,
-  draggable = true,
+  draggable = false,
   wrappable = false,
   children,
   ...rest
 }: PropsWithChildren<{
   draggable?: boolean;
   wrappable?: boolean;
-  peer: Peer;
+  id: string;
+  handle: string;
+  assets: CurrentEntityQuery["currentEntity"]["assets"];
+  peer?: Peer;
 }>) {
-  console.log(`Peer ${JSON.stringify(peer.customerData)}`);
-  const id: string = get(peer, ["customerData", "id"]);
-  const { data, loading, error } = useKnownEntityQuery({
-    variables: { id },
-    skip: !id,
-  });
-  const handle: string = get(peer, ["customerData", "handle"], "Anonymous");
+  peer && console.log(`Peer ${JSON.stringify(peer.customerData)}`);
 
-  const assets = get(data, ["knownEntity", "assets"], []);
+  const providedAssets = !!assets && !!assets.length;
+  const { data } = useKnownEntityQuery({
+    variables: { id },
+    skip: providedAssets,
+  });
+
+  const displayAssets = providedAssets
+    ? assets
+    : get(data, ["knownEntity", "assets"], []);
 
   return (
     <Container {...rest}>
-      <Handle>{handle}</Handle>
-      <PeerControls
-        peer={peer}
-        render={({ isMuted, mute, unmute }) => (
-          <button onClick={() => (isMuted ? unmute() : mute())}>
-            {isMuted ? "unmute" : "mute"}
-          </button>
-        )}
-      />
+      <Handle>{handle || "Anonymous"}</Handle>
+      {peer && (
+        <PeerControls
+          peer={peer}
+          render={({ isMuted, mute, unmute }) => (
+            <button onClick={() => (isMuted ? unmute() : mute())}>
+              {isMuted ? "unmute" : "mute"}
+            </button>
+          )}
+        />
+      )}
       <StyledAssetsList
-        assets={assets}
+        assets={displayAssets}
         wrappable={wrappable}
         draggable={draggable}
       >

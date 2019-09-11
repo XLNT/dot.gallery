@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { useEffect } from "react";
 
 import { useCurrentEntityQuery } from "operations";
@@ -10,7 +10,12 @@ export default function useRequiredTicket() {
   const ticket = get(data, ["currentEntity", "availableTicket"]);
 
   useEffect(() => {
-    if (!loading && !error && !ticket) {
+    if (
+      !loading &&
+      !error &&
+      !ticket &&
+      process.env.NODE_ENV !== "development"
+    ) {
       console.log("useRequiredTicket: user does not have ticket");
       history.replace("/want-ticket");
     }

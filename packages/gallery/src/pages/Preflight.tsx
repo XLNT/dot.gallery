@@ -9,7 +9,7 @@ import {
 import { Direction, directionFor, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { RequestUserMedia } from "@andyet/simplewebrtc";
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { humanize } from "lib/errorCodes";
 import { useCurrentEntityQuery, useSetHandleMutation } from "operations";
 import ControlledVideo from "components/ControlledVideo";

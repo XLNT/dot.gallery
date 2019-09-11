@@ -1,5 +1,5 @@
 import { animated, config as springConfig, useTransition } from "react-spring";
-import { get } from "lodash";
+import { get } from "lodash-es";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import useKey from "use-key-hook";
@@ -143,6 +143,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   return (
     <>
       <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
+      <SocialLayer room={room} />
       <JourneyAndExit {...props} />
       <Canvas>
         {transitions.map(({ item, key, props }) => (
@@ -151,7 +152,6 @@ export default function Gallery(props: ExhibitionProps<{}>) {
           </InnerCanvas>
         ))}
       </Canvas>
-      <SocialLayer room={room} />
       <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
     </>
   );

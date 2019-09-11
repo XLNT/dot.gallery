@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-client";
-import { get } from "lodash";
+import { get } from "lodash-es";
 
 export const ERROR_CODES = {
   COUPON_NOT_FOUND: "Unknown voucher code.",
