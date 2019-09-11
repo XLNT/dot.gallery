@@ -1,3 +1,9 @@
+import { animated, config as springConfig, useTransition } from "react-spring";
+import { get } from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import styled from "styled-components";
+import useKey from "use-key-hook";
+
 import {
   Coords,
   Direction,
@@ -6,23 +12,16 @@ import {
   keycodeFor,
   navigate,
 } from "lib/rooms";
-import { CurrentExhibitionQuery, useUserDataTokenQuery } from "operations";
+import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
-import { Provider as SWRTCProvider } from "@andyet/simplewebrtc";
-import { animated, config as springConfig, useTransition } from "react-spring";
 import { format } from "lib/exhibitionSlug";
-import { get } from "lodash";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import PanelAction from "context/PanelAction";
-import React, { useEffect, useMemo, useState } from "react";
 import Room from "components/Room";
 import SocialLayer from "./Gallery/SocialLayer";
-import config from "config";
-import styled from "styled-components";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
-import useKey from "use-key-hook";
 import usePreloadedEntries from "hook/usePreloadedEntries";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -59,13 +58,11 @@ const ExhibitionSlug = styled.div`
   font-weight: bold;
 `;
 
-export default function Gallery(props: ExhibitionProps<void>) {
+export default function Gallery(props: ExhibitionProps<{}>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
   const [, appendToJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
-  const { data } = useUserDataTokenQuery();
-  const token = get(data, "userDataToken");
 
   const { exhibition } = useCurrentExhibition();
   const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
@@ -145,22 +142,17 @@ export default function Gallery(props: ExhibitionProps<void>) {
 
   return (
     <>
-      <SWRTCProvider
-        configUrl={`https://api.simplewebrtc.com/config/user/${config.SIMPLEWEBRTC_API_KEY}`}
-        userData={token}
-      >
-        <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
-        <JourneyAndExit {...props} />
-        <Canvas>
-          {transitions.map(({ item, key, props }) => (
-            <InnerCanvas key={key} style={props}>
-              {item && <Room room={item} />}
-            </InnerCanvas>
-          ))}
-        </Canvas>
-        <SocialLayer />
-        <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
-      </SWRTCProvider>
+      <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
+      <JourneyAndExit {...props} />
+      <Canvas>
+        {transitions.map(({ item, key, props }) => (
+          <InnerCanvas key={key} style={props}>
+            {item && <Room room={item} />}
+          </InnerCanvas>
+        ))}
+      </Canvas>
+      <SocialLayer room={room} />
+      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
     </>
   );
 }

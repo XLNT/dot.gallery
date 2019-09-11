@@ -9,13 +9,19 @@ import {
 import { Direction, directionFor, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { RequestUserMedia } from "@andyet/simplewebrtc";
+import { get } from "lodash";
+import { humanize } from "lib/errorCodes";
+import { useCurrentEntityQuery, useSetHandleMutation } from "operations";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
+import HandleInput from "components/HandleInput";
+import HelpText from "components/HelpText";
 import React, {
   CSSProperties,
   PropsWithChildren,
   useCallback,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import arrows from "static/arrows.svg";
@@ -114,6 +120,12 @@ const PreflightStep = React.forwardRef<HTMLDivElement, any>(
   },
 );
 
+const HandleInputContainer = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+`;
+
 export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useRequiredLogin();
   useRequiredTicket();
@@ -124,6 +136,14 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const { setFullscreen } = Fullscreen.useContainer();
   const [currentStep, setCurrentStep] = useState(0);
   const flexDirection = useBreakpoints(["column", "column", "row"]);
+  const handleRef = useRef<HTMLInputElement>();
+  const { data, loading: fetchingHandle } = useCurrentEntityQuery();
+  const [setHandle, { loading, error }] = useSetHandleMutation({
+    refetchQueries: ["CurrentEntity", "UserDataToken"],
+    awaitRefetchQueries: true,
+  });
+  const handle = get(data, ["currentEntity", "handle"], "");
+  const hasHandle = !!handle;
 
   const [permissionState, setPermissionState] = useState<PermissionState>(
     PermissionState.Unasked,
@@ -136,6 +156,10 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
 
     setFlow(Flow.Foyer);
   }, [setFlow, setFullscreen]);
+
+  const onHandleSubmit = useCallback(async () => {
+    await setHandle({ variables: { handle: handleRef.current.value } });
+  }, [setHandle]);
 
   const steps = useMemo(
     () => [
@@ -187,9 +211,17 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         subtitle:
           "Everyone viewing a work can talk with one another. Enter the name you want others to see. You can mute yourself or others.",
         element: (
-          <>
-            <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
-          </>
+          <HandleInputContainer>
+            <HandleInput
+              ref={handleRef}
+              onSubmit={onHandleSubmit}
+              disabled={fetchingHandle}
+              defaultValue={handle}
+            />
+            {hasHandle && <HelpText>You have set your handle 👍</HelpText>}
+            {loading && <HelpText>Submitting...</HelpText>}
+            {error && <HelpText>{humanize(error)}</HelpText>}
+          </HandleInputContainer>
         ),
       },
       {
@@ -213,20 +245,37 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [goFoyer, permissionState],
+    [
+      error,
+      fetchingHandle,
+      goFoyer,
+      handle,
+      hasHandle,
+      loading,
+      onHandleSubmit,
+      permissionState,
+    ],
   );
 
   const goNext = useCallback(
     () =>
       setCurrentStep(step => {
         // block until we have audio
-        if (permissionState === PermissionState.Unasked && step == 1) {
+        if (permissionState === PermissionState.Unasked && step === 1) {
           return step;
         }
 
+        // block until we have handle
+        if (!hasHandle && step === 2) {
+          return step;
+        }
+
+        // defocus handle input if available
+        handleRef.current && handleRef.current.blur();
+
         return Math.min(step + 1, steps.length - 1);
       }),
-    [permissionState, steps.length],
+    [hasHandle, permissionState, steps.length],
   );
 
   const goPrev = useCallback(

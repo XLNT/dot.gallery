@@ -138,6 +138,10 @@ const ownsAvailableTicketForCurrentExhibition = rule()(
   },
 );
 
+const onlySelf = rule()(
+  async ({ id }, args, { currentEntity }) => currentEntity.id === id,
+);
+
 export default shield(
   {
     Query: {
@@ -145,6 +149,18 @@ export default shield(
       userDataToken: isKnownEntity,
     },
     Mutation: {
+      setHandle: and(
+        isKnownEntity,
+        inputRule(yup =>
+          yup.object({
+            handle: yup
+              .string()
+              .max(22)
+              .min(7)
+              .required(),
+          }),
+        ),
+      ),
       redeemTicket: chain(
         isKnownEntity,
         onlyDuringActiveShow,
@@ -174,6 +190,13 @@ export default shield(
       ),
       awardWalk: chain(isKnownEntity, onlyDuringActiveShow),
       modIssueTicket: chain(isKnownEntity, onlyMod),
+    },
+    Entity: {
+      email: chain(isKnownEntity, onlySelf),
+      tradableAssets: chain(isKnownEntity, onlySelf),
+      placements: chain(isKnownEntity, onlySelf),
+      tickets: chain(isKnownEntity, onlySelf),
+      availableTicket: chain(isKnownEntity, onlySelf),
     },
   },
   {

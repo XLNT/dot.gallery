@@ -1,8 +1,9 @@
+import { get } from "lodash";
 import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-import { CurrentEntityQuery } from "../../operations";
-
+import { Peer, PeerControls } from "@andyet/simplewebrtc";
+import { useKnownEntityQuery } from "../../operations";
 import AssetsList from "components/AssetsList";
 
 const Container = styled.div`
@@ -13,7 +14,7 @@ const Container = styled.div`
   overflow-y: hidden;
 `;
 
-const Name = styled.div``;
+const Handle = styled.div``;
 
 const StyledAssetsList = styled(AssetsList)`
   padding-left: 1rem;
@@ -21,7 +22,7 @@ const StyledAssetsList = styled(AssetsList)`
 `;
 
 export default function PresentEntity({
-  entity,
+  peer,
   draggable = true,
   wrappable = false,
   children,
@@ -29,13 +30,31 @@ export default function PresentEntity({
 }: PropsWithChildren<{
   draggable?: boolean;
   wrappable?: boolean;
-  entity: CurrentEntityQuery["currentEntity"];
+  peer: Peer;
 }>) {
+  console.log(`Peer ${JSON.stringify(peer.customerData)}`);
+  const id: string = get(peer, ["customerData", "id"]);
+  const { data, loading, error } = useKnownEntityQuery({
+    variables: { id },
+    skip: !id,
+  });
+  const handle: string = get(peer, ["customerData", "handle"], "Anonymous");
+
+  const assets = get(data, ["knownEntity", "assets"], []);
+
   return (
     <Container {...rest}>
-      <Name>{entity.handle}</Name>
+      <Handle>{handle}</Handle>
+      <PeerControls
+        peer={peer}
+        render={({ isMuted, mute, unmute }) => (
+          <button onClick={() => (isMuted ? unmute() : mute())}>
+            {isMuted ? "unmute" : "mute"}
+          </button>
+        )}
+      />
       <StyledAssetsList
-        assets={entity.tradableAssets}
+        assets={assets}
         wrappable={wrappable}
         draggable={draggable}
       >

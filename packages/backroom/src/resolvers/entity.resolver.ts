@@ -13,6 +13,12 @@ const currentEntity: QueryResolvers["currentEntity"] = async (
   { currentEntity },
 ) => currentEntity;
 
+const knownEntity: QueryResolvers["knownEntity"] = async (
+  root,
+  { id },
+  { prisma },
+) => prisma.entity({ id });
+
 const loginAs: MutationResolvers["loginAs"] = async (
   root,
   { accessToken },
@@ -55,12 +61,20 @@ const tradableAssets: EntityResolvers["tradableAssets"] = async (
     },
   });
 
+const setHandle: MutationResolvers["setHandle"] = async (
+  parent,
+  { handle },
+  { currentEntity, prisma },
+) => prisma.updateEntity({ where: { id: currentEntity.id }, data: { handle } });
+
 export default {
   Query: {
     currentEntity,
+    knownEntity,
   },
   Mutation: {
     loginAs,
+    setHandle,
   },
   Entity: {
     assets: relation("entity", "assets"),

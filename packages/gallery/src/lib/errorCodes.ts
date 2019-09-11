@@ -15,5 +15,23 @@ export const humanize = (error: ApolloError) => {
     "INTERNAL_SERVER_ERROR",
   );
 
+  const name = get(error, [
+    "graphQLErrors",
+    0,
+    "extensions",
+    "exception",
+    "name",
+  ]);
+
+  if (name && name === "ValidationError") {
+    return get(error, [
+      "graphQLErrors",
+      0,
+      "extensions",
+      "exception",
+      "message",
+    ]);
+  }
+
   return ERROR_CODES[code];
 };

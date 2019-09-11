@@ -12,6 +12,7 @@ const userDataToken: QueryResolvers["userDataToken"] = async (
       handle: currentEntity.handle,
     },
     process.env.SIMPLEWEBRTC_API_SECRET,
+    { expiresIn: "7d" },
   );
 
 export default {

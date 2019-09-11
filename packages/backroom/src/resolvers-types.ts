@@ -69,6 +69,7 @@ export type Mutation = {
   redeemTicket: Ticket,
   awardWalk: Asset,
   redeemCoupon: CouponRedemption,
+  setHandle: Entity,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -96,6 +97,11 @@ export type MutationRedeemCouponArgs = {
 };
 
 
+export type MutationSetHandleArgs = {
+  handle: Scalars['String']
+};
+
+
 export type MutationModIssueTicketArgs = {
   exhibitionId: Scalars['ID'],
   email?: Maybe<Scalars['String']>,
@@ -118,6 +124,12 @@ export type Query = {
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
   userDataToken?: Maybe<Scalars['String']>,
+  knownEntity: Entity,
+};
+
+
+export type QueryKnownEntityArgs = {
+  id: Scalars['ID']
 };
 
 export type Room = {
@@ -315,6 +327,7 @@ export type MutationResolvers<ContextType = BackroomContext, ParentType extends 
   redeemTicket?: Resolver<ResolversTypes['Ticket'], ParentType, ContextType>,
   awardWalk?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationAwardWalkArgs, 'image'>>,
   redeemCoupon?: Resolver<ResolversTypes['CouponRedemption'], ParentType, ContextType, RequireFields<MutationRedeemCouponArgs, 'code'>>,
+  setHandle?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<MutationSetHandleArgs, 'handle'>>,
   modIssueTicket?: Resolver<Maybe<ResolversTypes['Ticket']>, ParentType, ContextType, RequireFields<MutationModIssueTicketArgs, 'exhibitionId'>>,
 };
 
@@ -332,6 +345,7 @@ export type QueryResolvers<ContextType = BackroomContext, ParentType extends Res
   currentEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   currentExhibition?: Resolver<Maybe<ResolversTypes['Exhibition']>, ParentType, ContextType>,
   userDataToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  knownEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<QueryKnownEntityArgs, 'id'>>,
 };
 
 export type RoomResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {

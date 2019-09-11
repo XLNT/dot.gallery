@@ -6,6 +6,7 @@ import { humanize } from "lib/errorCodes";
 import { useRedeemCouponMutation } from "operations";
 import CouponInput from "components/CouponInput";
 import EnterButton from "components/EnterButton";
+import HelpText from "components/HelpText";
 import ModalFrame from "components/ModalFrame";
 import ModalHeader from "components/ModalHeader";
 import ModalSubtitle from "components/ModalSubtitle";
@@ -19,11 +20,6 @@ const ModalAction = styled.div`
   justify-self: flex-end;
 `;
 
-const HelpText = styled.div`
-  margin-top: 0.25rem;
-  font-size: 0.8rem;
-`;
-
 const StyledEnterButton = styled(EnterButton)`
   font-size: 3rem;
 `;
@@ -33,7 +29,10 @@ export default function CouponModal() {
   const couponInput = useRef<HTMLInputElement>();
   const { isDefinitelyOpen } = useIsOpen();
 
-  const [redeemCoupon, { data, loading, error }] = useRedeemCouponMutation();
+  const [redeemCoupon, { data, loading, error }] = useRedeemCouponMutation({
+    refetchQueries: ["CurrentEntity"],
+    awaitRefetchQueries: true,
+  });
 
   const { exhibition, show } = useCurrentExhibition();
 

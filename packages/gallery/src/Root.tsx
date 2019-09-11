@@ -80,7 +80,10 @@ function Root() {
               <Route path="/" exact component={Home} />
               <Route path="/authorize" exact component={Authorize} />
               <Route path="/ticket-success" exact component={TicketSuccess} />
-              <Route path="/:slug([eE]\d\d[sS]\d\d)" component={Exhibition} />
+              <Route
+                path="/:slug([eE]\d\d\d[sS]\d\d\d)"
+                component={Exhibition}
+              />
               <Route component={Home} />
             </Switch>
           </WithPanel>

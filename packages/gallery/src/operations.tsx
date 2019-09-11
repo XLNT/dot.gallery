@@ -69,6 +69,7 @@ export type Mutation = {
   redeemTicket: Ticket,
   awardWalk: Asset,
   redeemCoupon: CouponRedemption,
+  setHandle: Entity,
   modIssueTicket?: Maybe<Ticket>,
 };
 
@@ -96,6 +97,11 @@ export type MutationRedeemCouponArgs = {
 };
 
 
+export type MutationSetHandleArgs = {
+  handle: Scalars['String']
+};
+
+
 export type MutationModIssueTicketArgs = {
   exhibitionId: Scalars['ID'],
   email?: Maybe<Scalars['String']>,
@@ -118,6 +124,12 @@ export type Query = {
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
   userDataToken?: Maybe<Scalars['String']>,
+  knownEntity: Entity,
+};
+
+
+export type QueryKnownEntityArgs = {
+  id: Scalars['ID']
 };
 
 export type Room = {
@@ -229,6 +241,19 @@ export type CurrentExhibitionQuery = (
   )> }
 );
 
+export type KnownEntityQueryVariables = {
+  id: Scalars['ID']
+};
+
+
+export type KnownEntityQuery = (
+  { __typename?: 'Query' }
+  & { knownEntity: (
+    { __typename?: 'Entity' }
+    & Pick<Entity, 'id' | 'handle'>
+  ) }
+);
+
 export type LoginAsMutationVariables = {
   accessToken: Scalars['String']
 };
@@ -260,6 +285,19 @@ export type RedeemTicketMutation = (
   & { redeemTicket: (
     { __typename?: 'Ticket' }
     & Pick<Ticket, 'id' | 'redeemed'>
+  ) }
+);
+
+export type SetHandleMutationVariables = {
+  handle: Scalars['String']
+};
+
+
+export type SetHandleMutation = (
+  { __typename?: 'Mutation' }
+  & { setHandle: (
+    { __typename?: 'Entity' }
+    & Pick<Entity, 'id' | 'handle'>
   ) }
 );
 
@@ -388,6 +426,24 @@ export const CurrentExhibitionDocument = gql`
       
 export type CurrentExhibitionQueryHookResult = ReturnType<typeof useCurrentExhibitionQuery>;
 export type CurrentExhibitionQueryResult = ApolloReactCommon.QueryResult<CurrentExhibitionQuery, CurrentExhibitionQueryVariables>;
+export const KnownEntityDocument = gql`
+    query KnownEntity($id: ID!) {
+  knownEntity(id: $id) {
+    id
+    handle
+  }
+}
+    `;
+
+    export function useKnownEntityQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<KnownEntityQuery, KnownEntityQueryVariables>) {
+      return ApolloReactHooks.useQuery<KnownEntityQuery, KnownEntityQueryVariables>(KnownEntityDocument, baseOptions);
+    };
+      export function useKnownEntityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<KnownEntityQuery, KnownEntityQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<KnownEntityQuery, KnownEntityQueryVariables>(KnownEntityDocument, baseOptions);
+      };
+      
+export type KnownEntityQueryHookResult = ReturnType<typeof useKnownEntityQuery>;
+export type KnownEntityQueryResult = ApolloReactCommon.QueryResult<KnownEntityQuery, KnownEntityQueryVariables>;
 export const LoginAsDocument = gql`
     mutation LoginAs($accessToken: String!) {
   loginAs(accessToken: $accessToken)
@@ -432,6 +488,22 @@ export type RedeemTicketMutationFn = ApolloReactCommon.MutationFunction<RedeemTi
 export type RedeemTicketMutationHookResult = ReturnType<typeof useRedeemTicketMutation>;
 export type RedeemTicketMutationResult = ApolloReactCommon.MutationResult<RedeemTicketMutation>;
 export type RedeemTicketMutationOptions = ApolloReactCommon.BaseMutationOptions<RedeemTicketMutation, RedeemTicketMutationVariables>;
+export const SetHandleDocument = gql`
+    mutation SetHandle($handle: String!) {
+  setHandle(handle: $handle) {
+    id
+    handle
+  }
+}
+    `;
+export type SetHandleMutationFn = ApolloReactCommon.MutationFunction<SetHandleMutation, SetHandleMutationVariables>;
+
+    export function useSetHandleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetHandleMutation, SetHandleMutationVariables>) {
+      return ApolloReactHooks.useMutation<SetHandleMutation, SetHandleMutationVariables>(SetHandleDocument, baseOptions);
+    };
+export type SetHandleMutationHookResult = ReturnType<typeof useSetHandleMutation>;
+export type SetHandleMutationResult = ApolloReactCommon.MutationResult<SetHandleMutation>;
+export type SetHandleMutationOptions = ApolloReactCommon.BaseMutationOptions<SetHandleMutation, SetHandleMutationVariables>;
 export const UserDataTokenDocument = gql`
     query UserDataToken {
   userDataToken

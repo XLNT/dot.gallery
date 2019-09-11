@@ -39,7 +39,7 @@ const Arrow = styled(ArrowButton)`
 `;
 
 // eslint-disable-next-line react/display-name
-export default React.forwardRef(function EmailInput(
+export default React.forwardRef(function CouponInput(
   { className, onSubmit, ...rest }: any,
   ref,
 ) {

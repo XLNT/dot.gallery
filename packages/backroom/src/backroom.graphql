@@ -100,6 +100,7 @@ type Query {
   currentEntity: Entity!
   currentExhibition: Exhibition
   userDataToken: String
+  knownEntity(id: ID!): Entity!
 }
 
 type Mutation  {
@@ -109,6 +110,7 @@ type Mutation  {
   redeemTicket: Ticket!
   awardWalk(image: String!): Asset!
   redeemCoupon(code: String!): CouponRedemption!
+  setHandle(handle: String!): Entity!
 
   # Moderator Actions
   modIssueTicket(exhibitionId: ID!, email: String, id: String): Ticket
