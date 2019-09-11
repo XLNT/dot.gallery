@@ -162,7 +162,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const steps = useMemo(
     () => [
       {
-        title: "Arrows navigate between works.",
+        title: "Arrows help you navigate.",
         subtitle: "Give it a try.",
         // eslint-disable-next-line react/display-name
         element: (focused = false) => (

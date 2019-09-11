@@ -65,7 +65,7 @@ export default function HaveTicketModal() {
           {isDefinitelyClosed
             ? "You already have a ticket for this exhibition. Return here for the next showing."
             : isLoggedIn
-            ? "Redeem your ticket to enter the exhibition."
+            ? "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half."
             : didRequestLogin
             ? "Check your email for a link to the exhibition."
             : "Enter your email to receive a link to the exhibition."}
@@ -73,7 +73,7 @@ export default function HaveTicketModal() {
       </ModalHeader>
       <ModalAction>
         {isDefinitelyClosed ? null : isLoggedIn ? (
-          <StyledEnterButton onClick={goExhibition}>Redeem</StyledEnterButton>
+          <StyledEnterButton onClick={goExhibition}>Enter</StyledEnterButton>
         ) : didRequestLogin ? (
           <ModalSubtitle>
             Exhibition link sent to your email. You may close this page.
