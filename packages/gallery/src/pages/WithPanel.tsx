@@ -123,7 +123,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     ref,
     { width: backboardWidth = document.body.clientWidth },
   ] = useDimensions();
-  const [buttonRef, { width: buttonWidth = 0 }] = useDimensions();
+  const [buttonRef, { width: buttonWidth = 64 }] = useDimensions();
 
   const panelWidth = (panelExtentRatio / 100.0) * backboardWidth;
 

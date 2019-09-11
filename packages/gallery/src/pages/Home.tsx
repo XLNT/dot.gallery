@@ -75,7 +75,7 @@ const TimezoneSelect = styled.select`
   position: absolute;
   bottom: 0;
   left: 0;
-  max-width: 10rem;
+  max-width: 17rem;
   margin-left: 1rem;
   margin-bottom: 1rem;
 

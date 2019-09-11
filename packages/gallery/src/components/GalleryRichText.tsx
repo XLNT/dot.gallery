@@ -8,6 +8,7 @@ import styled from "styled-components";
 export const Heading1 = styled.h1`
   margin-top: 1rem;
   margin-bottom: 0;
+  word-wrap: break-word;
 `;
 
 export const Blockquote = styled.blockquote`
