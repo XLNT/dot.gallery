@@ -1,6 +1,9 @@
 import { Direction, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
+import { animated, useSpring } from "react-spring";
+import { sleep } from "stanza/Utils";
 import { useRedeemTicketMutation, useUserDataTokenQuery } from "operations";
+import ControlledVideo from "components/ControlledVideo";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";
 import fromTheme from "theme/fromTheme";
@@ -9,16 +12,16 @@ import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
-const Video = styled.video`
+const Backboard = styled.div`
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background-color: ${fromTheme("primary")};
 `;
 
-const SkipButton = styled.div`
+const SkipButton = styled(animated.div)`
   position: absolute;
   bottom: 2rem;
   right: 2rem;
@@ -43,7 +46,8 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
 
   useUserDataTokenQuery(); // preload token
 
-  const skipVisible = useState(false);
+  const [isFocused, setIsFocused] = useState(true);
+  const [skipVisible, setSkipVisible] = useState(false);
 
   const [redeemTicket] = useRedeemTicketMutation();
 
@@ -59,11 +63,17 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
           // TODO: handle this error with a redirect or notice or something
           throw error;
         }
+      } finally {
+        await sleep(30 * 1000);
+        setSkipVisible(true);
       }
     })();
   }, [redeemTicket]);
 
-  const goGallery = useCallback(() => setFlow(Flow.Gallery), [setFlow]);
+  const goGallery = useCallback(() => {
+    setIsFocused(false);
+    setFlow(Flow.Gallery);
+  }, [setFlow]);
 
   useKey(
     (pressedKey: number) => goGallery(),
@@ -71,16 +81,24 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
     { dependencies: [goGallery] },
   );
 
+  const style = useSpring({
+    opacity: skipVisible ? 1 : 0,
+    from: { opacity: 0 },
+  });
+
   return (
     <>
-      <Video autoPlay onEnded={goGallery}>
-        <source src="https://cdn.bydot.app/foyer.mp4" type="video/mp4" />
-      </Video>
-      {skipVisible && (
-        <SkipButton onClick={goGallery}>
-          Skip <Arrow src={arrow} />
-        </SkipButton>
-      )}
+      <Backboard>
+        <ControlledVideo
+          src="https://cdn.bydot.app/foyer.mp4"
+          playing={isFocused}
+          autoPlay
+          onEnded={goGallery}
+        />
+      </Backboard>
+      <SkipButton onClick={goGallery} style={style}>
+        Skip <Arrow src={arrow} />
+      </SkipButton>
     </>
   );
 }

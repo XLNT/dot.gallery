@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import { animated, config, interpolate, useSpring } from "react-spring";
+import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
-const Video = styled.video`
+const Video = styled(animated.video)`
   height: 100%;
   width: 100%;
 `;
@@ -15,13 +16,45 @@ export default function ControlledVideo({
 }) {
   const ref = useRef<HTMLVideoElement>();
 
-  useEffect(() => {
+  const enforcePlaying = useCallback(() => {
     if (playing) {
-      ref.current.play();
-    } else {
-      ref.current.pause();
+      if (ref.current) {
+        ref.current.play();
+      }
     }
   }, [playing]);
 
-  return <Video ref={ref} {...rest}></Video>;
+  const enforcePaused = useCallback(() => {
+    if (!playing) {
+      if (ref.current) {
+        ref.current.pause();
+      }
+    }
+  }, [playing]);
+
+  const { volume } = useSpring({
+    volume: playing ? 1.0 : 0.0,
+    from: { volume: 0 },
+    config: config.slow,
+    onStart: enforcePlaying,
+    onRest: enforcePaused,
+  });
+
+  interpolate([volume], v => console.log(v));
+
+  return (
+    <Video
+      ref={ref}
+      style={{
+        volume: volume.interpolate(v => {
+          if (ref.current) {
+            // lmao
+            ref.current.volume = v;
+          }
+          return v;
+        }),
+      }}
+      {...rest}
+    ></Video>
+  );
 }

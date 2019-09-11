@@ -15,6 +15,7 @@ import {
 import { CurrentExhibitionQuery } from "operations";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { format } from "lib/exhibitionSlug";
+import CurrentRoomId from "context/CurrentRoomId";
 import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import PanelAction from "context/PanelAction";
@@ -141,7 +142,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   });
 
   return (
-    <>
+    <CurrentRoomId.Provider value={room ? room.id : null}>
       <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
       <SocialLayer room={room} />
       <JourneyAndExit {...props} />
@@ -153,6 +154,6 @@ export default function Gallery(props: ExhibitionProps<{}>) {
         ))}
       </Canvas>
       <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
-    </>
+    </CurrentRoomId.Provider>
   );
 }

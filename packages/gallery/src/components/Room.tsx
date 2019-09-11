@@ -5,9 +5,11 @@ import { animated, useSpring } from "react-spring";
 import { contentTypeIsVideo } from "lib/contentType";
 import { get } from "lodash-es";
 import AnimatedPanelContent from "./AnimatedPanelContent";
+import ControlledVideo from "./ControlledVideo";
+import CurrentRoomId from "context/CurrentRoomId";
 import DragTypes from "lib/dragTypes";
 import GalleryRichText from "./GalleryRichText";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
 import useContentfulEntry from "hook/useContentfulEntry";
 
@@ -34,16 +36,12 @@ const Image = styled.div`
   background-position: 50% 50%;
 `;
 
-const Video = styled.video`
-  height: 100%;
-  width: 100%;
-`;
-
 const collect = (monitor: DropTargetMonitor) => ({
   isOver: monitor.isOver(),
 });
 
 export default function Room({ room }: RoomProps) {
+  const currentRoomId = useContext(CurrentRoomId);
   const [result, error, state] = useContentfulEntry(room.entryId);
 
   const uri = get(result, "fields.work.fields.file.url");
@@ -53,7 +51,7 @@ export default function Room({ room }: RoomProps) {
   );
   const ElementType = contentType
     ? contentTypeIsVideo(contentType)
-      ? Video
+      ? ControlledVideo
       : Image
     : undefined;
   const [createPlacement] = useCreatePlacementMutation({
@@ -89,7 +87,9 @@ export default function Room({ room }: RoomProps) {
     <>
       <Container>
         <Work ref={dropRef} style={style}>
-          {contentType && <ElementType src={uri} autoPlay loop />}
+          {contentType && (
+            <ElementType src={uri} loop playing={currentRoomId === room.id} />
+          )}
         </Work>
       </Container>
       <AnimatedPanelContent>
