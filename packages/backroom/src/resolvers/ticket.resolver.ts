@@ -15,8 +15,6 @@ const availableTicket: EntityResolvers<
   const tickets = await prisma.entity({ id: entity.id }).tickets({
     where: {
       exhibition: { id: currentExhibition.id },
-      redeemed: process.env.NODE_ENV === "development" ? undefined : false,
-      // ^ restrict to ticker holders only in production
     },
     first: 1,
   });
