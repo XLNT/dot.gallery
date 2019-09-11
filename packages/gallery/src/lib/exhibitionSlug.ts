@@ -20,5 +20,5 @@ export const parse = (s: string) => {
 };
 
 export const format = (e: number, s?: number): string => {
-  return `E${pad(e + 1)}${s !== undefined ? `S${pad(s)}` : ""}`;
+  return `E${pad(e)}${s !== undefined ? `S${pad(s)}` : ""}`;
 };
