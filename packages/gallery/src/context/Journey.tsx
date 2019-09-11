@@ -4,17 +4,20 @@ import { createContainer } from "unstated-next";
 
 enum ActionType {
   Append,
+  Reset,
 }
 
-interface Action {
+interface Action<T> {
   type: ActionType;
-  payload: Coords;
+  payload?: T;
 }
 
 type State = Coords[];
 
-const reducer: Reducer<State, Action> = (state, action) => {
+const reducer: Reducer<State, Action<any>> = (state, action) => {
   switch (action.type) {
+    case ActionType.Reset:
+      return [];
     case ActionType.Append:
       return [...state, action.payload];
     default:
@@ -22,14 +25,19 @@ const reducer: Reducer<State, Action> = (state, action) => {
   }
 };
 
-function useJourney(): [Coords[], (payload: Coords) => void] {
+function useJourney(): [Coords[], (payload: Coords) => void, () => void] {
   const [journey, dispatch] = useReducer<typeof reducer>(reducer, []);
   const appendToJourney = useCallback(
     (payload: Coords) => dispatch({ type: ActionType.Append, payload }),
     [],
   );
 
-  return [journey, appendToJourney];
+  const clearJourney = useCallback(
+    () => dispatch({ type: ActionType.Reset }),
+    [],
+  );
+
+  return [journey, appendToJourney, clearJourney];
 }
 
 export default createContainer(useJourney);

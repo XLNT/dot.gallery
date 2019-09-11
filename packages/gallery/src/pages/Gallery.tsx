@@ -63,7 +63,7 @@ const ExhibitionSlug = styled.div`
 export default function Gallery(props: ExhibitionProps<{}>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
-  const [, appendToJourney] = Journey.useContainer();
+  const [, appendToJourney, resetJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
 
   const { exhibition } = useCurrentExhibition();
@@ -78,11 +78,13 @@ export default function Gallery(props: ExhibitionProps<{}>) {
         Math.floor(exhibition.extent / 2.0),
         Math.floor(exhibition.extent / 2.0),
       ];
+      resetJourney();
+      // yes, twice
       appendToJourney(center);
       appendToJourney(center);
       setCoords(center);
     }
-  }, [appendToJourney, exhibition]);
+  }, [appendToJourney, exhibition, resetJourney]);
 
   const [handleDirection] = useDebouncedCallback(
     (direction: Direction) => {
