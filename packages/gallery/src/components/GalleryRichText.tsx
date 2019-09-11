@@ -86,7 +86,6 @@ export default function GalleryRichText({ richText }: { richText: Document }) {
         const mimeType = get(data, "target.fields.file.contentType", "");
         const mimeTypeGroup = mimeType.split("/")[0];
 
-        console.log(data, mimeType, mimeTypeGroup);
         if (!mimeTypeGroup) {
           return children;
         }

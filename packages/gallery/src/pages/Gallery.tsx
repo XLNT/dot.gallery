@@ -1,5 +1,6 @@
 import { animated, config as springConfig, useTransition } from "react-spring";
 import { get } from "lodash-es";
+import { useDebouncedCallback } from "use-debounce";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import useKey from "use-key-hook";
@@ -83,19 +84,23 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     }
   }, [appendToJourney, exhibition]);
 
-  useKey(
-    (pressedKey: number) => {
+  const [handleDirection] = useDebouncedCallback(
+    (direction: Direction) => {
       if (exhibition) {
-        setLastDirection(directionFor(pressedKey));
-        const newCoords = navigate(
-          coords,
-          exhibition.extent,
-          directionFor(pressedKey),
-        );
+        setLastDirection(direction);
+        const newCoords = navigate(coords, exhibition.extent, direction);
         appendToJourney(newCoords);
         setCoords(newCoords);
       }
     },
+    400,
+    {
+      leading: true,
+    },
+  );
+
+  const [] = useKey(
+    (pressedKey: number) => handleDirection(directionFor(pressedKey)),
     {
       detectKeys: [
         Direction.Left,

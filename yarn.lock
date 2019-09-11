@@ -990,11 +990,6 @@
   dependencies:
     "@contentful/rich-text-types" "^13.4.0"
 
-"@contentful/rich-text-types@^12.1.2":
-  version "12.1.2"
-  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-12.1.2.tgz#3ac70eb49e7636705e5b962d3c91e2cffbee5e5a"
-  integrity sha512-AFLfDBKEj/6zYg4srg0165d3zyw5iprVjyW/Mll0C8IXT1VPadXIhkcA28N5BKYzOtykuJ2wOYNqvs1zAkNpUQ==
-
 "@contentful/rich-text-types@^13.4.0":
   version "13.4.0"
   resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-13.4.0.tgz#a59c311ebd1b801ee00edbc08663c8d78da26171"
@@ -1906,13 +1901,6 @@
   dependencies:
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
-
-"@madebyconnor/rich-text-to-jsx@^2.1.1":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@madebyconnor/rich-text-to-jsx/-/rich-text-to-jsx-2.1.2.tgz#cf503c4812115006f6bf5d3814448f79997b7eda"
-  integrity sha512-ClZPBtR92HFvZWxgbjlrYWKY3StE/bCnsRzVE7Kfb7xr706NJDiAAMu7/pxh33/Ngh5eRka30Q3GwXey2FVXdw==
-  dependencies:
-    "@contentful/rich-text-types" "^12.1.2"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -12981,6 +12969,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-debounce@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-3.0.1.tgz#da9f63f4e212048cd747a64032aff21e60bc4e69"
+  integrity sha512-uCPUD1BtzNjwJBsMFggtvNRfw5vCsarw75TM6Tcj0kCg58YvMnIAuvcPrl6mA91m4BtVvRfPTajZv1OEQpN+hw==
 
 use-force-update@^1.0.7:
   version "1.0.7"

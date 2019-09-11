@@ -53,6 +53,8 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   const [redeemTicket] = useRedeemTicketMutation();
 
   useEffect(() => {
+    let mounted = true;
+
     (async () => {
       try {
         await redeemTicket();
@@ -66,9 +68,13 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
         }
       } finally {
         await sleep(30 * 1000);
+
+        if (!mounted) return;
         setSkipVisible(true);
       }
     })();
+
+    return () => (mounted = false);
   }, [redeemTicket]);
 
   const goGallery = useCallback(() => {
@@ -77,7 +83,7 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   }, [setFlow]);
 
   useKey(
-    (pressedKey: number) => goGallery(),
+    () => goGallery(),
     { detectKeys: [Direction.Right].map(keycodeFor) },
     { dependencies: [goGallery] },
   );
