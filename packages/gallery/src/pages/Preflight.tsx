@@ -30,6 +30,7 @@ import useBreakpoints from "hook/useBreakpoints";
 import useDimensions from "react-use-dimensions";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
+import useMobileRedirect from "hook/useMobileRedirect";
 import usePreloadedFoyer from "hook/usePreloadedFoyer";
 import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
@@ -125,6 +126,14 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useRequiredTicket();
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
+
+  useMobileRedirect(
+    `/notice?${new URLSearchParams({
+      title: "Mobile Not Yet Supported",
+      subtitle:
+        "Mobile devices are not yet supported by dot.gallery. Please experience the exhibition on a desktop computer in the meantime.",
+    })}`,
+  );
 
   usePreloadedFoyer();
   const { setFullscreen } = Fullscreen.useContainer();

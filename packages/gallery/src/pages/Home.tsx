@@ -13,6 +13,7 @@ import GalleryRichText, { Heading1, P } from "components/GalleryRichText";
 import HaveTicketModal from "pages/HaveTicketModal";
 import LoginModal from "./LoginModal";
 import ModalView from "components/ModalView";
+import NoticeModal from "./NoticeModal";
 import PanelAction from "context/PanelAction";
 import RequestTicketModal from "./RequestTicketModal";
 import Timezone from "context/Timezone";
@@ -99,6 +100,10 @@ const ExhibitionDetails = styled.div`
 const ExhibitionText = styled(P)`
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
+`;
+
+const RichTextContainer = styled.div`
+  padding-bottom: 8rem;
 `;
 
 export default function Home() {
@@ -252,7 +257,9 @@ export default function Home() {
             </ExhibitionDetails>
           )}
           {state === "resolved" && (
-            <GalleryRichText richText={result.fields.bottom} />
+            <RichTextContainer>
+              <GalleryRichText richText={result.fields.bottom} />
+            </RichTextContainer>
           )}
         </>
       </AnimatedPanelContent>
@@ -265,6 +272,7 @@ export default function Home() {
           "/have-ticket": HaveTicketModal,
           "/want-ticket": WantTicketModal,
           "/want-ticket/voucher": CouponModal,
+          "/notice": NoticeModal,
         }}
       />
     </>
