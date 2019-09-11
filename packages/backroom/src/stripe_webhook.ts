@@ -65,6 +65,11 @@ export default async (req: NowRequest, res: NowResponse) => {
       const exhibitionId = (await getCurrentExhibition(prisma)).id;
 
       console.log(`Issuing ticket for exhibition '${exhibitionId}'`);
+      const entityExists = await prisma.$exists.entity({ email });
+      if (!entityExists) {
+        await prisma.createEntity({ email });
+      }
+
       await issueTicket(prisma, exhibitionId, { email });
 
       // send login email

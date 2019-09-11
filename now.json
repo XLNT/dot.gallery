@@ -51,6 +51,8 @@
     "STRIPE_SECRET": "@backroom-stripe-secret",
     "STRIPE_SIGNING_SECRET": "@backroom-stripe-signing-secret",
     "BACKROOM_SECRET": "@backroom-secret",
-    "SIMPLEWEBRTC_API_SECRET": "@backroom-simplewebrtc-api-secret"
+    "SIMPLEWEBRTC_API_SECRET": "@backroom-simplewebrtc-api-secret",
+    "CONTENTFUL_SPACE_ID": "5ieii38bftgi",
+    "CONTENTFUL_MANAGEMENT_TOKEN": "@backroom-contentful-management-token"
   }
 }

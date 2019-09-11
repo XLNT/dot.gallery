@@ -3,7 +3,9 @@ import { find, get } from "lodash-es";
 import { useCurrentExhibitionQuery } from "../operations";
 
 export default function useCurrentExhibition() {
-  const { loading, error, data } = useCurrentExhibitionQuery();
+  const { loading, error, data } = useCurrentExhibitionQuery({
+    pollInterval: 60 * 1000,
+  });
   const exhibition = get(data, ["currentExhibition"]);
 
   const shows = get(exhibition, ["shows"], []);

@@ -59,8 +59,9 @@ export default function WantTicketModal() {
       history.push(
         `/login?${new URLSearchParams({
           goto: "/want-ticket/voucher",
-          title: "But first, login.",
-          subtitle: "Click the link to enter your voucher code.",
+          title: "Voucher, but first, login.",
+          subtitle:
+            "Click the link we send you to log in and enter your voucher code.",
         })}`,
       );
     }

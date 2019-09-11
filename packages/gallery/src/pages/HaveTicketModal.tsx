@@ -59,30 +59,53 @@ export default function HaveTicketModal() {
     <ModalFrame>
       <ModalHeader>
         <ModalTitle>
-          {isDefinitelyClosed ? "dot.gallery is closed" : "I have a ticket."}
+          {!isLoggedIn && isDefinitelyClosed
+            ? "dot.gallery is closed"
+            : "I have a ticket."}
         </ModalTitle>
         <ModalSubtitle>
-          {isDefinitelyClosed
-            ? "You already have a ticket for this exhibition. Return here for the next showing."
-            : isLoggedIn
-            ? "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half."
-            : didRequestLogin
-            ? "Check your email for a link to the exhibition."
-            : "Enter your email to receive a link to the exhibition."}
+          {(() => {
+            if (!isLoggedIn) {
+              if (didRequestLogin) {
+                return "Check your email for a link to the exhibition.";
+              }
+
+              return "Enter your email to receive a link to the exhibition.";
+            }
+
+            if (isDefinitelyClosed) {
+              return "You already have a ticket for this exhibition. Return here for the next showing.";
+            }
+
+            return "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half.";
+          })()}
         </ModalSubtitle>
       </ModalHeader>
       <ModalAction>
-        {isDefinitelyClosed ? null : isLoggedIn ? (
-          <StyledEnterButton onClick={goExhibition}>Enter</StyledEnterButton>
-        ) : didRequestLogin ? (
-          <ModalSubtitle>
-            Exhibition link sent to your email. You may close this page.
-          </ModalSubtitle>
-        ) : isRequestingLogin ? (
-          <ModalSubtitle>Sending login email...</ModalSubtitle>
-        ) : (
-          <EmailInput ref={emailInput} onSubmit={onSubmit} />
-        )}
+        {(() => {
+          if (isDefinitelyClosed) {
+            return null;
+          }
+
+          if (!isLoggedIn) {
+            if (didRequestLogin) {
+              return (
+                <ModalSubtitle>
+                  Exhibition link sent to your email. You may close this page.
+                </ModalSubtitle>
+              );
+            }
+            if (isRequestingLogin) {
+              return <ModalSubtitle>Sending login email...</ModalSubtitle>;
+            }
+
+            return <EmailInput ref={emailInput} onSubmit={onSubmit} />;
+          }
+
+          return (
+            <StyledEnterButton onClick={goExhibition}>Enter</StyledEnterButton>
+          );
+        })()}
       </ModalAction>
     </ModalFrame>
   );
