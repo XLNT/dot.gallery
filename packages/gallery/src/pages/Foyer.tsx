@@ -1,4 +1,4 @@
-import { Direction, keycodeFor } from "lib/rooms";
+import { Direction, keycodeFor } from "lib/direction";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { animated, useSpring } from "react-spring";
 import { sleep } from "stanza/Utils";

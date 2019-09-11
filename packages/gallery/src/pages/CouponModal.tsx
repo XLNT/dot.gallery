@@ -43,7 +43,9 @@ export default function CouponModal() {
 
   const onSubmit = useCallback(async () => {
     // submit coupon
-    await redeemCoupon({ variables: { code: couponInput.current.value } });
+    await redeemCoupon({
+      variables: { code: couponInput.current.value.toLowerCase() },
+    });
   }, [redeemCoupon]);
 
   return (

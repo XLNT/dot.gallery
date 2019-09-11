@@ -1,19 +1,18 @@
 import { animated, config as springConfig, useTransition } from "react-spring";
 import { get } from "lodash-es";
 import { useDebouncedCallback } from "use-debounce";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import useKey from "use-key-hook";
 
+import { Coords, findRoom, navigate } from "lib/rooms";
+import { CurrentExhibitionQuery } from "operations";
 import {
-  Coords,
   Direction,
   directionFor,
-  findRoom,
+  invertForPreference,
   keycodeFor,
-  navigate,
-} from "lib/rooms";
-import { CurrentExhibitionQuery } from "operations";
+} from "lib/direction";
 import { ExhibitionProps } from "./ExhibitionProps";
 import { format } from "lib/exhibitionSlug";
 import CurrentRoomId from "context/CurrentRoomId";
@@ -21,6 +20,7 @@ import Journey from "context/Journey";
 import JourneyAndExit from "./Gallery/JourneyAndExit";
 import PanelAction from "context/PanelAction";
 import Room from "components/Room";
+import ScrollingPreference from "context/ScrollingPreference";
 import SocialLayer from "./Gallery/SocialLayer";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
@@ -63,6 +63,7 @@ const ExhibitionSlug = styled.div`
 export default function Gallery(props: ExhibitionProps<{}>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
+  const [scrollDirection] = ScrollingPreference.useContainer();
   const [, appendToJourney, resetJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
 
@@ -87,22 +88,28 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   }, [appendToJourney, exhibition, resetJourney]);
 
   const [handleDirection] = useDebouncedCallback(
-    (direction: Direction) => {
-      if (exhibition) {
-        setLastDirection(direction);
-        const newCoords = navigate(coords, exhibition.extent, direction);
-        appendToJourney(newCoords);
-        setCoords(newCoords);
-      }
-    },
+    useCallback(
+      (direction: Direction) => {
+        if (exhibition) {
+          setLastDirection(direction);
+          const newCoords = navigate(coords, exhibition.extent, direction);
+          appendToJourney(newCoords);
+          setCoords(newCoords);
+        }
+      },
+      [appendToJourney, coords, exhibition],
+    ),
     400,
     {
       leading: true,
     },
   );
 
-  const [] = useKey(
-    (pressedKey: number) => handleDirection(directionFor(pressedKey)),
+  useKey(
+    (pressedKey: number) =>
+      handleDirection(
+        invertForPreference(scrollDirection, directionFor(pressedKey)),
+      ),
     {
       detectKeys: [
         Direction.Left,
@@ -111,7 +118,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
         Direction.Down,
       ].map(keycodeFor),
     },
-    { dependencies: [exhibition, coords] },
+    { dependencies: [handleDirection] },
   );
 
   const room = useMemo(

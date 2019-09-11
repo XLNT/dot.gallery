@@ -6,7 +6,13 @@ import {
   useSprings,
   useTrail,
 } from "react-spring";
-import { Direction, directionFor, keycodeFor } from "lib/rooms";
+import {
+  Direction,
+  ScrollDirection,
+  directionFor,
+  invertForPreference,
+  keycodeFor,
+} from "lib/direction";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { get } from "lodash-es";
 import { humanize } from "lib/errorCodes";
@@ -24,6 +30,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import ScrollingPreference from "context/ScrollingPreference";
 import arrows from "static/arrows.svg";
 import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
@@ -126,6 +133,11 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   useRequiredTicket();
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
+
+  const [
+    scrollingPreference,
+    setScrollingPreference,
+  ] = ScrollingPreference.useContainer();
 
   useMobileRedirect(
     `/notice?${new URLSearchParams({
@@ -335,17 +347,34 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     })),
   );
 
-  useKey(
+  const handleKey = useCallback(
     (pressedKey: number) => {
-      switch (directionFor(pressedKey)) {
+      const dir = directionFor(pressedKey);
+      let sp = scrollingPreference;
+      if (currentStep === 0) {
+        sp =
+          dir === Direction.Up
+            ? ScrollDirection.Natural
+            : ScrollDirection.Inverted;
+        setScrollingPreference(sp);
+      }
+
+      const normalized = invertForPreference(sp, dir);
+
+      switch (normalized) {
         case Direction.Up:
           return goPrev();
         case Direction.Down:
           return goNext();
       }
     },
+    [currentStep, goNext, goPrev, scrollingPreference, setScrollingPreference],
+  );
+
+  useKey(
+    handleKey,
     { detectKeys: [Direction.Up, Direction.Down].map(keycodeFor) },
-    { dependencies: [goPrev, goNext] },
+    { dependencies: [handleKey] },
   );
 
   return (

@@ -23,6 +23,7 @@ import MediaQuery from "context/MediaQuery";
 import Modal from "context/Modal";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
+import ScrollingPreference from "context/ScrollingPreference";
 import TicketSuccess from "pages/TicketSuccess";
 import Timezone from "context/Timezone";
 import WithPanel from "pages/WithPanel";
@@ -57,6 +58,7 @@ const Providers = nest([
   EntityToken.Provider,
   MediaQuery.Provider,
   Timezone.Provider,
+  ScrollingPreference.Provider,
   DndProvider,
   Router,
 ]);
