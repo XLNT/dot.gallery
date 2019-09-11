@@ -3,7 +3,6 @@ import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
 import { CurrentEntityQuery, useKnownEntityQuery } from "../../operations";
-import { Peer, PeerControls } from "@andyet/simplewebrtc";
 import AssetsList from "components/AssetsList";
 
 const Container = styled.div`
@@ -30,7 +29,6 @@ export default function PresentEntity({
   id,
   handle,
   assets,
-  peer,
   draggable = false,
   wrappable = false,
   children,
@@ -41,10 +39,7 @@ export default function PresentEntity({
   id: string;
   handle: string;
   assets: CurrentEntityQuery["currentEntity"]["assets"];
-  peer?: Peer;
 }>) {
-  peer && console.log(`Peer ${JSON.stringify(peer.customerData)}`);
-
   const providedAssets = !!assets && !!assets.length;
   const { data } = useKnownEntityQuery({
     variables: { id },
@@ -58,16 +53,6 @@ export default function PresentEntity({
   return (
     <Container {...rest}>
       <Handle>{handle || "Anonymous"}</Handle>
-      {peer && (
-        <PeerControls
-          peer={peer}
-          render={({ isMuted, mute, unmute }) => (
-            <button onClick={() => (isMuted ? unmute() : mute())}>
-              {isMuted ? "unmute" : "mute"}
-            </button>
-          )}
-        />
-      )}
       <StyledAssetsList
         assets={displayAssets}
         wrappable={wrappable}

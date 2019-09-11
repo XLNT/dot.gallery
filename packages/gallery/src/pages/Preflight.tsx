@@ -8,7 +8,6 @@ import {
 } from "react-spring";
 import { Direction, directionFor, keycodeFor } from "lib/rooms";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
-import { RequestUserMedia } from "@andyet/simplewebrtc";
 import { get } from "lodash-es";
 import { humanize } from "lib/errorCodes";
 import { useCurrentEntityQuery, useSetHandleMutation } from "operations";
@@ -185,41 +184,41 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
           />
         ),
       },
-      {
-        title: "You are not alone.",
-        subtitle:
-          "Everyone viewing a work can talk with one another. Make sure your voice is heard.",
-        // eslint-disable-next-line react/display-name
-        element: (focused = false) => (
-          <RequestUserMedia
-            audio
-            share
-            microphonePermissionDenied={() =>
-              setPermissionState(PermissionState.Denied)
-            }
-            onError={() => setPermissionState(PermissionState.Denied)}
-            onSuccess={() => setPermissionState(PermissionState.Available)}
-            render={getMedia => (
-              <StyledEnterButton
-                onClick={e => {
-                  setPermissionState(PermissionState.Pending);
-                  return getMedia(e);
-                }}
-                disabled={
-                  permissionState === PermissionState.Available ||
-                  permissionState === PermissionState.Pending
-                }
-              >
-                {permissionState === PermissionState.Available
-                  ? "Granted"
-                  : permissionState === PermissionState.Denied
-                  ? "Denied"
-                  : "Grant"}
-              </StyledEnterButton>
-            )}
-          />
-        ),
-      },
+      // {
+      //   title: "You are not alone.",
+      //   subtitle:
+      //     "Everyone viewing a work can talk with one another. Make sure your voice is heard.",
+      //   // eslint-disable-next-line react/display-name
+      //   element: (focused = false) => (
+      //     <RequestUserMedia
+      //       audio
+      //       share
+      //       microphonePermissionDenied={() =>
+      //         setPermissionState(PermissionState.Denied)
+      //       }
+      //       onError={() => setPermissionState(PermissionState.Denied)}
+      //       onSuccess={() => setPermissionState(PermissionState.Available)}
+      //       render={getMedia => (
+      //         <StyledEnterButton
+      //           onClick={e => {
+      //             setPermissionState(PermissionState.Pending);
+      //             return getMedia(e);
+      //           }}
+      //           disabled={
+      //             permissionState === PermissionState.Available ||
+      //             permissionState === PermissionState.Pending
+      //           }
+      //         >
+      //           {permissionState === PermissionState.Available
+      //             ? "Granted"
+      //             : permissionState === PermissionState.Denied
+      //             ? "Denied"
+      //             : "Grant"}
+      //         </StyledEnterButton>
+      //       )}
+      //     />
+      //   ),
+      // },
       {
         title: "Be who you are.",
         subtitle:
@@ -262,16 +261,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [
-      error,
-      fetchingHandle,
-      goFoyer,
-      handle,
-      hasHandle,
-      loading,
-      onHandleSubmit,
-      permissionState,
-    ],
+    [error, fetchingHandle, goFoyer, handle, hasHandle, loading, onHandleSubmit],
   );
 
   const goNext = useCallback(

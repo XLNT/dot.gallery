@@ -1,14 +1,3 @@
-import {
-  Connected,
-  Connecting,
-  Disconnected,
-  Failed,
-  NotSupported,
-  PeerList,
-  RemoteAudioPlayer,
-  Provider as SWRTCProvider,
-  Room as SWRTCRoom,
-} from "@andyet/simplewebrtc";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -47,55 +36,6 @@ export default function SocialLayer({ room }: { room: Pick<Room, "id"> }) {
   return (
     <>
       <PresenceList>
-        {false && token && room && (
-          <SWRTCProvider
-            configUrl={`https://api.simplewebrtc.com/config/user/${config.SIMPLEWEBRTC_API_KEY}`}
-            userData={token}
-          >
-            <RemoteAudioPlayer />
-            <Connecting>Connecting...</Connecting>
-            <Connected>Connected</Connected>
-            <Disconnected>Disconnected</Disconnected>
-            <NotSupported configUrl="">NotSupported!</NotSupported>
-            <Failed>Failed!</Failed>
-            <Connected>
-              <SWRTCRoom
-                key={room.id}
-                name={room.id}
-                password="password"
-                leave={address => console.log(`Left room ${address}`)}
-                destroy={address => console.log(`Destroy room ${address}`)}
-                lock={address => console.log(`Lock room ${address}`)}
-                unlock={address => console.log(`Unlock room ${address}`)}
-              >
-                {({ room, ...rest }) => {
-                  return (
-                    <>
-                      {room.joined && (
-                        <PeerList
-                          room={room.address}
-                          render={({ peers }) =>
-                            peers.map(peer => {
-                              return (
-                                <PresentEntity
-                                  key={peer.address}
-                                  id={peer.customerData["id"]}
-                                  handle={peer.customerData["handle"]}
-                                  peer={peer}
-                                />
-                              );
-                            })
-                          }
-                        />
-                      )}
-                    </>
-                  );
-                }}
-              </SWRTCRoom>
-            </Connected>
-          </SWRTCProvider>
-        )}
-
         {!loading && !error && (
           <PresentEntity id={ownId} handle={`${ownHandle} (you)`} draggable />
         )}

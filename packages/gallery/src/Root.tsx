@@ -2,7 +2,6 @@ import "normalize.css";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import { DndProvider } from "react-dnd";
-import { Provider as ReduxProvider } from "react-redux";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
@@ -10,7 +9,6 @@ import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 import ReactGA from "react-ga";
 
-import { createStore } from "@andyet/simplewebrtc";
 import Authorize from "pages/Authorize";
 import EntityToken from "context/EntityToken";
 import EntryCache from "context/EntryCache";
@@ -59,7 +57,6 @@ const Providers = nest([
   EntityToken.Provider,
   MediaQuery.Provider,
   Timezone.Provider,
-  ReduxProvider,
   DndProvider,
   Router,
 ]);
@@ -67,11 +64,10 @@ const Providers = nest([
 function Root() {
   const client = useConstant(() => makeClient());
   const backend = useConstant(() => HTML5Backend);
-  const store = useConstant(() => createStore());
 
   return (
     <>
-      <Providers theme={theme} client={client} backend={backend} store={store}>
+      <Providers theme={theme} client={client} backend={backend}>
         <>
           <GlobalStyle />
           <Interactors />
