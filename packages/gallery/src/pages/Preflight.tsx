@@ -28,6 +28,7 @@ import React, {
 import arrows from "static/arrows.svg";
 import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
+import useDimensions from "react-use-dimensions";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import usePreloadedFoyer from "hook/usePreloadedFoyer";
@@ -49,43 +50,36 @@ const Container = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction};
   justify-content: space-between;
-  margin: 2rem 5rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
 `;
 
 const StyledEnterButton = styled(EnterButton)`
   font-size: 4rem;
 `;
 
-const ActionContainer = styled.div`
+const Column = styled.div`
   flex: 1;
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
 `;
 
 const Action = styled(animated.div)`
   height: ${EXTENT}px;
 
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
-`;
-
-const StepsContainer = styled.div`
-  flex: 1;
-  overflow: hidden;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 `;
 
 const PreflightContainer = styled(animated.div)`
   height: ${EXTENT}px;
 
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   justify-content: center;
   user-select: none;
@@ -135,10 +129,14 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
 
   usePreloadedFoyer();
   const { setFullscreen } = Fullscreen.useContainer();
-  const [currentStep, setCurrentStep] = useState(0);
   const flexDirection = useBreakpoints(["column", "column", "row"]);
-  const handleRef = useRef<HTMLInputElement>();
+  const [ref, { height: columnHeight }] = useDimensions();
+  const height = columnHeight || document.body.clientHeight / 2;
+
+  const [currentStep, setCurrentStep] = useState(0);
   const { data, loading: fetchingHandle } = useCurrentEntityQuery();
+
+  const handleRef = useRef<HTMLInputElement>();
   const [setHandle, { loading, error }] = useSetHandleMutation({
     refetchQueries: ["CurrentEntity", "UserDataToken"],
     awaitRefetchQueries: true,
@@ -330,10 +328,13 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   );
 
   const midpoint = Math.floor(steps.length / 2);
-  const dist = midpoint - currentStep;
-  const trail = useTrail(steps.length, {
-    transform: `translateY(${dist * EXTENT}px)`,
-  });
+  const middleTop = height / 2 - EXTENT / 2;
+  const trail = useSprings(
+    steps.length,
+    steps.map((step, i) => ({
+      transform: `translateY(${middleTop - currentStep * EXTENT}px)`,
+    })),
+  );
 
   useKey(
     (pressedKey: number) => {
@@ -350,7 +351,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
 
   return (
     <Container direction={flexDirection}>
-      <StepsContainer>
+      <Column ref={ref}>
         {trail.map((props, index) => (
           <PreflightStep
             key={index}
@@ -374,8 +375,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
             subtitle={steps[index].subtitle}
           />
         ))}
-      </StepsContainer>
-      <ActionContainer>
+      </Column>
+      <Column>
         {trail.map((props, index) => (
           <Action
             key={index}
@@ -390,7 +391,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
             {steps[index].element(index === currentStep)}
           </Action>
         ))}
-      </ActionContainer>
+      </Column>
     </Container>
   );
 }

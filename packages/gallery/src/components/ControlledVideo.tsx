@@ -1,4 +1,10 @@
 import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
+
+const Video = styled.video`
+  height: 100%;
+  width: 100%;
+`;
 
 export default function ControlledVideo({
   playing = false,
@@ -17,5 +23,5 @@ export default function ControlledVideo({
     }
   }, [playing]);
 
-  return <video ref={ref} {...rest}></video>;
+  return <Video ref={ref} {...rest}></Video>;
 }
