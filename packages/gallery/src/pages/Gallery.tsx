@@ -118,8 +118,8 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     [coords, exhibition],
   );
 
-  const width = document.body.clientWidth;
-  const height = document.body.clientHeight;
+  const width = document.body.clientWidth * 1.5;
+  const height = document.body.clientHeight * 1.5;
   const outX =
     lastDirection === Direction.Left
       ? width
@@ -138,7 +138,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     from: { transform: `translate3d(${-outX}px, ${-outY}px, 0)`, opacity: 0 },
     enter: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
     leave: { transform: `translate3d(${outX}px, ${outY}px, 0)`, opacity: 0 },
-    config: springConfig.molasses,
+    config: { ...springConfig.molasses, friction: 200 },
   });
 
   return (
