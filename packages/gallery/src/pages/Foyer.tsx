@@ -1,12 +1,12 @@
 import { Direction, keycodeFor } from "lib/direction";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { animated, useSpring } from "react-spring";
-import { sleep } from "stanza/Utils";
 import { useRedeemTicketMutation, useUserDataTokenQuery } from "operations";
 import ControlledVideo from "components/ControlledVideo";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";
 import fromTheme from "theme/fromTheme";
+import sleep from "lib/sleep";
 import styled from "styled-components";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
