@@ -12,6 +12,7 @@ import { RequestUserMedia } from "@andyet/simplewebrtc";
 import { get } from "lodash";
 import { humanize } from "lib/errorCodes";
 import { useCurrentEntityQuery, useSetHandleMutation } from "operations";
+import ControlledVideo from "components/ControlledVideo";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
 import HandleInput from "components/HandleInput";
@@ -166,7 +167,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
       {
         title: "Arrows navigate between works.",
         subtitle: "Give it a try.",
-        element: (
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
           <>
             <img src={arrows}></img>
           </>
@@ -176,7 +178,21 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         title: "Adjust your audio.",
         subtitle:
           "These works exists in pixels and waves. Set your volume accordingly.",
-        element: (
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
+          <ControlledVideo
+            src="https://cdn.bydot.app/dot.gallery_audio_check.mp4"
+            playing={focused}
+            loop
+          />
+        ),
+      },
+      {
+        title: "You are not alone.",
+        subtitle:
+          "Everyone viewing a work can talk with one another. Make sure your voice is heard.",
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
           <RequestUserMedia
             audio
             share
@@ -207,10 +223,11 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
       {
-        title: "You are not alone.",
+        title: "Be who you are.",
         subtitle:
-          "Everyone viewing a work can talk with one another. Enter the name you want others to see. You can mute yourself or others.",
-        element: (
+          "Enter the name you want others to see. You can mute yourself or others.",
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
           <HandleInputContainer>
             <HandleInput
               ref={handleRef}
@@ -228,7 +245,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         title: "Give and receive.",
         subtitle:
           "Drag a token onto a work and the work will give you something in return.",
-        element: (
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
           <>
             <img src="https://cdn.bydot.app/token.png"></img>
           </>
@@ -238,7 +256,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         title: "Be where you are.",
         subtitle:
           "The gallery can only be viewed in full-screen. These works demand 100% of your pixels and your attention. When you click ENTER you will enter full-screen and migrate into the gallery.",
-        element: (
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
           <>
             <StyledEnterButton onClick={goFoyer}>Enter</StyledEnterButton>
           </>
@@ -261,12 +280,12 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     () =>
       setCurrentStep(step => {
         // block until we have audio
-        if (permissionState === PermissionState.Unasked && step === 1) {
+        if (permissionState === PermissionState.Unasked && step === 2) {
           return step;
         }
 
         // block until we have handle
-        if (!hasHandle && step === 2) {
+        if (!hasHandle && step === 3) {
           return step;
         }
 
@@ -351,7 +370,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
                 (s, o) => s * o,
               ),
             }}
-            {...steps[index]}
+            title={steps[index].title}
+            subtitle={steps[index].subtitle}
           />
         ))}
       </StepsContainer>
@@ -367,7 +387,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
               ),
             }}
           >
-            {steps[index].element}
+            {steps[index].element(index === currentStep)}
           </Action>
         ))}
       </ActionContainer>

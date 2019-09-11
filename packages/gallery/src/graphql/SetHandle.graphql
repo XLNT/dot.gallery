@@ -1,0 +1,6 @@
+mutation SetHandle($handle: String!) {
+  setHandle(handle: $handle) {
+    id
+    handle
+  }
+}

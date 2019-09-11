@@ -1,0 +1,11 @@
+query KnownEntity($id: ID!) {
+  knownEntity(id: $id) {
+    id
+    handle
+    assets {
+      id
+      domain
+      uri
+    }
+  }
+}
