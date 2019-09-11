@@ -12,13 +12,14 @@ import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
-const Backboard = styled.div`
+const MaxedVideo = styled(ControlledVideo)`
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background-color: ${fromTheme("primary")};
+  object-fit: cover;
 `;
 
 const SkipButton = styled(animated.div)`
@@ -88,14 +89,12 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
 
   return (
     <>
-      <Backboard>
-        <ControlledVideo
-          src="https://cdn.bydot.app/foyer.mp4"
-          playing={isFocused}
-          autoPlay
-          onEnded={goGallery}
-        />
-      </Backboard>
+      <MaxedVideo
+        src="https://cdn.bydot.app/foyer.mp4"
+        playing={isFocused}
+        autoPlay
+        onEnded={goGallery}
+      />
       <SkipButton onClick={goGallery} style={style}>
         Skip <Arrow src={arrow} />
       </SkipButton>

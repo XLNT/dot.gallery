@@ -261,19 +261,27 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [error, fetchingHandle, goFoyer, handle, hasHandle, loading, onHandleSubmit],
+    [
+      error,
+      fetchingHandle,
+      goFoyer,
+      handle,
+      hasHandle,
+      loading,
+      onHandleSubmit,
+    ],
   );
 
   const goNext = useCallback(
     () =>
       setCurrentStep(step => {
-        // block until we have audio
-        if (permissionState === PermissionState.Unasked && step === 2) {
-          return step;
-        }
+        // // block until we have audio
+        // if (permissionState === PermissionState.Unasked && step === 1) {
+        //   return step;
+        // }
 
         // block until we have handle
-        if (!hasHandle && step === 3) {
+        if (!hasHandle && step === 2) {
           return step;
         }
 
@@ -282,7 +290,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
 
         return Math.min(step + 1, steps.length - 1);
       }),
-    [hasHandle, permissionState, steps.length],
+    [hasHandle, steps.length],
   );
 
   const goPrev = useCallback(

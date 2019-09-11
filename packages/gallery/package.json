@@ -25,9 +25,9 @@
   "dependencies": {
     "@apollo/react-common": "^3.0.1",
     "@apollo/react-hooks": "^3.0.1",
+    "@contentful/rich-text-react-renderer": "^13.4.0",
     "@contentful/rich-text-types": "^13.4.0",
     "@hot-loader/react-dom": "^16.9.0",
-    "@madebyconnor/rich-text-to-jsx": "^2.1.1",
     "@straw-hat/react-fullscreen": "^1.2.1",
     "@types/luxon": "^1.15.2",
     "apollo-cache-inmemory": "^1.6.3",

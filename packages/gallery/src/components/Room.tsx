@@ -17,6 +17,10 @@ interface RoomProps {
   room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
 }
 
+const RichTextContainer = styled.div`
+  padding-bottom: 8rem;
+`;
+
 const Container = styled.div`
   flex: 1;
   perspective: 1000px;
@@ -94,7 +98,9 @@ export default function Room({ room }: RoomProps) {
       </Container>
       <AnimatedPanelContent>
         {state === "resolved" && (
-          <GalleryRichText richText={result.fields.body} />
+          <RichTextContainer>
+            <GalleryRichText richText={result.fields.body} />
+          </RichTextContainer>
         )}
         {state === "rejected" && (
           <>

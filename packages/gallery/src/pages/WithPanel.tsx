@@ -81,18 +81,13 @@ const PanelActionText = styled(animated.div)`
   transform-origin: 25% 50%;
 `;
 
-const PanelContentElement = styled(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, react/display-name
-  React.forwardRef<HTMLDivElement>(({ buttonExtent, ...props }: any, ref) => (
-    <animated.div ref={ref} {...props} />
-  )),
-)`
+const PanelContentElement = styled(animated.div)`
   position: relative;
   flex: 1;
   display: flex;
   width: 100%;
 
-  height: ${({ buttonExtent }) => `calc(100% - ${buttonExtent}px - 2rem)`};
+  height: 100%;
 
   &:after {
     content: "";
@@ -198,10 +193,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
               }}
             />
           </PanelButton>
-          <PanelContent.Target
-            as={PanelContentElement}
-            buttonExtent={buttonWidth}
-          />
+          <PanelContent.Target as={PanelContentElement} />
         </Inner>
       </PanelContainer>
     </Backboard>
