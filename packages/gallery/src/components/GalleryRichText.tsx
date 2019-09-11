@@ -76,30 +76,38 @@ const assetRenderers = {
 };
 
 export default function GalleryRichText({ richText }: { richText: Document }) {
-  return documentToReactComponents(richText, {
-    // renderMark: {},
-    renderNode: {
-      [BLOCKS.PARAGRAPH]: (node, children) => <P>{children}</P>,
-      [BLOCKS.QUOTE]: (node, children) => <Blockquote>{children}</Blockquote>,
-      [BLOCKS.HEADING_1]: (node, children) => <Heading1>{children}</Heading1>,
-      [BLOCKS.EMBEDDED_ASSET]: ({ data }, children) => {
-        const mimeType = get(data, "target.fields.file.contentType", "");
-        const mimeTypeGroup = mimeType.split("/")[0];
+  return (
+    <>
+      {documentToReactComponents(richText, {
+        // renderMark: {},
+        renderNode: {
+          [BLOCKS.PARAGRAPH]: (node, children) => <P>{children}</P>,
+          [BLOCKS.QUOTE]: (node, children) => (
+            <Blockquote>{children}</Blockquote>
+          ),
+          [BLOCKS.HEADING_1]: (node, children) => (
+            <Heading1>{children}</Heading1>
+          ),
+          [BLOCKS.EMBEDDED_ASSET]: ({ data }, children) => {
+            const mimeType = get(data, "target.fields.file.contentType", "");
+            const mimeTypeGroup = mimeType.split("/")[0];
 
-        if (!mimeTypeGroup) {
-          return children;
-        }
+            if (!mimeTypeGroup) {
+              return children;
+            }
 
-        const renderer = assetRenderers[mimeTypeGroup];
+            const renderer = assetRenderers[mimeTypeGroup];
 
-        return renderer(data.target);
-      },
-      [INLINES.HYPERLINK]: (node, children) => <A>{children}</A>,
-    },
-    renderText: text => {
-      return text.split("\n").reduce((children, textSegment, index) => {
-        return [...children, index > 0 && <br key={index} />, textSegment];
-      }, []);
-    },
-  });
+            return renderer(data.target);
+          },
+          [INLINES.HYPERLINK]: (node, children) => <A>{children}</A>,
+        },
+        renderText: text => {
+          return text.split("\n").reduce((children, textSegment, index) => {
+            return [...children, index > 0 && <br key={index} />, textSegment];
+          }, []);
+        },
+      })}
+    </>
+  );
 }

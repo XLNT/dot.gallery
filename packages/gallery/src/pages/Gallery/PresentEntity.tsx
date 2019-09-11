@@ -38,7 +38,7 @@ export default function PresentEntity({
   wrappable?: boolean;
   id: string;
   handle: string;
-  assets: CurrentEntityQuery["currentEntity"]["assets"];
+  assets?: CurrentEntityQuery["currentEntity"]["assets"];
 }>) {
   const providedAssets = !!assets && !!assets.length;
   const { data } = useKnownEntityQuery({
@@ -52,7 +52,7 @@ export default function PresentEntity({
 
   return (
     <Container {...rest}>
-      <Handle>{handle || "Anonymous"}</Handle>
+      {/* <Handle>{handle || "Anonymous"}</Handle> */}
       <StyledAssetsList
         assets={displayAssets}
         wrappable={wrappable}

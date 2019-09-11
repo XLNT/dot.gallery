@@ -35,7 +35,7 @@ import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
-const EXTENT = 200;
+const EXTENT = 300;
 
 enum PermissionState {
   Unasked,
@@ -219,25 +219,25 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
       //     />
       //   ),
       // },
-      {
-        title: "Be who you are.",
-        subtitle:
-          "Enter the name you want others to see. You can mute yourself or others.",
-        // eslint-disable-next-line react/display-name
-        element: (focused = false) => (
-          <HandleInputContainer>
-            <HandleInput
-              ref={handleRef}
-              onSubmit={onHandleSubmit}
-              disabled={fetchingHandle}
-              defaultValue={handle}
-            />
-            {hasHandle && <HelpText>You have set your handle 👍</HelpText>}
-            {loading && <HelpText>Submitting...</HelpText>}
-            {error && <HelpText>{humanize(error)}</HelpText>}
-          </HandleInputContainer>
-        ),
-      },
+      // {
+      //   title: "Be who you are.",
+      //   subtitle:
+      //     "Enter the name you want others to see. You can mute yourself or others.",
+      //   // eslint-disable-next-line react/display-name
+      //   element: (focused = false) => (
+      //     <HandleInputContainer>
+      //       <HandleInput
+      //         ref={handleRef}
+      //         onSubmit={onHandleSubmit}
+      //         disabled={fetchingHandle}
+      //         defaultValue={handle}
+      //       />
+      //       {hasHandle && <HelpText>You have set your handle 👍</HelpText>}
+      //       {loading && <HelpText>Submitting...</HelpText>}
+      //       {error && <HelpText>{humanize(error)}</HelpText>}
+      //     </HandleInputContainer>
+      //   ),
+      // },
       {
         title: "Give and receive.",
         subtitle:
@@ -261,15 +261,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [
-      error,
-      fetchingHandle,
-      goFoyer,
-      handle,
-      hasHandle,
-      loading,
-      onHandleSubmit,
-    ],
+    [goFoyer],
   );
 
   const goNext = useCallback(
@@ -281,16 +273,16 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         // }
 
         // block until we have handle
-        if (!hasHandle && step === 2) {
-          return step;
-        }
+        // if (!hasHandle && step === 2) {
+        //   return step;
+        // }
 
         // defocus handle input if available
         handleRef.current && handleRef.current.blur();
 
         return Math.min(step + 1, steps.length - 1);
       }),
-    [hasHandle, steps.length],
+    [steps.length],
   );
 
   const goPrev = useCallback(

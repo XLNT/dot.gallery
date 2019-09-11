@@ -24,20 +24,26 @@ const PresenceList = styled.div`
 `;
 
 export default function SocialLayer({ room }: { room: Pick<Room, "id"> }) {
-  const { data: tokenData } = useUserDataTokenQuery({ pollInterval: 5000 });
-  const token = get(tokenData, "userDataToken");
+  // const { data: tokenData } = useUserDataTokenQuery({ pollInterval: 5000 });
+  // const token = get(tokenData, "userDataToken");
   const { data, loading, error } = useCurrentEntityQuery({
     pollInterval: 5000,
   });
 
   const ownId = get(data, ["currentEntity", "id"]);
   const ownHandle = get(data, ["currentEntity", "handle"]);
+  const ownAssets = get(data, ["currentEntity", "tradableAssets"]);
 
   return (
     <>
       <PresenceList>
         {!loading && !error && (
-          <PresentEntity id={ownId} handle={`${ownHandle} (you)`} draggable />
+          <PresentEntity
+            id={ownId}
+            handle={`${ownHandle} (you)`}
+            assets={ownAssets}
+            draggable
+          />
         )}
       </PresenceList>
     </>
