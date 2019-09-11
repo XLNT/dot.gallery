@@ -13,10 +13,6 @@ import React, { useCallback, useContext } from "react";
 import styled from "styled-components";
 import useContentfulEntry from "hook/useContentfulEntry";
 
-interface RoomProps {
-  room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
-}
-
 const RichTextContainer = styled.div`
   padding-bottom: 8rem;
 `;
@@ -44,7 +40,13 @@ const collect = (monitor: DropTargetMonitor) => ({
   isOver: monitor.isOver(),
 });
 
-export default function Room({ room }: RoomProps) {
+export default function Room({
+  room,
+  createPlacement,
+}: {
+  room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
+  createPlacement: ReturnType<typeof useCreatePlacementMutation>[0];
+}) {
   const currentRoomId = useContext(CurrentRoomId);
   const [result, error, state] = useContentfulEntry(room.entryId);
 
@@ -53,14 +55,12 @@ export default function Room({ room }: RoomProps) {
     result,
     "fields.work.fields.file.contentType",
   );
+
   const ElementType = contentType
     ? contentTypeIsVideo(contentType)
       ? ControlledVideo
       : Image
     : undefined;
-  const [createPlacement] = useCreatePlacementMutation({
-    refetchQueries: ["CurrentEntity"],
-  });
 
   const drop = useCallback(
     async item => {

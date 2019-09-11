@@ -6,7 +6,12 @@ import styled from "styled-components";
 import useKey from "use-key-hook";
 
 import { Coords, findRoom, navigate } from "lib/rooms";
-import { CurrentExhibitionQuery } from "operations";
+import {
+  CurrentEntityDocument,
+  CurrentEntityQuery,
+  CurrentExhibitionQuery,
+  useCreatePlacementMutation,
+} from "operations";
 import {
   Direction,
   directionFor,
@@ -70,6 +75,44 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const { exhibition } = useCurrentExhibition();
   const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
   usePreloadedEntries(rooms.map(room => room.entryId));
+
+  const [
+    createPlacementMutation,
+    { loading: creatingPlacement },
+  ] = useCreatePlacementMutation({
+    refetchQueries: ["CurrentEntity"],
+    awaitRefetchQueries: true,
+  });
+
+  const createPlacement = useCallback(
+    (args: Parameters<typeof createPlacementMutation>[0]) =>
+      createPlacementMutation({
+        ...args,
+        optimisticResponse: {
+          createPlacement: {
+            __typename: "Placement",
+            id: new Date().toString(),
+            assets: [],
+          },
+        },
+        update: (proxy, { data: { createPlacement } }) => {
+          const data = proxy.readQuery<CurrentEntityQuery>({
+            query: CurrentEntityDocument,
+          });
+          data.currentEntity.tradableAssets = [
+            ...data.currentEntity.tradableAssets.filter(
+              asset => asset.id !== args.variables.assetId,
+            ),
+            ...createPlacement.assets,
+          ];
+          proxy.writeQuery<CurrentEntityQuery>({
+            query: CurrentEntityDocument,
+            data,
+          });
+        },
+      }),
+    [createPlacementMutation],
+  );
 
   const [coords, setCoords] = useState<Coords>(null);
 
@@ -158,12 +201,12 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   return (
     <CurrentRoomId.Provider value={room ? room.id : null}>
       <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
-      <SocialLayer room={room} />
+      <SocialLayer room={room} loadingAsset={creatingPlacement} />
       <JourneyAndExit {...props} />
       <Canvas>
         {transitions.map(({ item, key, props }) => (
           <InnerCanvas key={key} style={props}>
-            {item && <Room room={item} />}
+            {item && <Room room={item} createPlacement={createPlacement} />}
           </InnerCanvas>
         ))}
       </Canvas>

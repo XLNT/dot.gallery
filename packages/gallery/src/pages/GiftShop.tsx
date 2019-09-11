@@ -162,7 +162,10 @@ export default function GiftShop({  }: ExhibitionProps<void>) {
               ref={drag}
               size={5}
               journey={journey}
-              style={{ opacity: isDragging ? 0.2 : 1 }}
+              style={{
+                opacity: isDragging ? 0.2 : 1,
+                cursor: isDragging ? "grabbing" : "grab",
+              }}
             />
           )}
         </GiftContainer>

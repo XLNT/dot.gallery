@@ -116,7 +116,7 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
           style={{ transform: y.interpolate(y => `translateY(${y}px)`) }}
         >
           <InnerExitProposal>
-            You are about to exit the gallery, hands on the door.
+            You are about to exit the gallery.
             <br />
             Do you want to{" "}
             <ThemeLink onClick={goExit}>continue to exit</ThemeLink> or{" "}

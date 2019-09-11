@@ -2,14 +2,10 @@ import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
-import {
-  Room,
-  useCurrentEntityQuery,
-  useUserDataTokenQuery,
-} from "../../operations";
+import { Room, useCurrentEntityQuery } from "../../operations";
 import { ZIndex } from "lib/zIndex";
+import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./PresentEntity";
-import config from "config";
 
 const PresenceList = styled.div`
   position: absolute;
@@ -23,7 +19,13 @@ const PresenceList = styled.div`
   z-index: ${ZIndex.Social};
 `;
 
-export default function SocialLayer({ room }: { room: Pick<Room, "id"> }) {
+export default function SocialLayer({
+  room,
+  loadingAsset = false,
+}: {
+  room: Pick<Room, "id">;
+  loadingAsset: boolean;
+}) {
   // const { data: tokenData } = useUserDataTokenQuery({ pollInterval: 5000 });
   // const token = get(tokenData, "userDataToken");
   const { data, loading, error } = useCurrentEntityQuery({
@@ -43,7 +45,9 @@ export default function SocialLayer({ room }: { room: Pick<Room, "id"> }) {
             handle={`${ownHandle} (you)`}
             assets={ownAssets}
             draggable
-          />
+          >
+            {loadingAsset && <LoadingAsset />}
+          </PresentEntity>
         )}
       </PresenceList>
     </>
