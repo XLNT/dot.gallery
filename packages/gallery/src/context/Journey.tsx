@@ -32,12 +32,12 @@ function useJourney(): [Coords[], (payload: Coords) => void, () => void] {
     [],
   );
 
-  const clearJourney = useCallback(
+  const resetJourney = useCallback(
     () => dispatch({ type: ActionType.Reset }),
     [],
   );
 
-  return [journey, appendToJourney, clearJourney];
+  return [journey, appendToJourney, resetJourney];
 }
 
 export default createContainer(useJourney);

@@ -73,6 +73,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const [lastDirection, setLastDirection] = useState<Direction>();
 
   const { exhibition } = useCurrentExhibition();
+  const exhibitionExtent = get(exhibition, "extent");
   const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
   usePreloadedEntries(rooms.map(room => room.entryId));
 
@@ -117,18 +118,18 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const [coords, setCoords] = useState<Coords>(null);
 
   useEffect(() => {
-    if (exhibition) {
+    if (exhibitionExtent) {
       const center: Coords = [
-        Math.floor(exhibition.extent / 2.0),
-        Math.floor(exhibition.extent / 2.0),
+        Math.floor(exhibitionExtent / 2.0),
+        Math.floor(exhibitionExtent / 2.0),
       ];
-      resetJourney();
+      console.log("reset journey");
       // yes, twice
       appendToJourney(center);
       appendToJourney(center);
       setCoords(center);
     }
-  }, [appendToJourney, exhibition, resetJourney]);
+  }, [appendToJourney, exhibitionExtent, resetJourney]);
 
   const [handleDirection] = useDebouncedCallback(
     useCallback(
@@ -195,7 +196,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     from: { transform: `translate3d(${-outX}px, ${-outY}px, 0)`, opacity: 0 },
     enter: { transform: `translate3d(0, 0, 0)`, opacity: 1 },
     leave: { transform: `translate3d(${outX}px, ${outY}px, 0)`, opacity: 0 },
-    config: { ...springConfig.molasses, friction: 200 },
+    config: springConfig.molasses,
   });
 
   return (

@@ -10,6 +10,7 @@ import sleep from "lib/sleep";
 import styled from "styled-components";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
+import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const MaxedVideo = styled(ControlledVideo)`
@@ -46,7 +47,7 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   useSuggestedPanelState(false);
 
   useUserDataTokenQuery(); // preload token
-
+  const { history } = useRouter();
   const [isFocused, setIsFocused] = useState(true);
   const [skipVisible, setSkipVisible] = useState(false);
 
@@ -63,8 +64,12 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
           // ignore
           console.log("[dev] redeemTicket failed, ignoring...");
         } else {
-          // TODO: handle this error with a redirect or notice or something
-          throw error;
+          history.push(
+            `/notice?${new URLSearchParams({
+              title: "Ticket Required.",
+              subtitle: "You do not have a ticket for this exhibition.",
+            })}`,
+          );
         }
       } finally {
         await sleep(30 * 1000);
@@ -75,7 +80,7 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
     })();
 
     return () => (mounted = false);
-  }, [redeemTicket]);
+  }, [history, redeemTicket]);
 
   const goGallery = useCallback(() => {
     setIsFocused(false);

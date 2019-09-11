@@ -10,7 +10,6 @@ const Assets = styled.div`
   flex-direction: row;
 
   flex-wrap: ${({ wrappable }) => (wrappable ? "wrap" : "no-wrap")};
-  cursor: ${({ draggable }) => (draggable ? "grab" : "not-allowed")};
 `;
 
 const StyledDraggableAsset = styled(DraggableAsset)`

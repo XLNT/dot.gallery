@@ -6,20 +6,20 @@ import ModalSubtitle from "components/ModalSubtitle";
 import ModalTitle from "components/ModalTitle";
 import useRouter from "context/useRouter";
 
-export default function LoginModal() {
+export default function NoticeModal() {
   const { location } = useRouter();
 
   const params = useMemo(() => new URLSearchParams(location.search), [
     location.search,
   ]);
-  const title = params.get("title") || "Login";
-  const subtitle = params.get("subtitle") || "Enter your email to log in.";
+  const title = params.get("title");
+  const subtitle = params.get("subtitle");
 
   return (
     <ModalFrame>
       <ModalHeader>
         <ModalTitle>{title}</ModalTitle>
-        <ModalSubtitle>{subtitle}</ModalSubtitle>
+        {subtitle && <ModalSubtitle>{subtitle}</ModalSubtitle>}
       </ModalHeader>
     </ModalFrame>
   );

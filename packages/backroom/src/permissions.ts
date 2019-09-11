@@ -124,7 +124,7 @@ const ownsAvailableTicketForCurrentExhibition = rule()(
         where: {
           owner: { id: currentEntity.id },
           exhibition: { id: currentExhibition.id },
-          redeemed: false,
+          // redeemed: false,
         },
       })
       .aggregate()
