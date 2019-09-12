@@ -146,7 +146,7 @@ export default shield(
   {
     Query: {
       currentEntity: isKnownEntity,
-      userDataToken: isKnownEntity,
+      twilioAccessToken: isKnownEntity,
     },
     Mutation: {
       setHandle: and(

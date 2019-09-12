@@ -61,6 +61,7 @@
     "react-use-dimensions": "^1.2.1",
     "react-use-promise": "^0.2.0",
     "styled-components": "^4.3.2",
+    "twilio-video": "2.0.0-beta13",
     "unstated-next": "^1.1.0",
     "use-debounce": "^3.0.1",
     "use-force-update": "^1.0.7",
