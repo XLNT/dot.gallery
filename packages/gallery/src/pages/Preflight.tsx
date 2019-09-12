@@ -7,6 +7,12 @@ import {
   useTrail,
 } from "react-spring";
 import {
+  CurrentEntityDocument,
+  CurrentEntityQuery,
+  useCurrentEntityQuery,
+  useSetHandleMutation,
+} from "operations";
+import {
   Direction,
   ScrollDirection,
   directionFor,
@@ -16,7 +22,6 @@ import {
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { get } from "lodash-es";
 import { humanize } from "lib/errorCodes";
-import { useCurrentEntityQuery, useSetHandleMutation } from "operations";
 import ControlledVideo from "components/ControlledVideo";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
@@ -157,10 +162,27 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const { data, loading: fetchingHandle } = useCurrentEntityQuery();
 
   const handleRef = useRef<HTMLInputElement>();
-  const [setHandle, { loading, error }] = useSetHandleMutation({
-    refetchQueries: ["CurrentEntity", "UserDataToken"],
+  const [setHandleMutation, { loading, error }] = useSetHandleMutation({
     awaitRefetchQueries: true,
   });
+  const setHandle = useCallback(
+    (args: Parameters<typeof setHandleMutation>[0]) =>
+      setHandleMutation({
+        ...args,
+        update: (proxy, { data: { setHandle } }) => {
+          const data = proxy.readQuery<CurrentEntityQuery>({
+            query: CurrentEntityDocument,
+          });
+          data.currentEntity.handle = setHandle.handle;
+          proxy.writeQuery<CurrentEntityQuery>({
+            query: CurrentEntityDocument,
+            data,
+          });
+        },
+      }),
+    [setHandleMutation],
+  );
+
   const handle = get(data, ["currentEntity", "handle"], "");
   const hasHandle = !!handle;
 
@@ -240,25 +262,25 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
       //     />
       //   ),
       // },
-      // {
-      //   title: "Be who you are.",
-      //   subtitle:
-      //     "Enter the name you want others to see. You can mute yourself or others.",
-      //   // eslint-disable-next-line react/display-name
-      //   element: (focused = false) => (
-      //     <HandleInputContainer>
-      //       <HandleInput
-      //         ref={handleRef}
-      //         onSubmit={onHandleSubmit}
-      //         disabled={fetchingHandle}
-      //         defaultValue={handle}
-      //       />
-      //       {hasHandle && <HelpText>You have set your handle 👍</HelpText>}
-      //       {loading && <HelpText>Submitting...</HelpText>}
-      //       {error && <HelpText>{humanize(error)}</HelpText>}
-      //     </HandleInputContainer>
-      //   ),
-      // },
+      {
+        title: "Be who you are.",
+        subtitle:
+          "Enter the name you want others to see. You can mute yourself or others.",
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
+          <HandleInputContainer>
+            <HandleInput
+              ref={handleRef}
+              onSubmit={onHandleSubmit}
+              disabled={fetchingHandle}
+              defaultValue={handle}
+            />
+            {hasHandle && <HelpText>You have set your handle 👍</HelpText>}
+            {loading && <HelpText>Submitting...</HelpText>}
+            {error && <HelpText>{humanize(error)}</HelpText>}
+          </HandleInputContainer>
+        ),
+      },
       {
         title: "Give and receive.",
         subtitle:
@@ -282,7 +304,15 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
         ),
       },
     ],
-    [goFoyer],
+    [
+      error,
+      fetchingHandle,
+      goFoyer,
+      handle,
+      hasHandle,
+      loading,
+      onHandleSubmit,
+    ],
   );
 
   const goNext = useCallback(

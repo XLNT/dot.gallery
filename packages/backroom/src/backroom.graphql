@@ -99,7 +99,7 @@ type CouponRedemption {
 type Query {
   currentEntity: Entity!
   currentExhibition: Exhibition
-  userDataToken: String
+  twilioAccessToken: String
   knownEntity(id: ID!): Entity!
 }
 

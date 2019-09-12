@@ -41,7 +41,8 @@
       "AUTH0_CLIENT_ID": "@backroom-auth0-client-id",
       "STRIPE_PUBLISHABLE": "@backroom-stripe-publishable",
       "GA_TRACKING_ID": "@gallery-ga-tracking-id",
-      "SENTRY_DSN": "@gallery-sentry-dsn"
+      "SENTRY_DSN": "@gallery-sentry-dsn",
+      "TWILIO_ACCOUNT_SID": "@backroom-twilio-account-sid"
     }
   },
   "env": {
@@ -52,6 +53,10 @@
     "STRIPE_SIGNING_SECRET": "@backroom-stripe-signing-secret",
     "BACKROOM_SECRET": "@backroom-secret",
     "CONTENTFUL_SPACE_ID": "5ieii38bftgi",
-    "CONTENTFUL_MANAGEMENT_TOKEN": "@backroom-contentful-management-token"
+    "CONTENTFUL_MANAGEMENT_TOKEN": "@backroom-contentful-management-token",
+    "TWILIO_ACCOUNT_SID": "@backroom-twilio-account-sid",
+    "TWILIO_AUTH_TOKEN": "@backroom-twilio-auth-token",
+    "TWILIO_API_KEY_SID": "@backroom-twilio-api-key-sid",
+    "TWILIO_API_KEY_SECRET": "@backroom-twilio-api-key-secret"
   }
 }

@@ -1,7 +1,7 @@
 import { Direction, keycodeFor } from "lib/direction";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { animated, useSpring } from "react-spring";
-import { useRedeemTicketMutation, useUserDataTokenQuery } from "operations";
+import { useRedeemTicketMutation, useTwilioAccessTokenQuery } from "operations";
 import ControlledVideo from "components/ControlledVideo";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";

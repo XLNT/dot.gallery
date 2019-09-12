@@ -47,7 +47,7 @@ export default function Room({
   room: Pick<RoomModel, "id" | "entryId" | "x" | "y">;
   createPlacement: ReturnType<typeof useCreatePlacementMutation>[0];
 }) {
-  const currentRoomId = useContext(CurrentRoomId);
+  const currentRoomId = CurrentRoomId.useContainer();
   const [result, error, state] = useContentfulEntry(room.entryId);
 
   const uri = get(result, "fields.work.fields.file.url");

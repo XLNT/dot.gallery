@@ -123,7 +123,7 @@ export type Query = {
   __typename?: 'Query',
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
-  userDataToken?: Maybe<Scalars['String']>,
+  twilioAccessToken?: Maybe<Scalars['String']>,
   knownEntity: Entity,
 };
 
@@ -344,7 +344,7 @@ export type PlacementResolvers<ContextType = BackroomContext, ParentType extends
 export type QueryResolvers<ContextType = BackroomContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   currentEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>,
   currentExhibition?: Resolver<Maybe<ResolversTypes['Exhibition']>, ParentType, ContextType>,
-  userDataToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  twilioAccessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   knownEntity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType, RequireFields<QueryKnownEntityArgs, 'id'>>,
 };
 

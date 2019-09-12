@@ -1,3 +1,4 @@
-import { createContext } from "react";
+import { createContainer } from "unstated-next";
+import { identity } from "lodash-es";
 
-export default createContext<string>(null);
+export default createContainer<string | null, string | null>(identity);

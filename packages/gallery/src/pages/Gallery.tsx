@@ -201,7 +201,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   });
 
   return (
-    <CurrentRoomId.Provider value={room ? room.id : null}>
+    <CurrentRoomId.Provider initialState={room ? room.id : null}>
       <ExhibitionSlug>{format(exhibition.number)}</ExhibitionSlug>
       <SocialLayer room={room} loadingAsset={creatingPlacement} />
       <JourneyAndExit {...props} />

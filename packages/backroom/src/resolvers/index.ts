@@ -6,8 +6,8 @@ import entity from "./entity.resolver";
 import exhibition from "./exhibition.resolver";
 import mod from "./mod.resolvers";
 import placement from "./placement.resolver";
-import simplewebrtc from "./simplewebrtc.resolver";
 import ticket from "./ticket.resolver";
+import twilio from "./twilio.resolver";
 
 export default mergeResolvers([
   entity,
@@ -15,7 +15,7 @@ export default mergeResolvers([
   exhibition,
   mod,
   coupon,
-  simplewebrtc,
+  twilio,
   ticket,
   asset,
 ]);

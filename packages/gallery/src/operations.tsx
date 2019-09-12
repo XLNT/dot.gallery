@@ -123,7 +123,7 @@ export type Query = {
   __typename?: 'Query',
   currentEntity: Entity,
   currentExhibition?: Maybe<Exhibition>,
-  userDataToken?: Maybe<Scalars['String']>,
+  twilioAccessToken?: Maybe<Scalars['String']>,
   knownEntity: Entity,
 };
 
@@ -305,12 +305,12 @@ export type SetHandleMutation = (
   ) }
 );
 
-export type UserDataTokenQueryVariables = {};
+export type TwilioAccessTokenQueryVariables = {};
 
 
-export type UserDataTokenQuery = (
+export type TwilioAccessTokenQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'userDataToken'>
+  & Pick<Query, 'twilioAccessToken'>
 );
 
 export const AwardWalkDocument = gql`
@@ -513,18 +513,18 @@ export type SetHandleMutationFn = ApolloReactCommon.MutationFunction<SetHandleMu
 export type SetHandleMutationHookResult = ReturnType<typeof useSetHandleMutation>;
 export type SetHandleMutationResult = ApolloReactCommon.MutationResult<SetHandleMutation>;
 export type SetHandleMutationOptions = ApolloReactCommon.BaseMutationOptions<SetHandleMutation, SetHandleMutationVariables>;
-export const UserDataTokenDocument = gql`
-    query UserDataToken {
-  userDataToken
+export const TwilioAccessTokenDocument = gql`
+    query TwilioAccessToken {
+  twilioAccessToken
 }
     `;
 
-    export function useUserDataTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDataTokenQuery, UserDataTokenQueryVariables>) {
-      return ApolloReactHooks.useQuery<UserDataTokenQuery, UserDataTokenQueryVariables>(UserDataTokenDocument, baseOptions);
+    export function useTwilioAccessTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TwilioAccessTokenQuery, TwilioAccessTokenQueryVariables>) {
+      return ApolloReactHooks.useQuery<TwilioAccessTokenQuery, TwilioAccessTokenQueryVariables>(TwilioAccessTokenDocument, baseOptions);
     };
-      export function useUserDataTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDataTokenQuery, UserDataTokenQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UserDataTokenQuery, UserDataTokenQueryVariables>(UserDataTokenDocument, baseOptions);
+      export function useTwilioAccessTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TwilioAccessTokenQuery, TwilioAccessTokenQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<TwilioAccessTokenQuery, TwilioAccessTokenQueryVariables>(TwilioAccessTokenDocument, baseOptions);
       };
       
-export type UserDataTokenQueryHookResult = ReturnType<typeof useUserDataTokenQuery>;
-export type UserDataTokenQueryResult = ApolloReactCommon.QueryResult<UserDataTokenQuery, UserDataTokenQueryVariables>;
+export type TwilioAccessTokenQueryHookResult = ReturnType<typeof useTwilioAccessTokenQuery>;
+export type TwilioAccessTokenQueryResult = ApolloReactCommon.QueryResult<TwilioAccessTokenQuery, TwilioAccessTokenQueryVariables>;
