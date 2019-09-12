@@ -1,4 +1,5 @@
 import {
+  LocalTrack,
   RemoteParticipant,
   RemoteTrack,
   RemoteTrackPublication,
@@ -6,11 +7,8 @@ import {
   TwilioError,
   connect,
 } from "twilio-video";
-import { get } from "lodash-es";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-import { useTwilioAccessTokenQuery } from "operations";
-import AudioTrack from "context/AudioTrack";
+import { mapValues } from "lodash-es";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 
 enum RoomState {
   Disconnected,
@@ -18,68 +16,152 @@ enum RoomState {
   Connected,
 }
 
-export default function useTwilioRoom(
-  id: string,
-  muteSelf = false,
-  mutedIds: string[] = [],
-) {
-  const audioRef = useRef<HTMLAudioElement>(document.createElement("audio"));
-  const [room, setRoom] = useState<Room>();
+enum ActionType {
+  OnConnect,
+  OnDisconnect,
+  OnReconnecting,
+  OnReconnected,
+  OnParticipantConnected,
+  OnParticipantDisconnected,
+  OnTrackEnabled,
+  OnTrackDisabled,
+  OnTrackPublished,
+  OnTrackUnpublished,
+  OnTrackSubscribed,
+  OnTrackUnsubscribed,
+}
 
-  const [roomState, setRoomState] = useState<RoomState>();
-  const [error, setError] = useState<TwilioError>();
-  const [participants, setParticipants] = useState<RemoteParticipant[]>([]);
-  const [
-    tracksByParticipantIdentity,
-    setTracksByParticipantIdentity,
-  ] = useState<{ [_: string]: RemoteTrack[] }>({});
+type Action =
+  | { type: ActionType.OnConnect; payload: { room: Room } }
+  | {
+      type: ActionType.OnDisconnect;
+      payload: { room: Room; error: TwilioError };
+    }
+  | { type: ActionType.OnReconnecting; payload: { error: TwilioError } }
+  | { type: ActionType.OnReconnected }
+  | {
+      type: ActionType.OnTrackEnabled;
+      payload: {
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnTrackDisabled;
+      payload: {
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnTrackPublished;
+      payload: {
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnTrackUnpublished;
+      payload: {
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnTrackSubscribed;
+      payload: {
+        track: RemoteTrack;
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnTrackUnsubscribed;
+      payload: {
+        track: RemoteTrack;
+        publication: RemoteTrackPublication;
+        participant: RemoteParticipant;
+      };
+    }
+  | {
+      type: ActionType.OnParticipantConnected;
+      payload: { participant: RemoteParticipant };
+    }
+  | {
+      type: ActionType.OnParticipantDisconnected;
+      payload: { participant: RemoteParticipant };
+    };
 
-  const [
-    ,
-    { tracks, loading: localTrackLoading, error: localTrackError },
-  ] = AudioTrack.useContainer();
-  const { data: tokenData } = useTwilioAccessTokenQuery();
-  const token = get(tokenData, "twilioAccessToken");
+interface State {
+  room?: Room;
+  roomState: RoomState;
+  error?: TwilioError;
+  subscribedTracks: { [_: string]: RemoteTrack[] };
+  participants: RemoteParticipant[];
+}
 
-  const canConnect = !!token && !!id && !localTrackLoading && !localTrackError;
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    // connectivity
 
-  const onConnect = useCallback(() => {
-    setRoomState(RoomState.Connected);
-    setError(undefined);
-  }, []);
-  // hook up room event handlers
-  const onDisconnect = useCallback((room: Room, error: TwilioError) => {
-    console.log(
-      `[local] disconnected from room ${room.sid} with error ${error}`,
-    );
-    setRoomState(RoomState.Disconnected);
-    setError(error);
-  }, []);
-  const onReconnecting = useCallback((error: TwilioError) => {
-    console.log(`[local] reconnecting with error ${error}`);
-    setRoomState(RoomState.Reconnecting);
-    setError(error);
-  }, []);
-  const onReconnected = onConnect;
+    case ActionType.OnConnect: {
+      const { room } = action.payload;
+      return {
+        ...state,
+        room,
+        roomState: RoomState.Connected,
+        error: undefined,
+      };
+    }
+    case ActionType.OnDisconnect: {
+      const { room, error } = action.payload;
+      console.log(
+        `[local] disconnected from room ${room.sid} with error ${error}`,
+      );
+      return {
+        ...state,
+        room: undefined,
+        roomState: RoomState.Disconnected,
+        error,
+        participants: [],
+        subscribedTracks: {},
+      };
+    }
+    case ActionType.OnReconnecting: {
+      const { error } = action.payload;
+      console.log(`[local] reconnecting with error ${error}`);
+      return {
+        ...state,
+        roomState: RoomState.Reconnecting,
+        error,
+      };
+    }
+    case ActionType.OnReconnected: {
+      return {
+        ...state,
+        roomState: RoomState.Connected,
+        error: undefined,
+      };
+    }
 
-  const onTrackEnabled = useCallback(
-    (publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+    // tracks
+
+    case ActionType.OnTrackEnabled: {
+      const { participant, publication } = action.payload;
       console.log(
         `participant ${participant.identity} has enabled track ${publication.trackSid}`,
       );
-    },
-    [],
-  );
-  const onTrackDisabled = useCallback(
-    (publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+      return state;
+    }
+    case ActionType.OnTrackDisabled: {
+      const { participant, publication } = action.payload;
       console.log(
         `participant ${participant.identity} has DISenabled track ${publication.trackSid}`,
       );
-    },
-    [],
-  );
-  const onTrackPublished = useCallback(
-    (publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+      return state;
+    }
+    case ActionType.OnTrackPublished: {
+      const { participant, publication } = action.payload;
       console.log(
         `participant ${participant.identity} published a(n) ${
           publication.kind
@@ -87,11 +169,10 @@ export default function useTwilioRoom(
           publication.isSubscribed ? "are" : "are not"
         } subscribed to.`,
       );
-    },
-    [],
-  );
-  const onTrackUnpublished = useCallback(
-    (publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+      return state;
+    }
+    case ActionType.OnTrackUnpublished: {
+      const { participant, publication } = action.payload;
       console.log(
         `participant ${participant.identity} UNpublished a(n) ${
           publication.kind
@@ -99,144 +180,200 @@ export default function useTwilioRoom(
           publication.isSubscribed ? "are" : "are not"
         } subscribed to.`,
       );
-    },
-    [],
-  );
-  const onTrackSubscribed = useCallback(
-    (
-      track: RemoteTrack,
-      publication: RemoteTrackPublication,
-      participant: RemoteParticipant,
-    ) => {
+      return state;
+    }
+    case ActionType.OnTrackSubscribed: {
+      const { track, participant } = action.payload;
       console.log(
         `we have subscribed to participant ${participant.identity}'s ${track.kind} track ${track.sid}`,
       );
-
-      setTracksByParticipantIdentity(store => ({
-        ...store,
-        [participant.identity]: [...(store[participant.identity] || []), track],
-      }));
-    },
-    [],
-  );
-  const onTrackUnsubscribed = useCallback(
-    (
-      track: RemoteTrack,
-      publication: RemoteTrackPublication,
-      participant: RemoteParticipant,
-    ) => {
+      return {
+        ...state,
+        subscribedTracks: {
+          ...state.subscribedTracks,
+          [participant.identity]: [
+            ...(state.subscribedTracks[participant.identity] || []),
+            track,
+          ],
+        },
+      };
+    }
+    case ActionType.OnTrackUnsubscribed: {
+      const { track, participant } = action.payload;
       console.log(
         `we have UNsubscribed to participant ${participant.identity}'s ${track.kind} track ${track.sid}`,
       );
 
-      // detatch from track
-      if (track.kind === "audio") {
-        track.detach();
-      }
+      // // detatch from track
+      // if (track.kind === "audio") {
+      //   track.detach();
+      // }
       // remove from cache
-      setTracksByParticipantIdentity(store => ({
-        ...store,
-        [participant.identity]: [
-          ...(store[participant.identity] || []).filter(
-            t => t.sid !== track.sid,
-          ),
-        ],
-      }));
-    },
-    [],
-  );
+      return {
+        ...state,
+        subscribedTracks: mapValues(state.subscribedTracks, tracks =>
+          tracks.filter(t => t.sid !== track.sid),
+        ),
+      };
+    }
 
-  const onParticipantConnected = useCallback(
-    (participant: RemoteParticipant) => {
+    // participants
+
+    case ActionType.OnParticipantConnected: {
+      const { participant } = action.payload;
       console.log(`participant ${participant.identity} joined!`);
-      setParticipants(participants => [...participants, participant]);
-      participant.tracks.forEach(publication =>
-        onTrackPublished(publication, participant),
-      );
-    },
-    [onTrackPublished],
-  );
-  const onParticipantDisconnected = useCallback(
-    (participant: RemoteParticipant) => {
+
+      return {
+        ...state,
+        participants: [...state.participants, participant],
+      };
+    }
+    case ActionType.OnParticipantDisconnected: {
+      const { participant } = action.payload;
       console.log(`participant ${participant.identity} left!`);
-      setParticipants(participants => [
-        ...participants.filter(p => p.identity !== participant.identity),
-      ]);
-    },
-    [],
-  );
-  const handlers = useMemo(
-    () => ({
-      disconnect: onDisconnect,
-      reconnecting: onReconnecting,
-      reconnected: onReconnected,
-      participantConnected: onParticipantConnected,
-      participantDisconnected: onParticipantDisconnected,
-      trackEnabled: onTrackEnabled,
-      trackDisabled: onTrackDisabled,
-      trackPublished: onTrackPublished,
-      trackUnpublished: onTrackUnpublished,
-      trackSubscribed: onTrackSubscribed,
-      trackUnsubscribed: onTrackUnsubscribed,
-    }),
-    [
-      onDisconnect,
-      onParticipantConnected,
-      onParticipantDisconnected,
-      onReconnected,
-      onReconnecting,
-      onTrackDisabled,
-      onTrackEnabled,
-      onTrackPublished,
-      onTrackSubscribed,
-      onTrackUnpublished,
-      onTrackUnsubscribed,
-    ],
-  );
 
+      return {
+        ...state,
+        participants: state.participants.filter(
+          p => p.identity !== participant.identity,
+        ),
+      };
+    }
+
+    default:
+      throw new Error(`Unknown action ${action}.`);
+  }
+};
+
+const HANDLER_ACTION_CREATORS: { [_: string]: (...args: any[]) => Action } = {
+  disconnect: (room: Room, error: TwilioError) => ({
+    type: ActionType.OnDisconnect,
+    payload: { room, error },
+  }),
+  reconnecting: (error: TwilioError) => ({
+    type: ActionType.OnReconnecting,
+    payload: { error },
+  }),
+  reconnected: () => ({ type: ActionType.OnReconnected }),
+  trackEnabled: (
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackEnabled,
+    payload: { publication, participant },
+  }),
+  trackDisabled: (
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackDisabled,
+    payload: { publication, participant },
+  }),
+  trackPublished: (
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackPublished,
+    payload: { publication, participant },
+  }),
+  trackUnpublished: (
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackUnpublished,
+    payload: { publication, participant },
+  }),
+  trackSubscribed: (
+    track: RemoteTrack,
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackSubscribed,
+    payload: { track, publication, participant },
+  }),
+  trackUnsubscribed: (
+    track: RemoteTrack,
+    publication: RemoteTrackPublication,
+    participant: RemoteParticipant,
+  ) => ({
+    type: ActionType.OnTrackUnsubscribed,
+    payload: { track, publication, participant },
+  }),
+  participantConnected: (participant: RemoteParticipant) => ({
+    type: ActionType.OnParticipantConnected,
+    payload: { participant },
+  }),
+  participantDisconnected: (participant: RemoteParticipant) => ({
+    type: ActionType.OnParticipantDisconnected,
+    payload: { participant },
+  }),
+};
+
+export default function useTwilioRoom(
+  token: string,
+  id: string,
+  tracks: LocalTrack[],
+  muteSelf = false,
+  mutedIds: string[] = [],
+) {
+  const elementCache = useRef<{ [_: string]: HTMLAudioElement }>({});
+  const [state, dispatch] = useReducer(reducer, {
+    roomState: RoomState.Disconnected,
+    subscribedTracks: {},
+    participants: [],
+  });
+
+  const { room, participants, subscribedTracks } = state;
+
+  const canConnect = tracks !== null && !!id && !!token;
+
+  // idempotent (afaict)
   const loadTrack = useCallback((track: RemoteTrack) => {
+    if (elementCache.current[track.sid]) return;
+
     console.log(`ATtaching track ${track.sid}`);
-    if (track.kind === "audio") track.attach(audioRef.current);
+    if (track.kind === "audio") {
+      elementCache.current[track.sid] = track.attach();
+    }
   }, []);
+
+  // idempotent (afaict)
   const unloadTrack = useCallback((track: RemoteTrack) => {
+    if (!elementCache.current[track.sid]) return;
+
     console.log(`DEtaching track ${track.sid}`);
-    if (track.kind === "audio") track.detach(audioRef.current);
+    if (track.kind === "audio") {
+      elementCache.current[track.sid].muted = true; // chromium hack
+      track.detach(elementCache.current[track.sid]);
+      elementCache.current[track.sid].srcObject = null; // chromium hack
+      delete elementCache.current[track.sid];
+    }
   }, []);
 
-  const loadRoom = useCallback(
-    (room: Room) => {
-      if (room) {
-        console.log(`connected to room ${room.sid}`);
-        onConnect();
-        room.participants.forEach(p => onParticipantConnected(p));
-        Object.keys(handlers).forEach(event => room.on(event, handlers[event]));
-      }
-    },
-    [handlers, onConnect, onParticipantConnected],
-  );
-
-  const unloadRoom = useCallback(
-    (room: Room) => {
-      if (room) {
-        console.log(`disconnecting from room ${room.sid}`);
-        Object.keys(handlers).forEach(event =>
-          room.off(event, handlers[event]),
-        );
-        room.disconnect();
-        setParticipants(() => []);
-        Object.values(tracksByParticipantIdentity).forEach(tracks =>
-          tracks.forEach(unloadTrack),
-        );
-      }
-    },
-    [handlers, tracksByParticipantIdentity, unloadTrack],
-  );
-
-  // and disconnect when not available
+  // handle room changes
   useEffect(() => {
-    loadRoom(room);
-    return () => unloadRoom(room);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!room) return;
+
+    const handlers = mapValues(
+      HANDLER_ACTION_CREATORS,
+      creator => (...args: any[]) => dispatch(creator(...args)),
+    );
+
+    console.log(`connected to room ${room.sid}`);
+
+    room.participants.forEach(participant =>
+      dispatch({
+        type: ActionType.OnParticipantConnected,
+        payload: { participant },
+      }),
+    );
+    Object.keys(handlers).forEach(event => room.on(event, handlers[event]));
+
+    return () => {
+      console.log(`disconnecting from room ${room.sid}`);
+      Object.keys(handlers).forEach(event => room.off(event, handlers[event]));
+      room.disconnect();
+    };
   }, [room]);
 
   // connect to the room when available
@@ -247,14 +384,26 @@ export default function useTwilioRoom(
         const room = await connect(
           token,
           { name: id, audio: false, video: false },
-          // ^ join with nothing because we're going to mute ourselves later
+          // ^ join with nothing because we're going to mute/unmute ourselves later
         );
         if (!mounted) return;
-        setRoom(room);
+        dispatch({ type: ActionType.OnConnect, payload: { room } });
       })();
     }
     return () => (mounted = false);
-  }, [canConnect, id, token, tracks]);
+  }, [canConnect, id, token]);
+
+  // auto-connect existing participant tracks
+  // useEffect(() => {
+  //   participants.forEach(participant => {
+  //     participant.tracks.forEach(publication =>
+  //       dispatch({
+  //         type: ActionType.OnTrackPublished,
+  //         payload: { publication, participant },
+  //       }),
+  //     );
+  //   });
+  // }, [participants]);
 
   // handle mute status
   useEffect(() => {
@@ -270,24 +419,20 @@ export default function useTwilioRoom(
   }, [muteSelf, room, tracks]);
 
   // handle remote muting
+  // TODO: use twilio-video v2 trackSubscriptions to mute instead of local detaching
   useEffect(() => {
-    // TODO: use twilio-video v2 trackSubscriptions to mute instead of local detaching
+    // every time participants or subscribedTracks changes,
+    // go through every participant and their tracks
     participants.forEach(p => {
+      // if the participant is muted, unload all of their tracks
       if (mutedIds.includes(p.identity)) {
-        (tracksByParticipantIdentity[p.identity] || []).forEach(unloadTrack);
+        (subscribedTracks[p.identity] || []).forEach(unloadTrack);
       } else {
-        (tracksByParticipantIdentity[p.identity] || []).forEach(loadTrack);
+        // otherwise make sure their track is loaded
+        (subscribedTracks[p.identity] || []).forEach(loadTrack);
       }
     });
-  }, [
-    loadTrack,
-    mutedIds,
-    participants,
-    room,
-    tracks,
-    tracksByParticipantIdentity,
-    unloadTrack,
-  ]);
+  }, [loadTrack, mutedIds, participants, subscribedTracks, unloadTrack]);
 
   // // disconnect from room on unload
   // const handleBeforeUnload = useCallback(() => unloadRoom(room), [
@@ -300,5 +445,5 @@ export default function useTwilioRoom(
   //   return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   // }, [handleBeforeUnload]);
 
-  return { participants, tracksByParticipantIdentity, state: roomState, error };
+  return state;
 }

@@ -3,8 +3,9 @@ import { get, uniq } from "lodash-es";
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
-import { Room } from "../../operations";
+import { Room, useTwilioAccessTokenQuery } from "../../operations";
 import { ZIndex } from "lib/zIndex";
+import AudioTrack from "context/AudioTrack";
 import LoadingAsset from "components/LoadingAsset";
 import PresentEntity from "./PresentEntity";
 import PresentSelf from "./PresentSelf";
@@ -31,24 +32,27 @@ export default function SocialLayer({
   room: Pick<Room, "id">;
   loadingAsset: boolean;
 }) {
+  const [, { tracks }] = AudioTrack.useContainer();
+
   const [mutedParticipantIds, setMutedParticipantIds] = useState<string[]>([]);
   const [focusedParticipant, setFocusedParticipant] = useState<string>();
   const [muted, setMuted] = useState<boolean>(false);
-  const { participants, tracksByParticipantIdentity } = useTwilioRoom(
+
+  const { data: tokenData } = useTwilioAccessTokenQuery();
+
+  const { participants, subscribedTracks } = useTwilioRoom(
+    get(tokenData, "twilioAccessToken"),
     get(room, "id"),
+    tracks,
     muted,
     mutedParticipantIds,
   );
 
   const selfMutedIds = participants
     .map(p => p.identity)
-    .filter(
-      id =>
-        !tracksByParticipantIdentity[id] ||
-        tracksByParticipantIdentity[id].length === 0,
-    );
+    .filter(id => !subscribedTracks[id] || subscribedTracks[id].length === 0);
 
-  console.log(selfMutedIds, tracksByParticipantIdentity);
+  console.log(selfMutedIds, subscribedTracks);
 
   const transitions = useTransition(participants, p => p.identity, {
     initial: { transform: "translate3d(0, 2rem, -100px)", opacity: 0 },
