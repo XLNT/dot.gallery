@@ -22,6 +22,7 @@ import {
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { get } from "lodash-es";
 import { humanize } from "lib/errorCodes";
+import AudioTrack from "context/AudioTrack";
 import ControlledVideo from "components/ControlledVideo";
 import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
@@ -47,6 +48,7 @@ import usePreloadedFoyer from "hook/usePreloadedFoyer";
 import useRequiredLogin from "hook/useRequiredLogin";
 import useRequiredTicket from "hook/useRequiredTicket";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
+import sleep from "lib/sleep";
 
 const EXTENT = 300;
 
@@ -143,6 +145,17 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     scrollingPreference,
     setScrollingPreference,
   ] = ScrollingPreference.useContainer();
+  const [
+    getUserMedia,
+    { tracks, loading: loadingMedia, error: getUserMediaError },
+  ] = AudioTrack.useContainer();
+  const permissionState = tracks.length
+    ? PermissionState.Available
+    : loadingMedia
+    ? PermissionState.Pending
+    : getUserMediaError
+    ? PermissionState.Denied
+    : PermissionState.Unasked;
 
   useMobileRedirect(
     `/notice?${new URLSearchParams({
@@ -166,8 +179,8 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     awaitRefetchQueries: true,
   });
   const setHandle = useCallback(
-    (args: Parameters<typeof setHandleMutation>[0]) =>
-      setHandleMutation({
+    async (args: Parameters<typeof setHandleMutation>[0]) => {
+      await setHandleMutation({
         ...args,
         update: (proxy, { data: { setHandle } }) => {
           const data = proxy.readQuery<CurrentEntityQuery>({
@@ -179,16 +192,15 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
             data,
           });
         },
-      }),
+      });
+      await sleep(600);
+      setCurrentStep(step => step + 1);
+    },
     [setHandleMutation],
   );
 
   const handle = get(data, ["currentEntity", "handle"], "");
   const hasHandle = !!handle;
-
-  const [permissionState, setPermissionState] = useState<PermissionState>(
-    PermissionState.Unasked,
-  );
 
   const goFoyer = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
@@ -227,41 +239,28 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
           />
         ),
       },
-      // {
-      //   title: "You are not alone.",
-      //   subtitle:
-      //     "Everyone viewing a work can talk with one another. Make sure your voice is heard.",
-      //   // eslint-disable-next-line react/display-name
-      //   element: (focused = false) => (
-      //     <RequestUserMedia
-      //       audio
-      //       share
-      //       microphonePermissionDenied={() =>
-      //         setPermissionState(PermissionState.Denied)
-      //       }
-      //       onError={() => setPermissionState(PermissionState.Denied)}
-      //       onSuccess={() => setPermissionState(PermissionState.Available)}
-      //       render={getMedia => (
-      //         <StyledEnterButton
-      //           onClick={e => {
-      //             setPermissionState(PermissionState.Pending);
-      //             return getMedia(e);
-      //           }}
-      //           disabled={
-      //             permissionState === PermissionState.Available ||
-      //             permissionState === PermissionState.Pending
-      //           }
-      //         >
-      //           {permissionState === PermissionState.Available
-      //             ? "Granted"
-      //             : permissionState === PermissionState.Denied
-      //             ? "Denied"
-      //             : "Grant"}
-      //         </StyledEnterButton>
-      //       )}
-      //     />
-      //   ),
-      // },
+      {
+        title: "You are not alone.",
+        subtitle:
+          "Everyone viewing a work can talk with one another. Make sure your voice is heard.",
+        // eslint-disable-next-line react/display-name
+        element: (focused = false) => (
+          <StyledEnterButton
+            onClick={() => getUserMedia({ audio: true })}
+            disabled={
+              !focused ||
+              permissionState === PermissionState.Available ||
+              permissionState === PermissionState.Pending
+            }
+          >
+            {permissionState === PermissionState.Available
+              ? "Granted"
+              : permissionState === PermissionState.Denied
+              ? "Denied"
+              : "Grant"}
+          </StyledEnterButton>
+        ),
+      },
       {
         title: "Be who you are.",
         subtitle:
@@ -307,33 +306,35 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     [
       error,
       fetchingHandle,
+      getUserMedia,
       goFoyer,
       handle,
       hasHandle,
       loading,
       onHandleSubmit,
+      permissionState,
     ],
   );
 
   const goNext = useCallback(
     () =>
       setCurrentStep(step => {
-        // // block until we have audio
-        // if (permissionState === PermissionState.Unasked && step === 1) {
-        //   return step;
-        // }
+        // block until we have audio
+        if (permissionState === PermissionState.Unasked && step === 2) {
+          return step;
+        }
 
         // block until we have handle
-        // if (!hasHandle && step === 2) {
-        //   return step;
-        // }
+        if (!hasHandle && step === 3) {
+          return step;
+        }
 
         // defocus handle input if available
         handleRef.current && handleRef.current.blur();
 
         return Math.min(step + 1, steps.length - 1);
       }),
-    [steps.length],
+    [hasHandle, permissionState, steps.length],
   );
 
   const goPrev = useCallback(

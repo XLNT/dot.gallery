@@ -10,6 +10,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 import ReactGA from "react-ga";
 
+import AudioTrack from "context/AudioTrack";
 import Authorize from "pages/Authorize";
 import EntityToken from "context/EntityToken";
 import EntryCache from "context/EntryCache";
@@ -61,6 +62,7 @@ const Providers = nest([
   MediaQuery.Provider,
   Timezone.Provider,
   ScrollingPreference.Provider,
+  AudioTrack.Provider,
   DndProvider,
   Router,
 ]);

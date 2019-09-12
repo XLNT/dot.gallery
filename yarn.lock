@@ -2530,6 +2530,11 @@
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
   integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
 
+"@types/twilio-video@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@types/twilio-video/-/twilio-video-2.0.7.tgz#314b4fe8ed75da8bc982b7af28f05f35274bb6d5"
+  integrity sha512-IBFJHd6zhRhxF6v/2CasbcmVPuSCgdhILZRs08fMYlEIxT6jSOCDBoIKALyBXGx0Z28EW3VJVc0hkd8KpiNPgQ==
+
 "@types/valid-url@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@types/valid-url/-/valid-url-1.0.2.tgz#60fa435ce24bfd5ba107b8d2a80796aeaf3a8f45"
