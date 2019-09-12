@@ -46,7 +46,7 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
   useEnforcePanelVisibility(false);
   useSuggestedPanelState(false);
 
-  useUserDataTokenQuery(); // preload token
+  // useUserDataTokenQuery(); // preload token
   const { history } = useRouter();
   const [isFocused, setIsFocused] = useState(true);
   const [skipVisible, setSkipVisible] = useState(false);
