@@ -30,12 +30,10 @@ export default function SocialLayer({
   room: Pick<Room, "id">;
   loadingAsset: boolean;
 }) {
-  const { data: tokenData } = useTwilioAccessTokenQuery({ pollInterval: 5000 });
-  const token = get(tokenData, "userDataToken");
+  const { data: tokenData } = useTwilioAccessTokenQuery();
+  const token = get(tokenData, "twilioAccessToken");
 
-  const { data, loading, error } = useCurrentEntityQuery({
-    pollInterval: 5000,
-  });
+  const { data, loading, error } = useCurrentEntityQuery();
 
   const ownId = get(data, ["currentEntity", "id"]);
   const ownHandle = get(data, ["currentEntity", "handle"]);

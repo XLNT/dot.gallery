@@ -23,6 +23,7 @@ export default function useLocalTrack(): [
         });
         setTracks(tracks);
       } catch (error) {
+        setTracks([]);
         setError(error);
       } finally {
         setLoading(false);
