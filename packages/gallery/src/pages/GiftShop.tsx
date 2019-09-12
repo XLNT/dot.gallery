@@ -90,11 +90,10 @@ export default function GiftShop({  }: ExhibitionProps<void>) {
   const { history } = useRouter();
 
   const [awardWalk, { data: createAssetData }] = useAwardWalkMutation({
+    awaitRefetchQueries: true,
     refetchQueries: ["CurrentEntity"],
   });
-  const { data } = useCurrentEntityQuery({
-    pollInterval: 5000,
-  });
+  const { data } = useCurrentEntityQuery();
 
   const goHome = useCallback(async () => {
     if (process.env.NODE_ENV !== "development") {
