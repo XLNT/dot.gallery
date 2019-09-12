@@ -123,7 +123,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
         Math.floor(exhibitionExtent / 2.0),
         Math.floor(exhibitionExtent / 2.0),
       ];
-      console.log("reset journey");
+      resetJourney();
       // yes, twice
       appendToJourney(center);
       appendToJourney(center);
