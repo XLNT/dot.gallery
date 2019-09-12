@@ -74,6 +74,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
 
   const { exhibition } = useCurrentExhibition();
   const exhibitionExtent = get(exhibition, "extent");
+  const exhibitionId = get(exhibition, "id");
   const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
   usePreloadedEntries(rooms.map(room => room.entryId));
 
@@ -118,7 +119,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const [coords, setCoords] = useState<Coords>(null);
 
   useEffect(() => {
-    if (exhibitionExtent) {
+    if (exhibitionId) {
       const center: Coords = [
         Math.floor(exhibitionExtent / 2.0),
         Math.floor(exhibitionExtent / 2.0),
@@ -129,7 +130,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
       appendToJourney(center);
       setCoords(center);
     }
-  }, [appendToJourney, exhibitionExtent, resetJourney]);
+  }, [appendToJourney, exhibitionExtent, exhibitionId, resetJourney]);
 
   const [handleDirection] = useDebouncedCallback(
     useCallback(
