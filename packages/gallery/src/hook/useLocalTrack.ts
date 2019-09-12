@@ -17,10 +17,7 @@ export default function useLocalTrack(): [
     async (options: CreateLocalTracksOptions) => {
       setLoading(true);
       try {
-        const tracks = await createLocalTracks({
-          logLevel: "debug",
-          ...options,
-        });
+        const tracks = await createLocalTracks(options);
         setTracks(tracks);
       } catch (error) {
         setTracks([]);

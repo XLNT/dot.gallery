@@ -146,6 +146,7 @@ export default shield(
   {
     Query: {
       currentEntity: isKnownEntity,
+      knownEntity: isKnownEntity,
       twilioAccessToken: isKnownEntity,
     },
     Mutation: {
@@ -193,6 +194,7 @@ export default shield(
     },
     Entity: {
       email: chain(isKnownEntity, onlySelf),
+      assets: chain(isKnownEntity),
       tradableAssets: chain(isKnownEntity, onlySelf),
       placements: chain(isKnownEntity, onlySelf),
       tickets: chain(isKnownEntity, onlySelf),

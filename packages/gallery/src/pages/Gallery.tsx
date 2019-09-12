@@ -75,8 +75,8 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const { exhibition } = useCurrentExhibition();
   const exhibitionExtent = get(exhibition, "extent");
   const exhibitionId = get(exhibition, "id");
-  const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
-  usePreloadedEntries(rooms.map(room => room.entryId));
+  // const rooms = get(exhibition, "rooms", [] as typeof exhibition["rooms"]);
+  // usePreloadedEntries(rooms.map(room => room.entryId));
 
   const [
     createPlacementMutation,

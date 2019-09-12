@@ -3,6 +3,8 @@ import React from "react";
 import styled from "styled-components";
 
 const AssetImg = styled.img`
+  user-select: none;
+
   width: 4.5rem;
   height: 4.5rem;
 `;

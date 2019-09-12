@@ -80,6 +80,7 @@ const TimezoneSelect = styled.select`
   margin-bottom: 1rem;
 
   border: 4px solid ${fromTheme("primary")};
+  border-radius: 0;
   background-color: ${fromTheme("panel")};
   color: ${fromTheme("panelText")};
   font-weight: bold;

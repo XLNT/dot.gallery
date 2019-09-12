@@ -17,7 +17,9 @@ const StyledDraggableAsset = styled(DraggableAsset)`
   margin-bottom: 0.5rem;
 `;
 
-const StyledStaticAsset = styled(StaticAsset)`
+const StyledUndraggableAsset = styled(StaticAsset)`
+  pointer-events: none;
+  user-select: none;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
 `;
@@ -40,7 +42,7 @@ export default function AssetsList({
         draggable ? (
           <StyledDraggableAsset key={asset.id} asset={asset} />
         ) : (
-          <StyledStaticAsset key={asset.id} asset={asset} />
+          <StyledUndraggableAsset key={asset.id} asset={asset} />
         ),
       )}
       {children}
