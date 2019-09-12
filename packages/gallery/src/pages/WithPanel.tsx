@@ -86,18 +86,7 @@ const PanelContentElement = styled(animated.div)`
   flex: 1;
   display: flex;
   width: 100%;
-
   height: 100%;
-
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: 0px;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: linear-gradient(transparent, white);
-  }
 `;
 
 const Arrow = styled(animated.img)`
