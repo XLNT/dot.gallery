@@ -40,7 +40,7 @@ const StyledAssetsList = styled(AssetsList)`
 `;
 
 const MuteButton = styled.img`
-  cursor: ${({ canUnmute }) => (canUnmute ? "pointer" : "not-allowed")};
+  cursor: pointer;
   margin-left: 0.5rem;
 
   transform: scale(1);
@@ -55,7 +55,6 @@ export default function PresentEntity({
   id,
   muted,
   setMuted,
-  canUnmute,
   focused = false,
   onFocus,
   children,
@@ -63,7 +62,6 @@ export default function PresentEntity({
 }: PropsWithChildren<{
   id: string;
   muted: boolean;
-  canUnmute: boolean;
   setMuted: (muted: boolean) => void;
   focused: boolean;
   onFocus: (id: string) => void;
@@ -92,9 +90,8 @@ export default function PresentEntity({
         <span onClick={toggleFocus}>{handle}</span>
         <MuteButton
           alt={muted ? "muted" : "unmuted"}
-          onClick={canUnmute ? () => setMuted(!muted) : null}
+          onClick={() => setMuted(!muted)}
           src={muted ? mutedImage : unmutedImage}
-          canUnmute={canUnmute}
         />
       </Handle>
       <AssetsContainer style={style}>

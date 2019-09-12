@@ -34,25 +34,21 @@ export default function SocialLayer({
 }) {
   const [, { tracks }] = AudioTrack.useContainer();
 
-  const [mutedParticipantIds, setMutedParticipantIds] = useState<string[]>([]);
   const [focusedParticipant, setFocusedParticipant] = useState<string>();
-  const [muted, setMuted] = useState<boolean>(false);
 
   const { data: tokenData } = useTwilioAccessTokenQuery();
 
-  const { participants, subscribedTracks } = useTwilioRoom(
+  const {
+    participants,
+    selfMuted,
+    setSelfMuted,
+    mutedParticipant,
+    setMutedParticipant,
+  } = useTwilioRoom(
     get(tokenData, "twilioAccessToken"),
     get(room, "id"),
     tracks,
-    muted,
-    mutedParticipantIds,
   );
-
-  const selfMutedIds = participants
-    .map(p => p.identity)
-    .filter(id => !subscribedTracks[id] || subscribedTracks[id].length === 0);
-
-  console.log(selfMutedIds, subscribedTracks);
 
   const transitions = useTransition(participants, p => p.identity, {
     initial: { transform: "translate3d(0, 2rem, -100px)", opacity: 0 },
@@ -60,16 +56,6 @@ export default function SocialLayer({
     enter: { transform: "translate3d(0, 0, 0)", opacity: 1 },
     leave: { transform: "translate3d(0, 2rem, -100px)", opacity: 0 },
   });
-
-  const addMutedId = useCallback(
-    (id: string) => setMutedParticipantIds(ids => uniq([...ids, id])),
-    [],
-  );
-
-  const removeMutedId = useCallback(
-    (id: string) => setMutedParticipantIds(ids => ids.filter(i => i !== id)),
-    [],
-  );
 
   return (
     <>
@@ -80,20 +66,12 @@ export default function SocialLayer({
               id={participant.identity}
               focused={focusedParticipant === participant.identity}
               onFocus={setFocusedParticipant}
-              muted={
-                mutedParticipantIds.includes(participant.identity) ||
-                selfMutedIds.includes(participant.identity)
-              }
-              canUnmute={!selfMutedIds.includes(participant.identity)}
-              setMuted={(muted: boolean) =>
-                muted
-                  ? addMutedId(participant.identity)
-                  : removeMutedId(participant.identity)
-              }
+              muted={mutedParticipant[participant.identity]}
+              setMuted={setMutedParticipant(participant.identity)}
             />
           </animated.div>
         ))}
-        <PresentSelf draggable muted={muted} setMuted={setMuted}>
+        <PresentSelf draggable muted={selfMuted} setMuted={setSelfMuted}>
           {loadingAsset && <LoadingAsset />}
         </PresentSelf>
       </PresenceList>

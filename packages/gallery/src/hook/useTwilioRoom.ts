@@ -7,8 +7,8 @@ import {
   TwilioError,
   connect,
 } from "twilio-video";
-import { mapValues } from "lodash-es";
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { filter, mapValues, uniq } from "lodash-es";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 
 enum RoomState {
   Disconnected,
@@ -29,6 +29,9 @@ enum ActionType {
   OnTrackUnpublished,
   OnTrackSubscribed,
   OnTrackUnsubscribed,
+
+  SetSelfMuted,
+  SetParticipantMuted,
 }
 
 type Action =
@@ -90,11 +93,18 @@ type Action =
   | {
       type: ActionType.OnParticipantDisconnected;
       payload: { participant: RemoteParticipant };
+    }
+  | { type: ActionType.SetSelfMuted; payload: { selfMuted: boolean } }
+  | {
+      type: ActionType.SetParticipantMuted;
+      payload: { id: string; muted: boolean };
     };
 
 interface State {
   room?: Room;
   roomState: RoomState;
+  selfMuted: boolean;
+  mutedParticipantIds: string[];
   error?: TwilioError;
   subscribedTracks: { [_: string]: RemoteTrack[] };
   participants: RemoteParticipant[];
@@ -240,6 +250,25 @@ const reducer = (state: State, action: Action): State => {
       };
     }
 
+    // muting
+
+    case ActionType.SetSelfMuted: {
+      const { selfMuted } = action.payload;
+      return {
+        ...state,
+        selfMuted,
+      };
+    }
+    case ActionType.SetParticipantMuted: {
+      const { id, muted } = action.payload;
+      return {
+        ...state,
+        mutedParticipantIds: muted
+          ? uniq([...state.mutedParticipantIds, id])
+          : filter(state.mutedParticipantIds, i => i !== id),
+      };
+    }
+
     default:
       throw new Error(`Unknown action ${action}.`);
   }
@@ -313,17 +342,23 @@ export default function useTwilioRoom(
   token: string,
   id: string,
   tracks: LocalTrack[],
-  muteSelf = false,
-  mutedIds: string[] = [],
 ) {
   const elementCache = useRef<{ [_: string]: HTMLAudioElement }>({});
   const [state, dispatch] = useReducer(reducer, {
     roomState: RoomState.Disconnected,
     subscribedTracks: {},
     participants: [],
+    selfMuted: false,
+    mutedParticipantIds: [],
   });
 
-  const { room, participants, subscribedTracks } = state;
+  const {
+    room,
+    participants,
+    subscribedTracks,
+    selfMuted,
+    mutedParticipantIds,
+  } = state;
 
   const canConnect = tracks !== null && !!id && !!token;
 
@@ -408,7 +443,7 @@ export default function useTwilioRoom(
   // handle mute status
   useEffect(() => {
     if (room) {
-      if (muteSelf) {
+      if (selfMuted) {
         console.log(`[local] UNpublishing self track`);
         room.localParticipant.unpublishTracks(tracks);
       } else {
@@ -416,7 +451,7 @@ export default function useTwilioRoom(
         room.localParticipant.publishTracks(tracks);
       }
     }
-  }, [muteSelf, room, tracks]);
+  }, [selfMuted, room, tracks]);
 
   // handle remote muting
   // TODO: use twilio-video v2 trackSubscriptions to mute instead of local detaching
@@ -424,26 +459,69 @@ export default function useTwilioRoom(
     // every time participants or subscribedTracks changes,
     // go through every participant and their tracks
     participants.forEach(p => {
-      // if the participant is muted, unload all of their tracks
-      if (mutedIds.includes(p.identity)) {
+      // if the participant is muted or I self-muted, unload all of their tracks
+      if (selfMuted || mutedParticipantIds.includes(p.identity)) {
         (subscribedTracks[p.identity] || []).forEach(unloadTrack);
       } else {
         // otherwise make sure their track is loaded
         (subscribedTracks[p.identity] || []).forEach(loadTrack);
       }
     });
-  }, [loadTrack, mutedIds, participants, subscribedTracks, unloadTrack]);
+  }, [
+    loadTrack,
+    mutedParticipantIds,
+    participants,
+    selfMuted,
+    subscribedTracks,
+    unloadTrack,
+  ]);
 
-  // // disconnect from room on unload
-  // const handleBeforeUnload = useCallback(() => unloadRoom(room), [
-  //   room,
-  //   unloadRoom,
-  // ]);
+  // disconnect from room on unload
+  const handleBeforeUnload = useCallback(() => room.disconnect(), [room]);
 
-  // useEffect(() => {
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-  //   return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  // }, [handleBeforeUnload]);
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [handleBeforeUnload]);
 
-  return state;
+  const setSelfMuted = useCallback(
+    (selfMuted: boolean) =>
+      dispatch({ type: ActionType.SetSelfMuted, payload: { selfMuted } }),
+    [],
+  );
+
+  const setMutedParticipant = useCallback(
+    (id: string) => (muted: boolean) =>
+      dispatch({
+        type: ActionType.SetParticipantMuted,
+        payload: { id, muted },
+      }),
+    [],
+  );
+
+  const mutedParticipant = useMemo(
+    () =>
+      participants.reduce((memo, participant) => {
+        const isManuallyMuted = mutedParticipantIds.includes(
+          participant.identity,
+        );
+        const isSelfMuted =
+          !subscribedTracks[participant.identity] ||
+          subscribedTracks[participant.identity].length === 0;
+        memo[participant.identity] = isManuallyMuted || isSelfMuted;
+        return memo;
+      }, {}),
+    [mutedParticipantIds, participants, subscribedTracks],
+  );
+
+  // if self muted, show no participants
+  const visibleParticipants = selfMuted ? [] : participants;
+
+  return {
+    participants: visibleParticipants,
+    selfMuted,
+    setSelfMuted,
+    mutedParticipant,
+    setMutedParticipant,
+  };
 }
