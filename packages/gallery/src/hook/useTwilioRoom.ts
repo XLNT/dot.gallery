@@ -6,7 +6,6 @@ import {
   Room,
   TwilioError,
   connect,
-  createLocalTracks,
 } from "twilio-video";
 import { differenceBy, mapValues, uniq, uniqBy } from "lodash-es";
 import {
@@ -489,24 +488,38 @@ export default function useTwilioRoom(
   // sync track loading to muting behavior
   // TODO: use twilio-video v2 trackSubscriptions to mute instead of local detaching
   useEffect(() => {
+    console.log(
+      `[load/unload] looping through participants ${participants.map(
+        p => p.identity,
+      )}`,
+    );
+
     // every time participants or subscribedTracks changes,
     // go through every participant and their tracks
     participants.forEach(p => {
       // if the participant is muted or I self-muted, unload all of their tracks
       if (selfMuted || mutedParticipantIds.includes(p.identity)) {
+        console.log(`[unload] UNloading tracks for participant ${p.identity}`);
         (subscribedTracks[p.identity] || []).forEach(unloadTrack);
       } else {
         // otherwise make sure their track is loaded
+        console.log(`[load] loading tracks for participant ${p.identity}`);
         (subscribedTracks[p.identity] || []).forEach(loadTrack);
       }
     });
+
+    return () => {
+      participants.forEach(p =>
+        (subscribedTracks[p.identity] || []).forEach(unloadTrack),
+      );
+    };
   }, [
     loadTrack,
+    unloadTrack,
     mutedParticipantIds,
     participants,
     selfMuted,
     subscribedTracks,
-    unloadTrack,
   ]);
 
   // disconnect from room on unload
