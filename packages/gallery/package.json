@@ -6,9 +6,6 @@
   "homepage": "https://github.com/XLNT/dot.gallery#readme",
   "license": "GPL-3.0-or-later",
   "main": "src/index.html",
-  "engines": {
-    "node": "10.x"
-  },
   "scripts": {
     "start": "parcel -p ${PORT:-3000} src/index.html",
     "build": "parcel build src/index.html",
