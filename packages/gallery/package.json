@@ -51,7 +51,7 @@
     "luxon": "^1.17.2",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
-    "react": "^15.6.0 || ^16.0.0",
+    "react": "^16.9.0",
     "react-dnd": "^9.3.4",
     "react-dnd-html5-backend": "^9.3.4",
     "react-dom": "npm:@hot-loader/react-dom",

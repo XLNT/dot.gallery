@@ -424,6 +424,14 @@ export default function useTwilioRoom(
     });
   }, [participants, prevParticipants]);
 
+  const handlers = useMemo(
+    () =>
+      mapValues(HANDLER_ACTION_CREATORS, creator => (...args: any[]) =>
+        dispatch(creator(...args)),
+      ),
+    [],
+  );
+
   // when there is a new room...
   useEffect(() => {
     if (!_room) return;
@@ -435,10 +443,6 @@ export default function useTwilioRoom(
     });
 
     // add event handlers
-    const handlers = mapValues(
-      HANDLER_ACTION_CREATORS,
-      creator => (...args: any[]) => dispatch(creator(...args)),
-    );
     _room.setMaxListeners(Object.keys(handlers).length);
     Object.keys(handlers).forEach(event => _room.on(event, handlers[event]));
 
@@ -449,24 +453,7 @@ export default function useTwilioRoom(
         payload: { participant },
       }),
     );
-
-    return () => {
-      // on dispose
-
-      // remove all handlers
-      Object.keys(handlers).forEach(event => _room.off(event, handlers[event]));
-
-      // notify disconnected
-      dispatch({
-        type: ActionType.OnDisconnect,
-        payload: { room: _room },
-      });
-
-      // disconnect from twilio signalling
-      console.log(`[twilio] DISconnecting from room ${_room.sid}`);
-      _room.disconnect();
-    };
-  }, [_room]);
+  }, [_room, handlers]);
 
   // handle mute status
   useEffect(() => {
@@ -530,6 +517,26 @@ export default function useTwilioRoom(
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
   }, [_room]);
+
+  // on dispose
+  useEffect(() => {
+    if (!_room) return;
+
+    return () => {
+      // remove all handlers
+      Object.keys(handlers).forEach(event => _room.off(event, handlers[event]));
+
+      // notify disconnected
+      dispatch({
+        type: ActionType.OnDisconnect,
+        payload: { room: _room },
+      });
+
+      // disconnect from twilio signalling
+      console.log(`[twilio] DISconnecting from room ${_room.sid}`);
+      _room.disconnect();
+    };
+  }, [_room, handlers]);
 
   // connect to the room when available
   // (this should only really change when `id` changes or `tracks` become available)

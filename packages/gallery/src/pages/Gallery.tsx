@@ -152,7 +152,7 @@ export default function Gallery(props: ExhibitionProps<{}>) {
             setCoords(newCoords);
           }
         },
-        3000,
+        400,
         { leading: true, trailing: false },
       ),
     [appendToJourney, _coords, exhibition],
