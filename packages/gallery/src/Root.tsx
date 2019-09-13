@@ -5,6 +5,7 @@ import { DndProvider } from "react-dnd";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
+import { init as initSentry } from "@sentry/browser";
 import HTML5Backend from "react-dnd-html5-backend";
 import React from "react";
 import ReactGA from "react-ga";
@@ -35,6 +36,7 @@ import theme from "theme/theme";
 import useConstant from "hook/useConstant";
 
 ReactGA.initialize(config.GA_TRACKING_ID);
+initSentry({ dsn: config.SENTRY_DSN, environment: process.env.NODE_ENV });
 
 const GlobalStyle = createGlobalStyle`
   body {

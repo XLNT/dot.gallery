@@ -40,7 +40,8 @@
       "BACKROOM_URI": "/graphql",
       "AUTH0_CLIENT_ID": "@backroom-auth0-client-id",
       "STRIPE_PUBLISHABLE": "@backroom-stripe-publishable",
-      "GA_TRACKING_ID": "@gallery-ga-tracking-id"
+      "GA_TRACKING_ID": "@gallery-ga-tracking-id",
+      "SENTRY_DSN": "@gallery-sentry-dsn"
     }
   },
   "env": {

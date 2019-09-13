@@ -6,7 +6,7 @@ const config = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   STRIPE_PUBLISHABLE: process.env.STRIPE_PUBLISHABLE,
   GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-  SIMPLEWEBRTC_API_KEY: process.env.SIMPLEWEBRTC_API_KEY,
+  SENTRY_DSN: process.env.SENTRY_DSN,
 };
 
 export default config;
