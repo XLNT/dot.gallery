@@ -10,6 +10,7 @@ export const computePrice = (capacity: number, available: number) =>
   Math.floor(remap(available, capacity, 0, priceMin, priceMax));
 
 export const getPrice = async (prisma: Prisma, id: string) => {
+  return priceMin;
   const capacity = await prisma.exhibition({ id }).capacity();
   const issuedTicketsCount = await prisma
     .ticketsConnection({
