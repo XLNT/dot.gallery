@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "dot.gallery",
   "main": "index.js",
+  "engines": {
+    "node": "10.x"
+  },
   "repository": "https://github.com/xlnt/dot.gallery",
   "author": "Matt Condon (shrugs)",
   "license": "GPL-3.0-or-later",
