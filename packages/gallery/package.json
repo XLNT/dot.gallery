@@ -45,6 +45,7 @@
     "contentful": "^7.9.1",
     "graphql": "^14.5.0",
     "graphql-tag": "^2.10.1",
+    "immutability-helper": "^3.0.1",
     "localforage": "^1.7.3",
     "lodash-es": "^4.17.15",
     "luxon": "^1.17.2",
