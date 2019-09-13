@@ -24,6 +24,7 @@ import useContentfulEntry from "hook/useContentfulEntry";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useIsLoggedIn from "hook/useIsLoggedIn";
+import usePanelAction from "hook/usePanelAction";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -80,6 +81,7 @@ const TimezoneSelect = styled.select`
   margin-bottom: 1rem;
 
   border: 4px solid ${fromTheme("primary")};
+  border-radius: 0;
   background-color: ${fromTheme("panel")};
   color: ${fromTheme("panelText")};
   font-weight: bold;
@@ -109,6 +111,7 @@ const RichTextContainer = styled.div`
 export default function Home() {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(false);
+  usePanelAction("About");
   const { exhibition, loading, error } = useCurrentExhibition();
   const [result, , state] = useContentfulEntry(ABOUT_ID);
   const { history } = useRouter();
@@ -229,7 +232,6 @@ export default function Home() {
           ))}
         </TimezoneSelect>
       </Container>
-      <PanelAction.Source>&nbsp;&nbsp;About</PanelAction.Source>
       <AnimatedPanelContent>
         <>
           {state === "pending" && <h1>Loading...</h1>}

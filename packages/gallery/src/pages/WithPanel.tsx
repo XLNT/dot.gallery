@@ -1,16 +1,16 @@
 import { ZIndex } from "lib/zIndex";
-import { animated, useSpring } from "react-spring";
+import { animated, config, useSpring } from "react-spring";
 import ForcedPanelState from "context/ForcedPanelState";
 import PanelAction from "context/PanelAction";
 import PanelContent from "context/PanelContent";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { PropsWithChildren, useCallback, useRef } from "react";
 import arrow from "static/arrow.svg";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
-import useDimensions from "react-use-dimensions";
+import useComponentSize from "@rehooks/component-size";
 
 const Backboard = styled.div`
   position: relative;
@@ -78,7 +78,6 @@ const PanelActionText = styled(animated.div)`
   font-weight: bold;
   text-transform: uppercase;
   color: ${fromTheme("panelText")};
-  transform-origin: 25% 50%;
 `;
 
 const PanelContentElement = styled(animated.div)`
@@ -98,6 +97,7 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
   const { forcedState } = ForcedPanelState.useContainer();
   const [isVisible] = PanelVisibility.useContainer();
   const [isOpen, setPanelState, hydrated] = PanelState.useContainer();
+  const [panelAction] = PanelAction.useContainer();
 
   const overlayButton = useBreakpoints([true, true, false]);
   const compressContent = useBreakpoints([false, false, true]);
@@ -108,11 +108,17 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     setPanelState,
   ]);
 
-  const [
-    ref,
-    { width: backboardWidth = document.body.clientWidth },
-  ] = useDimensions();
-  const [buttonRef, { width: buttonWidth = 64 }] = useDimensions();
+  const backboardRef = useRef<HTMLDivElement>(null);
+  const { width: backboardWidth } = useComponentSize(backboardRef);
+
+  const buttonRef = useRef<HTMLImageElement>(null);
+  const { width: buttonWidth } = useComponentSize(buttonRef);
+
+  const actionRef = useRef<HTMLDivElement>(null);
+  const { width: actionWidth, height: actionHeight } = useComponentSize(
+    actionRef,
+  );
+  console.log(actionWidth, actionHeight);
 
   const panelWidth = (panelExtentRatio / 100.0) * backboardWidth;
 
@@ -128,7 +134,6 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     transform,
     arrowTransform,
     progress,
-    actionOpacity,
   } = useSpring({
     progress: isVisible ? 1 : 0,
     opacity: isVisible ? 1 : 0,
@@ -139,14 +144,26 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     buttonRightOffset:
       panelWidth - buttonWidth + (showPanel && overlayButton ? -0 : 0),
     buttonBottomOffset: showPanel && overlayButton ? 16 : 0,
-    actionOpacity: showPanel ? 0 : 1,
+
+    config: config.molasses,
     from: {
       opacity: isVisible ? 1 : 0,
     },
   });
 
+  const actionStyle = useSpring({
+    opacity: showPanel ? 1 : 0,
+    marginLeft: `${showPanel ? 0.5 : 0}rem`,
+    width: showPanel ? actionWidth : 0,
+
+    config: config.molasses,
+    from: {
+      width: 0,
+    },
+  });
+
   return (
-    <Backboard ref={ref}>
+    <Backboard ref={backboardRef}>
       <Content style={{ width }}>{children}</Content>
       <PanelContainer
         style={{
@@ -158,7 +175,6 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
       >
         <Inner>
           <PanelButton
-            ref={buttonRef}
             style={{
               right: buttonRightOffset,
               bottom: buttonBottomOffset,
@@ -167,20 +183,15 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
             onClick={canTogglePanel ? togglePanel : null}
           >
             <Arrow
+              ref={buttonRef}
               src={arrow}
               style={{
                 transform: arrowTransform,
               }}
             />
-            <PanelAction.Target
-              as={PanelActionText}
-              style={{
-                opacity: actionOpacity,
-                display: actionOpacity.interpolate(o =>
-                  o > 0.5 ? "block" : "none",
-                ),
-              }}
-            />
+            <PanelActionText ref={actionRef} style={actionStyle}>
+              <div>{panelAction}</div>
+            </PanelActionText>
           </PanelButton>
           <PanelContent.Target as={PanelContentElement} />
         </Inner>

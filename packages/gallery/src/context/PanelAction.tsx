@@ -1,3 +1,4 @@
-import createTeleporter from "lib/teleporter";
+import { createContainer } from "unstated-next";
+import { useState } from "react";
 
-export default createTeleporter("panel-action");
+export default createContainer(() => useState<string>());

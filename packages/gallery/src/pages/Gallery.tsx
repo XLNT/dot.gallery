@@ -29,6 +29,7 @@ import ScrollingPreference from "context/ScrollingPreference";
 import SocialLayer from "./Gallery/SocialLayer";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import usePanelAction from "hook/usePanelAction";
 import usePreloadedEntries from "hook/usePreloadedEntries";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -68,6 +69,7 @@ const ExhibitionSlug = styled.div`
 export default function Gallery(props: ExhibitionProps<{}>) {
   useEnforcePanelVisibility(true);
   useSuggestedPanelState(true);
+  usePanelAction("Details");
   const [scrollDirection] = ScrollingPreference.useContainer();
   const [, appendToJourney, resetJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
@@ -212,7 +214,6 @@ export default function Gallery(props: ExhibitionProps<{}>) {
           </InnerCanvas>
         ))}
       </Canvas>
-      <PanelAction.Source>&nbsp;&nbsp;Details</PanelAction.Source>
     </CurrentRoomId.Provider>
   );
 }

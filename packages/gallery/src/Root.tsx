@@ -7,9 +7,10 @@ import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import { init as initSentry } from "@sentry/browser";
 import HTML5Backend from "react-dnd-html5-backend";
-import React from "react";
+import React, { Component, useMemo } from "react";
 import ReactGA from "react-ga";
 
+import AnimatedSwitch, { RouteConfig } from "components/AnimatedSwitch";
 import Authorize from "pages/Authorize";
 import EntityToken from "context/EntityToken";
 import EntryCache from "context/EntryCache";
@@ -22,6 +23,7 @@ import Interactors from "Interactors";
 import Journey from "context/Journey";
 import MediaQuery from "context/MediaQuery";
 import Modal from "context/Modal";
+import PanelAction from "context/PanelAction";
 import PanelState from "context/PanelState";
 import PanelVisibility from "context/PanelVisibility";
 import ScrollingPreference from "context/ScrollingPreference";
@@ -60,6 +62,7 @@ const Providers = nest([
   EntityToken.Provider,
   MediaQuery.Provider,
   Timezone.Provider,
+  PanelAction.Provider,
   ScrollingPreference.Provider,
   DndProvider,
   Router,
@@ -69,6 +72,19 @@ function Root() {
   const client = useConstant(() => makeClient());
   const backend = useConstant(() => HTML5Backend);
 
+  const routes = useMemo<RouteConfig[]>(
+    () => [
+      { path: "/authorize", exact: true, component: Authorize },
+      { path: "/ticket-success", exact: true, component: TicketSuccess },
+      {
+        path: "/:slug([eE]\\d\\d\\d[sS]\\d\\d\\d)",
+        component: Exhibition,
+      },
+      { component: Home },
+    ],
+    [],
+  );
+
   return (
     <>
       <Providers theme={theme} client={client} backend={backend}>
@@ -76,16 +92,7 @@ function Root() {
           <GlobalStyle />
           <Interactors />
           <WithPanel>
-            <Switch>
-              <Route path="/" exact component={Home} />
-              <Route path="/authorize" exact component={Authorize} />
-              <Route path="/ticket-success" exact component={TicketSuccess} />
-              <Route
-                path="/:slug([eE]\d\d\d[sS]\d\d\d)"
-                component={Exhibition}
-              />
-              <Route component={Home} />
-            </Switch>
+            <AnimatedSwitch routes={routes} />
           </WithPanel>
           <Modal.Target />
         </>

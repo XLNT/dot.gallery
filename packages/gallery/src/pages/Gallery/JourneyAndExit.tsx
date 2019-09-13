@@ -3,10 +3,9 @@ import { ZIndex } from "lib/zIndex";
 import { animated, config, useSpring, useTransition } from "react-spring";
 import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
-import useDimensions from "react-use-dimensions";
 
 const ExitLayer = styled.div`
   position: absolute;
@@ -82,7 +81,10 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
 
   const [journey] = Journey.useContainer();
   const [proposingExit, setProposingExit] = useState<boolean>(false);
-  const [proposalRef, { height: proposalExtent }] = useDimensions();
+
+  const proposalRef = useRef();
+  const proposalExtent = 200; // TODO: size
+
   const { y } = useSpring<{ y: number }>({
     y: proposingExit ? 0 : -1 * (proposalExtent || document.body.clientHeight),
   });
