@@ -1,7 +1,12 @@
 import { animated, config as springConfig, useTransition } from "react-spring";
-import { get } from "lodash-es";
-import { useDebouncedCallback } from "use-debounce";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { get, throttle } from "lodash-es";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import useKey from "use-key-hook";
 
@@ -29,7 +34,7 @@ import ScrollingPreference from "context/ScrollingPreference";
 import SocialLayer from "./Gallery/SocialLayer";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
-import usePreloadedEntries from "hook/usePreloadedEntries";
+import useNonreactive from "hook/useNonreactive";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
 const Canvas = styled.div`
@@ -71,6 +76,8 @@ export default function Gallery(props: ExhibitionProps<{}>) {
   const [scrollDirection] = ScrollingPreference.useContainer();
   const [, appendToJourney, resetJourney] = Journey.useContainer();
   const [lastDirection, setLastDirection] = useState<Direction>();
+  const [coords, setCoords] = useState<Coords>(null);
+  const _coords = useNonreactive(coords);
 
   const { exhibition } = useCurrentExhibition();
   const exhibitionExtent = get(exhibition, "extent");
@@ -116,8 +123,6 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     [createPlacementMutation],
   );
 
-  const [coords, setCoords] = useState<Coords>(null);
-
   useEffect(() => {
     if (exhibitionId) {
       const center: Coords = [
@@ -132,22 +137,25 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     }
   }, [appendToJourney, exhibitionExtent, exhibitionId, resetJourney]);
 
-  const [handleDirection] = useDebouncedCallback(
-    useCallback(
-      (direction: Direction) => {
-        if (exhibition) {
-          setLastDirection(direction);
-          const newCoords = navigate(coords, exhibition.extent, direction);
-          appendToJourney(newCoords);
-          setCoords(newCoords);
-        }
-      },
-      [appendToJourney, coords, exhibition],
-    ),
-    400,
-    {
-      leading: true,
-    },
+  const handleDirection = useMemo(
+    () =>
+      throttle(
+        (direction: Direction) => {
+          if (exhibition) {
+            setLastDirection(direction);
+            const newCoords = navigate(
+              _coords.current,
+              exhibition.extent,
+              direction,
+            );
+            appendToJourney(newCoords);
+            setCoords(newCoords);
+          }
+        },
+        3000,
+        { leading: true, trailing: false },
+      ),
+    [appendToJourney, _coords, exhibition],
   );
 
   useKey(
