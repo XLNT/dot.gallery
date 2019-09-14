@@ -34,6 +34,7 @@ import ScrollingPreference from "context/ScrollingPreference";
 import arrows from "static/arrows.svg";
 import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
+import useDimensions from "hook/useDimensions";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useKey from "use-key-hook";
 import useMobileRedirect from "hook/useMobileRedirect";
@@ -150,7 +151,10 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
   const { setFullscreen } = Fullscreen.useContainer();
   const flexDirection = useBreakpoints(["column", "column", "row"]);
   const ref = useRef();
-  const columnHeight = 500; // TODO: size
+  const { height: columnHeight } = useDimensions(ref, {
+    width: document.body.clientWidth,
+    height: document.body.clientHeight,
+  });
   const height = columnHeight || document.body.clientHeight / 2;
 
   const [currentStep, setCurrentStep] = useState(0);

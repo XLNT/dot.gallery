@@ -12,6 +12,7 @@ import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
 import useDimensions from "hook/useDimensions";
 
+const BUTTON_EXTENT = 50; // px
 const OFFSCREEN_PADDING = 60; // px, larger than button
 
 const Backboard = styled.div`
@@ -32,8 +33,6 @@ const Content = styled(animated.div)`
 `;
 
 const PanelContainer = styled(animated.div)`
-  box-sizing: border-box;
-
   z-index: ${ZIndex.Panel};
   position: absolute;
   top: 0;
@@ -57,22 +56,19 @@ const PanelContainerInner = styled.div`
 `;
 
 const PanelButtonContainer = styled(animated.div)`
-  box-sizing: border-box;
   user-select: none;
 
   z-index: ${ZIndex.Panel};
   position: absolute;
   bottom: 0;
   right: 0;
-  margin-bottom: 1rem;
+  margin-bottom: calc(1rem + 1px); /* the web is a good platform */
 `;
 
 const PanelButtonInner = styled.div`
   position: relative;
-  /* width: 50px;
-  height: 50px; */
 
-  margin-right: 4rem;
+  margin-right: calc(${BUTTON_EXTENT}px + 1rem);
 `;
 
 const PanelButton = styled(animated.div)`
@@ -185,10 +181,8 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
 
     // button
     buttonRight: showPanel ? panelWidth : 0,
-    buttonTransformOrigin: `${showPanel ? "50%" : "25%"} 50%`,
-    buttonTransform: `rotate(-90deg) translateY(${
-      overlayButton && showPanel ? 2.5 : 0
-    }rem)`,
+    buttonTransformOrigin: `${BUTTON_EXTENT / 2}px ${BUTTON_EXTENT / 2}px`,
+    buttonTransform: `rotate(-90deg)`,
     arrowTransform: `rotate(${showPanel ? -90 : 90}deg)`,
 
     // action

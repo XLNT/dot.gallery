@@ -6,6 +6,7 @@ import JourneyIcon from "components/JourneyIcon";
 import React, { useCallback, useRef, useState } from "react";
 import fromTheme from "theme/fromTheme";
 import styled from "styled-components";
+import useDimensions from "hook/useDimensions";
 
 const ExitLayer = styled.div`
   position: absolute;
@@ -83,10 +84,13 @@ export default function JourneyAndExit({ setFlow }: ExhibitionProps<{}>) {
   const [proposingExit, setProposingExit] = useState<boolean>(false);
 
   const proposalRef = useRef();
-  const proposalExtent = 200; // TODO: size
+  const { height: proposalExtent } = useDimensions(proposalRef, {
+    width: document.body.clientWidth,
+    height: document.body.clientHeight,
+  });
 
   const { y } = useSpring<{ y: number }>({
-    y: proposingExit ? 0 : -1 * (proposalExtent || document.body.clientHeight),
+    y: proposingExit ? 0 : -1 * proposalExtent,
   });
 
   const showExitHoveredState = exitHovered || proposingExit;
