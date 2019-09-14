@@ -131,15 +131,9 @@ export default function Panel({ children }: PropsWithChildren<{}>) {
     backboardRef,
     { width: document.body.clientWidth, height: document.body.clientHeight },
   );
-  // console.log(`backboard ${backboardWidth}x${backboardHeight}`);
-
-  // const buttonRef = useRef<HTMLImageElement>(null);
-  // const { width: buttonWidth, height: buttonHeight } = useDimensions(buttonRef);
-  // console.log(`button ${buttonWidth}x${buttonHeight}`);
 
   const actionRef = useRef<HTMLDivElement>(null);
   const { width: actionWidth, height: actionHeight } = useDimensions(actionRef);
-  console.log(`action ${actionWidth}x${actionHeight}`);
 
   const canTogglePanel = forcedState === null;
   const showPanel = forcedState === null ? hydrated && isOpen : forcedState;

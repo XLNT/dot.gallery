@@ -68,7 +68,6 @@ const ExhibitionSlug = styled.div`
 
 export default function Gallery(props: ExhibitionProps<{}>) {
   useEnforcePanelVisibility(true);
-  useSuggestedPanelState(true);
   usePanelAction("Details");
   const [scrollDirection] = ScrollingPreference.useContainer();
   const [, appendToJourney, resetJourney] = Journey.useContainer();

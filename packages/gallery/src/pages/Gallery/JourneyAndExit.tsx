@@ -23,10 +23,10 @@ const ExitLayer = styled.div`
 
 const ExitProposal = styled(animated.div)`
   max-width: 80%;
-  padding: 1rem;
 `;
 
 const InnerExitProposal = styled.div`
+  margin-top: 1rem;
   border: 4px solid ${fromTheme("primary")};
   padding: 0.75rem;
   background: #fff;

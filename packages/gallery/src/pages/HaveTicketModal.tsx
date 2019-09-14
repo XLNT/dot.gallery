@@ -77,7 +77,7 @@ export default function HaveTicketModal() {
               return "You already have a ticket for this exhibition. Return here for the next showing.";
             }
 
-            return "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half.";
+            return "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half, and currently works on modern desktop browsers.";
           })()}
         </ModalSubtitle>
       </ModalHeader>

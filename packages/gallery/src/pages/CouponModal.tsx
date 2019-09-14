@@ -51,11 +51,15 @@ export default function CouponModal() {
   return (
     <ModalFrame>
       <ModalHeader>
-        <ModalTitle>I have a voucher.</ModalTitle>
+        <ModalTitle>
+          {!!data ? "Voucher Redeemed!" : "I have a voucher."}
+        </ModalTitle>
         <ModalSubtitle>
           {!!data
-            ? "Voucher redeemed!"
-            : "Redeem your voucher for a ticket for the current exhibition."}
+            ? isDefinitelyOpen
+              ? "You may enter the exhibition. The exhibition, experienced gradually, occupies an hour and a half, and currently works on modern desktop browsers."
+              : "dot.gallery is currently closed. Return here for the next showing."
+            : "Redeem your voucher for a ticket to the current exhibition."}
         </ModalSubtitle>
       </ModalHeader>
       <ModalAction>
@@ -65,9 +69,7 @@ export default function CouponModal() {
               <StyledEnterButton onClick={goExhibition}>
                 Enter
               </StyledEnterButton>
-            ) : (
-              "dot.gallery is currently closed. Return here for the next showing."
-            )}
+            ) : null}
           </>
         ) : (
           <>

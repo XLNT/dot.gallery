@@ -9,13 +9,12 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import { useAwardWalkMutation, useCurrentEntityQuery } from "../operations";
 import AssetsList from "components/AssetsList";
 import DragTypes from "lib/dragTypes";
+import EnterButton from "components/EnterButton";
 import Fullscreen from "context/Fullscreen";
 import Journey from "context/Journey";
 import JourneyIcon from "components/JourneyIcon";
 import LoadingAsset from "components/LoadingAsset";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import fromTheme from "theme/fromTheme";
-import sleep from "lib/sleep";
 import styled from "styled-components";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
 import useRouter from "context/useRouter";
@@ -51,6 +50,7 @@ const AssetsContainer = styled.div`
 `;
 
 const StepsContainer = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,12 +64,8 @@ const Header = styled.h2`
 
 const Subtitle = styled.span``;
 
-const LeaveButton = styled.span`
+const StyledEnterButton = styled(EnterButton)`
   font-size: 3rem;
-  font-weight: bold;
-  color: ${fromTheme("secondary")};
-  text-transform: uppercase;
-  cursor: pointer;
 `;
 
 const connectDrag = (monitor: DragSourceMonitor) => ({
@@ -89,7 +85,7 @@ export default function GiftShop({  }: ExhibitionProps<void>) {
   const { setFullscreen } = Fullscreen.useContainer();
   const { history } = useRouter();
 
-  const [awardWalk, { data: createAssetData }] = useAwardWalkMutation({
+  const [awardWalk, { data: createAssetData = true }] = useAwardWalkMutation({
     awaitRefetchQueries: true,
     refetchQueries: ["CurrentEntity"],
   });
@@ -146,16 +142,20 @@ export default function GiftShop({  }: ExhibitionProps<void>) {
     <Column>
       <Container>
         <StepsContainer>
-          <Header>We hope you enjoyed your walk.</Header>
+          <Header>
+            {!!createAssetData
+              ? "The journey you created is now memorabilia."
+              : "Drag your journey into your collection."}
+          </Header>
           <Subtitle>
             {!!createAssetData
-              ? "We hope you enjoyed the show!"
-              : "Take home your personalized journey by dragging it into your collection."}
+              ? null
+              : "All of the memorabilia are yours and will be here when youn log in next."}
           </Subtitle>
         </StepsContainer>
         <GiftContainer>
           {didDrag ? (
-            <LeaveButton onClick={goHome}>Exit</LeaveButton>
+            <StyledEnterButton onClick={goHome}>Exit</StyledEnterButton>
           ) : (
             <JourneyIcon
               ref={drag}
