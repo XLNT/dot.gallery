@@ -5,7 +5,7 @@ import { map } from "lodash-es";
 import Modal from "context/Modal";
 import React, { ComponentType, useCallback } from "react";
 import styled from "styled-components";
-import useKey from "use-key-hook";
+import useKeys from "hook/useKeys";
 import useRouter from "context/useRouter";
 
 const Container = styled(animated.div)`
@@ -55,12 +55,9 @@ export default function ModalView({
     [onDismiss],
   );
 
-  useKey(
-    () => isOpen && onDismiss(),
-    {
-      detectKeys: [27], // ESC
-    },
-    { dependencies: [isOpen, onDismiss] },
+  useKeys(
+    useCallback(() => isOpen && onDismiss(), [isOpen, onDismiss]),
+    [27], // ESC
   );
 
   return (

@@ -65,8 +65,7 @@
     "typescript": "^3.5.2",
     "unstated-next": "^1.1.0",
     "use-debounce": "^3.0.1",
-    "use-force-update": "^1.0.7",
-    "use-key-hook": "^1.5.0"
+    "use-force-update": "^1.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",

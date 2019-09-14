@@ -1,7 +1,7 @@
 import { Direction, keycodeFor } from "lib/direction";
 import { ExhibitionProps, Flow } from "./ExhibitionProps";
 import { animated, useSpring } from "react-spring";
-import { useRedeemTicketMutation, useUserDataTokenQuery } from "operations";
+import { useRedeemTicketMutation } from "operations";
 import ControlledVideo from "components/ControlledVideo";
 import React, { useCallback, useEffect, useState } from "react";
 import arrow from "static/grey_arrow.svg";
@@ -9,7 +9,7 @@ import fromTheme from "theme/fromTheme";
 import sleep from "lib/sleep";
 import styled from "styled-components";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
-import useKey from "use-key-hook";
+import useKeys from "hook/useKeys";
 import useRouter from "context/useRouter";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
 
@@ -87,10 +87,9 @@ export default function Foyer({ setFlow }: ExhibitionProps<void>) {
     setFlow(Flow.Gallery);
   }, [setFlow]);
 
-  useKey(
-    () => goGallery(),
-    { detectKeys: [Direction.Right].map(keycodeFor) },
-    { dependencies: [goGallery] },
+  useKeys(
+    useCallback(() => goGallery(), [goGallery]),
+    [Direction.Right].map(keycodeFor),
   );
 
   const style = useSpring({

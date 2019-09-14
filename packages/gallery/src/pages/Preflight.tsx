@@ -36,7 +36,7 @@ import styled from "styled-components";
 import useBreakpoints from "hook/useBreakpoints";
 import useDimensions from "hook/useDimensions";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
-import useKey from "use-key-hook";
+import useKeys from "hook/useKeys";
 import useMobileRedirect from "hook/useMobileRedirect";
 import usePreloadedFoyer from "hook/usePreloadedFoyer";
 import useRequiredLogin from "hook/useRequiredLogin";
@@ -375,11 +375,7 @@ export default function Preflight({ setFlow }: ExhibitionProps<void>) {
     [currentStep, goNext, goPrev, scrollingPreference, setScrollingPreference],
   );
 
-  useKey(
-    handleKey,
-    { detectKeys: [Direction.Up, Direction.Down].map(keycodeFor) },
-    { dependencies: [handleKey] },
-  );
+  useKeys(handleKey, [Direction.Up, Direction.Down].map(keycodeFor));
 
   return (
     <Container direction={flexDirection}>

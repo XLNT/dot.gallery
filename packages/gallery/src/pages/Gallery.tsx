@@ -3,7 +3,6 @@ import { get } from "lodash-es";
 import { useDebouncedCallback } from "use-debounce";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import useKey from "use-key-hook";
 
 import { Coords, findRoom, navigate } from "lib/rooms";
 import {
@@ -29,6 +28,7 @@ import ScrollingPreference from "context/ScrollingPreference";
 import SocialLayer from "./Gallery/SocialLayer";
 import useCurrentExhibition from "hook/useCurrentExhibition";
 import useEnforcePanelVisibility from "hook/useEnforcePanelVisibility";
+import useKeys from "hook/useKeys";
 import usePanelAction from "hook/usePanelAction";
 import usePreloadedEntries from "hook/usePreloadedEntries";
 import useSuggestedPanelState from "hook/useSuggestedPanelState";
@@ -151,20 +151,17 @@ export default function Gallery(props: ExhibitionProps<{}>) {
     },
   );
 
-  useKey(
-    (pressedKey: number) =>
-      handleDirection(
-        invertForPreference(scrollDirection, directionFor(pressedKey)),
-      ),
-    {
-      detectKeys: [
-        Direction.Left,
-        Direction.Up,
-        Direction.Right,
-        Direction.Down,
-      ].map(keycodeFor),
-    },
-    { dependencies: [handleDirection] },
+  useKeys(
+    useCallback(
+      (pressedKey: number) =>
+        handleDirection(
+          invertForPreference(scrollDirection, directionFor(pressedKey)),
+        ),
+      [handleDirection, scrollDirection],
+    ),
+    [Direction.Left, Direction.Up, Direction.Right, Direction.Down].map(
+      keycodeFor,
+    ),
   );
 
   const room = useMemo(
