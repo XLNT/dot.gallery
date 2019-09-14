@@ -2,7 +2,7 @@ import "normalize.css";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import { DndProvider } from "react-dnd";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import { init as initSentry } from "@sentry/browser";
@@ -92,7 +92,11 @@ function Root() {
           <GlobalStyle />
           <Interactors />
           <WithPanel>
-            <AnimatedSwitch routes={routes} />
+            <Switch>
+              {routes.map(route => (
+                <Route key={route.path || "default"} {...route} />
+              ))}
+            </Switch>
           </WithPanel>
           <Modal.Target />
         </>
