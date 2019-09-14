@@ -2,12 +2,12 @@ import "normalize.css";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 import { DndProvider } from "react-dnd";
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { hot } from "react-hot-loader";
 import { init as initSentry } from "@sentry/browser";
 import HTML5Backend from "react-dnd-html5-backend";
-import React, { Component, useMemo } from "react";
+import React, { useMemo } from "react";
 import ReactGA from "react-ga";
 
 import AnimatedSwitch, { RouteConfig } from "components/AnimatedSwitch";
