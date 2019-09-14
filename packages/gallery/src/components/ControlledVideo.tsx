@@ -16,10 +16,14 @@ export default function ControlledVideo({
 }) {
   const ref = useRef<HTMLVideoElement>();
 
-  const enforcePlaying = useCallback(() => {
+  const enforcePlaying = useCallback(async () => {
     if (playing) {
       if (ref.current) {
-        ref.current.play();
+        try {
+          await ref.current.play();
+        } catch {
+          // ignore
+        }
       }
     }
   }, [playing]);
