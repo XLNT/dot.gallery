@@ -16,13 +16,9 @@ import {
   useRef,
   useState,
 } from "react";
-import update, { extend } from "immutability-helper";
+import update from "immutability-helper";
 
 import usePreviousValue from "./usePreviousValue";
-
-extend("$autoArray", function(value, object) {
-  return object ? update(object, value) : update([], value);
-});
 
 enum RoomState {
   Disconnected,

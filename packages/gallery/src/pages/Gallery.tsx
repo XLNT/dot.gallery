@@ -1,12 +1,6 @@
 import { animated, config as springConfig, useTransition } from "react-spring";
 import { get, throttle } from "lodash-es";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import useKey from "use-key-hook";
 

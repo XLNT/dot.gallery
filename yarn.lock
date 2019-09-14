@@ -12732,7 +12732,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-twilio-video@2.0.0-beta13:
+twilio-video@^2.0.0-beta13:
   version "2.0.0-beta13"
   resolved "https://registry.yarnpkg.com/twilio-video/-/twilio-video-2.0.0-beta13.tgz#21cd0c8b5c91e860e73b0af3afac354215031ba1"
   integrity sha512-+5r2AJIyPTVXBYVcxBomdln1K5Z/TcnabWr9s2VRfqWtdfKwFBM6qSaBCzGuffxqxYmt2JnFclGACeVLqa2klg==
