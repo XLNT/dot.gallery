@@ -270,10 +270,10 @@ export default function Home() {
                 <ExhibitionText>
                   {exhibitionOpen} — {exhibitionClose}
                 </ExhibitionText>
-                <ExhibitionText>
+                {/* <ExhibitionText>
                   {exhibition.ticketsAvailable}/{exhibition.capacity} Tickets
                   are available.
-                </ExhibitionText>
+                </ExhibitionText> */}
               </>
             )}
           </ExhibitionDetails>
