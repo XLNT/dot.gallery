@@ -13,6 +13,7 @@ const kSignOptions: SignOptions = {
 
 const kVerifyOptions: VerifyOptions = {
   algorithms: ["HS256"],
+  ignoreExpiration: true,
 };
 
 interface Payload {
