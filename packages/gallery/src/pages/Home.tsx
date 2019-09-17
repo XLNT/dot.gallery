@@ -183,7 +183,16 @@ export default function Home() {
     }
 
     if (!exhibition) {
-      return <div>No current exhibition found.</div>;
+      return (
+        <>
+          <ExhibitionTitle>dot.gallery is currently closed</ExhibitionTitle>
+          <InnerContainer>
+            <a href="https://twitter.com/dotdotgallery">
+              Follow us on Twitter to hear about the next exhibition.
+            </a>
+          </InnerContainer>
+        </>
+      );
     }
 
     const shows = exhibition.shows.filter(
@@ -212,6 +221,14 @@ export default function Home() {
               />
             );
           })}
+          {shows.length === 0 && (
+            <>
+              <div>dot.gallery is currently closed.</div>
+              <a href="https://twitter.com/dotdotgallery">
+                Follow us on Twitter to hear about the next exhibition.
+              </a>
+            </>
+          )}
         </InnerContainer>
       </>
     );
@@ -246,18 +263,20 @@ export default function Home() {
           {state === "resolved" && (
             <GalleryRichText richText={result.fields.body} />
           )}
-          {exhibition && (
-            <ExhibitionDetails>
-              <EmphasizeTitle>{exhibition.title}</EmphasizeTitle>
-              <ExhibitionText>
-                {exhibitionOpen} — {exhibitionClose}
-              </ExhibitionText>
-              <ExhibitionText>
-                {exhibition.ticketsAvailable}/{exhibition.capacity} Tickets are
-                available.
-              </ExhibitionText>
-            </ExhibitionDetails>
-          )}
+          <ExhibitionDetails>
+            {exhibition && (
+              <>
+                <EmphasizeTitle>{exhibition.title}</EmphasizeTitle>
+                <ExhibitionText>
+                  {exhibitionOpen} — {exhibitionClose}
+                </ExhibitionText>
+                <ExhibitionText>
+                  {exhibition.ticketsAvailable}/{exhibition.capacity} Tickets
+                  are available.
+                </ExhibitionText>
+              </>
+            )}
+          </ExhibitionDetails>
           {state === "resolved" && (
             <RichTextContainer>
               <GalleryRichText richText={result.fields.bottom} />
