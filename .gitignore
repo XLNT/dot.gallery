@@ -98,3 +98,5 @@ dist/
 .idea
 .DS_Store
 public/
+
+.now
