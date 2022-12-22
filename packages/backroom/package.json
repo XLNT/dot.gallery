@@ -30,7 +30,7 @@
     "graphql-import": "^0.7.1",
     "graphql-middleware": "^4.0.1",
     "graphql-shield": "^6.0.6",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.15",
     "luxon": "^1.17.2",
     "merge-graphql-schemas": "^1.7.0",
