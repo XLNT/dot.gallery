@@ -48,7 +48,7 @@
     "graphql-tag": "^2.10.1",
     "localforage": "^1.7.3",
     "lodash-es": "^4.17.15",
-    "luxon": "^1.17.2",
+    "luxon": "^2.5.2",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.x",
